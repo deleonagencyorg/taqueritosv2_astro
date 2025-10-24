@@ -24,13 +24,13 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
 ---
 
 <!-- Menú Móvil Global -->
-<div id="mobile-menu" class="hidden md:hidden fixed inset-0 w-screen h-screen z-[2147483647] bg-primary bg-opacity-80 overflow-y-auto" data-current-lang={currentLang}>
+<div id="mobile-menu" class="hidden md:hidden fixed inset-0 w-screen h-screen z-[2147483647] bg-primary bg-opacity-50 overflow-y-auto" data-current-lang={currentLang}>
   <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-8">
       <a href={`/${currentLang}/`} class="block">
-        <img src={logos.principal.url} alt={logos.principal.alt} class="h-10 w-auto" />
+        <img src={logos.principal.url} alt={logos.principal.alt}/>
       </a>
-      <button id="mobile-menu-close" type="button" class="text-white">
+      <button id="mobile-menu-close" type="button" class="text-white pr-[12px]">
         <span class="sr-only">{closeMenuLabel}</span>
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
