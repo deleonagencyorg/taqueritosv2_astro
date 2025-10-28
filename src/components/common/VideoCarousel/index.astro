@@ -36,7 +36,6 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
 ---
 
 <div class="video-carousel-container relative overflow-hidden">
-  <!-- Swiper container -->
   <div class="swiper-container video-carousel">
     <div class="swiper-wrapper">
       {slides.map((slide, index) => {
@@ -60,7 +59,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
               </div>
 
               
-              {/* {isVideo ? (
+              {isVideo ? (
                 <!-- Video background -->
                 <div class="video-container">
                   <video
@@ -73,25 +72,23 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                     preload={index === 0 ? "auto" : "metadata"}
                   >
                     <source src={slide.desktop} type={slide.desktop.toLowerCase().endsWith('.webm') ? 'video/webm' : 'video/mp4'}>
-                    <!-- If the browser doesn't support video, the fallback image will remain visible -->
-                    Your browser does not support the video tag.
                   </video>
                 </div>
-              ) : ( */}
+              ) : (
                 <!-- Image background for non-video slides -->
                 <div class="image-container relative w-full h-[680px] md:w-full md:h-full flex md:items-center md:justify-center">
                   <!-- Imagen principal (desktop) -->
                   <img
                     src={slide.desktop}
                     alt={slide.alt || "Slide background"}
-                    class="slide-image desktop-image h-auto z-20 bg-transparent"
+                    class="slide-image desktop-image h-auto z-20 bg-transparent w-[1200px] h-[900px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 
                   <img
                     src={slide.mobile}
                     alt={slide.alt || "Slide background"}
-                    class="slide-image mobile-image h-auto z-20 bg-transparent"
+                    class="slide-image mobile-image h-auto z-20 bg-transparent w-[1200px] h-[800px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 
@@ -155,7 +152,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
 
               
 
-              {/* )} */}
+              )}
 
               <!-- Overlay with text (conditional) -->
               {showOverlay && (slide.title || slide.subtitle) && (
@@ -528,9 +525,24 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     100% { transform: rotate(-12deg) translateY(0); }
   }
   
-  @media (min-width: 768px){
-    .desktop-image{ display:block !important; }
-    .mobile-image{ display:none !important; }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .desktop-image { 
+      display: block !important; 
+    }
+    .mobile-image { 
+      display: none !important; 
+    }
+    .right-text {
+      bottom: 8%;
+    }
+
+    .left-text {
+      bottom: 8%;
+    }
+
+    .right-text-top-div {
+      bottom: 80%;
+    }
   }
 
   @media (max-width: 767px){

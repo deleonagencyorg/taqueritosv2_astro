@@ -72,8 +72,8 @@
     "slider": [
       {
         "id": "slide1",
-        "desktop": "/images/es/products/taqueritojgp.png",
-        "mobile": "/images/es/products/taqueritojgp.png",
+        "desktop": "/images/es/products/taquerito.png",
+        "mobile": "/images/es/products/taquerito.png",
         "alt": "Ziba's",
         "title": "",
         "description": "",
@@ -173,7 +173,7 @@
     "contact_us": "Contáctanos",
     "instagram_text": "Instagram",
     "facebook_text": "Facebook",
-    "email": "ayudacliente@zibas.com",
+    "email": "taqueritos@gmail.com",
     "copyright": "Copyright 2025. Ziba's. Todos los derechos reservados.",
     "privacy_policy_text": "Política de Privacidad",
     "privacy_policy_url": "/es/politica-privacidad"

@@ -94,6 +94,28 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
         showOverlay={true} 
       />
     </div>
+
+    <section id="recipes" class="w-full py-12 !bg-[#180607]" transition:animate="slide">
+      <div class="container mx-auto px-4 ">
+        {recipesAssets.home?.title && (
+          <div class="container mx-auto px-4 title mb-12">
+            <p>
+              {recipesAssets.home?.title}
+            </p>
+            {recipesAssets.home?.subtitle && (
+              <p>
+                {recipesAssets.home?.subtitle}
+              </p>
+            )}
+          </div>
+        )}
+        <RecipesCarousel 
+          title={recipesAssets.home?.title || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
+          subtitle={recipesAssets.home?.subtitle || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
+          textButton={recipesAssets.home?.view_more || 'Ver Todas'}
+        />
+      </div>
+    </section>
     
     <!-- Sección de Productos Zibas -->
     {zibasProducts.length > 0 && (
@@ -125,40 +147,21 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       </section>
     )}
 
-    <section id="brands" class="w-full">
+    <section id="brands" class="w-full"  transition:persist>
       <BrandsCarousel 
         brands={brandsList}
         autoplay={true}
-        speed={3000}
+        speed={1000}
         backgroundColor="#0a0405"
       />
     </section>
     
     <!-- Sección de recetas con carrusel -->
-    <section id="recipes" class="w-full py-12" transition:animate="slide">
-      <div class="container mx-auto px-4">
-        {recipesAssets.home?.title && (
-          <div class="text-center mb-16 relative z-20" >
-            <h2 class="text-3xl md:text-4xl italic font-bold mb-4" style={`color: #5B3F2E`}>
-              {recipesAssets.home?.title}
-            </h2>
-            {recipesAssets.home?.subtitle && (
-              <h1 class="text-6xl md:text-9xl italic font-bold mb-4" style={`color: #5B3F2E`}>
-                {recipesAssets.home?.subtitle}
-              </h1>
-            )}
-          </div>
-        )}
-        <RecipesCarousel 
-          title={recipesAssets.home?.title || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
-          textButton={recipesAssets.home?.view_more || 'Ver Todas'}
-        />
-      </div>
-    </section>
+
 
 
     <!-- Sección Gallery -->
-    <section id="gallery" class="bg-pink w-full py-12" transition:animate="slide">
+    <!-- <section id="gallery" class="bg-pink w-full py-12" transition:animate="slide">
       <div class="container mx-auto px-4">
         {Array.isArray(galleryAssets.images) && galleryAssets.images.length > 0 && (
           <MasonryGallery 
@@ -169,7 +172,7 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
           />
         )}
       </div>
-    </section>
+    </section> -->
 
 
 

@@ -119,8 +119,6 @@ import LazyImage from "../LazyImage.astro";
           <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          
-          
       </button>
     </div>
   </div>
@@ -345,35 +343,6 @@ import LazyImage from "../LazyImage.astro";
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .carousel-navigation {
-    top: -100px;
-    gap: 8px;
-  }
-  
-  :global(.swiper-button-next),
-  :global(.swiper-button-prev) {
-    width: 48px !important;
-    height: 48px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel-navigation {
-    top: -80px;
-    gap: 6px;
-  }
-  
-  :global(.swiper-button-next),
-  :global(.swiper-button-prev) {
-    width: 40px !important;
-    height: 40px !important;
-  }
-  
-
-}
-
-  /* responsive */
   @media (max-width: 768px) {
     .products-carousel {
       padding-top: 150px;
@@ -398,11 +367,33 @@ import LazyImage from "../LazyImage.astro";
       width: 100% !important;
     }
   }
-  
-  @media (max-width: 480px) {
+
+  @media (max-width: 767px) {
+    .swiper-slide {
+      padding-top: 120px;
+    }
+    .carousel-navigation {
+      top: -80px; /* Más arriba en móvil */
+      right: 80%;
+      transform: translateX(50%);
+    }
+
+    :global(.swiper-button-next),
+    :global(.swiper-button-prev) {
+      width: 50px !important;
+      height: 50px !important;
+    }
+
+    :global(.swiper-button-next svg),
+    :global(.swiper-button-prev svg) {
+      width: 18px !important;
+      height: 18px !important;
+    }
+
     .products-carousel {
       padding-top: 120px;
     }
+
     .swiper-container {
       padding: 0 20px;
     }

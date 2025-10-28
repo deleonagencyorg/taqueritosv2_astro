@@ -2,11 +2,14 @@
 import RecipeCardCarousel from './RecipeCardCarousel.astro';
 import { getLocale } from '../../i18n/i18n';
 
-// Import all recipe files dynamically (use static glob and filter by lang)
 const currentLang = getLocale();
+
 interface Recipe {
   id: string;
   title: string;
+  subtitle?: string;
+  title_down?: string;
+  subtitle_down?: string;
   image: string;
   hover_image?: string;
   preparation_time: number;
@@ -19,24 +22,25 @@ interface Recipe {
   rating?: number;
 }
 
-// Optional items can be passed from parent (e.g., related recipes)
 export interface Props {
   title?: string;
+  subtitle?: string;
+  title_down?: string;
+  subtitle_down?: string;
   textButton?: string;
-  items?: any[]; // permitir arrays compatibles (e.g., RecipeItem)
+  items?: any[];
 }
 
 const {
   textButton = currentLang === 'es' ? 'Ver Todas' : 'View All',
   items
-} = Astro.props as { textButton?: string; items?: any[] };
+} = Astro.props;
 
-// If items provided, use them; otherwise load all by lang
 let recipeItems: Recipe[] = Array.isArray(items) ? (items as unknown as Recipe[]) : [];
 if (!recipeItems.length) {
   const recipeModules = import.meta.glob<{ default: Recipe }>("../../locales/*/recipes/*.json");
   for (const path in recipeModules) {
-    const lang = path.split('/') [3];
+    const lang = path.split('/')[3];
     if (lang === currentLang) {
       const mod = await recipeModules[path]();
       recipeItems.push(mod.default);
@@ -44,10 +48,6 @@ if (!recipeItems.length) {
   }
 }
 
-// Determine if we are in provided-items mode (hide filters/CTA)
-const providedMode = Array.isArray(items) && items.length > 0;
-
-// Normalizar categoría (usando claves en inglés para el filtrado)
 function getCategoryKey(recipe: any): string {
   const raw = (
     recipe?.category_en ||
@@ -58,105 +58,71 @@ function getCategoryKey(recipe: any): string {
     ''
   );
   const key = String(raw || '').trim().toLowerCase();
-  // mapear posibles variaciones a claves conocidas
   if (['breakfast', 'desayuno'].includes(key)) return 'breakfast';
   if (['brunch'].includes(key)) return 'brunch';
   if (['lunch', 'almuerzo'].includes(key)) return 'lunch';
   return key || 'other';
 }
-
-// Etiquetas por idioma (solo UI)
-const filterLabels = currentLang === 'es'
-  ? { breakfast: 'DESAYUNO', brunch: 'BRUNCH', lunch: 'ALMUERZO', all: 'TODO' }
-  : { breakfast: 'BREAKFAST', brunch: 'BRUNCH', lunch: 'LUNCH', all: 'ALL' };
-
-// Para desktop: mostrar 4 tarjetas por vista, avanzar de 1 en 1
-// Para mobile: 1 por slide (agrupadas de a 1)
-const mobileGroups = [] as any[];
-for (let i = 0; i < recipeItems.length; i += 1) {
-  mobileGroups.push([recipeItems[i]].filter(Boolean));
-}
-
 ---
 
-<div class="w-full" data-recipes-carousel>
-  <div class="w-full px-4 ">
-    <!-- Título alineado a la izquierda -->
+<div class="w-full recipes-carousel-wrapper" data-recipes-carousel>
+  <div class="w-full px-4">
     
-    <!-- Seccion de recetas -->
-    
-    <!-- Botones de filtro -->
-    {!providedMode && (
-    <div class="flex gap-2.5 mb-8 px-4 md:px-0 justify-center" id="recipesFilters">
-      <button type="button" data-filter="breakfast" class="filter-btn flex py-5 px-2.5 justify-center items-center gap-2.5 flex-1  text-xl rounded-full border border-brown bg-yellow font-bold text-brown hover:bg-yellow-400 transition-colors">
-        {filterLabels.breakfast}
-      </button>
-      <button type="button" data-filter="brunch" class="filter-btn flex py-5 px-2.5 justify-center items-center gap-2.5 flex-1 text-xl rounded-full border border-brown bg-yellow font-bold text-brown hover:bg-yellow-400 transition-colors">
-        {filterLabels.brunch}
-      </button>
-      <button type="button" data-filter="lunch" class="filter-btn flex py-5 px-2.5 justify-center items-center gap-2.5 flex-1 text-xl rounded-full border border-brown bg-yellow font-bold text-brown hover:bg-yellow-400 transition-colors">
-        {filterLabels.lunch}
-      </button>
-      <button type="button" data-filter="all" class="filter-btn flex py-5 px-2.5 justify-center items-center gap-2.5 flex-1 text-xl rounded-full border border-brown bg-yellow font-bold text-brown hover:bg-yellow-400 transition-colors">
-        {filterLabels.all}
-      </button>
-    </div>
-    )}
-     
-    <!-- Carousel de recetas - MOBILE (1 por slide) - Solo visible en mobile -->
+    <!-- Carousel MOBILE -->
     <div class="recipes-carousel-mobile relative md:hidden">
       <div class="recipes-carousel-container overflow-hidden w-full">
-        <div class="recipes-carousel-track flex items-start w-full gap-0 transition-transform duration-300" id="recipesTrackMobile" style="transform: translateX(0);">
-          {mobileGroups.map((group, gIndex) => (
-            <div class="recipe-slide-group flex-shrink-0 w-full">
-              {group.map((recipe: any) => (
-                <div class="recipe-slide w-full" data-category={getCategoryKey(recipe)}>
-                  <RecipeCardCarousel
-                    image={recipe.image}
-                    hoverImage={recipe.hover_image || recipe.image}
-                    title={recipe.title}
-                    time={`${recipe.preparation_time}MIN`}
-                    id={recipe.id}
-                    difficulty={recipe.difficulty || '---'}
-                    servings={recipe.servings || 0}
-                    rating={recipe.rating || 0}
-                    isMainCard={false}
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <!-- Controles de navegación mobile (flechas y puntos) -->
-      <div class="flex justify-center items-center gap-4 mt-6">
-        <button class="carousel-prev bg-white text-brown p-2 rounded-full shadow-lg z-10" aria-label="Anterior" id="prevBtnMobile">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        <div class="carousel-dots-mobile flex gap-2"></div>
-
-        <button class="carousel-next bg-white text-brown p-2 rounded-full shadow-lg z-10" aria-label="Siguiente" id="nextBtnMobile">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Carousel de recetas - DESKTOP - Solo visible en desktop -->
-    <div class="recipes-carousel relative hidden md:block">
-      <div class="recipes-carousel-container overflow-visible ">
-        <div class="recipes-carousel-track flex items-start justify-center w-full gap-4 md:gap-6 transition-transform duration-300" id="recipesTrackDesktop" style="transform: translateX(0);">
+        <div class="recipes-carousel-track flex items-start w-full gap-4 transition-transform duration-300" id="recipesTrackMobile">
           {recipeItems.map((recipe, index) => (
-            <div class="recipe-slide flex-shrink-0 group-hover-container" data-index={index} data-category={getCategoryKey(recipe)}>
+            <div class="recipe-slide-mobile flex-shrink-0 w-full mt-[100px]" data-category={getCategoryKey(recipe)}>
               <RecipeCardCarousel
                 image={recipe.image}
                 hoverImage={recipe.hover_image || recipe.image}
                 title={recipe.title}
+                title_down={recipe.title_down}
+                subtitle={recipe.subtitle}
+                subtitle_down={recipe.subtitle_down}
+                time={`${recipe.preparation_time}MIN`}
+                id={recipe.id}
+                difficulty={recipe.difficulty || '---'}
+                servings={recipe.servings || 0}
+                rating={recipe.rating || 0}
+                isMainCard={false}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+  
+      <div class="carousel-navigation">
+        <button class="carousel-btn-prev" type="button" aria-label="Anterior" id="prevBtnMobile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <button class="carousel-btn-next" type="button" aria-label="Siguiente" id="nextBtnMobile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Carousel DESKTOP -->
+    <div class="recipes-carousel-desktop relative hidden md:block">
+      <div class="carousel-container-desktop overflow-hidden">
+        <div class="carousel-track-desktop flex gap-6" id="recipesTrackDesktop">
+          {recipeItems.map((recipe, index) => (
+            <div class="carousel-slide-desktop flex-shrink-0" data-index={index} data-category={getCategoryKey(recipe)}>
+              <RecipeCardCarousel
+                image={recipe.image}
+                hoverImage={recipe.hover_image || recipe.image}
+                title={recipe.title}
+                title_down={recipe.title_down}
+                subtitle={recipe.subtitle}
+                subtitle_down={recipe.subtitle_down}
                 time={`${recipe.preparation_time}MIN`}
                 id={recipe.id}
                 difficulty={recipe.difficulty || '---'}
@@ -169,347 +135,329 @@ for (let i = 0; i < recipeItems.length; i += 1) {
         </div>
       </div>
       
-      <!-- Controles de navegación desktop (flechas y puntos en la parte inferior) -->
-      <div class="flex justify-center items-center gap-4 mt-8">
-        <!-- Flecha anterior -->
-        <button class="carousel-prev bg-white text-brown p-2 rounded-full shadow-lg z-10" aria-label="Anterior" id="prevBtnDesktop">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      <div class="carousel-navigation">
+        <button class="carousel-btn-prev" type="button" aria-label="Anterior">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        
-        <!-- Puntos indicadores -->
-        <div class="carousel-dots-desktop flex gap-2"></div>
-        
-        <!-- Flecha siguiente -->
-        <button class="carousel-next bg-white text-brown p-2 rounded-full shadow-lg z-10" aria-label="Siguiente" id="nextBtnDesktop">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        <button class="carousel-btn-next" type="button" aria-label="Siguiente">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
       </div>
     </div>
     
-    <!-- Botón "Ver Todas" - oculto cuando se proveen items -->
-    {!providedMode && (
-    <div class="flex justify-center mt-6 w-full px-4 md:px-0">
-      <a href={`/${currentLang === 'es' ? 'es/recetas' : 'en/recipes'}`} class="bg-yellow text-brown font-bold py-2 px-8 rounded-full hover:border-brown hover:border-2 hover:bg-brown hover:text-yellow transition-colors w-full md:w-auto text-center font-title text-2xl">
-        {textButton}
-      </a>
-    </div>
-    )}
   </div>
 </div>
 
-<script>
-  function initRecipesCarousel(root) {
-    if (!root || root.dataset.rcInitialized === 'true') return;
-    root.dataset.rcInitialized = 'true';
-    // Estado de filtro actual
-    let currentFilter = 'all';
+<style>
+  /* Mobile - Carrusel simple */
+  .recipes-carousel-track {
+    display: flex;
+    transition: transform 400ms ease-in-out;
+    gap: 1.5rem; /* 👈 MISMO GAP que desktop (24px) */
+    margin: 0 16px;
+  }
 
-    // Setup filtros
-    const filtersContainer = root.querySelector('#recipesFilters');
-    const filterButtons = Array.from(filtersContainer?.querySelectorAll('.filter-btn'));
+  .recipe-slide-mobile {
+    flex-shrink: 0;
+    width: 85%; /* Muestra 85% de la card + peek del 15% */
+    max-width: 340px;
+  }
 
-    // Configuración para el carrusel mobile
-    setupMobileCarousel();
+  .recipe-slide-mobile {
+    flex-shrink: 0;
+    width: 100%;
+  }
 
-    // Configuración para el carrusel desktop
-    setupDesktopCarousel();
+  /* Desktop */
+  .carousel-container-desktop {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+  }
 
-    // Eventos de filtros
-    filterButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-filter') || 'all';
-        currentFilter = filter;
-        // estilos activos
-        filterButtons.forEach(b => b.classList.remove('ring-2', 'ring-brown'));
-        btn.classList.add('ring-2', 'ring-brown');
-        // aplicar filtros
-        applyFilterMobile();
-        applyFilterDesktop();
-      });
-    });
+  .carousel-track-desktop {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+  }
 
-    // Función para configurar el carrusel mobile
-    function setupMobileCarousel() {
-      applyFilterMobile(true);
+  .carousel-slide-desktop {
+    flex-shrink: 0;
+    width: 710px;
+    min-width: 710px;
+    position: relative;
+    transition: opacity 50ms;
+  }
+
+  /* Animaciones DESKTOP */
+  @keyframes flyAcrossRight {
+    0% {
+      transform: translateX(0) translateY(0) scale(1);
+      opacity: 1;
     }
-
-    function applyFilterMobile(initial = false) {
-      const track = root.querySelector('#recipesTrackMobile');
-      const prevBtn = root.querySelector('#prevBtnMobile');
-      const nextBtn = root.querySelector('#nextBtnMobile');
-      const dotsContainer = root.querySelector('.carousel-dots-mobile');
-
-      if (!track || !prevBtn || !nextBtn || !dotsContainer) return;
-
-      const allGroups = Array.from(track.querySelectorAll('.recipe-slide-group'));
-      // Mostrar/ocultar grupos según filtro (cada grupo tiene 1 slide)
-      allGroups.forEach((group) => {
-        const slide = group.querySelector('.recipe-slide');
-        const cat = slide?.getAttribute('data-category') || '';
-        const visible = (currentFilter === 'all') || (cat === currentFilter);
-        group.style.display = visible ? '' : 'none';
-      });
-
-      const visibleGroups = allGroups.filter(g => g.style.display !== 'none');
-      let currentGroup = 0;
-
-      // Handlers prev/next: reset listeners para evitar acumulación
-      const prevClone = prevBtn.cloneNode(true);
-      const nextClone = nextBtn.cloneNode(true);
-      prevBtn.parentNode?.replaceChild(prevClone, prevBtn);
-      nextBtn.parentNode?.replaceChild(nextClone, nextBtn);
-
-      createDots();
-      updatePosition();
-
-      prevClone.addEventListener('click', () => {
-        if (currentGroup > 0) {
-          currentGroup--;
-          updatePosition();
-        }
-      });
-
-      nextClone.addEventListener('click', () => {
-        if (currentGroup < visibleGroups.length - 1) {
-          currentGroup++;
-          updatePosition();
-        }
-      });
-
-      function createDots() {
-        dotsContainer.innerHTML = '';
-        for (let i = 0; i < visibleGroups.length; i++) {
-          const dot = document.createElement('button');
-          dot.classList.add('w-3', 'h-3', 'rounded-full', i === currentGroup ? 'bg-white' : 'bg-gray-300');
-          dot.addEventListener('click', () => {
-            currentGroup = i;
-            updatePosition();
-          });
-          dotsContainer.appendChild(dot);
-        }
-      }
-
-      function updatePosition() {
-        // Calcular índice real de grupo visible
-        const targetGroup = visibleGroups[currentGroup];
-        const originalIndex = allGroups.indexOf(targetGroup);
-        const percent = Math.max(0, originalIndex) * 100;
-        track.style.transform = `translateX(-${percent}%)`;
-
-        // Actualizar dots
-        const dots = dotsContainer.querySelectorAll('button');
-        dots.forEach((dot, i) => {
-          if (i === currentGroup) {
-            dot.classList.remove('bg-gray-300');
-            dot.classList.add('bg-white');
-          } else {
-            dot.classList.remove('bg-white');
-            dot.classList.add('bg-gray-300');
-          }
-        });
-
-        // Habilitar/deshabilitar botones
-        prevClone.classList.toggle('opacity-50', currentGroup === 0);
-        nextClone.classList.toggle('opacity-50', currentGroup >= visibleGroups.length - 1);
-      }
+    30% {
+      transform: translateX(300px) translateY(-20px) scale(1.08);
+      opacity: 1;
     }
-
-    // Función para configurar el carrusel desktop
-    function setupDesktopCarousel() {
-      applyFilterDesktop(true);
-    }
-
-    function applyFilterDesktop(initial = false) {
-      const track = root.querySelector('#recipesTrackDesktop');
-      const prevBtn = root.querySelector('#prevBtnDesktop');
-      const nextBtn = root.querySelector('#nextBtnDesktop');
-      const dotsContainer = root.querySelector('.carousel-dots-desktop');
-
-      if (!track || !prevBtn || !nextBtn || !dotsContainer) return;
-
-      const allSlides = Array.from(track.querySelectorAll('.recipe-slide'));
-      // Mostrar/ocultar slides según filtro
-      allSlides.forEach((slide) => {
-        const cat = slide.getAttribute('data-category') || '';
-        const visible = (currentFilter === 'all') || (cat === currentFilter);
-        slide.style.display = visible ? 'block' : 'none';
-      });
-
-      const visibleSlides = allSlides.filter(s => s.style.display !== 'none');
-      let currentSlide = 0;
-
-      // Resetear listeners para evitar acumulación
-      const prevClone = prevBtn.cloneNode(true);
-      const nextClone = nextBtn.cloneNode(true);
-      prevBtn.parentNode?.replaceChild(prevClone, prevBtn);
-      nextBtn.parentNode?.replaceChild(nextClone, nextBtn);
-
-      updateDesktopCarousel();
-      createDesktopDots();
-
-      prevClone.addEventListener('click', () => {
-        if (currentSlide > 0) {
-          currentSlide--;
-          updateDesktopCarousel();
-        }
-      });
-
-      nextClone.addEventListener('click', () => {
-        if (currentSlide < Math.max(0, visibleSlides.length - 4)) {
-          currentSlide++;
-          updateDesktopCarousel();
-        }
-      });
-
-      function createDesktopDots() {
-        dotsContainer.innerHTML = '';
-        const totalDots = Math.max(0, visibleSlides.length - 3); // totalSlides - 4 + 1
-        for (let i = 0; i < totalDots; i++) {
-          const dot = document.createElement('button');
-          dot.classList.add('w-3', 'h-3', 'rounded-full', i === currentSlide ? 'bg-white' : 'bg-gray-300');
-          dot.addEventListener('click', () => {
-            currentSlide = i;
-            updateDesktopCarousel();
-          });
-          dotsContainer.appendChild(dot);
-        }
-      }
-
-      function updateDesktopCarousel() {
-        // Resetear todas las tarjetas visibles
-        visibleSlides.forEach((slide, index) => {
-          let card = slide.querySelector('a');
-          if (card) {
-            // Asegurar ancho base del wrapper slide y transición suave
-            slide.style.width = '310px';
-            slide.style.transition = 'width 300ms ease';
-
-            // Remover cualquier overlay residual si existiera (garantiza que la primera no tenga overlay)
-            const anyOverlay = card.querySelector('.absolute.inset-0');
-            if (anyOverlay) anyOverlay.remove();
-
-            // Remover listeners previos clonando el elemento
-            const newCard = card.cloneNode(true);
-            card.parentNode?.replaceChild(newCard, card);
-            card = newCard; // Usar la nueva referencia
-            
-            // Resetear clases
-            card.className = 'block group relative transition-all duration-500 ease-in-out flex-shrink-0 w-[310px] h-[562px]';
-            
-            // Actualizar el componente interno
-            const cardContainer = card.querySelector('div');
-            const imgContainer = cardContainer?.querySelector('div[class*="rounded-t-"]');
-            const infoContainer = cardContainer?.querySelector('div[class*="bg-[#F8E31F]"]');
-            const title = card.querySelector('h3');
-            const imgTag = imgContainer?.querySelector('img');
-
-            // Estado base: TODAS iguales (4 por slide)
-            if (cardContainer) cardContainer.style.width = '310px';
-            if (cardContainer) cardContainer.style.height = '562px';
-            if (imgContainer) imgContainer.style.width = '310px';
-            if (imgContainer) imgContainer.style.height = '300px';
-            if (infoContainer) infoContainer.style.width = '310px';
-            if (infoContainer) infoContainer.style.height = '262px';
-            if (title) title.className = 'font-title font-bold text-black leading-tight flex-1 flex items-center text-brown text-2xl';
-            if (imgTag) imgTag.className = 'w-full h-full object-cover';
-
-            // Hover: la tarjeta bajo cursor crece en ANCHO/ALTO y empuja a las demás
-            card.addEventListener('mouseenter', () => {
-              const baseW = 310;
-              const bigW = 560; // ancho cuando se expande
-              visibleSlides.forEach((s) => {
-                const c2 = s.querySelector('a');
-                const cc2 = c2?.querySelector('div');
-                const imgC2 = cc2?.querySelector('div[class*="rounded-t-"]');
-                const infoC2 = cc2?.querySelector('div[class*="bg-[#F8E31F]"]');
-                const t2 = c2?.querySelector('h3');
-                if (!c2) return;
-                if (c2 === card) {
-                  // Ensanchar slide contenedor para que el layout se mueva
-                  s.style.width = `${bigW}px`;
-                  c2.style.opacity = '1';
-                  c2.style.zIndex = '10';
-                  if (cc2) cc2.style.width = `${bigW}px`;
-                  if (cc2) cc2.style.height = '562px';
-                  if (imgC2) imgC2.style.width = `${bigW}px`;
-                  if (imgC2) imgC2.style.height = '300px';
-                  if (infoC2) infoC2.style.width = `${bigW}px`;
-                  if (infoC2) infoC2.style.height = '262px';
-                  if (t2) t2.className = 'font-sans font-bold text-black leading-tight flex-1 flex items-center text-2xl';
-                } else {
-                  s.style.width = `${baseW}px`;
-                  c2.style.opacity = '0.35';
-                  c2.style.zIndex = '1';
-                  if (cc2) cc2.style.width = `${baseW}px`;
-                  if (cc2) cc2.style.height = '562px';
-                  if (imgC2) imgC2.style.width = `${baseW}px`;
-                  if (imgC2) imgC2.style.height = '300px';
-                  if (infoC2) infoC2.style.width = `${baseW}px`;
-                  if (infoC2) infoC2.style.height = '262px';
-                  if (t2) t2.className = 'font-sans font-bold text-black leading-tight flex-1 flex items-center text-lg';
-                }
-              });
-            });
-
-            card.addEventListener('mouseleave', () => {
-              // Restaurar estado base igualado para las 4 visibles
-              const baseW = 310;
-              visibleSlides.forEach((s) => {
-                const c2 = s.querySelector('a');
-                const cc2 = c2?.querySelector('div');
-                const imgC2 = cc2?.querySelector('div[class*="rounded-t-"]');
-                const infoC2 = cc2?.querySelector('div[class*="bg-[#F8E31F]"]');
-                const t2 = c2?.querySelector('h3');
-                if (!c2) return;
-                s.style.width = `${baseW}px`;
-                c2.style.opacity = '1';
-                c2.style.zIndex = '';
-                if (cc2) cc2.style.width = `${baseW}px`;
-                if (cc2) cc2.style.height = '562px';
-                if (imgC2) imgC2.style.width = `${baseW}px`;
-                if (imgC2) imgC2.style.height = '300px';
-                if (infoC2) infoC2.style.width = `${baseW}px`;
-                if (infoC2) infoC2.style.height = '262px';
-                if (t2) t2.className = 'font-sans font-bold text-black leading-tight flex-1 flex items-center text-lg';
-              });
-            });
-          }
-
-          // Mostrar/ocultar slides visibles en ventana
-          if (index >= currentSlide && index < currentSlide + 4) {
-            slide.style.display = 'block';
-          } else {
-            slide.style.display = 'none';
-          }
-        });
-        
-        // Actualizar dots
-        const dots = dotsContainer.querySelectorAll('button');
-        dots.forEach((dot, i) => {
-          if (i === currentSlide) {
-            dot.classList.remove('bg-gray-300');
-            dot.classList.add('bg-white');
-          } else {
-            dot.classList.remove('bg-white');
-            dot.classList.add('bg-gray-300');
-          }
-        });
-
-        // Habilitar/deshabilitar botones
-        prevClone.classList.toggle('opacity-50', currentSlide === 0);
-        nextClone.classList.toggle('opacity-50', currentSlide >= Math.max(0, visibleSlides.length - 4));
-      }
+    100% {
+      transform: translateX(1200px) translateY(0) scale(0.95);
+      opacity: 0;
     }
   }
 
-  // Inicializaciones para navegaciones parciales de Astro y carga inicial
+  @keyframes slideFromBehind {
+    0% {
+      transform: translateX(0) scale(0.9);
+      opacity: 0.3;
+    }
+    100% {
+      transform: translateX(-1200px) scale(0.9);
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes bounceIn {
+    0% {
+      transform: translateX(0) scale(0.85);
+      opacity: 0;
+    }
+    60% {
+      transform: translateX(0) scale(1.05);
+      opacity: 1;
+    }
+    80% {
+      transform: translateX(0) scale(0.98);
+    }
+    100% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .flying-card-right {
+    position: fixed !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    animation: flyAcrossRight 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .flying-card-left {
+    position: fixed !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+    animation: slideFromBehind 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .bounce-in {
+    animation: bounceIn 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  }
+
+  .carousel-navigation {
+    position: absolute;
+    top: -120px;
+    right: 0;
+    display: flex;
+    gap: 12px;
+    z-index: 20;
+  }
+
+  .carousel-btn-prev,
+  .carousel-btn-next {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 45, 48, 0.16);
+    border: 2px solid #ff2c2f;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .carousel-btn-prev svg,
+  .carousel-btn-next svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .carousel-btn-prev:hover,
+  .carousel-btn-next:hover {
+    background: #180607;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4);
+  }
+
+  @media (max-width: 767px) {
+    .carousel-navigation {
+      top: -20px;
+      right: 80%;
+      transform: translateX(50%);
+    }
+
+    .carousel-btn-prev,
+    .carousel-btn-next {
+      width: 50px;
+      height: 50px;
+    }
+  }
+</style>
+
+<script>
+  function initRecipesCarousel(root: Element) {
+    if (!root || (root as any).dataset.rcInitialized === 'true') return;
+    (root as any).dataset.rcInitialized = 'true';
+
+    console.log('🎠 Inicializando carruseles');
+
+    // MOBILE CAROUSEL - Simple
+    const trackMobile = root.querySelector('#recipesTrackMobile') as HTMLElement;
+    const prevBtnMobile = root.querySelector('#prevBtnMobile') as HTMLButtonElement;
+    const nextBtnMobile = root.querySelector('#nextBtnMobile') as HTMLButtonElement;
+
+    if (trackMobile && prevBtnMobile && nextBtnMobile) {
+      const slidesMobile = Array.from(trackMobile.querySelectorAll('.recipe-slide-mobile')) as HTMLElement[];
+      let currentIndexMobile = 0;
+
+      function updateMobile() {
+        const offset = currentIndexMobile * 110;
+        trackMobile.style.transform = `translateX(-${offset}%)`;
+      }
+
+      prevBtnMobile.addEventListener('click', () => {
+        if (currentIndexMobile > 0) {
+          currentIndexMobile--;
+        } else {
+          currentIndexMobile = slidesMobile.length - 1;
+        }
+        updateMobile();
+      });
+
+      nextBtnMobile.addEventListener('click', () => {
+        if (currentIndexMobile < slidesMobile.length - 1) {
+          currentIndexMobile++;
+        } else {
+          currentIndexMobile = 0;
+        }
+        updateMobile();
+      });
+
+      console.log('✅ Carrusel mobile inicializado');
+    }
+
+    // DESKTOP CAROUSEL - Con efectos
+    const trackDesktop = root.querySelector('#recipesTrackDesktop') as HTMLElement;
+    const containerDesktop = root.querySelector('.carousel-container-desktop') as HTMLElement;
+    const prevBtnDesktop = root.querySelector('.carousel-btn-prev:not(#prevBtnMobile)') as HTMLButtonElement;
+    const nextBtnDesktop = root.querySelector('.carousel-btn-next:not(#nextBtnMobile)') as HTMLButtonElement;
+
+    if (trackDesktop && prevBtnDesktop && nextBtnDesktop && containerDesktop) {
+      let isAnimating = false;
+
+      nextBtnDesktop.addEventListener('click', () => {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const slides = Array.from(trackDesktop.children) as HTMLElement[];
+        if (slides.length === 0) {
+          isAnimating = false;
+          return;
+        }
+
+        const firstSlide = slides[0];
+        const rect = firstSlide.getBoundingClientRect();
+
+        const flyingClone = firstSlide.cloneNode(true) as HTMLElement;
+        flyingClone.style.cssText = `
+          position: fixed !important;
+          top: ${rect.top}px !important;
+          width: ${rect.width}px !important;
+          height: ${rect.height}px !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          z-index: 9999 !important;
+          pointer-events: none !important;
+        `;
+        flyingClone.classList.add('flying-card-right');
+        
+        document.body.appendChild(flyingClone);
+
+        firstSlide.style.opacity = '0';
+        firstSlide.style.visibility = 'hidden';
+
+        setTimeout(() => {
+          trackDesktop.appendChild(firstSlide);
+          firstSlide.style.opacity = '1';
+          firstSlide.style.visibility = 'visible';
+          flyingClone.remove();
+          isAnimating = false;
+        }, 280);
+      });
+
+      prevBtnDesktop.addEventListener('click', () => {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const slides = Array.from(trackDesktop.children) as HTMLElement[];
+        if (slides.length === 0) {
+          isAnimating = false;
+          return;
+        }
+
+        const lastSlide = slides[slides.length - 1];
+        const rect = lastSlide.getBoundingClientRect();
+
+        const flyingClone = lastSlide.cloneNode(true) as HTMLElement;
+        flyingClone.style.cssText = `
+          position: fixed !important;
+          left: ${rect.left}px !important;
+          top: ${rect.top}px !important;
+          width: ${rect.width}px !important;
+          height: ${rect.height}px !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          z-index: 1 !important;
+          pointer-events: none !important;
+        `;
+        flyingClone.classList.add('flying-card-left');
+        
+        document.body.appendChild(flyingClone);
+
+        lastSlide.style.opacity = '0';
+        lastSlide.style.visibility = 'hidden';
+
+        setTimeout(() => {
+          trackDesktop.insertBefore(lastSlide, trackDesktop.firstChild);
+          lastSlide.style.opacity = '0';
+          lastSlide.style.visibility = 'visible';
+          lastSlide.classList.add('bounce-in');
+          void lastSlide.offsetWidth;
+          flyingClone.remove();
+          
+          setTimeout(() => {
+            lastSlide.classList.remove('bounce-in');
+            lastSlide.style.opacity = '1';
+            isAnimating = false;
+          }, 400);
+        }, 280);
+      });
+
+      console.log('✅ Carrusel desktop inicializado');
+    }
+  }
+
   function initAll() {
-    document.querySelectorAll('[data-recipes-carousel]')
-      .forEach((el) => initRecipesCarousel(el));
+    document.querySelectorAll('[data-recipes-carousel]').forEach((el) => {
+      initRecipesCarousel(el);
+    });
   }
 
   if (document.readyState === 'loading') {
@@ -517,6 +465,7 @@ for (let i = 0; i < recipeItems.length; i += 1) {
   } else {
     initAll();
   }
+  
   document.addEventListener('astro:page-load', initAll);
   document.addEventListener('astro:after-swap', initAll);
 </script>
