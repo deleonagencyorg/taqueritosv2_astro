@@ -30,3 +30,13 @@
     height: 80px;
   }
 }
+
+.title{
+  font-family: 'Avory I PE', sans-serif;
+  font-size: 50px;
+  font-weight: 800;
+  letter-spacing: 2%;
+  line-height: 45px;
+  color: white;
+  text-transform: uppercase;
+}

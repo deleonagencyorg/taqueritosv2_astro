@@ -62,7 +62,7 @@ if (headerColors) {
   
   <!-- Navbar principal - ocupa el 100% del ancho -->
   <div 
-    class={`w-full bg-yellow`}
+    class={`w-full `}
     style={customStyles.backgroundColor ? `background-color: ${customStyles.backgroundColor}` : ''}
   >
     <!-- Navbar de Desktop (solo en pantallas lg y superiores) -->
@@ -72,15 +72,17 @@ if (headerColors) {
 
     <!-- Navegación Móvil -->
     <nav 
-      class={`mobile-nav lg:hidden w-full py-2 px-4 flex justify-between items-center ${customHeaderConfig.backgroundColor}`}
-      style={customStyles.backgroundColor ? `background-color: ${customStyles.backgroundColor}` : ''}
+      class={`lg:hidden w-full py-2 px-4 flex justify-between items-center fixed top-6 left-1/2 -translate-x-1/2 z-50 
+         bg-[rgba(11,2,2,0.2)] backdrop-blur-sm 
+         border border-white/20 rounded-[200px] 
+         w-[95%] max-w-[1400px] shadow-lg transition-all duration-300`}
     >
       <!-- Logo para Móvil -->
       <div class="logo-container">
         <a href={`/${currentLang}/`} class="flex-shrink-0">
           <LocalizedImage
             src={logosData.principal.url}
-            alt={logosData.principal.alt || "Ziba's Logo"}
+            alt={logosData.principal.alt || "Taqueritos Logo"}
             class="h-12 w-auto object-contain"
             loading="eager"
             width="120"
@@ -91,7 +93,7 @@ if (headerColors) {
       </div>
       
       <!-- Mobile Menu Button -->
-      <div class="menu-button-container">
+      <div class="">
         <MobileMenuButton currentLang={currentLang} headerColorConfig={customHeaderConfig} />
       </div>
     </nav>

@@ -1,0 +1,330 @@
+---
+/* Componente de carrusel de marcas/logos - Versión inline */
+interface Brand {
+  id: string;
+  name: string;
+  logo: string;
+  url?: string;
+}
+
+export interface Props {
+  brands: Brand[];
+  className?: string;
+  autoplay?: boolean;
+  speed?: number;
+  backgroundColor?: string;
+}
+
+const {
+  brands = [],
+  className = "",
+  autoplay = true,
+  speed = 3000,
+  backgroundColor = "#1a0a0b",
+} = Astro.props;
+
+const brandsItems = Array.isArray(brands) ? brands : [];
+
+// Duplicar varias veces para efecto infinito suave
+const itemsToRender = [
+  ...brandsItems,
+  ...brandsItems,
+  ...brandsItems,
+  ...brandsItems,
+];
+
+import LazyImage from "../LazyImage.astro";
+---
+
+<div
+  class={`brands-carousel ${className}`}
+  data-autoplay={autoplay}
+  data-speed={speed}
+  style={`background-color: ${backgroundColor}`}
+>
+  <div class="brands-shell">
+    <svg
+      class="brands-svg"
+      width="1200"
+      height="100"
+      viewBox="0 0 1200 100"
+      preserveAspectRatio="none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 0H1200H0ZM1200 100H0H1200ZM20 100C8.40202 100 -1 90.598 -1 79V21C-1 9.40202 8.40202 0 20 0C9.50659 0 1 8.9543 1 20V80C1 91.0457 9.50659 100 20 100ZM1180 0C1191.6 0 1201 9.40202 1201 21V79C1201 90.598 1191.6 100 1180 100C1190.49 100 1199 91.0457 1199 80V20C1199 8.9543 1190.49 0 1180 0Z"
+        fill="url(#paint0_linear_2132_1846)"
+      ></path>
+      <defs>
+        <linearGradient
+          id="paint0_linear_2132_1846"
+          x1="600"
+          y1="100"
+          x2="600"
+          y2="0"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.195653" stop-color="#FF2D30"></stop>
+          <stop offset="0.525" stop-color="#FF9BB1"></stop>
+          <stop offset="0.810531" stop-color="#FF2D6F"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+    
+    <div class="brands-track">
+      <div class="swiper-container-brands">
+        <div class="swiper-wrapper">
+          {
+            itemsToRender.map((brand) => (
+              <div class="swiper-slide">
+                {brand.url ? (
+                  <a  
+                    href={brand.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="brand-link"
+                  >
+                    <LazyImage
+                      src={brand.logo}
+                      alt={brand.name}
+                      class="brand-logo"
+                      width={160}
+                      height={60}
+                    />
+                  </a>
+                ) : (
+                  <div class="brand-link">
+                    <LazyImage
+                      src={brand.logo}
+                      alt={brand.name}
+                      class="brand-logo"
+                      width={160}
+                      height={60}
+                    />
+                  </div>
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .brands-carousel {
+    width: 100%;
+    padding: 0.2rem 0;
+    position: relative;
+    background-color: #250c0a !important;
+  }
+
+  .brands-shell {
+    width: 100%;
+    max-width: 1140px;
+    height: 100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* SVG - Desktop: líneas separadas */
+  .brands-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .brands-track {
+    overflow: hidden;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  .swiper-container-brands {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .swiper-wrapper {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .swiper-slide {
+    width: auto !important;
+    height: 80px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0;
+    opacity: 1 !important;
+  }
+
+  .brand-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2.5rem;
+    height: 100%;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .brand-link:hover {
+    transform: scale(1.1);
+  }
+
+  .brand-logo {
+    max-width: 80px;
+    max-height: 40px;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    filter: brightness(1) grayscale(0);
+    display: block;
+  }
+
+  .brand-link:hover .brand-logo {
+    filter: brightness(1.2);
+  }
+
+  /* Responsive - Móvil: líneas más juntas */
+  @media (min-width: 768px) and (max-width: 1000px) {
+     .brands-track {
+      overflow: hidden;
+      height: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brands-shell {
+      width: 100%;
+      max-width: 700px;
+      height: 100px;
+      margin: 0 auto;
+      position: relative;
+    }
+  }
+
+  /* Responsive - Móvil pequeño: líneas muy juntas */
+  @media (max-width: 767px) {
+    .brands-track {
+      overflow: hidden;
+      height: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brands-shell {
+      width: 100%;
+      max-width: 240px;
+      height: 100px;
+      margin: 0 auto;
+      position: relative;
+    }
+  }
+
+</style>
+
+<script>
+  import Swiper from "swiper";
+  import { Autoplay } from "swiper/modules";
+  import "swiper/css";
+
+  interface BrandsCarouselOptions {
+    autoplay?: boolean;
+    speed?: number;
+  }
+
+  class BrandsCarousel {
+    private container: HTMLElement;
+    private swiper: Swiper | null = null;
+    private options: BrandsCarouselOptions;
+
+    constructor(container: HTMLElement, options: BrandsCarouselOptions = {}) {
+      this.container = container;
+      this.options = options;
+      this.init();
+    }
+
+    private init(): void {
+      const swiperContainer = this.container.querySelector(
+        ".swiper-container-brands",
+      ) as HTMLElement;
+      if (!swiperContainer) return;
+
+      this.swiper = new Swiper(swiperContainer, {
+        modules: [Autoplay],
+
+        loop: true,
+        loopAdditionalSlides: 10,
+
+        centeredSlides: false, // ← CAMBIADO A FALSE para que se vean más
+        slidesPerView: "auto",
+        spaceBetween: 0,
+
+        speed: 5000,
+
+        autoplay: this.options.autoplay
+          ? {
+              delay: 0,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: false,
+            }
+          : false,
+
+        freeMode: true,
+
+        allowTouchMove: false,
+      });
+    }
+
+    public destroy(): void {
+      if (this.swiper && !this.swiper.destroyed) {
+        this.swiper.destroy(true, true);
+        this.swiper = null;
+      }
+    }
+  }
+
+  let carouselInstances: BrandsCarousel[] = [];
+
+  function cleanupCarousels() {
+    carouselInstances.forEach((instance) => {
+      try {
+        instance.destroy();
+      } catch (e) {
+        console.warn("Error destroying brands carousel:", e);
+      }
+    });
+    carouselInstances = [];
+  }
+
+  function initializeCarousels() {
+    cleanupCarousels();
+
+    const carousels = document.querySelectorAll(".brands-carousel");
+    carousels.forEach((element: Element) => {
+      if (element instanceof HTMLElement) {
+        const instance = new BrandsCarousel(element, {
+          autoplay: element.dataset.autoplay !== "false",
+          speed: parseInt(element.dataset.speed || "3000", 10),
+        });
+        carouselInstances.push(instance);
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initializeCarousels);
+  document.addEventListener("astro:page-load", initializeCarousels);
+  document.addEventListener("astro:before-preparation", cleanupCarousels);
+</script>

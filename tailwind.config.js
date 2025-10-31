@@ -17,7 +17,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#FD6600',
+        primary: '#FF050B',
         secondary: '#0167F7',
         tertiary: '#FDE820',
         cuaternary: '#FF4DFF',
@@ -31,8 +31,7 @@ module.exports = {
         yellow: '#FDE820',
         pink: '#FF4DFF',
         lemon: '#BEDE89',
-        
-    
+        grey: '#0B020233',
       },
       fontFamily: {
         sans: ['Rockeby regular', 'sans-serif'],

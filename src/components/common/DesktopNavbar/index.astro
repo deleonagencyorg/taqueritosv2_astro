@@ -22,72 +22,84 @@ const menuItems = t('menu_items', { namespace: 'common', locale: currentLang }) 
 ---
 
 <!-- Desktop Navigation -->
-<nav class={`hidden md:flex items-center justify-between w-full py-3 px-6 bg-[#fcb800]`} data-current-lang={currentLang}>
-  <!-- Logo -->
-  <div class="flex-shrink-0">
-    <a href={`/${currentLang}/`} class="block">
-      <img src={logos.principal.url} alt={logos.principal.alt} class="h-20 w-auto" />
-    </a>
-  </div>
-
-  <!-- Navigation Items - Center -->
-  <div class="flex items-center justify-center flex-1 px-4 mx-auto">
-   
-  </div>
-
-  <!-- Right Side - Language Switcher and Yummies One -->
-  <div class="flex items-center space-x-5">
-    <div class="flex space-x-10" id="desktop-menu-items">
-      {menuItems && menuItems.map((item: any) => (
-        <div class="relative group">
-          <a 
-            href={item.href} 
-            class={`${headerColorConfig.textColor} font-title text-xl uppercase font-medium transition-colors py-2 px-3 rounded-md flex items-center hover:bg-quinary ${!item.href.startsWith('#') && currentPath === item.href ? 'bg-quinary' : ''}`}
-            style={`color: ${headerColorConfig.textColor};`}
-          >
-            {item.text}
-            {item.submenu && (
-              <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
-            )}
-          </a>
-          {item.submenu && (
-            <div class="absolute left-0 mt-0 w-48 bg-white text-gray-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out invisible group-hover:visible z-50 py-1">
-              {item.submenu.map((subItem: any) => (
-                <div class="relative group/submenu">
-                  <a href={subItem.href} class="block px-4 py-2 text-sm font-sans hover:bg-quinary flex justify-between items-center transition-colors duration-200 ${!subItem.href.startsWith('#') && currentPath === subItem.href ? 'bg-quinary' : ''}">
-                    {subItem.text}
-                    {subItem.submenu && (
-                      <svg class="w-3 h-3 ml-1 fill-current" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 01-1.414 0z" /></svg>
-                    )}
-                  </a>
-                  {subItem.submenu && (
-                    <div class="absolute left-full top-0 w-48 bg-white text-gray-800 rounded-md shadow-lg opacity-0 group-hover/submenu:opacity-100 transition-opacity duration-200 ease-in-out invisible group-hover/submenu:visible z-50 py-1">
-                      {subItem.submenu.map((thirdItem: any) => (
-                        <a href={thirdItem.href} class="block px-4 py-2 text-sm font-sans hover:bg-quinary transition-colors duration-200 ${!thirdItem.href.startsWith('#') && currentPath === thirdItem.href ? 'bg-quinary' : ''}">{thirdItem.text}</a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
+<nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 
+         bg-[rgba(11,2,2,0.2)] backdrop-blur-sm 
+         border border-white/20 rounded-[200px] 
+         w-[95%] max-w-[1400px] shadow-lg transition-all duration-300"
+  data-current-lang={currentLang}>
+  <div class="hidden md:flex items-center justify-center w-full py-3 px-6 ">
+    <!-- Logo -->
+    <div class="flex-shrink-0 pr-20">
+      <a href={`/${currentLang}/`} class="block">
+        <img src={logos.principal.url} alt={logos.principal.alt} class="h-14 w-auto" />
+      </a>
     </div>
-    <!-- Language Switcher -->
-    <LanguageSwitcher activeLocale={currentLang} headerColorConfig={headerColorConfig} />
 
-    <div class="hidden md:flex">
-      <SocialMediaIcons 
-        currentLang={currentLang} 
-        iconColor={headerColorConfig.isSpecialBackground ? 'black' : headerColorConfig.textColor.replace('text-', '')}
-        centered={false} 
-      />
-    </div>
+    <!-- Navigation Items - Center -->
+    <!-- <div class="flex items-center justify-center flex-1 px-4 mx-auto">
     
-    <!-- Yummies One -->
-    <!-- <a href="/yummies-one" class="flex items-center text-white hover:text-gray-300 uppercase text-sm font-medium">
-      <span>Yummies One</span>
-    </a> -->
+    </div> -->
+
+    <!-- Right Side - Language Switcher and Yummies One -->
+    <div class="flex items-center space-x-5">
+      <div class="flex space-x-4" id="desktop-menu-items">
+        {menuItems && menuItems.map((item: any) => (
+          <div class="relative group">
+            <a 
+              href={item.href} 
+              class={`${headerColorConfig.textColor} font-title text-[16px] uppercase font-medium transition-colors py-2 px-3 rounded-md flex items-center  ${!item.href.startsWith('#') && currentPath === item.href ? 'bg-quinary' : ''}`}
+              style={`color: ${headerColorConfig.textColor};`}
+            >
+              {item.text}
+              {item.submenu && (
+                <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+              )}
+            </a>
+            {/* {item.submenu && (
+              <div class="absolute left-0 mt-0 w-48 bg-white text-gray-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out invisible group-hover:visible z-50 py-1">
+                {item.submenu.map((subItem: any) => (
+                  <div class="relative group/submenu">
+                    <a href={subItem.href} class="block px-4 py-2 text-sm font-sans hover:bg-quinary flex justify-between items-center transition-colors duration-200 ${!subItem.href.startsWith('#') && currentPath === subItem.href ? 'bg-quinary' : ''}">
+                      {subItem.text}
+                      {subItem.submenu && (
+                        <svg class="w-3 h-3 ml-1 fill-current" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 01-1.414 0z" /></svg>
+                      )}
+                    </a>
+                    {subItem.submenu && (
+                      <div class="absolute left-full top-0 w-48 bg-white text-gray-800 rounded-md shadow-lg opacity-0 group-hover/submenu:opacity-100 transition-opacity duration-200 ease-in-out invisible group-hover/submenu:visible z-50 py-1">
+                        {subItem.submenu.map((thirdItem: any) => (
+                          <a href={thirdItem.href} class="block px-4 py-2 text-sm font-sans hover:bg-quinary transition-colors duration-200 ${!thirdItem.href.startsWith('#') && currentPath === thirdItem.href ? 'bg-quinary' : ''}">{thirdItem.text}</a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )} */}
+          </div>
+        ))}
+      </div>
+      <!-- Language Switcher -->
+      <!-- <LanguageSwitcher activeLocale={currentLang} headerColorConfig={headerColorConfig} /> -->
+
+      <!-- <div class="hidden md:flex">
+        <SocialMediaIcons 
+          currentLang={currentLang} 
+          iconColor={headerColorConfig.isSpecialBackground ? 'black' : headerColorConfig.textColor.replace('text-', '')}
+          centered={false} 
+        />
+      </div> -->
+      
+      <!-- Yummies One -->
+      <!-- <a href="/yummies-one" class="flex items-center text-white hover:text-gray-300 uppercase text-sm font-medium">
+        <span>Yummies One</span>
+      </a> -->
+    </div>
+
+    <div class="pl-20">
+      <button class="px-[20px] py-[17px] bg-primary text-white rounded-[5px] w-[150px] h-[47px] flex items-center justify-center">
+        CONTÁCTANOS
+      </button>
+    </div>
   </div>
 </nav>

@@ -35,64 +35,125 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                          firstSlide.desktop?.toLowerCase().endsWith('.webm');
 ---
 
-<div class="video-carousel-container">
-  <!-- Swiper container -->
+<div class="video-carousel-container relative overflow-hidden">
   <div class="swiper-container video-carousel">
     <div class="swiper-wrapper">
       {slides.map((slide, index) => {
-        const isVideo = slide.desktop?.toLowerCase().endsWith('.mp4') || 
-                       slide.desktop?.toLowerCase().endsWith('.webm');
+        const isVideo =
+          slide.desktop?.toLowerCase().endsWith('.mp4') ||
+          slide.desktop?.toLowerCase().endsWith('.webm');
         const slideId = `slide-${index}`;
-        
+
         return (
           <div class="swiper-slide" id={slideId}>
             <div class="slide-content" style={`height: ${height};`}>
               <!-- Fallback image that shows while video loads or if video fails -->
               <div class="fallback-image">
-                <img 
-                  src={isVideo ? slide.desktop.replace(/\.(mp4|webm)$/i, '.jpg') : slide.desktop} 
-                  alt={slide.alt || "Slide background"} 
-                  width="1920" 
-                  height="1080"
+                <img
+                  src={isVideo ? slide.desktop.replace(/\.(mp4|webm)$/i, '.jpg') : slide.desktop}
+                  alt={slide.alt || "Slide background"}
+                  width="980"
+                  height="620"
                   loading={index === 0 ? "eager" : "lazy"}
                 />
               </div>
+
               
               {isVideo ? (
                 <!-- Video background -->
                 <div class="video-container">
-                  <video 
-                    autoplay 
-                    muted 
-                    loop 
+                  <video
+                    autoplay
+                    muted
+                    loop
                     playsinline
                     class="slide-video"
                     data-slide-id={slideId}
                     preload={index === 0 ? "auto" : "metadata"}
                   >
                     <source src={slide.desktop} type={slide.desktop.toLowerCase().endsWith('.webm') ? 'video/webm' : 'video/mp4'}>
-                    <!-- If the browser doesn't support video, the fallback image will remain visible -->
-                    Your browser does not support the video tag.
                   </video>
                 </div>
               ) : (
                 <!-- Image background for non-video slides -->
-                <div class="image-container">
-                  <img 
-                    src={slide.desktop} 
-                    alt={slide.alt || "Slide background"} 
-                    class="slide-image desktop-image"
+                <div class="image-container relative w-full h-[680px] md:w-full md:h-full flex md:items-center md:justify-center">
+                  <!-- Imagen principal (desktop) -->
+                  <img
+                    src={slide.desktop}
+                    alt={slide.alt || "Slide background"}
+                    class="slide-image desktop-image h-auto z-20 bg-transparent w-[1200px] h-[900px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
-                  <img 
-                    src={slide.mobile} 
-                    alt={slide.alt || "Slide background"} 
-                    class="slide-image mobile-image"
+
+                  <img
+                    src={slide.mobile}
+                    alt={slide.alt || "Slide background"}
+                    class="slide-image mobile-image h-auto z-20 bg-transparent w-[1200px] h-[800px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
+
+                  <h1 class="dragon-text font-bold uppercase leading-[90%] tracking-[0]  whitespace-nowrap select-none">
+                    DRAGON DE FUEGO
+                  </h1>
+                 
                 </div>
-              )}
+
+                <!-- Bloque de texto lateral izquierdo -->
+              <div class="left-text">
+                <p>Sabor intenso,<br />Diversion<span> <b>Maxima.</b></span></p>
+  
+
+              </div>
+
+              <!-- Bloque de texto lateral derecho -->
+              <div class="right-text-top-div">
+                  <div class="right-text-top">
+                      <p class="text-extra">
+                    Extra picante que <br /> enamora
+                  </p>
+                  <div class="pl-[50px]">
+                      <svg width="30" height="18" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M13.7175 4.85355C13.9127 4.65829 13.9127 4.34171 13.7175 4.14645L10.5355 0.964466C10.3402 0.769204 10.0236 0.769204 9.82837 0.964466C9.63311 1.15973 9.63311 1.47631 9.82837 1.67157L12.6568 4.5L9.82837 7.32843C9.63311 7.52369 9.63311 7.84027 9.82837 8.03553C10.0236 8.2308 10.3402 8.2308 10.5355 8.03553L13.7175 4.85355ZM0.635986 4.5V5L13.3639 5V4.5V4L0.635986 4V4.5Z" fill="white"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <svg width="255" height="32" viewBox="0 0 255 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 31C0 31 151 31 159.5 31C168 31 182.5 1 191 1C199.5 1 254.5 1 254.5 1" stroke="#FF2D30"/>
+                  </svg>
+              </div>
+             
+
+              <div class="right-text">
+                <p class="text-leveleate ">Leveleate al maximo con Taqueritos.<br/>Dragron de Fuego ¿Listo para el reto?</p>
+                
+                <div class="flex flex-row items-center">
+                  <div class="cta">
+                    <a href={slide.link || "#"} class="cta-button">Descubre mas </a>
+                  </div>
+                  <div class="button-play ml-[35px]">
+                    <div class="button-inner">
+                      <svg
+                        width="12"
+                        height="14"
+                        viewBox="0 0 12 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.1438 5.88712C12.0187 6.40766 12.0187 7.70904 11.1438 8.22959L2.28522 13.5001C1.4103 14.0207 0.31665 13.37 0.31665 12.3289L0.316651 1.78779C0.316651 0.746695 1.4103 0.0960091 2.28522 0.616558L11.1438 5.88712Z"
+                          fill="white"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
               
+
+              )}
+
               <!-- Overlay with text (conditional) -->
               {showOverlay && (slide.title || slide.subtitle) && (
                 <div class={`overlay bg-black bg-opacity-${overlayOpacity}`}>
@@ -116,172 +177,408 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
         );
       })}
     </div>
-    
+
     <!-- Navigation controls -->
-    <div class="swiper-button-next"></div>
+    <!-- <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
-    <div class="swiper-pagination"></div>
+    <div class="swiper-pagination"></div> -->
+    <div class="swiper-pagination pills"></div>
+
+
   </div>
 </div>
 
+
 <style>
-  /* Estilos para flechas y puntos de navegación blancos */
-  :global(.swiper-button-next),
-  :global(.swiper-button-prev) {
-    color: white !important;
-    filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.5));
-  }
-  
-  :global(.swiper-pagination-bullet) {
-    background: white !important;
-    opacity: 0.7;
-  }
-  
-  :global(.swiper-pagination-bullet-active) {
-    opacity: 1;
-    background: white !important;
-  }
-  
   .video-carousel-container {
     position: relative;
     width: 100%;
     overflow: hidden;
+    background: radial-gradient(circle at 50% 50%, #2c0b0b 0%, #150404 80%);
   }
   
+  /* ======= FONDO ======= */
   .slide-content {
     position: relative;
-    width: 100%;
+    background: radial-gradient(ellipse at center, #1a0708 0%, #230405 50%, #0e0202 100%);
     overflow: hidden;
   }
+  .slide-content::before,
+  .slide-content::after {
+    content:"";
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:50vw;
+    height:38vw;
+    border-radius:50%;
+    background: radial-gradient(ellipse at center, rgba(255,30,40,0.5) 0%, rgba(140,0,0,0) 70%);
+    filter: blur(60px);
+    z-index:1;
+  }
+  .slide-content::before { left:-30vw; }
+  .slide-content::after { right:-30vw; }
   
+  /* ======= LÍNEAS CURVAS ROJAS ======= */
+  .slide-image {
+    width: 920;
+    height: 680;
+    object-fit: cover;
+    object-position: center;
+  }
+
+
+
+  .image-container .slide-image {
+    animation: floatUpDown 2s ease-in-out infinite;
+    transition: transform 1s ease-in-out;
+  }
+
+  .line.left {
+    left: 3%;
+    top: -10%;
+    height: 140%;
+    border-radius: 50%;
+    transform: rotate(15deg);
+    box-shadow: 0 0 20px rgba(255,60,0,0.7);
+  }
+
+  .text-extra {
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Avory I PE', sans-serif;
+    color: white;
+    line-height: 20px;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea el bloque a la izquierda */
+    text-align: left;        /* Alinea el texto dentro del bloque */
+  }
+
+  .text-leveleate {
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Avory I PE', sans-serif;
+    color: white;
+    line-height: 100%;
+    text-transform: uppercase;
+    display: flex;
+  }
+
+   .right-text-top {
+    position: absolute;
+    bottom: 70%;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    font-family: 'Avory I PE', sans-serif;
+  }
+
+  .right-text-top-div {
+    position: absolute;
+    right: 8%;
+    bottom: 70%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    color: white;
+    font-family: 'Avory I PE', sans-serif;
+  }
+
+
   .fallback-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 920;
+    height: 680;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fallback-image img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 2;
   }
   
-  .fallback-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .line.right {
+    right: 3%;
+    top: -10%;
+    height: 140%;
+    border-radius: 50%;
+    transform: rotate(-15deg);
+    box-shadow: 0 0 20px rgba(255,60,0,0.7);
+  }
+
+  .button-play {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background-color: rgba(255, 0, 4, 0.25); /* círculo externo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+/* Círculo interior */
+  .button-inner {
+    width: 34px;
+    height: 36px;
+    background-color: rgba(255, 0, 4, 0.25); /* rojo sólido */
+    border-radius: 50%;
+    border-color: rgba(255, 45, 48, 1);
+    border-width: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 25px rgba(255, 45, 48, 0.6);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Animación hover */
+  .button-play:hover {
+    transform: scale(1.08);
+  }
+  .button-play:hover .button-inner {
+    box-shadow: 0 0 35px rgba(255, 45, 48, 0.8);
+    transform: scale(1.05);
+  }
+
+  /* SVG blanco centrado */
+  .button-play svg {
+    width: 12px;
+    height: 16px;
+    fill: white;
+  }
+
+  /* ======= TEXTO CENTRAL ======= */
+  .dragon-text {
+    color: rgba(158, 74, 75, 0.5);
+    z-index: 2;
+    animation: colorCycle 5s ease-in-out infinite;
+    text-align: center;
+    position: absolute;
+    font-size: 190px !important;
+  }
+
+  @keyframes colorCycle {
+    0% { color: #9a2d2e; }
+    25% { color: #ae5157; }
+    50% { color: #904d50; }
+    75% { color: #9c3235; }
+    100% { color: #9a2d2e; }
   }
   
+  /* ======= TEXTO IZQUIERDO ======= */
+  .left-text {
+    position: absolute;
+    left: 6%;
+    bottom: 20%;
+    color: white;
+    font-size: 1.5rem;
+    line-height: 1.4;
+    font-family: 'Avory I PE', sans-serif;
+    z-index: 10;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 120%;
+  }
+  .left-text span { color: #ff7b7b; }
+  
+  /* ======= TEXTO DERECHO ======= */
+  .right-text {
+    position: absolute;
+    right: 8%;
+    bottom: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    color: white;
+    font-family: 'Avory I PE', sans-serif;
+    z-index: 10;
+  }
+
+  .cta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.6rem;
+  }
+
+  .cta-button {
+    width: 247px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: linear-gradient(90deg, #ff0033, #ff4d6d);
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 6px;
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    box-shadow: 0 0 25px rgba(255,0,0,0.4);
+    transition: all 0.3s ease;
+  }
+  .cta-button:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 0 40px rgba(255,0,0,0.6);
+  }
+  .cta-button span {
+    font-size: 1.2rem;
+    margin-left: 4px;
+  }
+  
+  /* ======= IMAGEN ======= */
+
+  @keyframes floatUpDown {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(60px); }
+    100% { transform: translateY(0); }
+  }
+
+  .image-container .slide-image {
+    animation: floatUpDown 2s ease-in-out infinite;
+    transition: transform 1s ease-in-out;
+  }
+
+  .desktop-image {
+    display: none;
+    width: 920;
+    height: 680;
+  }
+
+  .mobile-image {
+    display: block;
+    width: 920;
+    height: 680;
+  }
+
+
+  /* ======= Pildoras ======= */
+
+/* Contenedor y posición */
+/* Posición del contenedor de paginación */
+  :global(.swiper-pagination.pills) {
+    position: absolute;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    z-index: 40;
+  }
+
+  /* Bullet base: forma de píldora */
+  :global(.swiper-pagination.pills .swiper-pagination-bullet) {
+    width: 40px;
+    height: 8px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.18);
+    opacity: 1;                /* Swiper pone 0.2 por defecto */
+    transition: width .25s ease, background .25s ease, transform .25s ease, box-shadow .25s ease;
+    margin: 0 !important;      /* Swiper añade márgenes, los quitamos */
+  }
+
+  /* Activo: más ancho y rosa/rojo brillante */
+  :global(.swiper-pagination.pills .swiper-pagination-bullet-active) {
+    width: 30px;
+    height: 8px;
+    background: #ff3a58;
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(255,58,88,0.45);
+  }
+
+  /* Hover (opcional) */
+  :global(.swiper-pagination.pills .swiper-pagination-bullet:hover) {
+    transform: translateY(-1px);
+  }
+
   .video-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
   }
-  
+
   .slide-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
-  .image-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
+
+  @keyframes floatBag {
+    0% { transform: rotate(-12deg) translateY(0); }
+    50% { transform: rotate(-12deg) translateY(-14px); }
+    100% { transform: rotate(-12deg) translateY(0); }
   }
   
-  .slide-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-  
-  .desktop-image {
-    display: none;
-  }
-  
-  .mobile-image {
-    display: block;
-  }
-  
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 3;
-  }
-  
-  .text-content {
-    text-align: center;
-    padding: 0 1rem;
-    max-width: 800px;
-  }
-  
-  .slide-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-  
-  .slide-subtitle {
-    font-size: 1.5rem;
-    font-weight: 400;
-    margin-bottom: 2rem;
-  }
-  
-  .slide-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-    border-radius: 9999px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-  }
-  
-  .slide-link:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-  }
-  
-  /* Responsive styles */
-  @media (min-width: 768px) {
-    .desktop-image {
-      display: block;
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .desktop-image { 
+      display: block !important; 
     }
-    
-    .mobile-image {
-      display: none;
+    .mobile-image { 
+      display: none !important; 
     }
-    
-    .slide-title {
-      font-size: 3.5rem;
+    .right-text {
+      bottom: 8%;
     }
-    
-    .slide-subtitle {
-      font-size: 2rem;
+
+    .left-text {
+      bottom: 8%;
+    }
+
+    .right-text-top-div {
+      bottom: 80%;
     }
   }
-  
-  @media (max-width: 767px) {
+
+  @media (max-width: 767px){
+    .slide-content{ height: 78vh !important; }
+    .dragon-text{ 
+      font-size: 132px !important;
+      margin-top: 130px !important;
+      padding-right: 400px !important;
+    }
+    .right-text-top-div { display: none !important;}
+    .left-text {display: none !important;}
+
+    .swiper-pagination.pills {
+      position: absolute;
+      bottom: auto; /* Quitar bottom */
+      top: 77%; /* O ajusta según necesites */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 40; /* Asegura que esté por encima */
+    }
+
+    .right-text {
+      margin-top: 350px;
+      margin-left: 50px;
+      position: relative;
+      z-index: 30;
+    }
+
     .slide-content {
-      height: 300px !important;
+      height: 120vh !important;
     }
+
   }
-</style>
+
+  </style>
+  
 
 <script>
   import Swiper from 'swiper';
