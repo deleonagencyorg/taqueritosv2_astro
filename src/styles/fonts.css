@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'Rockeby regular';
-  src: url('../assets/fonts/rockebycd-regular.otf') format('truetype');
+  src: url('../assets/fonts/avory.otf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -10,7 +10,7 @@
 
 @font-face {
   font-family: 'Rockeby black';
-  src: url('../assets/fonts/rockebycd-black.otf') format('truetype');
+  src: url('../assets/fonts/avory.otf') format('truetype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
