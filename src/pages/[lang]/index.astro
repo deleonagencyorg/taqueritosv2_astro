@@ -31,8 +31,8 @@ const ContentComponent = HomePageContent; // Asignación directa para la página
 
 // SEO Keywords based on language
 const seoKeywords = lang === 'es' 
-  ? 'snacks centroamérica, taqueritos, zambos, ranchitas, superman snacks, botanas mexicanas, comida mexicana auténtica, snacks honduras, snacks guatemala, marca líder snacks, snacks yummies'
-  : 'central america snacks, mexican snacks, authentic mexican food, honduras snacks, guatemala snacks, leading snack brand, snacks yummies, taqueritos, zambos, ranchitas, superman snacks';
+  ? 'snacks centroamérica, taqueritos, zambos, ranchitas, superman snacks,snacks honduras, snacks guatemala, marca líder snacks, snacks yummies'
+  : 'central america snacks, honduras snacks, guatemala snacks, leading snack brand, snacks yummies, taqueritos, zambos, ranchitas, superman snacks';
 ---
 <MainLayout title={pageTitle} description={pageDescription}>
   <Fragment slot="head">
@@ -40,13 +40,13 @@ const seoKeywords = lang === 'es'
     <meta name="keywords" content={seoKeywords}>
     <meta name="author" content="Snacks Yummies">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href={`https://zibaspapas.com/${lang}`}>
+    <link rel="canonical" href={`https://taqueritos.com/${lang}`}>
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content={`Snacks Yummies - ${pageTitle}`}>
     <meta property="og:description" content={pageDescription}>
     <meta property="og:image" content="https://snack.yummiespromociones.com/snacksyummies/taqueritos-logo.webp">
-    <meta property="og:url" content={`https://zibaspapas.com/${lang}`}>
+    <meta property="og:url" content={`https://taqueritos.com/${lang}`}>
     <meta property="og:type" content="website"> 
     <meta property="og:site_name" content="Taqueritos">
     <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'}>
@@ -64,7 +64,7 @@ const seoKeywords = lang === 'es'
       "@type": "Organization",
       "name": "Taqueritos",
       "alternateName": "Taqueritos",
-      "url": "https://zibaspapas.com",
+      "url": "https://taqueritos.com",
       "logo": "https://snack.yummiespromociones.com/snacksyummies/taqueritos-logo.webp",
       "description": lang === 'es' ? "Marca líder de snacks en Centroamérica. Taqueritos, Zambos, Ranchitas y Superman. Calidad y sabor inigualable." : "Leading snack brand in Central America. Taqueritos, Zambos, Ranchitas and Superman. Unmatched quality and flavor.",
       "foundingDate": "1990",
@@ -80,13 +80,13 @@ const seoKeywords = lang === 'es'
         {
           "@type": "Brand",
           "name": "Taqueritos",
-          "url": "https://zibaspapas.com"
+          "url": "https://taqueritos.com"
         }
       ],
       "sameAs": [
-        "https://www.facebook.com/zibaslatam",
-        "https://www.instagram.com/zibaslatam",
-        "https://www.tiktok.com/@zibaslatam", 
+        "https://www.facebook.com/taqueritos",
+        "https://www.instagram.com/taqueritos",
+        "https://www.tiktok.com/@taqueritos", 
       ],
       "contactPoint": {
         "@type": "ContactPoint",
@@ -107,12 +107,12 @@ const seoKeywords = lang === 'es'
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Taqueritos",
-      "url": "https://zibaspapas.com",
+      "url": "https://taqueritos.com",
       "description": lang === 'es' ? "Sitio web oficial de Taqueritos, la marca líder de snacks en Centroamérica" : "Official website of Taqueritos, the leading snack brand in Central America",
       "inLanguage": lang === 'es' ? "es-ES" : "en-US",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": `https://zibaspapas.com/${lang}/search?q={search_term_string}`,
+        "target": `https://taqueritos.com/${lang}/search?q={search_term_string}`,
         "query-input": "required name=search_term_string"
       }
     })}></script>
@@ -125,7 +125,7 @@ const seoKeywords = lang === 'es'
           "@type": "ListItem",
           "position": 1,
           "name": lang === 'es' ? "Inicio" : "Home",
-          "item": `https://zibaspapas.com/${lang}`
+          "item": `https://taqueritos.com/${lang}`
         }
       ]
     })}></script>
