@@ -91,7 +91,7 @@ import LazyImage from "../LazyImage.astro";
 
                 <a
                   style={`background: radial-gradient(${product.color_button || "#FF8E52"}, ${product.second_color_button || "#FF4400"} 0%, ${product.color_button || "#FF8E52"} 100%);`}
-                  class="btn-view flex w-full max-w-[310px] h-[54px] text-[22.02px] px-[10px] py-5 justify-center items-center gap-[10px] shrink-0 rounded border border-[0.1px] text-white font-semibold hover:shadow-lg"
+                  class="btn-view flex w-full h-[54px] text-[22.02px]  justify-center items-center shrink-0 rounded border border-[0.1px] text-white font-semibold hover:shadow-lg"
                   data-no-swipe="true"
                   data-no-animation="true"
                 >
@@ -343,32 +343,40 @@ import LazyImage from "../LazyImage.astro";
 }
 
 /* Responsive */
-  @media (max-width: 768px) {
+  @media (min-width: 768px) and (max-width: 1024px) {
     .products-carousel {
       padding-top: 150px;
     }
     .swiper-container {
-      padding: 0 30px;
+      padding: 0 20px;
     }
     .product-card {
       min-height: 480px;
       padding: 1.5rem;
     }
     .product-image-container {
-      margin-top: -120px;
+      margin-top: -60px;
     }
     .product-image-container img,
     .product-image-container .product-image {
       width: 280px !important;
       height: 380px !important;
     }
+    
     .product-card a {
-      max-width: 280px !important;
       width: 100% !important;
+    }
+
+    .product-name {
+      font-size: 20px;
     }
   }
 
   @media (max-width: 767px) {
+    .product-name {
+      font-size: 18px;
+    }
+
     .swiper-slide {
       padding-top: 120px;
     }
@@ -410,12 +418,12 @@ import LazyImage from "../LazyImage.astro";
       height: 320px !important;
     }
     .product-card a {
-      max-width: 240px !important;
       width: 100% !important;
       height: 50px !important;
       font-size: 14px !important;
       padding: 16px 8px !important;
     }
+
   }
 </style>
 

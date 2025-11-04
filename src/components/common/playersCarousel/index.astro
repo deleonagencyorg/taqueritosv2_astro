@@ -1,0 +1,324 @@
+---
+import { Image } from 'astro:assets';
+
+interface PlayersItem {
+    title: string;
+    subtitle: string;
+    user: string;
+    comment: string;
+}
+
+interface PlayersHome {
+    title: string;
+    subtitle: string;
+    button: {
+        title: string;
+    };
+}
+
+interface Props {
+  players: PlayersItem[];
+  playersHome: PlayersHome;
+}
+
+const {
+  players = [],
+  playersHome = { title: '', subtitle: '', button: { title: '' } }
+} = Astro.props;
+---
+
+<div class="players-carousel-container relative overflow-hidden">
+  <!-- Header fijo FUERA del carrusel -->
+  <div class="flex flex-col md:flex-col lg:flex-row lg:justify-between lg:items-center lg:ml-[20px] lg:mr-[80px] mt-[40px] mb-[40px]">
+    {playersHome.title && (
+      <div class="container mx-auto px-4 title">
+        <p>
+          {playersHome.title}
+        </p>
+        {playersHome.subtitle && (
+          <p>
+            {playersHome.subtitle}
+          </p>
+        )}
+      </div>
+    )}
+    
+    <div class="mt-8 md:mt-0 lg:mt-0">
+      <button class="gradient-border-button">
+        {playersHome.button?.title || "Sé parte de nuestra comunidad"}
+      </button>
+    </div>
+  </div>
+
+  <!-- Carrusel de Swiper -->
+  <div class="swiper players-swiper pb-16 ">
+    <div class="swiper-wrapper">
+      {players.map((player, index) => {
+        return (
+          <div class="swiper-slide">
+            <div class="slide-content flex items-center justify-center">
+              <div class="player-card">
+                <h3 class="card-title">
+                  {player.title} <br/>
+                  {player.subtitle}
+                </h3>
+                
+                <p class="card-user">
+                  {player.user}
+                </p>
+                
+                <p class="card-comment">
+                  {player.comment}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</div>
+
+<style>
+  .players-carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #081806;
+    padding-bottom: 40px;
+  }
+  
+  /* ======= FONDO ======= */
+  .players-carousel-container::before,
+  .players-carousel-container::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50vw;
+    height: 38vw;
+    border-radius: 50%;
+    background: linear-gradient(322.3deg, #07C650 7.42%, #00FFAE 82.2%);
+    filter: blur(80px);
+    opacity: 0.2;
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  .players-carousel-container::before { 
+    left: -30vw; 
+  }
+  
+  .players-carousel-container::after { 
+    right: -30vw;
+  }
+  
+  .slide-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px 0;
+  }
+
+  /* ========== AQUÍ: SOLUCIÓN CORRECTA - RTL para pegar a la derecha → ========== */
+  @media (min-width: 1024px) {
+    .players-swiper {
+      direction: rtl; /* Invierte todo el carrusel */
+      overflow: visible !important;
+    }
+    
+    /* Corrige la dirección del texto dentro de las cards */
+    .players-swiper .swiper-slide {
+      direction: ltr;
+    }
+  }
+  /* ============================================================== */
+  
+  /* ======= CARD ======= */
+  .player-card {
+    position: relative;
+    width: 532px;
+    max-width: 90%;
+    min-height: 275px;
+    padding: 40px 30px;
+    background: #092514A6;
+    border: none;
+    border-radius: 5px;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Borde degradado */
+  .player-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 5px;
+    padding: 1px;
+    background: linear-gradient(237.56deg, #2DFF45 1.39%, #9BFF9B 47.74%, #2DFF3B 100%);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+  }
+  
+  .card-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    font-family: 'Avory I PE', sans-serif;
+    line-height: 1.3;
+    margin-bottom: 24px;
+  }
+  
+  .card-user {
+    font-size: 16px;
+    font-weight: 600;
+    color: #9BFF9B;
+    margin-bottom: 16px;
+    font-family: 'Avory I PE', sans-serif;
+  }
+  
+  .card-comment {
+    font-size: 14px;
+    color: white;
+    line-height: 1.6;
+    opacity: 0.9;
+    font-family: 'Avory I PE', sans-serif;
+  }
+  
+  /* ======= BOTÓN ======= */
+  .gradient-border-button {
+    position: relative;
+    width: 252px;
+    height: 47px;
+    padding: 17px 20px;
+    background: #092514A6;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+  
+  .gradient-border-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 5px;
+    padding: 1px;
+    background: linear-gradient(237.56deg, #2DFF45 1.39%, #9BFF9B 47.74%, #2DFF3B 100%);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+  }
+  
+  .gradient-border-button:hover {
+    background: #0a2916;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 255, 69, 0.3);
+  }
+
+  .title {
+    font-family: 'Avory I PE', sans-serif;
+    font-size: 50px;
+    font-weight: 800;
+    letter-spacing: 2%;
+    line-height: 45px;
+    color: white;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 10;
+  }
+  
+  /* Responsive tablet */
+  @media (max-width: 1024px) {
+    .gradient-border-button {
+      margin: 20px 20px 0 20px;
+      width: 100%;
+      max-width: 90%;
+      height: 66px;
+    }
+
+    .player-card {
+      width: 450px;
+    }
+  }
+
+  /* Responsive mobile */
+  @media (max-width: 767px) {
+    .player-card {
+      width: 100%;
+      padding: 30px 20px;
+      min-height: auto;
+    }
+
+    .gradient-border-button {
+      margin: 0 20px;
+      width: 100%;
+      max-width: 90%;
+      height: 66px;
+    }
+    
+    .card-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .card-user {
+      font-size: 14px;
+    }
+    
+    .card-comment {
+      font-size: 13px;
+    }
+  }
+</style>
+
+<script>
+  import Swiper from 'swiper';
+  import { Autoplay } from 'swiper/modules';
+  import 'swiper/css';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const swiper = new Swiper('.players-swiper', {
+      modules: [Autoplay],
+      slidesPerView: 2.8,
+      spaceBetween: 25,
+      centeredSlides: false,
+      loop: true,
+      autoplay: {
+        delay: 2000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: false,
+      },
+      speed: 800,
+      breakpoints: {
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 20
+        },
+        768: {
+          slidesPerView: 1.5,
+          spaceBetween: 30
+        },
+        1024: {
+          slidesPerView: 2,
+          spaceBetween: 30
+        },
+        1440: {
+          slidesPerView: 2.5,
+          spaceBetween: 30
+        }
+      }
+    });
+  });
+</script>

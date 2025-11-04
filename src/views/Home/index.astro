@@ -9,6 +9,7 @@ import MasonryGallery from '../../components/gallery/MasonryGallery.astro';
 import PixelGrid from '../../components/atoms/PixelGrid.astro';
 import BlogCard from '../../components/blog/BlogCard.astro';
 import BrandsCarousel from '../../components/common/BrandsCarousel/index.astro';
+import PlayersCarousel from '../../components/common/playersCarousel/index.astro';
 
 
 // Style Imports
@@ -35,6 +36,9 @@ const aboutAssets = t('', { namespace: 'aboutus', locale: currentLang }) || {};
 const brandsAssets = t('', { namespace: 'brands', locale: currentLang }) || {};
 const newsAssets =  t('', { namespace: 'news', locale: currentLang }) || {};
 const products = t('items', { namespace: 'products', locale: currentLang }) || [];
+const playersNews = t('players', { namespace: 'players', locale: currentLang }) || [];
+const playersHome = t('home', { namespace: 'players', locale: currentLang }) || {};
+const players = Array.isArray(playersNews) ? playersNews : [];
 const brandsList = brandsAssets.brands || [];
 const zibasBrand = brandsList.find((brand: any) => brand.id === 'hugo');
 const zibasProducts = zibasBrand?.products || [];
@@ -155,11 +159,15 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
         backgroundColor="#0a0405"
       />
     </section>
+
+    <section id="players" class="w-full !bg-[#081806]">
+      <PlayersCarousel 
+        players={players} 
+        playersHome={playersHome}
+      />
+    </section>
     
     <!-- Sección de recetas con carrusel -->
-
-
-
     <!-- Sección Gallery -->
     <!-- <section id="gallery" class="bg-pink w-full py-12" transition:animate="slide">
       <div class="container mx-auto px-4">
@@ -178,7 +186,7 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
 
 
     <!-- Sección News -->
-      <section id="news" class="bg-yellow w-full py-12 hidden" transition:animate="slide">
+  <!-- <section id="news" class="bg-yellow w-full py-12 hidden" transition:animate="slide">
   <div class="container mx-auto px-4">
     {newsAssets.home.title && (
       <div class="text-center mb-16 relative z-20 overflow-hidden" >
@@ -211,7 +219,6 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
     ) : (
       <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 items-start">
-          <!-- Columna izquierda: 3 más recientes -->
           <div class="md:col-span-2">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-brown font-title text-lg md:text-xl font-bold uppercase tracking-wide">{topNewsLabel}</h3>
@@ -229,7 +236,6 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
             </div>
           </div>
 
-          <!-- Columna derecha: destacados (posiciones 3 y 4) -->
           <div class="md:col-span-1">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-brown font-title text-lg md:text-xl font-bold uppercase tracking-wide">{featuredLabel}</h3>
@@ -255,7 +261,7 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       </div>
     )}
   </div>
-</section>
+</section> -->
 
 
     <!-- Sección Abaout -->
