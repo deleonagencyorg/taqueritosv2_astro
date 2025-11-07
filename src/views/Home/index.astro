@@ -169,18 +169,15 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
     
     <!-- Sección de recetas con carrusel -->
     <!-- Sección Gallery -->
-    <!-- <section id="gallery" class="bg-pink w-full py-12" transition:animate="slide">
-      <div class="container mx-auto px-4">
+    <section id="gallery" class=" relative w-full overflow-hidden !bg-[#071416]">
         {Array.isArray(galleryAssets.images) && galleryAssets.images.length > 0 && (
           <MasonryGallery 
             items={galleryAssets.images}
-            columns={3}
             title={galleryAssets.title}
-            className=""
+            subtitle={galleryAssets.subtitle}
           />
         )}
-      </div>
-    </section> -->
+    </section>
 
 
 

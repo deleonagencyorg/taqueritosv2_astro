@@ -31,8 +31,8 @@ const {
   <!-- Header fijo FUERA del carrusel -->
   <div class="flex flex-col md:flex-col lg:flex-row lg:justify-between lg:items-center lg:ml-[20px] lg:mr-[80px] mt-[40px] mb-[40px]">
     {playersHome.title && (
-      <div class="container mx-auto px-4 title">
-        <p>
+      <div class="container lg:mx-auto lg:px-4 px-6 title">
+        <p class="mb-4">
           {playersHome.title}
         </p>
         {playersHome.subtitle && (
@@ -53,7 +53,7 @@ const {
   <!-- Carrusel de Swiper -->
   <div class="swiper players-swiper pb-16 ">
     <div class="swiper-wrapper">
-      {players.map((player, index) => {
+      {players.map((player) => {
         return (
           <div class="swiper-slide">
             <div class="slide-content flex items-center justify-center">
@@ -174,15 +174,15 @@ const {
   }
   
   .card-user {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 600;
-    color: #9BFF9B;
     margin-bottom: 16px;
+    color: white;
     font-family: 'Avory I PE', sans-serif;
   }
   
   .card-comment {
-    font-size: 14px;
+    font-size: 20px;
     color: white;
     line-height: 1.6;
     opacity: 0.9;
@@ -193,17 +193,18 @@ const {
   .gradient-border-button {
     position: relative;
     width: 252px;
-    height: 47px;
+    height: 55px;
     padding: 17px 20px;
     background: #092514A6;
     border: none;
     border-radius: 5px;
     color: white;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 10;
+    text-align: center;
   }
   
   .gradient-border-button::before {
@@ -248,6 +249,10 @@ const {
       height: 66px;
     }
 
+    .gradient-border-button {
+     font-size: 20px;
+    }
+
     .player-card {
       width: 450px;
     }
@@ -272,13 +277,17 @@ const {
       font-size: 20px;
       margin-bottom: 20px;
     }
+
+    .title {
+      font-size: 35px;
+    }
     
     .card-user {
-      font-size: 14px;
+      font-size: 20px;
     }
     
     .card-comment {
-      font-size: 13px;
+      font-size: 20px;
     }
   }
 </style>
@@ -307,7 +316,7 @@ const {
           spaceBetween: 20
         },
         768: {
-          slidesPerView: 1.5,
+          slidesPerView: 1.8,
           spaceBetween: 30
         },
         1024: {

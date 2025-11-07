@@ -1,226 +1,420 @@
 ---
 import LazyImage from '../common/LazyImage.astro';
 
-export interface GalleryItem {
-  url: string;
-  alt?: string;
-}
+export interface GalleryItem { url: string; alt?: string; }
 
 export interface Props {
   items: GalleryItem[];
-  columns?: number; // desktop columns
+  columns?: number;
   title?: string;
+  subtitle?: string;
   className?: string;
 }
 
-const {
-  items = [],
-  columns = 3,
-  title = '',
-  className = ''
-} = Astro.props as Props;
+const { items = [], columns = 3, title = '', subtitle = '', className = '' } = Astro.props as Props;
 ---
 
-<section class={`w-full ${className}`} data-gallery-root> 
-  
-  <div class="gallery-viewport">
-    <div class="masonry" style={`--cols: ${columns}; --gap: 1rem;`}>
-      {items.map((item, idx) => (
-        <div class="masonry-item">
-          <button class="block w-full text-left focus:outline-none" data-index={idx} aria-label={item.alt || 'Abrir imagen'}>
-            <LazyImage src={item.url} alt={item.alt || ''} class="w-full h-auto rounded-lg block" />
+<section class={className}>
+  <div class="gallery-viewport relative !bg-[#071416]">
+    
+    <!-- Header -->
+    <div class="max-w-[1600px] mx-auto px-8 mb-12">
+      <div class="flex flex-col justify-start md:flex-row lg:flex-row md:items-center lg:items-center md:justify-between lg:justify-between md:pt-12 lg:pt-12 md:pl-8 lg:pl-12">
+        <div>
+          {title && (
+            <h2 class="title">
+              {title} <br/>
+            </h2>
+          )}
+          {subtitle && (
+            <p class="title">
+              {subtitle}
+            </p>
+          )}
+        </div>
+
+        <!-- Botones de Navegación -->
+        <div class="carousel-navigation-masonry ">
+          <button class="swiper-button-prev" aria-label="Anterior">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          
+          <button class="swiper-button-next" aria-label="Siguiente">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
         </div>
-      ))}
-    </div>
-  </div>
-
-  <!-- Modal Slider -->
-  <div id="gallery-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/80 p-4">
-    <div class="relative w-full max-w-5xl">
-      <!-- Close -->
-      <button id="gallery-close" class="absolute -top-2 -right-2 md:top-0 md:right-0 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 flex items-center justify-center shadow" aria-label="Cerrar">
-        ✕
-      </button>
-      <!-- Prev -->
-      <button id="gallery-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black rounded-full w-10 h-10 flex items-center justify-center shadow" aria-label="Anterior">
-        ‹
-      </button>
-      <!-- Next -->
-      <button id="gallery-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black rounded-full w-10 h-10 flex items-center justify-center shadow" aria-label="Siguiente">
-        ›
-      </button>
-      <!-- Image -->
-      <div class="bg-transparent rounded-lg overflow-hidden">
-        <img id="gallery-image" alt="" class="mx-auto max-h-[80vh] w-auto rounded-lg shadow-lg" />
-        <p id="gallery-caption" class="mt-3 text-center text-white/90 text-sm"></p>
       </div>
     </div>
+
+    <!-- Swiper -->
+    <div class="swiper-container" data-count={items.length}>
+      <div class="swiper-wrapper">
+        {items.map((item, idx) => (
+          <div class="swiper-slide" data-slide-index={idx}>
+            <div class="taqueritos-card">
+              
+              <!-- Imagen -->
+              <div class="image-container">
+                <button class="image-button" 
+                        data-index={idx} 
+                        aria-label={item.alt || 'Abrir imagen'}>
+                  <LazyImage 
+                    src={item.url} 
+                    alt={item.alt || ''} 
+                    class="card-image" 
+                  />
+                </button>
+              </div>
+
+              <!-- Barra de Acciones -->
+              <div class="actions-bar">
+                <div class="flex items-center gap-4">
+                  <button class="action-btn" aria-label="Me gusta" data-action="like">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                  </button>
+                  <button class="action-btn" aria-label="Comentar" data-action="comment">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                  </button>
+                  <button class="action-btn" aria-label="Compartir" data-action="share">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <button class="action-btn" aria-label="Guardar" data-action="bookmark">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                  </svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
   </div>
 </section>
 
 <style>
-  /* Fixed viewport with overflow hidden */
-  .gallery-viewport {
-    height: 400px; /* mobile */
+  .gallery-viewport { 
+    position: relative; 
+    width: 100%; 
+    background: #071416;
     overflow: hidden;
   }
-  @media (min-width: 768px) {
-    .gallery-viewport { height: 500px; }
-  }
-  @media (min-width: 1024px) {
-    .gallery-viewport { height: 800px; }
+
+  .title {
+    color: white;
+    font-size: 35px;
+    font-family: 'Avory I PE', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 45px;
+    letter-spacing: 0.70px;
+    word-wrap: break-word;
   }
 
-  .masonry {
-    column-count: 1;
-    column-gap: var(--gap, 1rem);
+  .gallery-viewport::before,
+  .gallery-viewport::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50vw;
+    height: 38vw;
+    border-radius: 50%;
+    background: linear-gradient(349deg, #0776C6 0%, #006FFF 100%);
+    filter: blur(80px);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
   }
-  .masonry-item {
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-    margin-bottom: var(--gap, 1rem);
-    transition: opacity 300ms ease; /* smooth fade */
-  }
-  .fade-out { opacity: 0; }
-  .fade-in { opacity: 1; }
 
-  @media (min-width: 768px) {
-    .masonry { column-count: var(--cols, 3); }
+  .gallery-viewport::before { left: -30vw; }
+  .gallery-viewport::after { right: -30vw; }
+
+  /* ✅ CLAVE: Padding reducido para que quepan 4 cards */
+  .swiper-container {
+    padding: 60px 50px 100px 50px;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    overflow: visible;
   }
 
-  /* Reduce motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    .masonry-item { transition: none; }
+  .action-btn {
+    color: white;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .action-btn:hover {
+    color: #2DA0FF;
+    transform: scale(1.1);
+  }
+
+  .carousel-navigation-masonry {
+    position: absolute;
+    right: 50px;
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    content: '' !important;
+    display: none !important;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    position: relative !important;
+    width: 56px !important;
+    height: 56px !important;
+    margin: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    background: rgba(45, 160, 255, 0.16) !important;
+    border: 2px solid #2DA0FF !important;
+    border-radius: 10px !important;
+    backdrop-filter: blur(10px) !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+  }
+
+  .swiper-button-next svg,
+  .swiper-button-prev svg {
+    width: 24px !important;
+    height: 24px !important;
+    pointer-events: none;
+  }
+
+  .swiper-button-next:hover,
+  .swiper-button-prev:hover {
+    background: rgba(45, 160, 255, 0.3) !important;
+    border-color: #4DB5FF !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(45, 160, 255, 0.4) !important;
+  }
+
+  .swiper-button-next:active,
+  .swiper-button-prev:active {
+    transform: translateY(0) !important;
+  }
+
+  .taqueritos-card {
+    position: relative;
+    width: 100%;
+    background: rgba(45, 160, 255, 0.16);
+    border: 1px solid #2DA0FF;
+    border-radius: 5px;
+    box-shadow: 0px 23px 43px -48px rgba(0, 132, 255, 0.33);
+    padding: 17px 19px 20px 19px;
+    transition: all 0.3s ease;
+  }
+
+  .taqueritos-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 30px 60px -40px rgba(0, 132, 255, 0.5);
+    border-color: #4DB5FF;
+  }
+
+  .image-container {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #000;
+    margin-bottom: 14px;
+  }
+
+  .image-button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    outline: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .image-button:hover { opacity: 0.9; }
+
+  .image-button:focus {
+    outline: 2px solid #2DA0FF;
+    outline-offset: 2px;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .actions-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .action-icon {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: white;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  /* Efecto alternado */
+  .swiper-slide:nth-child(even) .taqueritos-card {
+    transform: translateY(40px);
+  }
+  
+  .swiper-slide:nth-child(odd) .taqueritos-card {
+    transform: translateY(-40px);
+  }
+
+  .swiper-slide:nth-child(even) .taqueritos-card:hover {
+    transform: translateY(36px);
+  }
+  
+  .swiper-slide:nth-child(odd) .taqueritos-card:hover {
+    transform: translateY(-44px);
+  }
+
+  .action-icon:hover {
+    color: #2DA0FF;
+    transform: scale(1.15);
+  }
+
+  .action-icon:active {
+    transform: scale(0.95);
+  }
+
+  .action-icon.liked { color: #FF4757; }
+  .action-icon.liked svg { fill: #FF4757; }
+  .action-icon.bookmarked { color: #2DA0FF; }
+  .action-icon.bookmarked svg { fill: #2DA0FF; }
+
+  @media (max-width: 767px) {
+
+    .title {
+      font-size: 24px;
+      line-height: 28px;
+      margin-left: 20px;
+    }
+
+    .carousel-navigation-masonry {
+      position: absolute;
+      left: 50px;
+      margin-top: 80px;
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 48px !important;
+      height: 48px !important;
+    }
+
+    .taqueritos-card { padding: 14px 16px 16px 16px; }
+    .action-icon { width: 22px; height: 22px; }
+
+    .swiper-container {
+      padding: 110px 50px 100px 50px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      overflow: visible;
+    }
   }
 </style>
 
-<script is:inline>
-  (() => {
-    function init(section) {
-      if (!section || section.dataset.galleryInit === '1') return;
-      section.dataset.galleryInit = '1';
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Autoplay } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/navigation';
 
-      const grid = section.querySelector('.masonry');
-      if (!grid) return;
+  function initSwiper() {
+    new Swiper('.swiper-container', {
+      modules: [Navigation, Autoplay],
+      slidesPerView: 5,
+      spaceBetween: 20,
+      loop: true,
+      speed: 600,
+   
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        320:  { slidesPerView: 1, spaceBetween: 16 },
+        640:  { slidesPerView: 2, spaceBetween: 18 },
+        1024: { slidesPerView: 3, spaceBetween: 20 },
+        1440: { slidesPerView: 4, spaceBetween: 20 },
+        1600: { slidesPerView: 4, spaceBetween: 22 },
+        1920: { slidesPerView: 4, spaceBetween: 24 },
+      },
+    });
+  }
 
-      const modal = section.querySelector('#gallery-modal');
-      const imgEl = section.querySelector('#gallery-image');
-      const capEl = section.querySelector('#gallery-caption');
-      const btnClose = section.querySelector('#gallery-close');
-      const btnPrev = section.querySelector('#gallery-prev');
-      const btnNext = section.querySelector('#gallery-next');
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSwiper);
+  } else {
+    initSwiper();
+  }
 
-      const thumbs = Array.from(grid.querySelectorAll('button[data-index] img'));
-      const data = thumbs.map((img) => ({ url: img.currentSrc || img.src, alt: img.alt || '' }));
-      let index = 0;
-      let isOpen = false;
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement | null;
+    const btn = target?.closest('.action-btn') as HTMLElement | null;
+    if (!btn) return;
 
-      function show(i) {
-        if (!imgEl) return;
-        index = (i + data.length) % data.length;
-        const item = data[index];
-        imgEl.src = item.url;
-        imgEl.alt = item.alt || '';
-        if (capEl) capEl.textContent = item.alt || '';
-      }
-
-      function onOpen(i) {
-        if (!modal) return;
-        isOpen = true;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-        show(i);
-      }
-
-      function onClose() {
-        if (!modal) return;
-        isOpen = false;
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        document.body.style.overflow = '';
-      }
-
-      function onPrev() { show(index - 1); }
-      function onNext() { show(index + 1); }
-
-      // Click handlers on thumbnails
-      grid.addEventListener('click', (e) => {
-        const target = e.target instanceof Element ? e.target : null;
-        const btn = target ? target.closest('button[data-index]') : null;
-        if (!btn) return;
-        const i = Number(btn.getAttribute('data-index') || '0');
-        pauseRotation();
-        onOpen(i);
-      });
-
-      // Controls
-      btnClose && btnClose.addEventListener('click', onClose);
-      btnPrev && btnPrev.addEventListener('click', onPrev);
-      btnNext && btnNext.addEventListener('click', onNext);
-
-      // Close when clicking backdrop
-      modal && modal.addEventListener('click', (e) => {
-        if (e.target === modal) onClose();
-      });
-
-      // Keyboard navigation
-      document.addEventListener('keydown', (e) => {
-        if (!isOpen) return;
-        if (e.key === 'Escape') onClose();
-        else if (e.key === 'ArrowLeft') onPrev();
-        else if (e.key === 'ArrowRight') onNext();
-      });
-
-      // Auto-rotation
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const ROTATE_MS = 4000;
-      let rotateTimer = null;
-
-      function cycleOnce() {
-        const firstItem = grid.querySelector('.masonry-item');
-        if (!firstItem) return;
-        firstItem.classList.add('fade-out');
-        setTimeout(() => {
-          firstItem.classList.remove('fade-out');
-          grid.appendChild(firstItem);
-          firstItem.classList.add('fade-in');
-          setTimeout(() => firstItem.classList.remove('fade-in'), 300);
-        }, 300);
-      }
-
-      function startRotation() {
-        if (reduceMotion || rotateTimer) return;
-        rotateTimer = window.setInterval(cycleOnce, ROTATE_MS);
-      }
-      function pauseRotation() {
-        if (rotateTimer) { clearInterval(rotateTimer); rotateTimer = null; }
-      }
-
-      if (!reduceMotion) {
-        setTimeout(cycleOnce, 800);
-        startRotation();
-      }
-
-      document.addEventListener('visibilitychange', () => {
-        if (reduceMotion) return;
-        if (document.hidden) pauseRotation();
-        else startRotation();
-      });
-
-      btnClose && btnClose.addEventListener('click', () => { if (!reduceMotion) startRotation(); });
-    }
-
-    function tryInit() {
-      const section = document.querySelector('[data-gallery-root]');
-      init(section);
-    }
-
-    // Initial load and after swaps
-    document.addEventListener('astro:page-load', tryInit);
-    document.addEventListener('astro:after-swap', tryInit);
-    // Fallback for full reload
-    tryInit();
-  })();
+    const action = btn.getAttribute('data-action');
+    if (action === 'like') btn.classList.toggle('liked');
+    if (action === 'bookmark') btn.classList.toggle('bookmarked');
+  });
 </script>
+
+
