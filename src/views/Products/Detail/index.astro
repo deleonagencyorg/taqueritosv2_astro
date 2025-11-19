@@ -1,12 +1,9 @@
 ---
 // src/views/Products/Detail/index.astro
+import RecipesCarousel from '../../../components/recipes/RecipesCarousel.astro';
 import { t } from '../../../i18n/i18n';
 import type { Locale } from '../../../i18n/i18n';
 import './styles.css';
-import { initProductDetail } from './scripts.js';
-import ProductsCarousel from '../../../components/common/ProductsCarousel/index.astro';
-import LazyImage from '../../../components/common/LazyImage.astro';
-
 
 // Interfaces locales
 interface ProductSize {
@@ -24,10 +21,12 @@ interface Stockist {
 interface Product {
   id: string;
   name: string;
+  name_description: string;
   image: string;
   available?: string;
   background_image: string;
   background_color: string;
+  text_color: string;
   header_text_color: string;
   color_button: string;
   sizes: ProductSize[];
@@ -37,7 +36,6 @@ interface Product {
     value: string;
     icono: string;
   }>;
-  // relatedProducts es opcional ya que no existe en la estructura actual
   relatedProducts?: string[];
   weight?: string[];
 }
@@ -54,6 +52,7 @@ const newsAssets =  t('', { namespace: 'news', locale: currentLang }) || {};
 const brandsList = brandsAssets.brands || [];
 const zibasBrand = brandsList.find((brand: any) => brand.id === 'zibas');
 const zibasProducts = (zibasBrand?.products || []).filter((product: any) => product.id !== productId);
+const recipesAssets = t('', { namespace: 'recipes', locale: currentLang }) || {};
 
 // Si el producto no existe, lanzar error
 if (!product || Object.keys(product).length === 0) {
@@ -64,160 +63,395 @@ if (!product || Object.keys(product).length === 0) {
 const safeProduct: Product = {
   id: product.id || '',
   name: product.name || '',
+  text_color: product.text_color || '#FFFFFF',
+  name_description: product.name_description || '',
   image: product.image || '',
   background_image: product.background_color || '',
-  background_color: product.background_color || '',
-  header_text_color: product.header_text_color || '#000000',
-  color_button: product.color_button || '#000000',
+  background_color: product.background_color || '#180607',
+  header_text_color: product.header_text_color || '#FFFFFF',
+  color_button: product.color_button || '#520406',
   sizes: Array.isArray(product.sizes) ? product.sizes : [],
   available: product.available || '',
   description: product.description || '',
   weight: Array.isArray(product.weight) ? product.weight : [],
-  
 };
 
 // Obtener todos los productos como un array
 const productsData = t('items', { locale: currentLang, namespace: 'products' }) || [];
 const allProductsArray = Array.isArray(productsData) ? productsData : [];
 
-// Filtrar productos relacionados - simplificado para evitar errores
+// Filtrar productos relacionados
 let relatedProducts: any[] = [];
-// Solo usar productos de la misma categoría si hay más de 1 producto
 if (allProductsArray.length > 1) {
-  relatedProducts = allProductsArray
-    .filter((p: any) => p.id !== productId)
-    .slice(0, 3);
+  relatedProducts = allProductsArray.filter((p: any) => p.id !== productId);
 }
 
-
+const carouselProducts = [safeProduct, ...relatedProducts];
 ---
-
-{safeProduct.background_color && (
-  <article
-    id="product-detail"
-    class="product-detail pt-12 md:pt-29 pb-32 bg-cover bg-center relative"
-    style={{ backgroundColor: safeProduct.background_color }}
-    transition:animate="slide"
-  >
-    <div class="md:mt-[0] container mx-auto px-6 py-5 flex flex-col lg:flex-row gap-5">
-      {/* Contenedor de la imagen del lado izquierdo */}
-      <div class="relative flex justify-center items-center w-full lg:w-[605px] p-4 lg:px-28 lg:py-8 rounded-[85px] gap-2 cursor-pointer overflow-hidden group" style={{ backgroundColor: safeProduct.color_button }}>
-        {/* Overlay para el efecto de oscurecimiento */}
-        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 rounded-[85px]"></div>
-        <img id="product-image" class="relative z-10 max-w-full h-auto transition-transform duration-300 group-hover:scale-110" src={safeProduct.image} alt={safeProduct.name} transition:name={`product-image-${safeProduct.id}`} />
-      </div>
-      
-      {/* Contenido del lado derecho */}
-      <div class="w-full lg:w-1/2  h-auto">
-        <div class="flex justify-between items-center mb-6">
-          <h1 class="lg:text-6xl text-6xl font-bold uppercase italic" style={{ color: safeProduct.header_text_color }}>{safeProduct.name}</h1>
-      
+<div>
+  {safeProduct.background_color && (
+    <article
+      id="product-detail"
+      class="product-detail relative min-h-screen overflow-hidden"
+      style={{ backgroundColor: safeProduct.background_color || '#180607' }}
+      transition:animate="slide"
+    >
+      <!-- Cambiar a grid en lugar de flex -->
+      <div class="container mx-auto px-6 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10 min-h-screen">
+        <!-- Contenido del lado izquierdo -->
+        <div class="flex flex-col gap-12 relative z-20 lg:mt-[100px] mt-[100px]">
+          <!-- Título principal -->
+          <h1 
+              id="product-title"
+              class="text-[80px] md:text-[120px] font-black uppercase leading-[90px] md:leading-[110px]"
+              style={{ color: safeProduct.text_color }}
+            >
+              {safeProduct.name_description}
+          </h1>
+    
+          <div class="flex flex-col gap-12 max-w-[488px]">
+            <!-- Descripción -->
+            <p 
+              id="product-description"
+              class="text-2xl md:text-[26.6px] font-normal"
+              style={{ color: safeProduct.text_color }}
+            >
+              {safeProduct.description || 'Totopos de maiz enrollados con sabor a…'}
+            </p>
+    
+            <!-- Botones de presentaciones -->
+            {safeProduct.weight && safeProduct.weight.length > 0 && (
+              <div class="flex gap-1">
+                {safeProduct.weight.map((weight, index) => (
+                  <button 
+                    class={`flex-1 h-[78px] rounded-[30px] border-[1.16px] transition-all duration-300 hover:opacity-100 ${
+                      index === 0 ? 'opacity-100' : 'opacity-40'
+                    }`}
+                    style={{
+                      backgroundColor: index === 0 ? (safeProduct.color_button || '#520406') : '#1C1C1C',
+                      borderColor: index === 0 ? '#FF2D30' : '#4A4A4A',
+                      color: safeProduct.text_color || 'white'
+                    }}
+                  >
+                    <span class="text-[30px] font-semibold">{weight}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+    
+            <!-- Botón de comprar y navegación -->
+            <div class="flex items-center gap-5">
+              <button 
+                class="button-buy relative md:px-14 md:py-5 rounded-[6.65px] border-[1.33px] shadow-[0_28px_52px_-48px_rgba(255,0,4,0.33)] transition-all duration-300 hover:scale-105"
+                style={{
+                  background: 'radial-gradient(ellipse 97.54% 50.91% at 50% 2.46%, #FF5255 0%, #FF0048 100%)',
+                  borderColor: '#FF0004',
+                  color: safeProduct.text_color || 'white'
+                }}
+              >
+                <span class="text-[18px] md:text-[26.6px] lg:text-[26.6px] font-semibold">
+                  {currentLang === 'es' ? '¿Donde comprar?' : 'Where to buy?'}
+                </span>
+              </button>
+    
+              <!-- Controles de navegación -->
+              <div class="flex gap-5">
+                <div class="carousel-navigation">
+                  <button class="swiper-button-prev">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <button class="swiper-button-next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h1 
-          class="uppercase italic font-title lg:text-4xl text-xl  font-medium text-[${safeProduct.header_text_color}] py-4"
-          style={{ color: safeProduct.header_text_color }}>
-         {currentLang === 'es' ? 'DESCRIPCIÓN' : 'DESCRIPTION'}
-        </h1>
-        <h2 
-          class=" lg:text-3xl text-2xl italic font-text font-medium gap-30 py-5"
-          style={{ color: safeProduct.header_text_color }}
-        >
-            {safeProduct.description}
-        </h2>
-
-        <h1 
-          class="uppercase italic font-title lg:text-4xl text-xl  font-medium text-[${safeProduct.header_text_color}] py-4"
-          style={{ color: safeProduct.header_text_color }}>
-          {currentLang === 'es' ? 'PRESENTACIONES' : 'PRESENTATIONS'}
-        </h1>
-        <h2 
-          class=" lg:text-3xl text-2xl italic font-text font-medium py-5"
-          style={{ color: safeProduct.header_text_color }}
-        >
-            {currentLang === 'es' ? 'Tamaño por presentación varía de acuerdo al país.​' : 'The size of the presentation varies according to the country.'}
-        </h2>
-
-        {safeProduct.weight && safeProduct.weight.length > 0 && (
-          <div class="my-4 max-w-full">
-            <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-              {safeProduct.weight.map((weight) => (
-                <div class="w-full min-w-0">
-                  <span class="block w-full h-[60px] md:h-[70px] px-4 lg:px-5 py-3 md:py-4 text-center rounded-[15px] border text-base md:text-xl font-bold"
-                        style={{ color: safeProduct.header_text_color, borderColor: safeProduct.header_text_color, backgroundColor: safeProduct.color_button }}>
-                    {weight}
-                  </span>
+    
+        <!-- Carousel de productos - SOLO lado derecho -->
+        <div class="relative flex items-center justify-center overflow-hidden lg:mt-[100px]">
+          {relatedProducts.length > 0 && (
+            <div class="swiper products-swiper w-full h-full">
+              <div class="swiper-wrapper">
+                <!-- Producto actual primero -->
+                <div class="swiper-slide">
+                  <div class="relative w-[300px] md:w-[600px] lg:w-[500px] h-[600px] md:h-[800px]">
+                    <div class="absolute top-0 right-0 w-[80%] h-auto">
+                      <img 
+                        class="w-[300px] md:w-[600px] lg:w-[500px] h-auto rotate-[32deg] transition-transform duration-500 hover:scale-105 mt-[100px]"
+                        src={safeProduct.image} 
+                        alt={safeProduct.name}
+                        transition:name={`product-image-${safeProduct.id}`}
+                      />
+                    </div>
+                  </div>
                 </div>
-              ))}
+                
+                <!-- Productos relacionados -->
+                {relatedProducts.map((relatedProduct: Product) => (
+                  <div class="swiper-slide">
+                    <div class="relative w-[300px] md:w-[600px] lg:w-[500px] h-[600px] md:h-[800px]">
+                      <div class="absolute top-0 right-0 w-[80%] h-auto mt-[100px]">
+                        <img 
+                          class="w-[300px] md:w-[600px] lg:w-[500px] h-auto rotate-[32deg] transition-transform duration-500 hover:scale-105 cursor-pointer"
+                          src={relatedProduct.image} 
+                          alt={relatedProduct.name}
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* Sección de Stockists */}
-        {stockists && stockists.length > 0 && (
-          <div class="stockists-section mt-8 mb-4">
-            <h1 
-              class="uppercase italic font-title lg:text-4xl text-xl font-medium py-2"
-              style={{ color: safeProduct.header_text_color }}>
-              {currentLang === 'es' ? productsAssets.product_available || 'DISPONIBLE EN' : 'AVAILABLE AT'}
-            </h1>
-            <div class="flex flex-wrap gap-4 my-4 mb-8">
-              {stockists.map((stockist: Stockist) => (
-                <div 
-                  class="flex items-center justify-center h-[100px] w-[100px] p-2 rounded-[15px] border hover:scale-105 transition-transform"
-                  style={{ borderColor: safeProduct.header_text_color, backgroundColor: safeProduct.color_button }}
-                >
-                  <a href={stockist.link} target="_blank" rel="noopener noreferrer">  
-                  <LazyImage
-                    src={stockist.icon} 
-                    alt={stockist.name}
-                    color={['#FDE820', '#BEDE89'].includes(safeProduct.background_color) ? 'black' : 'white'}
-                    class="w-full h-full object-contain"
-                    title={stockist.name}
-                  />
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-     
+          )}
+        </div>
       </div>
-    </div>
-  </article>
-)}
-<!-- Sección de Productos Zibas -->
-    {products.length > 0 && (
-      <section class="w-full py-16 bg-blue">
-        <div class="container mx-auto px-4">
-          {brandsAssets.home?.title && (
-          <div class="text-center mb-8 relative z-20" >
-            <h2 class="text-3xl md:text-4xl italic font-bold mb-4" style={`color: white`}>
-              {brandsAssets.home?.title}
-            </h2>
-            {brandsAssets.home?.subtitle && (
-              <h1 class="text-6xl md:text-9xl italic font-bold mb-4" style={`color: white`}>
-                {brandsAssets.home?.subtitle}
-              </h1>
+    </article>
+    )}
+    
+    <section id="recipes" class="w-full py-12 !bg-[#180607]" transition:animate="slide">
+      <div class="container mx-auto px-4 ">
+        {recipesAssets.home?.title && (
+          <div class="container mx-auto px-4 title mb-12">
+            <p>
+              {recipesAssets.home?.title}
+            </p>
+            {recipesAssets.home?.subtitle && (
+              <p>
+                {recipesAssets.home?.subtitle}
+              </p>
             )}
           </div>
         )}
-          <ProductsCarousel 
-            products={products}
-            color={'white'}
-            autoplay={true}
-            speed={4000}
-            slidesPerView={3}
-            spaceBetween={30}
-            loop={true}
-            className="max-w-7xl mx-auto"
-          />
-        </div>
-      </section>
-    )}
+        <RecipesCarousel 
+          title={recipesAssets.home?.title || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
+          subtitle={recipesAssets.home?.subtitle || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
+          textButton={recipesAssets.home?.view_more || 'Ver Todas'}
+        />
+      </div>
+    </section>
+</div>
+
+
+<style>
+  .product-detail {
+    position: relative;
+    background: radial-gradient(ellipse at center, #1a0708 0%, #230405 50%, #0e0202 100%);
+    overflow: hidden;
+  }
+  
+  .product-detail::before,
+  .product-detail::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50vw;
+    height: 38vw;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(255,30,40,0.5) 0%, rgba(140,0,0,0) 70%);
+    filter: blur(60px);
+    z-index: 1;
+  }
+  
+  .product-detail::before { 
+    left: -30vw; 
+  }
+  
+  .product-detail::after { 
+    right: -30vw; 
+  }
+  
+  /* Estilos del Swiper */
+  .products-swiper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .swiper-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .swiper-slide {
+    width: 100%;
+    flex-shrink: 0;
+    opacity: 0; /* ✅ AGREGAR: Ocultar slides inactivos */
+    transition: opacity 0.3s ease;
+  }
+
+  .swiper-slide-active {
+    opacity: 1; /* ✅ AGREGAR: Mostrar solo el slide activo */
+  }
+  
+  .carousel-navigation {
+    right: 0;
+    display: flex;
+    gap: 12px;
+  }
+
+  /* Ocultar las flechas predeterminadas */
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    content: '' !important;
+    display: none;
+  }
+
+  /* Botones cuadrados */
+  .swiper-button-next,
+  .swiper-button-prev {
+    position: relative !important;
+    width: 65px !important;
+    height: 65px !important;
+    margin: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    background: #FF2D3029 !important;
+    border: 1px solid #ff2c2f !important;
+    border-radius: 10px !important;
+    backdrop-filter: blur(10px) !important;
+    transition: all 0.3s ease !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .swiper-button-next svg,
+  .swiper-button-prev svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .swiper-button-next:hover,
+  .swiper-button-prev:hover {
+    background: #180607 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4) !important;
+  }
+
+  .swiper-button-next:active,
+  .swiper-button-prev:active {
+    transform: translateY(0) !important;
+  }
+
+  .swiper-button-disabled {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+  }
+
+  @media (max-width: 767px) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 50px !important;
+      height: 50px !important;
+    }
+
+    .button-buy {
+      width: 100% !important;
+      height: 70px !important;
+    }
+  }
+</style>
+
+<script is:inline define:vars={{ carouselProducts }}>
+  window.carouselProductsData = carouselProducts;
+</script>
+
 <script>
-  // Este script se ejecuta solo en el navegador
-  import { initProductDetail } from './scripts.js';
+  import Swiper from 'swiper';
+  import { Navigation, Autoplay } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+
   document.addEventListener('DOMContentLoaded', () => {
-    initProductDetail();
+    const swiperContainer = document.querySelector('.products-swiper');
+    
+    if (!swiperContainer) {
+      console.log('No swiper container found');
+      return;
+    }
+
+    // Obtener datos de productos
+    const productsData = (window as any).carouselProductsData || [];
+
+    // Función para actualizar el contenido
+    function updateProductContent(index: number) {
+      const product = productsData[index];
+      if (!product) return;
+
+      // Actualizar título
+      const titleEl = document.getElementById('product-title');
+      if (titleEl) {
+        titleEl.textContent = product.name_description || product.name;
+        titleEl.style.color = product.text_color || '#FFFFFF';
+      }
+
+      // Actualizar descripción
+      const descEl = document.getElementById('product-description');
+      if (descEl) {
+        descEl.textContent = product.description || '';
+        descEl.style.color = product.text_color || '#FFFFFF';
+      }
+    }
+
+    // Inicializar Swiper
+    const swiper = new Swiper('.products-swiper', {
+      modules: [Navigation, Autoplay],
+      slidesPerView: 1,
+      spaceBetween: 0,
+      loop: true,
+      speed: 800,
+      centeredSlides: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 1,
+        },
+        1024: {
+          slidesPerView: 1,
+        },
+      },
+      on: {
+        init: function (swiper) {
+          updateProductContent(swiper.realIndex);
+        },
+        slideChange: function (swiper) {
+          updateProductContent(swiper.realIndex);
+        }
+      }
+    });
+
+    // Pausar autoplay al hacer hover
+    if (swiperContainer) {
+      swiperContainer.addEventListener('mouseenter', () => {
+        swiper.autoplay.stop();
+      });
+      
+      swiperContainer.addEventListener('mouseleave', () => {
+        swiper.autoplay.start();
+      });
+    }
   });
 </script>

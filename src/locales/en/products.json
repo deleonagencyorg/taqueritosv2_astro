@@ -26,6 +26,7 @@
     {
       "id": "taqueritos-dragon-de-hielo",
       "name": "Taqueritos Dragon Hielo",
+      "name_description": "Dragon de Hielo",
       "image": "/images/es/products/dragonhielo.png",
       "background_color": "#0e121a",
       "header_color": "#FDE820",
@@ -45,16 +46,15 @@
         }
       ],
       "weight": [
-        "23g",
-        "26g",
-        "40g",
-        "80g",
-        "190g"
+        "180gr",
+        "36gr",
+        "34gr"
       ]
     },
     {
       "id": "taqueritos-queso-fusion",
       "name": "Taqueritos Queso Fusion",
+      "name_description": "Queso Fusion",
       "image": "/images/es/products/fusion.png",
       "background_color": "#251008",
       "header_color": "#FDE820",
@@ -74,16 +74,15 @@
         }
       ],
       "weight": [
-        "23g",
-        "26g",
-        "40g",
-        "80g",
-        "190g"
+        "180gr",
+        "36gr",
+        "34gr"
       ]
     },
     {
-      "id": "ttaqueritos-dragon-de-fuego",
-      "name": "Taqueritos Dragon de Fusion",
+      "id": "taqueritos-dragon-de-fuego",
+      "name": "Taqueritos Dragon de Fuego",
+      "name_description": "Dragon de Fuego",
       "image": "/images/es/products/fuego.png",
       "background_color": "#250909",
       "header_color": "#FDE820",
@@ -93,7 +92,7 @@
       "color_button": "#FF0048",
       "second_color_button": "#FF5255",
       "boder_color": "#ff585b",
-      "description": "Hojuelas de Papa Fritas con sabor a Queso.",
+      "description": "Totopos de maiz enrollados con sabor a…",
       "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
       "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
       "sizes": [
@@ -103,11 +102,9 @@
         }
       ],
       "weight": [
-        "23g",
-        "26g",
-        "40g",
-        "80g",
-        "190g"
+        "180gr",
+        "36gr",
+        "34gr"
       ]
     }
   ]
