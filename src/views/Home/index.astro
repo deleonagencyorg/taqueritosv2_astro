@@ -30,7 +30,7 @@ const { loading = false } = Astro.props;
 // Language and Data Setup
 const currentLang = getLocale();
 const homeAssets = t('home', { namespace: 'common', locale: currentLang }) || {};
-const recipesAssets = t('', { namespace: 'recipes', locale: currentLang }) || {};
+const eventsAssets = t('', { namespace: 'recipes', locale: currentLang }) || {};
 const galleryAssets = t('', { namespace: 'gallery', locale: currentLang }) || {};
 const aboutAssets = t('', { namespace: 'aboutus', locale: currentLang }) || {};
 const brandsAssets = t('', { namespace: 'brands', locale: currentLang }) || {};
@@ -41,7 +41,7 @@ const playersHome = t('home', { namespace: 'players', locale: currentLang }) || 
 const players = Array.isArray(playersNews) ? playersNews : [];
 const brandsList = brandsAssets.brands || [];
 const zibasBrand = brandsList.find((brand: any) => brand.id === 'hugo');
-const zibasProducts = zibasBrand?.products || [];
+const taqueritosProducts = zibasBrand?.products || [];
 
 const commonAssets = t('assets.slider', { namespace: 'common', locale: currentLang }) || [];
 const slides = Array.isArray(commonAssets)
@@ -99,31 +99,31 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       />
     </div>
 
-    <section id="recipes" class="w-full py-12 !bg-[#180607]" transition:animate="slide">
+    <section id="events" class="w-full py-12 !bg-brown" transition:animate="slide">
       <div class="container mx-auto px-4 ">
-        {recipesAssets.home?.title && (
+        {eventsAssets.home?.title && (
           <div class="container mx-auto px-4 title mb-12">
             <p>
-              {recipesAssets.home?.title}
+              {eventsAssets.home?.title}
             </p>
-            {recipesAssets.home?.subtitle && (
+            {eventsAssets.home?.subtitle && (
               <p>
-                {recipesAssets.home?.subtitle}
+                {eventsAssets.home?.subtitle}
               </p>
             )}
           </div>
         )}
         <RecipesCarousel 
-          title={recipesAssets.home?.title || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
-          subtitle={recipesAssets.home?.subtitle || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
-          textButton={recipesAssets.home?.view_more || 'Ver Todas'}
+          title={eventsAssets.home?.title || (currentLang === 'es' ? 'DESCUBRE NUEVOS SABORES CON NUESTRAS' : 'DISCOVER NEW FLAVORS WITH OUR')}
+          subtitle={eventsAssets.home?.subtitle || (currentLang === 'es' ? 'DESCUBRE NUEVOS SABORES CON NUESTRAS' : 'RECIPES')}
+          textButton={eventsAssets.home?.view_more || (currentLang === 'es' ? 'Ver Todas' : 'View All')}
         />
       </div>
     </section>
     
     <!-- Sección de Productos Zibas -->
-    {zibasProducts.length > 0 && (
-      <section id="products" class="w-full py-4 pt-16 bg-[#180607]">
+    {taqueritosProducts.length > 0 && (
+      <section id="products" class="w-full py-4 pt-16 bg-brown">
         <div class="container mx-auto px-4 title">
           {brandsAssets.home?.title && (
           <div >

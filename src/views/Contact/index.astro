@@ -36,17 +36,17 @@ const title = contact.title;
 const metaDescription = contact.description;
 console.log('headerColorConfig in Contact:', headerColorConfig);
 const headerColors = {
-  backgroundColor: '#FE5A00',
+  backgroundColor: 'red',
   textColor: '#FFFFFF'
 };
 ---
 
-<MainLayout title={title} class="bg-white" description={metaDescription} headerColorConfig={headerColors}>
-  <div class=" w-[100%] mx-auto ">
+<MainLayout title={title} class="bg-brown" description={metaDescription} headerColorConfig={headerColors}>
+  <div class=" w-[100%] mx-auto  lg:py-24">
     
 
     <!-- Main Contact Section -->
-    <div class="flex flex-col justify-center px-4 items-start lg:flex-row gap-12 py-12" style="background-image: url('https://snack.yummiespromociones.com/SnacksyummiesAssets/bgcontactzibas.webp'); background-size: cover; background-position: center;">
+    <div class="flex flex-col justify-center px-4 items-start lg:flex-row gap-12 py-12 bg-dark-spotlight" >
       
       <!-- Left Column - Contact Info -->
     <div class="w-[100%] lg:w-[40%] pl-8 lg:pl-16 flex flex-col justify-center h-[100%] lg:h-[600px]">
@@ -67,7 +67,7 @@ const headerColors = {
     </div>
     
     <!-- Offices Section -->
-    <div class="mx-auto bg-blue p-8">
+    <div class="mx-auto p-8">
       <h3 class="text-white md:text-4xl text-4xl italic font-title uppercase font-bold mb-4 flex items-center justify-center gap-1">
         <span class="font-title">{contact.offices.title.split(' ')[0]} {contact.offices.title.split(' ')[1]}</span>
       </h3>
@@ -76,10 +76,52 @@ const headerColors = {
       </h1>
       
       <!-- Tabs and Office Info -->
-      <div class="flex flex-col mb-4">
+      <div class="flex flex-col items-center mb-4">
+        <!-- Map and Tabs -->
+        <div class="w-full lg:w-[80%] mt-4 flex flex-col items-center">
+          <div class="w-full lg:w-[80%]">
+            <!-- Country Tabs -->
+            <div class="mb-6 flex flex-wrap gap-2 justify-center lg:justify-between">
+            {Object.entries(contact.offices.locations).map(([countryCode, location]: [string, any], index: number) => (
+              <button 
+                data-country-code={countryCode}
+                class={`country-tab px-10 py-4 text-white uppercase text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2.5 italic h-[54px] rounded-[10px] border border-white/40 opacity-75 hover:opacity-100 bg-transparent ${index === 0 ? 'is-active' : ''}`}
+              >
+                {location.tab}
+              </button>
+            ))}
+          </div>
+          
+            <!-- Map -->
+            <div class="rounded-2xl p-6 shadow-lg mb-4 bg-white border-[3px] border-[#FF0000]">
+            <div class="w-full overflow-hidden rounded-xl" style="height: 500px;">
+              <!-- Container for all map iframes -->
+              <div id="maps-container" style="width: 100%; height: 100%;">
+                {Object.entries(contact.offices.locations).map(([countryCode, location]: [string, any], index: number) => (
+                  <div 
+                    data-map-country={countryCode}
+                    style={`width: 100%; height: 100%; ${index === 0 ? 'display: block;' : 'display: none;'}`}
+                  >
+                    <iframe
+                      src={location.mapEmbed}
+                      width="100%"
+                      height="100%"
+                      frameborder="0"
+                      allowfullscreen="allowfullscreen"
+                      aria-hidden="false"
+                      style="width: 100%; height: 100%; border: 0;"
+                      title={`${location.name} Map`}
+                    ></iframe>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Office Details -->
-        <div class="order-2 w-[80%] mx-auto">
-          <div id="officeInfo" class="bg-blue rounded-2xl p-8 ">
+        <div class="w-full lg:w-[80%] mx-auto mt-8">
+          <div id="officeInfo" class="rounded-2xl p-8 ">
             <div class="flex flex-col lg:flex-row justify-between items-center">
               <div class="space-y-4">
                 <h3 id="officeName" class="text-white font-sans text-9xl md:text-7xl uppercase font-extrabold  mb-4">
@@ -115,51 +157,6 @@ const headerColors = {
                   alt="Yummies Honduras"
                   class="w-full h-48 object-cover rounded-xl"
                 />
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Map and Tabs -->
-        <div class="order-1 mt-4">
-          <!-- Country Tabs -->
-          <div class="mb-6 flex flex-wrap justify-center gap-2">
-          {Object.entries(contact.offices.locations).map(([countryCode, location]: [string, any], index: number) => (
-            <button 
-              data-country-code={countryCode}
-              class={`country-tab px-10 py-4 text-white uppercase text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2.5
-                ${index === 0 
-                  ? 'h-[54px] bg-[#005ADA] opacity-100 border border-white' 
-                  : 'h-[54px] bg-[#005ADA] opacity-75 hover:opacity-100'
-                } rounded-[47px]`}
-            >
-              {location.tab}
-            </button>
-          ))}
-        </div>
-          
-          <!-- Map -->
-          <div class="bg-gradient-to-br w-[80%] mx-auto bg-white rounded-2xl p-6 shadow-lg mb-4">
-            <div class="w-full  overflow-hidden rounded-xl" style="height: 500px;">
-              <!-- Container for all map iframes -->
-              <div id="maps-container" style="width: 100%; height: 100%;">
-                {Object.entries(contact.offices.locations).map(([countryCode, location]: [string, any], index: number) => (
-                  <div 
-                    data-map-country={countryCode}
-                    style={`width: 100%; height: 100%; ${index === 0 ? 'display: block;' : 'display: none;'}`}
-                  >
-                    <iframe
-                      src={location.mapEmbed}
-                      width="100%"
-                      height="100%"
-                      frameborder="0"
-                      allowfullscreen="allowfullscreen"
-                      aria-hidden="false"
-                      style="width: 100%; height: 100%; border: 0;"
-                      title={`${location.name} Map`}
-                    ></iframe>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
@@ -253,16 +250,12 @@ const headerColors = {
         
         // Function to handle tab selection
         function handleTabSelection(tab) {
-          // Remove active class and border from all tabs
           tabs.forEach(t => {
-            t.classList.remove('border', 'border-white');
-            t.style.opacity = '0.75';
+            t.classList.remove('is-active');
           });
-          
-          // Add active class and border to clicked tab
-          tab.classList.add('border', 'border-white');
-          tab.style.opacity = '1';
-          
+
+          tab.classList.add('is-active');
+
           // Update office info based on country code
           const countryCode = tab.getAttribute('data-country-code');
           if (countryCode) {
@@ -286,10 +279,7 @@ const headerColors = {
         
         // Initialize with first country
         if (tabs.length > 0) {
-          const firstTabCountry = tabs[0].getAttribute('data-country-code');
-          if (firstTabCountry) {
-            updateOfficeInfo(firstTabCountry);
-          }
+          handleTabSelection(tabs[0]);
         }
       }
       

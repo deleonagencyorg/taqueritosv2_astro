@@ -39,8 +39,8 @@ const zibasLogo = 'https://snack.yummiespromociones.com/snacksyummies/taqueritos
 {loading ? (
   <Skeleton />
 ) : (
-  <footer class="bg-[#180607] text-white relative overflow-hidden">
-    <div class="container mx-auto px-6 py-8 md:py-12">
+  <footer class="bg-brown text-white relative overflow-hidden">
+    <div class="container text-center flex justify-center items-center mx-auto px-6 py-8 md:py-12">
       <div class="flex flex-col lg:flex-row lg:gap-32 xl:gap-64">
         
         <!-- Columna 1: Logo y Navegación -->
@@ -83,15 +83,7 @@ const zibasLogo = 'https://snack.yummiespromociones.com/snacksyummies/taqueritos
           
           <!-- Escríbenos -->
           <div class="text-left">
-            <h3 class="font-title text-xl md:text-2xl font-bold mb-3 uppercase">
-              Escríbenos
-            </h3>
-            <a 
-              href={`mailto:${email}`}
-              class="font-sans text-sm md:text-base hover:underline transition-all duration-200 hover:opacity-80"
-            >
-              {email}
-            </a>
+          
           </div>
           
           <!-- Contáctanos -->

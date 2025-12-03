@@ -10,3 +10,44 @@ html, body {
   max-width: 100vw;
   background-color: white;
 }
+
+
+
+  .bg-dark-spotlight {
+    position: relative;
+    background: radial-gradient(ellipse at center, #230405 0%, #230405 50%, #230405 100%);
+    overflow: hidden;
+  }
+  .bg-dark-spotlight::before,
+  .bg-dark-spotlight::after {
+    content:"";
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:50vw;
+    height:38vw;
+    border-radius:50%;
+    background: radial-gradient(ellipse at center, rgba(255,30,40,0.5) 0%, rgba(140,0,0,0) 70%);
+    filter: blur(60px);
+    z-index:1;
+  }
+  .bg-dark-spotlight::before { left:-30vw; }
+  .bg-dark-spotlight::after { right:-30vw; }
+  
+
+    .cta-button {
+    width: 247px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: linear-gradient(90deg, #ff0033, #ff4d6d);
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 6px;
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    box-shadow: 0 0 25px rgba(255,0,0,0.4);
+    transition: all 0.3s ease;
+  }

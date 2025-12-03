@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import { getLocale } from '../../../i18n/i18n';
 
 interface SlideItem {
   desktop: string;
@@ -28,6 +29,8 @@ const {
   textColor = "text-white",
   showOverlay = true
 } = Astro.props;
+
+const currentLang = getLocale();
 
 // Identificar el primer slide para precargar
 const firstSlide = slides[0] || {};
@@ -93,22 +96,34 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                   />
 
                   <h1 class="dragon-text font-bold uppercase leading-[90%] tracking-[0]  whitespace-nowrap select-none">
-                    DRAGON DE FUEGO
+                    {currentLang === 'es' ? 'DRAGON DE FUEGO' : 'DRAGON OF FIRE'}
                   </h1>
                  
                 </div>
 
                 <!-- Bloque de texto lateral izquierdo -->
               <div class="left-text">
-                <p>Sabor intenso,<br />Diversion<span> <b>Maxima.</b></span></p>
+                {currentLang === 'es' ? (
+                  <p>
+                    Sabor intenso,<br />
+                    Diversión<span> <b>Máxima.</b></span>
+                  </p>
+                ) : (
+                  <p>
+                    Intense flavor,<br />
+                    Maximum<span> <b>Fun.</b></span>
+                  </p>
+                )}
               </div>
 
               <!-- Bloque de texto lateral derecho -->
               <div class="right-text-top-div">
                   <div class="right-text-top">
                       <p class="text-extra">
-                    Extra picante que <br /> enamora
-                  </p>
+                        {currentLang === 'es' ? 'Extra picante que' : 'Extra spicy that'}
+                        <br />
+                        {currentLang === 'es' ? 'enamora' : 'you will love'}
+                      </p>
                   <div class="pl-[50px]">
                       <svg width="30" height="18" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M13.7175 4.85355C13.9127 4.65829 13.9127 4.34171 13.7175 4.14645L10.5355 0.964466C10.3402 0.769204 10.0236 0.769204 9.82837 0.964466C9.63311 1.15973 9.63311 1.47631 9.82837 1.67157L12.6568 4.5L9.82837 7.32843C9.63311 7.52369 9.63311 7.84027 9.82837 8.03553C10.0236 8.2308 10.3402 8.2308 10.5355 8.03553L13.7175 4.85355ZM0.635986 4.5V5L13.3639 5V4.5V4L0.635986 4V4.5Z" fill="white"/>
@@ -122,11 +137,15 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
              
 
               <div class="right-text">
-                <p class="text-leveleate ">Leveleate al maximo con Taqueritos.<br/>Dragron de Fuego ¿Listo para el reto?</p>
+                {currentLang === 'es' ? (
+                  <p class="text-leveleate ">Levéleate al máximo con Taqueritos.<br/>Dragón de Fuego ¿Listo para el reto?</p>
+                ) : (
+                  <p class="text-leveleate ">Level up to the max with Taqueritos.<br/>Dragon of Fire. Ready for the challenge?</p>
+                )}
                 
                 <div class="flex flex-row items-center">
                   <div class="cta">
-                    <a href={slide.link || "#"} class="cta-button">Descubre mas </a>
+                    <a href={slide.link || "#"} class="cta-button">{currentLang === 'es' ? 'Descubre más' : 'Discover more'}</a>
                   </div>
                   <div class="button-play ml-[35px]">
                     <div class="button-inner">
@@ -160,7 +179,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                     {slide.subtitle && <p class={`slide-subtitle ${textColor}`}>{slide.subtitle}</p>}
                     {slide.link && (
                       <a href={slide.link} class="slide-link">
-                        <span>Ver más</span>
+                        <span>{currentLang === 'es' ? 'Ver más' : 'View more'}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <line x1="5" y1="12" x2="19" y2="12"></line>
                           <polyline points="12 5 19 12 12 19"></polyline>
@@ -198,7 +217,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   /* ======= FONDO ======= */
   .slide-content {
     position: relative;
-    background: radial-gradient(ellipse at center, #1a0708 0%, #230405 50%, #0e0202 100%);
+    background: radial-gradient(ellipse at center, #230405 0%, #230405 50%, #230405 100%);
     overflow: hidden;
   }
   .slide-content::before,

@@ -1,10 +1,10 @@
 {
-  "title": "Momentos CON UN",
-  "subtitle": "alto nivel",
+  "title": "Moments WITH A",
+  "subtitle": "high level",
   "modal": {
-    "closeLabel": "Cerrar modal",
-    "prevLabel": "Imagen anterior",
-    "nextLabel": "Imagen siguiente",
+    "closeLabel": "Close modal",
+    "prevLabel": "Previous image",
+    "nextLabel": "Next image",
     "counterTemplate": "{current} / {total}"
   },
   "images": [

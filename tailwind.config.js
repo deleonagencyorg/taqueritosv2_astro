@@ -24,7 +24,7 @@ module.exports = {
         quinary: '#0167F7',
         red: '#FC4238',
         white: '#FFFFFF',
-        brown: '#5B3F2E',
+        brown: '#230405',
         blue: '#0167F7',
         green: '#10b981',
         orange: '#FD6600',

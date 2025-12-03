@@ -1,20 +1,35 @@
 {
-    "meta": {
-      "title": "Noticias",
-      "subtitle": "Mantente al día con las últimas noticias y eventos de Taqueritos."
+    "home": {
+      "title": "This is how our",
+      "subtitle": "players level up"
     },
     "button": {
-        "title": "Sé parte de nuestra comunidad"
+        "title": "Be part of our community"
     },
-    "items": [
+    "players": [
       {
         "id": "player-one",
         "slug": "player-one",
-        "title": "¿Cuál fue tu primer cosplay y qué tan OP",
-        "subtitle": "lo consideras ahora?",
+        "title": "What was your first cosplay and how OP",
+        "subtitle": "do you think it is now?",
         "user": "@TitanSoul",
-        "comment": "Mi primer cosplay fue de Cloud, versión Final Fantasy VII clásico. En ese momento me sentía OP al 200%, pero viéndolo ahora… el espadón parecía de cartón mojado"
+        "comment": "My first cosplay was Cloud from the classic Final Fantasy VII. Back then I felt 200% OP, but looking at it now... the buster sword looked like soggy cardboard."
+      },
+      {
+        "id": "player-two",
+        "slug": "player-two",
+        "title": "What was your first cosplay and how OP",
+        "subtitle": "do you think it is now?",
+        "user": "@TitanSoul",
+        "comment": "My first cosplay was Cloud from the classic Final Fantasy VII. Back then I felt 200% OP, but looking at it now... the buster sword looked like soggy cardboard."
+      },
+      {
+        "id": "player-three",
+        "slug": "player-three",
+        "title": "What was your first cosplay and how OP",
+        "subtitle": "do you think it is now?",
+        "user": "@TitanSoul",
+        "comment": "My first cosplay was Cloud from the classic Final Fantasy VII. Back then I felt 200% OP, but looking at it now... the buster sword looked like soggy cardboard."
       }
     ]
   }
-  

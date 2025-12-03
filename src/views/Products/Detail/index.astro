@@ -51,7 +51,7 @@ const brandsAssets = t('', { namespace: 'brands', locale: currentLang }) || {};
 const newsAssets =  t('', { namespace: 'news', locale: currentLang }) || {};
 const brandsList = brandsAssets.brands || [];
 const zibasBrand = brandsList.find((brand: any) => brand.id === 'zibas');
-const zibasProducts = (zibasBrand?.products || []).filter((product: any) => product.id !== productId);
+const taqueritosProducts = (zibasBrand?.products || []).filter((product: any) => product.id !== productId);
 const recipesAssets = t('', { namespace: 'recipes', locale: currentLang }) || {};
 
 // Si el producto no existe, lanzar error
@@ -67,7 +67,7 @@ const safeProduct: Product = {
   name_description: product.name_description || '',
   image: product.image || '',
   background_image: product.background_color || '',
-  background_color: product.background_color || '#180607',
+  background_color: product.background_color || '#150404',
   header_text_color: product.header_text_color || '#FFFFFF',
   color_button: product.color_button || '#520406',
   sizes: Array.isArray(product.sizes) ? product.sizes : [],
@@ -93,7 +93,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     <article
       id="product-detail"
       class="product-detail relative min-h-screen overflow-hidden"
-      style={{ backgroundColor: safeProduct.background_color || '#180607' }}
+      style={{ backgroundColor: safeProduct.background_color || '#150404' }}
       transition:animate="slide"
     >
       <!-- Cambiar a grid en lugar de flex -->
@@ -217,7 +217,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     </article>
     )}
     
-    <section id="recipes" class="w-full py-12 !bg-[#180607]" transition:animate="slide">
+    <section id="recipes" class="w-full py-12 bg-brown" transition:animate="slide">
       <div class="container mx-auto px-4 ">
         {recipesAssets.home?.title && (
           <div class="container mx-auto px-4 title mb-12">
@@ -335,7 +335,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
 
   .swiper-button-next:hover,
   .swiper-button-prev:hover {
-    background: #180607 !important;
+    background: #150404 !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4) !important;
   }
