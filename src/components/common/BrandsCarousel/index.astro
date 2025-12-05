@@ -13,6 +13,8 @@ export interface Props {
   autoplay?: boolean;
   speed?: number;
   backgroundColor?: string;
+  duplicate?: boolean;
+  centered?: boolean;
 }
 
 const {
@@ -21,17 +23,21 @@ const {
   autoplay = true,
   speed = 3000,
   backgroundColor = "#1a0a0b",
+  duplicate = true,
+  centered = false,
 } = Astro.props;
 
 const brandsItems = Array.isArray(brands) ? brands : [];
 
-// Duplicar varias veces para efecto infinito suave
-const itemsToRender = [
-  ...brandsItems,
-  ...brandsItems,
-  ...brandsItems,
-  ...brandsItems,
-];
+// Duplicar varias veces para efecto infinito suave (opcional)
+const itemsToRender = duplicate
+  ? [
+      ...brandsItems,
+      ...brandsItems,
+      ...brandsItems,
+      ...brandsItems,
+    ]
+  : brandsItems;
 
 import LazyImage from "../LazyImage.astro";
 ---
@@ -40,6 +46,8 @@ import LazyImage from "../LazyImage.astro";
   class={`brands-carousel ${className}`}
   data-autoplay={autoplay}
   data-speed={speed}
+  data-centered={centered}
+  data-count={brandsItems.length}
   style={`background-color: ${backgroundColor}`}
 >
   <div class="brands-shell">
@@ -73,42 +81,41 @@ import LazyImage from "../LazyImage.astro";
     </svg>
     
     <div class="brands-track">
-      <div class="swiper-container-brands">
-        <div class="swiper-wrapper">
-          {
-            itemsToRender.map((brand) => (
+      {centered && itemsToRender.length <= 4 ? (
+        <div class="static-brands-container">
+          {itemsToRender.map((brand) => (
+            <div class="static-brand-item">
+              {brand.url ? (
+                <a href={brand.url} target="_blank" rel="noopener noreferrer" class="brand-link">
+                  <LazyImage src={brand.logo} alt={brand.name} class="brand-logo" width={160} height={60} />
+                </a>
+              ) : (
+                <div class="brand-link">
+                  <LazyImage src={brand.logo} alt={brand.name} class="brand-logo" width={160} height={60} />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="swiper-container-brands">
+          <div class="swiper-wrapper">
+            {itemsToRender.map((brand) => (
               <div class="swiper-slide">
                 {brand.url ? (
-                  <a  
-                    href={brand.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="brand-link"
-                  >
-                    <LazyImage
-                      src={brand.logo}
-                      alt={brand.name}
-                      class="brand-logo"
-                      width={160}
-                      height={60}
-                    />
+                  <a href={brand.url} target="_blank" rel="noopener noreferrer" class="brand-link">
+                    <LazyImage src={brand.logo} alt={brand.name} class="brand-logo" width={160} height={60} />
                   </a>
                 ) : (
                   <div class="brand-link">
-                    <LazyImage
-                      src={brand.logo}
-                      alt={brand.name}
-                      class="brand-logo"
-                      width={160}
-                      height={60}
-                    />
+                    <LazyImage src={brand.logo} alt={brand.name} class="brand-logo" width={160} height={60} />
                   </div>
                 )}
               </div>
-            ))
-          }
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   </div>
 </div>
@@ -123,8 +130,8 @@ import LazyImage from "../LazyImage.astro";
 
   .brands-shell {
     width: 100%;
-    max-width: 1140px;
-    height: 100px;
+    max-width: 1400px;
+    height: 120px;
     margin: 0 auto;
     position: relative;
   }
@@ -157,11 +164,16 @@ import LazyImage from "../LazyImage.astro";
   .swiper-wrapper {
     display: flex !important;
     align-items: center !important;
+    justify-content: center;
+  }
+
+  .brands-carousel[data-centered="true"] .swiper-wrapper {
+    justify-content: center !important;
   }
 
   .swiper-slide {
     width: auto !important;
-    height: 80px !important;
+    height: 100px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -173,7 +185,7 @@ import LazyImage from "../LazyImage.astro";
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 2.5rem;
+    padding: 0 1.5rem;
     height: 100%;
     width: 100%;
     transition: all 0.3s ease;
@@ -184,8 +196,8 @@ import LazyImage from "../LazyImage.astro";
   }
 
   .brand-logo {
-    max-width: 80px;
-    max-height: 40px;
+    max-width: 140px;
+    max-height: 70px;
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
@@ -195,6 +207,29 @@ import LazyImage from "../LazyImage.astro";
 
   .brand-link:hover .brand-logo {
     filter: brightness(1.2);
+  }
+
+  /* Static centered container - sin Swiper */
+  .static-brands-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    gap: 4rem;
+  }
+
+  .static-brand-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+  }
+
+  @media (max-width: 768px) {
+    .static-brands-container {
+      gap: 2rem;
+    }
   }
 
   /* Responsive - Móvil: líneas más juntas */
@@ -208,8 +243,8 @@ import LazyImage from "../LazyImage.astro";
 
     .brands-shell {
       width: 100%;
-      max-width: 700px;
-      height: 100px;
+      max-width: 900px;
+      height: 110px;
       margin: 0 auto;
       position: relative;
     }
@@ -226,10 +261,15 @@ import LazyImage from "../LazyImage.astro";
 
     .brands-shell {
       width: 100%;
-      max-width: 240px;
-      height: 100px;
+      max-width: 320px;
+      height: 110px;
       margin: 0 auto;
       position: relative;
+    }
+
+    .brand-logo {
+      max-width: 120px;
+      max-height: 60px;
     }
   }
 
@@ -261,30 +301,40 @@ import LazyImage from "../LazyImage.astro";
         ".swiper-container-brands",
       ) as HTMLElement;
       if (!swiperContainer) return;
+      const centered = this.container.getAttribute('data-centered') === 'true';
+      const total = parseInt(this.container.getAttribute('data-count') || '0', 10);
+      const shouldLoop = !centered || total > 4;
+      const autoplayConfig = shouldLoop && this.options.autoplay
+        ? {
+            delay: 0,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: false,
+          }
+        : false;
+      const slidesPerViewValue = centered
+        ? Math.max(1, Math.min(total, 4))
+        : 'auto';
+      const space = centered ? 48 : 0;
+      const speedValue = centered ? 600 : 5000;
 
       this.swiper = new Swiper(swiperContainer, {
         modules: [Autoplay],
 
-        loop: true,
-        loopAdditionalSlides: 10,
+        loop: shouldLoop,
+        loopAdditionalSlides: shouldLoop ? 10 : 0,
 
-        centeredSlides: false, // ← CAMBIADO A FALSE para que se vean más
-        slidesPerView: "auto",
-        spaceBetween: 0,
+        centeredSlides: centered,
+        centerInsufficientSlides: centered,
+        slidesPerView: slidesPerViewValue,
+        spaceBetween: space,
 
-        speed: 5000,
+        speed: speedValue,
 
-        autoplay: this.options.autoplay
-          ? {
-              delay: 0,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: false,
-            }
-          : false,
+        autoplay: autoplayConfig,
 
-        freeMode: true,
+        freeMode: shouldLoop && !centered,
 
-        allowTouchMove: false,
+        allowTouchMove: shouldLoop,
       });
     }
 

@@ -3,12 +3,13 @@
 import LazyImage from '../../components/common/LazyImage.astro';
 // Component Imports
 import VideoCarousel from '../../components/common/VideoCarousel/index.astro';
-import RecipesCarousel from "../../components/recipes/RecipesCarousel.astro";
+import ChallengesCarousel from "../../components/challenges/ChallengesCarousel.astro";
 import ProductsCarousel from '../../components/common/ProductsCarousel/index.astro';
 import MasonryGallery from '../../components/gallery/MasonryGallery.astro';
 import PixelGrid from '../../components/atoms/PixelGrid.astro';
 import BlogCard from '../../components/blog/BlogCard.astro';
 import BrandsCarousel from '../../components/common/BrandsCarousel/index.astro';
+import PlayersCarousel from '../../components/common/playersCarousel/index.astro';
 
 
 // Style Imports
@@ -29,15 +30,23 @@ const { loading = false } = Astro.props;
 // Language and Data Setup
 const currentLang = getLocale();
 const homeAssets = t('home', { namespace: 'common', locale: currentLang }) || {};
-const recipesAssets = t('', { namespace: 'recipes', locale: currentLang }) || {};
+const challengesAssets = t('', { namespace: 'challenges', locale: currentLang }) || {};
 const galleryAssets = t('', { namespace: 'gallery', locale: currentLang }) || {};
 const aboutAssets = t('', { namespace: 'aboutus', locale: currentLang }) || {};
 const brandsAssets = t('', { namespace: 'brands', locale: currentLang }) || {};
 const newsAssets =  t('', { namespace: 'news', locale: currentLang }) || {};
 const products = t('items', { namespace: 'products', locale: currentLang }) || [];
+const playersNews = t('players', { namespace: 'players', locale: currentLang }) || [];
+const playersHome = t('home', { namespace: 'players', locale: currentLang }) || {};
+const players = Array.isArray(playersNews) ? playersNews : [];
 const brandsList = brandsAssets.brands || [];
-const zibasBrand = brandsList.find((brand: any) => brand.id === 'hugo');
-const zibasProducts = zibasBrand?.products || [];
+// Where to buy: take stockist from products locales and adapt to BrandsCarousel shape
+const stockistItems = t('stockist', { namespace: 'products', locale: currentLang }) || [];
+const whereToBuyBrands = Array.isArray(stockistItems)
+  ? stockistItems.map((s: any) => ({ id: String(s.id || ''), name: String(s.name || ''), logo: String(s.icon || ''), url: String(s.link || '') }))
+  : [];
+const taqueritosBrand = brandsList.find((brand: any) => brand.id === 'hugo');
+const taqueritosProducts = taqueritosBrand?.products || [];
 
 const commonAssets = t('assets.slider', { namespace: 'common', locale: currentLang }) || [];
 const slides = Array.isArray(commonAssets)
@@ -95,31 +104,31 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       />
     </div>
 
-    <section id="recipes" class="w-full py-12 !bg-[#180607]" transition:animate="slide">
-      <div class="container mx-auto px-4 ">
-        {recipesAssets.home?.title && (
+    <section id="challenges" class="w-full py-12 !bg-brown relative" transition:animate="slide">
+      <div class="container mx-auto px-4 relative" style="padding-top: 60px;">
+        {challengesAssets.title && (
           <div class="container mx-auto px-4 title mb-12">
             <p>
-              {recipesAssets.home?.title}
+              {challengesAssets.title}
             </p>
-            {recipesAssets.home?.subtitle && (
+            {challengesAssets.subtitle && (
               <p>
-                {recipesAssets.home?.subtitle}
+                {challengesAssets.subtitle}
               </p>
             )}
           </div>
         )}
-        <RecipesCarousel 
-          title={recipesAssets.home?.title || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
-          subtitle={recipesAssets.home?.subtitle || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
-          textButton={recipesAssets.home?.view_more || 'Ver Todas'}
+        <ChallengesCarousel 
+          title={challengesAssets.title || (currentLang === 'es' ? 'PARTICIPA EN NUESTROS' : 'PARTICIPATE IN OUR')}
+          subtitle={challengesAssets.subtitle || (currentLang === 'es' ? 'RETOS Y GANA PREMIOS' : 'CHALLENGES')}
+          textButton={challengesAssets.view_more || (currentLang === 'es' ? 'Ver Todos' : 'View All')}
         />
       </div>
     </section>
     
-    <!-- Sección de Productos Zibas -->
-    {zibasProducts.length > 0 && (
-      <section id="products" class="w-full py-4 pt-16 bg-[#180607]">
+    <!-- Sección de Productos taqueritos -->
+    {taqueritosProducts.length > 0 && (
+      <section id="products" class="w-full py-4 pt-16 bg-brown">
         <div class="container mx-auto px-4 title">
           {brandsAssets.home?.title && (
           <div >
@@ -147,38 +156,45 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       </section>
     )}
 
-    <section id="brands" class="w-full"  transition:persist>
+    <section id="wherebuy" class="w-full"  transition:persist>
       <BrandsCarousel 
-        brands={brandsList}
+        brands={whereToBuyBrands}
         autoplay={true}
         speed={1000}
         backgroundColor="#0a0405"
+        duplicate={false}
+        centered={true}
       />
     </section>
+
+    <!-- {players.length > 0 && (
+      <section id="players" class="w-full !bg-[#081806]">
+        <PlayersCarousel 
+          players={players} 
+          playersHome={playersHome}
+        />
+      </section>
+    )} -->
     
-    <!-- Sección de recetas con carrusel -->
-
-
-
     <!-- Sección Gallery -->
-    <!-- <section id="gallery" class="bg-pink w-full py-12" transition:animate="slide">
-      <div class="container mx-auto px-4">
+    <section
+      id="gallery"
+      class="relative w-full overflow-hidden bg-dark-spotlight-blue py-16"
+    >
         {Array.isArray(galleryAssets.images) && galleryAssets.images.length > 0 && (
           <MasonryGallery 
             items={galleryAssets.images}
-            columns={3}
             title={galleryAssets.title}
-            className=""
+            subtitle={galleryAssets.subtitle}
           />
         )}
-      </div>
-    </section> -->
+    </section>
 
 
 
 
     <!-- Sección News -->
-      <section id="news" class="bg-yellow w-full py-12 hidden" transition:animate="slide">
+  <!-- <section id="news" class="bg-yellow w-full py-12 hidden" transition:animate="slide">
   <div class="container mx-auto px-4">
     {newsAssets.home.title && (
       <div class="text-center mb-16 relative z-20 overflow-hidden" >
@@ -211,7 +227,6 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
     ) : (
       <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 items-start">
-          <!-- Columna izquierda: 3 más recientes -->
           <div class="md:col-span-2">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-brown font-title text-lg md:text-xl font-bold uppercase tracking-wide">{topNewsLabel}</h3>
@@ -229,7 +244,6 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
             </div>
           </div>
 
-          <!-- Columna derecha: destacados (posiciones 3 y 4) -->
           <div class="md:col-span-1">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-brown font-title text-lg md:text-xl font-bold uppercase tracking-wide">{featuredLabel}</h3>
@@ -255,7 +269,7 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       </div>
     )}
   </div>
-</section>
+</section> -->
 
 
     <!-- Sección Abaout -->
@@ -281,10 +295,10 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
         <p class="text-white font-sans  text-xl leading-relaxed w-100%">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec metus vel ante bibendum finibus. Nullam nec metus vel ante bibendum finibus.</p>
       </div>
       <div>
-        <LazyImage src="https://snack.yummiespromociones.com/zibas/gallery16.webp" class="py-4" alt="Taqueritos" />
+        <LazyImage src="https://snack.yummiespromociones.com/taqueritos/gallery16.webp" class="py-4" alt="Taqueritos" />
       </div>
       <div>
-        <LazyImage src="https://snack.yummiespromociones.com/zibas/gallery15.webp" class="py-4" alt="Taqueritos" />
+        <LazyImage src="https://snack.yummiespromociones.com/taqueritos/gallery15.webp" class="py-4" alt="Taqueritos" />
         <h4 class="md:text-4xl text-lg font-bold text-white font-title">LOREM IPSUM DOLOR</h4>
         <p class="text-white font-sans text-xl  leading-relaxed w-100%">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec metus vel ante bibendum finibus. Nullam nec metus vel ante bibendum finibus.</p>
       </div>

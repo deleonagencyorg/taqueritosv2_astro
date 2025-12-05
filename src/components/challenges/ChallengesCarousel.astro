@@ -1,0 +1,508 @@
+---
+import ChallengeCardCarousel from './ChallengeCardCarousel.astro';
+import { getLocale } from '../../i18n/i18n';
+
+const currentLang = getLocale();
+
+interface Challenge {
+  id: string;
+  title: string;
+  subtitle?: string;
+  title_down?: string;
+  subtitle_down?: string;
+  image: string;
+  hover_image?: string;
+  preparation_time: number;
+  category?: string;
+  category_en?: string;
+  categories?: string[];
+  categories_en?: string[];
+  difficulty?: string;
+  servings?: number;
+  rating?: number;
+  url?: string;
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  title_down?: string;
+  subtitle_down?: string;
+  textButton?: string;
+  items?: any[];
+}
+
+const {
+  textButton = currentLang === 'es' ? 'Ver Todas' : 'View All',
+  items
+} = Astro.props;
+
+let challengeItems: Challenge[] = Array.isArray(items) ? (items as unknown as Challenge[]) : [];
+if (!challengeItems.length) {
+  const challengeModules = import.meta.glob<{ default: Challenge }>("../../locales/*/challenges/*.json");
+  for (const path in challengeModules) {
+    const lang = path.split('/')[3];
+    if (lang === currentLang) {
+      const mod = await challengeModules[path]();
+      challengeItems.push(mod.default);
+    }
+  }
+}
+
+function getCategoryKey(challenge: any): string {
+  const raw = (
+    challenge?.category_en ||
+    challenge?.category ||
+    challenge?.category?.name ||
+    (Array.isArray(challenge?.categories_en) ? challenge.categories_en[0] : undefined) ||
+    (Array.isArray(challenge?.categories) ? challenge.categories[0] : undefined) ||
+    ''
+  );
+  const key = String(raw || '').trim().toLowerCase();
+  if (['breakfast', 'desayuno'].includes(key)) return 'breakfast';
+  if (['brunch'].includes(key)) return 'brunch';
+  if (['lunch', 'almuerzo'].includes(key)) return 'lunch';
+  return key || 'other';
+}
+---
+
+<div class="w-full challenges-carousel-wrapper" data-challenges-carousel>
+  <div class="w-full px-4">
+    
+    <!-- Carousel MOBILE -->
+    <div class="challenges-carousel-mobile relative md:hidden">
+      <div class="challenges-carousel-container overflow-hidden w-full">
+        <div class="challenges-carousel-track flex items-start w-full gap-4 transition-transform duration-300" id="challengesTrackMobile">
+          {challengeItems.map((challenge, index) => (
+            <div class="challenge-slide-mobile flex-shrink-0 w-full mt-[100px]" data-category={getCategoryKey(challenge)}>
+              <ChallengeCardCarousel
+                image={challenge.image}
+                hoverImage={challenge.hover_image || challenge.image}
+                title={challenge.title}
+                title_down={challenge.title_down}
+                subtitle={challenge.subtitle}
+                subtitle_down={challenge.subtitle_down}
+                time={`${challenge.preparation_time}MIN`}
+                id={challenge.id}
+                difficulty={challenge.difficulty || '---'}
+                servings={challenge.servings || 0}
+                rating={challenge.rating || 0}
+                isMainCard={false}
+                url={challenge.url}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+  
+      <div class="carousel-navigation">
+        <button class="carousel-btn-prev" type="button" aria-label="Anterior" id="prevBtnMobile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <button class="carousel-btn-next" type="button" aria-label="Siguiente" id="nextBtnMobile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Carousel DESKTOP -->
+    <div class="challenges-carousel-desktop relative hidden md:block">
+      <div class="carousel-container-desktop overflow-hidden">
+        <div class="carousel-track-desktop flex gap-6" id="challengesTrackDesktop">
+          {challengeItems.map((challenge, index) => (
+            <div class="carousel-slide-desktop flex-shrink-0" data-index={index} data-category={getCategoryKey(challenge)}>
+              <ChallengeCardCarousel
+                image={challenge.image}
+                hoverImage={challenge.hover_image || challenge.image}
+                title={challenge.title}
+                title_down={challenge.title_down}
+                subtitle={challenge.subtitle}
+                subtitle_down={challenge.subtitle_down}
+                time={`${challenge.preparation_time}MIN`}
+                id={challenge.id}
+                difficulty={challenge.difficulty || '---'}
+                servings={challenge.servings || 0}
+                rating={challenge.rating || 0}
+                isMainCard={false}
+                url={challenge.url}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div class="carousel-navigation">
+        <button class="carousel-btn-prev" type="button" aria-label="Anterior">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="carousel-btn-next" type="button" aria-label="Siguiente">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<style>
+  /* Mobile - Carrusel simple */
+  .challenges-carousel-track {
+    display: flex;
+    transition: transform 400ms ease-in-out;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .challenge-slide-mobile {
+    flex-shrink: 0;
+    width: calc(100vw - 2rem); /* Ancho completo menos padding */
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .challenge-slide-mobile > a {
+    width: 100% !important;
+    max-width: 500px;
+    height: auto !important;
+  }
+
+  .challenge-slide-mobile .recipe-card > div {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 255px;
+  }
+
+  /* Desktop */
+  .carousel-container-desktop {
+    overflow: visible; /* Permite que el glow/sombra de las cards no se corte */
+    width: 100%;
+    position: relative;
+  }
+
+  .carousel-track-desktop {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+  }
+
+  .carousel-slide-desktop {
+    flex-shrink: 0;
+    width: 710px;
+    min-width: 710px;
+    position: relative;
+    transition: opacity 50ms;
+  }
+
+  /* Animaciones DESKTOP */
+  @keyframes flyAcrossRight {
+    0% {
+      transform: translateX(0) translateY(0) scale(1);
+      opacity: 1;
+    }
+    30% {
+      transform: translateX(300px) translateY(-20px) scale(1.08);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(1200px) translateY(0) scale(0.95);
+      opacity: 0;
+    }
+  }
+
+  @keyframes slideFromBehind {
+    0% {
+      transform: translateX(0) scale(0.9);
+      opacity: 0.3;
+    }
+    100% {
+      transform: translateX(-1200px) scale(0.9);
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes bounceIn {
+    0% {
+      transform: translateX(0) scale(0.85);
+      opacity: 0;
+    }
+    60% {
+      transform: translateX(0) scale(1.05);
+      opacity: 1;
+    }
+    80% {
+      transform: translateX(0) scale(0.98);
+    }
+    100% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .flying-card-right {
+    position: fixed !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    animation: flyAcrossRight 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .flying-card-left {
+    position: fixed !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+    animation: slideFromBehind 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .bounce-in {
+    animation: bounceIn 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  }
+
+  .carousel-navigation {
+    position: absolute;
+    top: -80px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  .challenges-carousel-wrapper {
+    position: relative;
+  }
+
+  .challenges-carousel-desktop {
+    position: relative;
+    padding-top: 20px;
+  }
+
+  .carousel-btn-prev,
+  .carousel-btn-next {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 45, 48, 0.16);
+    border: 2px solid #ff2c2f;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .carousel-btn-prev svg,
+  .carousel-btn-next svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .carousel-btn-prev:hover,
+  .carousel-btn-next:hover {
+    background: #150404;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4);
+  }
+
+  @media (min-width: 768px) {
+    .challenges-carousel-mobile {
+      display: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .challenges-carousel-desktop {
+      display: none;
+    }
+
+    .carousel-navigation {
+      top: -20px;
+      right: 50%;
+      transform: translateX(50%);
+    }
+
+    .carousel-btn-prev,
+    .carousel-btn-next {
+      width: 50px;
+      height: 50px;
+    }
+  }
+</style>
+
+<script>
+  function initChallengesCarousel(root: Element) {
+    if (!root || (root as any).dataset.rcInitialized === 'true') return;
+    (root as any).dataset.rcInitialized = 'true';
+
+    console.log('🎠 Inicializando carruseles');
+
+    // MOBILE CAROUSEL - Simple
+    const trackMobile = root.querySelector('#challengesTrackMobile') as HTMLElement;
+    const prevBtnMobile = root.querySelector('#prevBtnMobile') as HTMLButtonElement;
+    const nextBtnMobile = root.querySelector('#nextBtnMobile') as HTMLButtonElement;
+
+    if (trackMobile && prevBtnMobile && nextBtnMobile) {
+      const slidesMobile = Array.from(trackMobile.querySelectorAll('.challenge-slide-mobile')) as HTMLElement[];
+      let currentIndexMobile = 0;
+
+      function updateMobile() {
+        const slideWidth = slidesMobile[0]?.offsetWidth || 0;
+        const gap = 16; // 1rem gap
+        const offset = currentIndexMobile * (slideWidth + gap);
+        trackMobile.style.transform = `translateX(-${offset}px)`;
+      }
+
+      prevBtnMobile.addEventListener('click', () => {
+        if (currentIndexMobile > 0) {
+          currentIndexMobile--;
+        } else {
+          currentIndexMobile = slidesMobile.length - 1;
+        }
+        updateMobile();
+      });
+
+      nextBtnMobile.addEventListener('click', () => {
+        if (currentIndexMobile < slidesMobile.length - 1) {
+          currentIndexMobile++;
+        } else {
+          currentIndexMobile = 0;
+        }
+        updateMobile();
+      });
+
+      // Recalcular en resize
+      window.addEventListener('resize', updateMobile);
+
+      console.log('✅ Carrusel mobile inicializado');
+    }
+
+    // DESKTOP CAROUSEL - Con efectos
+    const trackDesktop = root.querySelector('#challengesTrackDesktop') as HTMLElement;
+    const containerDesktop = root.querySelector('.carousel-container-desktop') as HTMLElement;
+    const prevBtnDesktop = root.querySelector('.carousel-btn-prev:not(#prevBtnMobile)') as HTMLButtonElement;
+    const nextBtnDesktop = root.querySelector('.carousel-btn-next:not(#nextBtnMobile)') as HTMLButtonElement;
+
+    if (trackDesktop && prevBtnDesktop && nextBtnDesktop && containerDesktop) {
+      let isAnimating = false;
+
+      nextBtnDesktop.addEventListener('click', () => {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const slides = Array.from(trackDesktop.children) as HTMLElement[];
+        if (slides.length === 0) {
+          isAnimating = false;
+          return;
+        }
+
+        const firstSlide = slides[0];
+        const rect = firstSlide.getBoundingClientRect();
+
+        const flyingClone = firstSlide.cloneNode(true) as HTMLElement;
+        flyingClone.style.cssText = `
+          position: fixed !important;
+          top: ${rect.top}px !important;
+          width: ${rect.width}px !important;
+          height: ${rect.height}px !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          z-index: 9999 !important;
+          pointer-events: none !important;
+        `;
+        flyingClone.classList.add('flying-card-right');
+        
+        document.body.appendChild(flyingClone);
+
+        firstSlide.style.opacity = '0';
+        firstSlide.style.visibility = 'hidden';
+
+        setTimeout(() => {
+          trackDesktop.appendChild(firstSlide);
+          firstSlide.style.opacity = '1';
+          firstSlide.style.visibility = 'visible';
+          flyingClone.remove();
+          isAnimating = false;
+        }, 280);
+      });
+
+      prevBtnDesktop.addEventListener('click', () => {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const slides = Array.from(trackDesktop.children) as HTMLElement[];
+        if (slides.length === 0) {
+          isAnimating = false;
+          return;
+        }
+
+        const lastSlide = slides[slides.length - 1];
+        const rect = lastSlide.getBoundingClientRect();
+
+        const flyingClone = lastSlide.cloneNode(true) as HTMLElement;
+        flyingClone.style.cssText = `
+          position: fixed !important;
+          left: ${rect.left}px !important;
+          top: ${rect.top}px !important;
+          width: ${rect.width}px !important;
+          height: ${rect.height}px !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          z-index: 1 !important;
+          pointer-events: none !important;
+        `;
+        flyingClone.classList.add('flying-card-left');
+        
+        document.body.appendChild(flyingClone);
+
+        lastSlide.style.opacity = '0';
+        lastSlide.style.visibility = 'hidden';
+
+        setTimeout(() => {
+          trackDesktop.insertBefore(lastSlide, trackDesktop.firstChild);
+          lastSlide.style.opacity = '0';
+          lastSlide.style.visibility = 'visible';
+          lastSlide.classList.add('bounce-in');
+          void lastSlide.offsetWidth;
+          flyingClone.remove();
+          
+          setTimeout(() => {
+            lastSlide.classList.remove('bounce-in');
+            lastSlide.style.opacity = '1';
+            isAnimating = false;
+          }, 400);
+        }, 280);
+      });
+
+      console.log('✅ Carrusel desktop inicializado');
+    }
+  }
+
+  function initAll() {
+    document.querySelectorAll('[data-challenges-carousel]').forEach((el) => {
+      initChallengesCarousel(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+  
+  document.addEventListener('astro:page-load', initAll);
+  document.addEventListener('astro:after-swap', initAll);
+</script>

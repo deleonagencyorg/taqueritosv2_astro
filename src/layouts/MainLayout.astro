@@ -3,7 +3,7 @@ import GoogleTagManager from '../components/common/GoogleTagManager.astro';
 import Favicon from '../components/Favicon.astro';
 // import GoogleTagManager from './i18n/GoogleTagManager.astro';
 // import GoogleTagManagerNoScript from './i18n/GoogleTagManagerNoScript.astro';
-import { type Locale } from '../i18n/i18n'; // t is not used, Locale type might be needed
+import { t, type Locale } from '../i18n/i18n';
 import Header from '../components/common/Header/index.astro';
 import Footer from '../components/common/Footer/index.astro';
 import MobileMenu from '../components/common/MobileMenu/index.astro';
@@ -13,6 +13,7 @@ import { getHeaderColors } from '../config/headerColors';
 import { ViewTransitions } from 'astro:transitions';
 import "../styles/global.css";
 import { head } from 'framer-motion/m';
+import StockistModal from '../components/common/StockistModal.astro';
 
 export interface Props {
   title?: string;
@@ -26,6 +27,12 @@ export interface Props {
 
 const { title, description, class: className, headerColors } = Astro.props;
 
+// Normalizar título con prefijo "Taqueritos - "
+function withTaqueritosPrefix(value?: string) {
+  if (!value) return undefined;
+  return value.startsWith('Taqueritos - ') ? value : `Taqueritos - ${value}`;
+}
+
 // Determine language for <html lang=...> and for key prop from the URL
 const pathSegments = Astro.url.pathname.split('/');
 const langFromUrl = pathSegments[1] as Locale;
@@ -34,6 +41,10 @@ const currentLang = validLocales.includes(langFromUrl) ? langFromUrl : 'es'; // 
 // Obtener configuración de colores basada en la ruta actual
 const { pathname } = Astro.url;
 const headerColorConfig = getHeaderColors(pathname);
+
+// Datos globales para el modal de "Dónde comprar"
+const products = t('items', { namespace: 'products', locale: currentLang }) || [];
+const stockists = t('stockist', { namespace: 'products', locale: currentLang }) || [];
 
 // Si se pasan colores de header específicos (por ejemplo, desde un producto), 
 // crear una configuración personalizada
@@ -53,7 +64,7 @@ if (headerColors) {
     
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {title && <title> Zibas -  {title}</title>}
+    {title && <title>{withTaqueritosPrefix(title)}</title>}
     {description && <meta name="description" content={description} />}
     <ViewTransitions />
     <slot name="head" />
@@ -73,5 +84,39 @@ if (headerColors) {
     
     <!-- Menú móvil al final del body para máximo z-index -->
     <MobileMenu currentLang={currentLang} headerColorConfig={customHeaderConfig} />
+
+    <!-- Modal global de "Dónde comprar" -->
+    <StockistModal products={products} stockists={stockists} locale={currentLang} />
+
+    <script>
+      function initGlobalStockistLinks() {
+        document.addEventListener(
+          'click',
+          (event) => {
+            const target = event.target as HTMLElement | null;
+            if (!target) return;
+
+            const link = target.closest('[data-open-stockist="true"]') as HTMLAnchorElement | null;
+            if (!link) return;
+
+            event.preventDefault();
+
+            if (typeof window.openStockistModal === 'function') {
+              window.openStockistModal();
+            }
+          },
+          { capture: true }
+        );
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGlobalStockistLinks);
+      } else {
+        initGlobalStockistLinks();
+      }
+
+      document.addEventListener('astro:page-load', initGlobalStockistLinks);
+      document.addEventListener('astro:after-swap', initGlobalStockistLinks);
+    </script>
   </body>
 </html>

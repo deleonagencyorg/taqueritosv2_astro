@@ -1,12 +1,12 @@
 {
   "meta": {
-    "title": "Productos - Taqueritos",
-    "description": "Descubre nuestra línea completa de productos Taqueritos. Sabor auténtico para toda la familia."
+    "title": "Products - Taqueritos",
+    "description": "Discover our complete line of Taqueritos products. Authentic flavor for the whole family."
   },
   "home": {
-    "title": "Descubre",
-    "subtitle": "Nuestros Productos",
-    "textButton": "Conoce más"
+    "title": "Discover",
+    "subtitle": "Our Products",
+    "textButton": "Learn more"
   },
   "stockist": [
     {
@@ -22,69 +22,12 @@
       "icon": "https://snack.yummiespromociones.com/SnacksyummiesAssets/latorreapp.webp"
     }
   ],
-  "items": [
-    {
-      "id": "taqueritos-dragon-de-hielo",
-      "name": "Taqueritos Dragon Hielo",
-      "image": "/images/es/products/dragonhielo.png",
-      "background_color": "#0e121a",
-      "header_color": "#FDE820",
-      "text_color": "#FFF",
-      "header_background": "#FDE820",
-      "header_text_color": "#5B3F2E",
-      "color_button": "#1567D3",
-      "second_color_button": "#519CFF",
-      "boder_color": "#92bffb",
-      "description": "Hojuelas de Papa Fritas con sabor a Queso.",
-      "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
-      "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
-      "sizes": [
-        {
-          "value": "150",
-          "image": "dragonhielo.png"
-        }
-      ],
-      "weight": [
-        "23g",
-        "26g",
-        "40g",
-        "80g",
-        "190g"
-      ]
-    },
-    {
-      "id": "taqueritos-queso-fusion",
-      "name": "Taqueritos Queso Fusion",
-      "image": "/images/es/products/fusion.png",
-      "background_color": "#251008",
-      "header_color": "#FDE820",
-      "text_color": "#FFF",
-      "header_background": "#FDE820",
-      "header_text_color": "#5B3F2E",
-      "color_button": "#FF3300",
-      "second_color_button": "#FF8E52",
-      "boder_color": "#ff9b7a",
-      "description": "Hojuelas de Papa Fritas con sabor a Queso.",
-      "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
-      "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
-      "sizes": [
-        {
-          "value": "150",
-          "image": "dragonhielo.png"
-        }
-      ],
-      "weight": [
-        "23g",
-        "26g",
-        "40g",
-        "80g",
-        "190g"
-      ]
-    },
-    {
-      "id": "ttaqueritos-dragon-de-fuego",
-      "name": "Taqueritos Dragon de Fusion",
-      "image": "/images/es/products/fuego.png",
+   "items": [
+            {
+      "id": "taqueritos-dragon-de-fuego",
+      "name": "Taqueritos Dragón de Fuego",
+      "name_description": "Dragón de Fuego",
+      "image": "https://snack.yummiespromociones.com/taqueritos/taqueritodragonfuegousa.webp",
       "background_color": "#250909",
       "header_color": "#FDE820",
       "text_color": "#FFF",
@@ -93,7 +36,7 @@
       "color_button": "#FF0048",
       "second_color_button": "#FF5255",
       "boder_color": "#ff585b",
-      "description": "Hojuelas de Papa Fritas con sabor a Queso.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
       "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
       "sizes": [
@@ -103,12 +46,63 @@
         }
       ],
       "weight": [
-        "23g",
-        "26g",
-        "40g",
-        "80g",
-        "190g"
+        "180gr",
+        "80gr",
+        "34gr"
       ]
-    }
+    },
+    {
+      "id": "taqueritos-dragon-de-hielo",
+      "name": "Taqueritos Dragón Hielo",
+      "name_description": "Dragón de Hielo",
+      "image": "https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
+      "background_color": "#0e121a",
+      "header_color": "#FDE820",
+      "text_color": "#FFF",
+      "header_background": "#FDE820",
+      "header_text_color": "#5B3F2E",
+      "color_button": "#1567D3",
+      "second_color_button": "#519CFF",
+      "product": "Taquerito Dragón Hielo",
+      "boder_color": "#92bffb",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
+      "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
+      "sizes": [
+        {
+          "value": "150",
+          "image": "dragonhielo.png"
+        }
+      ],
+      "weight": [
+        "8oz"
+      ]
+    },
+     {
+      "id": "taqueritos-chile-toreado",
+      "name": "Taqueritos Chile Toreado",
+      "name_description": "Chile Toreado",
+      "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
+      "background_color": "#081806",
+      "header_color": "#FDE820",
+      "text_color": "#FFF",
+      "header_background": "#FDE820",
+      "header_text_color": "#5B3F2E",
+      "color_button": "#055E24",
+      "second_color_button": "#08B63E",
+      "boder_color": "#7CD546",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
+      "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
+      "sizes": [
+        {
+          "value": "150",
+          "image": "taquerito.png"
+        }
+      ],
+      "weight": [
+        "8oz"
+      ]
+    } 
   ]
 }

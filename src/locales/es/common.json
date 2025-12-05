@@ -35,6 +35,14 @@
     "zibas_creators": {
       "title": "Taqueritos Creators - Concurso de Creatividad",
       "description": "Participa en el concurso de creatividad de Taqueritos. Sube tu contenido en video, baile, música, arte, memes e inteligencia artificial y gana premios increíbles."
+    },
+    "participacion": {
+      "title": "Participación - Taqueritos Creators",
+      "description": "Completa tu registro y sube tu contenido creativo para participar en el concurso Taqueritos Creators. Videos, bailes, música, arte, memes e inteligencia artificial en un solo lugar."
+    },
+    "jurados": {
+      "title": "Jurados - Taqueritos Creators",
+      "description": "Conoce al jurado oficial de Taqueritos Creators: creadores de contenido y expertos en entretenimiento que evaluarán tu talento y elegirán a los ganadores."
     }
   },
   "social_media": {
@@ -82,6 +90,7 @@
      
     ]
   },
+  "contact_us": "Contacto",
   "menu_labels": {
     "open_main_menu": "Abrir menú principal",
     "explore": "Explorar"
@@ -105,12 +114,12 @@
     {
       "id": "community",
       "text": "Comunidad",
-      "href": "/es/comunidad"
+      "href": "/es/#players"
     },
     {
       "id": "about-taqueritos",
       "text": "Sobre Taqueritos",
-      "href": "/es/sobre-taqueritos"
+      "href": "/es/nosotros"
     },
     {
       "id": "where-buy",

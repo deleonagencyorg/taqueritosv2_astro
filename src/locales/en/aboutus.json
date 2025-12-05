@@ -2,6 +2,36 @@
   "title": "Our",
   "subtitle": "HISTORY",
   "intro": "Discover how Snacks Yummies became the leading snack brand in Central America, from our humble beginnings to the present day.",
+  "about_section_title": "WHO ARE WE?",
+  "about_section_paragraphs": [
+    "Taqueritos was born from a passion for creating unforgettable moments. We are a brand that understands gamer culture and perfectly fuses it with the most intense and authentic flavors of Central America.",
+    "Our commitment goes beyond offering quality snacks. We create a community where gamers, food lovers and content creators find their space to shine, compete and share unique experiences.",
+    "With a presence in multiple countries in Central America and the Caribbean, we are dedicated to boosting local talent, organizing epic tournaments and developing products that adapt to the dynamic lifestyle of our community."
+  ],
+  "presence_section_title": "OUR PRESENCE",
+  "presence_section_description": "With a strategic presence in 6 countries across Central America and the Caribbean, we bring the Taqueritos experience to millions of gamers and food lovers.",
+  "experiences_section_title": "OUR EXPERIENCES",
+  "experiences_section_description": "Explore everything Taqueritos has to offer: from epic competitions where you can show off your skills and win incredible prizes, to events and moments lived together with our community.",
+  "experiences_cards": [
+    {
+      "id": "products",
+      "title": "OUR PRODUCTS",
+      "description": "Join exciting activations and dynamics with our star products. Discover new combinations, bold flavors and formats designed for every occasion.",
+      "cta": "EXPLORE"
+    },
+    {
+      "id": "challenges",
+      "title": "CHALLENGES & TOURNAMENTS",
+      "description": "Join thousands of gamers and food lovers. Share experiences, strategies, recipes and events where passion is lived to the fullest.",
+      "cta": "EXPLORE"
+    },
+    {
+      "id": "community",
+      "title": "COMMUNITY",
+      "description": "Become part of the Taqueritos community. Discover content, activities, creators and spaces designed to enjoy every moment together.",
+      "cta": "EXPLORE"
+    }
+  ],
   "items": [
     {
       "year": "1973",

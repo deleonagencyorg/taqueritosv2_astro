@@ -31,6 +31,14 @@
     "yummiesone": {
       "title": "Taqueritos One",
       "description": "Discover Taqueritos One, our new exclusive platform for true snack lovers."
+    },
+    "participacion": {
+      "title": "Participation - Taqueritos Creators",
+      "description": "Complete your registration and upload your creative content to join the Taqueritos Creators contest. Videos, dances, music, art, memes and AI creations in one place."
+    },
+    "jurados": {
+      "title": "Judges - Taqueritos Creators",
+      "description": "Meet the official Taqueritos Creators judges: content creators and entertainment experts who will review your talent and select the winners."
     }
   },
   "social_media": {
@@ -54,7 +62,7 @@
     }
   },
   "cookie_consent": {
-    "title": "Uso de cookies",
+    "title": "Use of cookies",
     "description": "We use cookies to improve your experience on our website.",
     "accept": "Accept",
     "reject": "Reject",
@@ -67,32 +75,26 @@
     "slidermaskmobile": "https://snack.yummiespromociones.com/snacksyummies/bg-front-mobile_1_.webp",
     "slider": [
       {
-        "id": "slide2",
-        "desktop": "https://snack.yummiespromociones.com/taqueritos/banner.webp",
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/banner-m.webp",
+        "id": "slide1",
+        "desktop": "/images/es/products/taquerito.png",
+        "mobile": "/images/es/products/taquerito.png",
         "alt": "Taqueritos",
         "title": "",
         "description": "",
         "link": "#"
       }
-     
     ]
   },
+  "contact_us": "Contact",
   "menu_labels": {
-    "open_main_menu": "Abrir menú principal",
-    "explore": "Explorar"
+    "open_main_menu": "Open main menu",
+    "explore": "Explore"
   },
   "menu_items": [
- 
     {
       "id": "products",
       "text": "Products",
       "href": "/en/#products"
-    },
-    {
-      "id": "gallery",
-      "text": "Gallery",
-      "href": "/en/#gallery"
     },
     {
       "id": "recipes",
@@ -100,23 +102,37 @@
       "href": "/en/recipes"
     },
     {
-      "id": "contact",
-      "text": "Contact",
-      "href": "/en/contact"
+      "id": "challenges-tournaments",
+      "text": "Challenges / Tournaments",
+      "href": "/en/challenges-tournaments"
+    },
+    {
+      "id": "community",
+      "text": "Community",
+      "href": "/en/#players"
+    },
+    {
+      "id": "about-taqueritos",
+      "text": "About Taqueritos",
+      "href": "/en/about-us"
+    },
+    {
+      "id": "where-buy",
+      "text": "Where to buy",
+      "href": "/en/where-to-buy"
     }
-   
   ],
   "about_us": {
-    "title": "Conoce Nuestra",
-    "subtitle": "Historia",
+    "title": "Get to know our",
+    "subtitle": "History",
     "content": [
-      "Las mejores papas en un solo lugar."
+      "The best chips all in one place."
     ]
   },
   "home": {
     "meta": {
-      "title": "Taqueritos - Disfruta tus Taqueritos en todo momento",
-      "description": "Tus hojuelas de papa frita favoritas llegan con sabores naturalmente auténticos para todos los gustos."
+      "title": "Taqueritos - Enjoy your Taqueritos at any moment",
+      "description": "Your favorite potato chip flakes come with naturally authentic flavors for all tastes."
     },
     "newsletter":{
       "placeholder":"email@email.com",
@@ -154,7 +170,7 @@
     "email": "ayudacliente@taqueritos.com",
     "copyright": "Copyright 2025. Taqueritos. All rights reserved.",
     "privacy_policy_text": "Privacy Policy",
-    "privacy_policy_url": "/es/politica-privacidad"
+    "privacy_policy_url": "/en/privacy-policy"
   },
   "messagetop":[
     {

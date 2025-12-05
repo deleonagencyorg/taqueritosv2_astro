@@ -1,0 +1,593 @@
+---
+interface Product {
+  id: string;
+  name: string;
+  name_description: string;
+  image: string;
+  weight?: string[];
+}
+
+interface Stockist {
+  id: string;
+  name: string;
+  link: string;
+  icon: string;
+}
+
+interface Props {
+  products: Product[];
+  stockists: Stockist[];
+  initialProduct?: Product;
+  locale?: string;
+}
+
+const { products = [], stockists = [], initialProduct, locale = 'es' } = Astro.props;
+
+const texts = {
+  es: {
+    product: 'Producto',
+    weight: 'Gramaje',
+    whereToFind: '¿DÓNDE ENCONTRARNOS?',
+    buy: 'COMPRAR',
+    contact: 'CONTÁCTANOS'
+  },
+  en: {
+    product: 'Product',
+    weight: 'Weight',
+    whereToFind: 'WHERE TO FIND US?',
+    buy: 'BUY',
+    contact: 'CONTACT US'
+  }
+};
+
+const t = texts[locale as keyof typeof texts] || texts.es;
+---
+
+<div id="stockist-modal" class="stockist-modal modal-hidden">
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <button class="modal-close" aria-label="Cerrar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <div class="modal-body">
+      <!-- Sección superior: Imagen + Selectores -->
+      <div class="modal-top-section">
+        <!-- Imagen del producto -->
+        <div class="product-image-section">
+          <img 
+            id="modal-product-image" 
+            src={initialProduct?.image || products[0]?.image || ''} 
+            alt={initialProduct?.name || products[0]?.name || ''}
+            class="product-image"
+          />
+        </div>
+
+        <!-- Contenido del modal -->
+        <div class="modal-info">
+          <h2 id="modal-product-title" class="product-title">
+            {initialProduct?.name || products[0]?.name || ''}
+          </h2>
+
+          <!-- Selector de Producto -->
+          <div class="form-group">
+            <label for="product-select">{t.product}</label>
+            <select id="product-select" class="form-select">
+              {products.map((product) => (
+                <option 
+                  value={product.id} 
+                  data-name={product.name}
+                  data-image={product.image}
+                  data-weights={product.weight ? product.weight.join('|') : ''}
+                  selected={initialProduct?.id === product.id}
+                >
+                  {product.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <!-- Selector de Gramaje -->
+          <div class="form-group">
+            <label for="weight-select">{t.weight}</label>
+            <div id="weight-buttons" class="weight-buttons">
+              {(initialProduct?.weight || products[0]?.weight || []).map((weight) => (
+                <div 
+                  class=""  style={{ backgroundColor: 'transparent', color: '#FFFFFF !important' }}
+                  data-weight={weight}
+                >
+                  {weight}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección inferior: Stockists centrados -->
+      <div class="stockists-section">
+        <h3 class="section-title">{t.whereToFind}</h3>
+
+        <!-- Lista de Stockists -->
+        <div class="stockists-list">
+          {stockists.map((stockist) => (
+            <div class="stockist-item">
+              <div class="stockist-info">
+                <img src={stockist.icon} alt={stockist.name} class="stockist-logo" />
+              </div>
+              <a 
+                href={stockist.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="stockist-button"
+              >
+                {stockist.id === 'walmart' ? t.contact : t.buy}
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JSON data for products -->
+  <script type="application/json" id="stockist-products-json" set:html={JSON.stringify(products)}></script>
+</div>
+
+<style>
+  .stockist-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 100px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .stockist-modal.modal-hidden {
+    display: none !important;
+  }
+
+  .stockist-modal.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-content {
+    position: relative;
+    background: #000;
+    border-radius: 20px;
+    max-width: 900px;
+    width: 90%;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    margin-top: 0;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  .modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+  }
+
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 40px;
+  }
+
+  .modal-top-section {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+  }
+
+  .product-image-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .product-image {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .modal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .stockists-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .product-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  .form-select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .form-select:hover,
+  .form-select:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+    outline: none;
+  }
+
+  .form-select option {
+    background: #1a1a1a;
+    color: white;
+  }
+
+  .weight-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .weight-btn {
+    background: transparent !important;
+    border: 1.5px solid #FFFFFF !important;
+    border-radius: 30px;
+    padding: 10px 24px;
+    color: #FFFFFF !important;
+    font-size: 16px;
+    font-family: 'Avory I PE', sans-serif;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .section-title {
+
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+    text-transform: uppercase;
+    margin: 0 0 16px 0;
+    text-align: center;
+  }
+
+  .stockists-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 600px;
+    align-items: center;
+  }
+
+  .stockist-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 20px 32px;
+    background: #000;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .stockist-item:hover {
+    background: #1a1a1a;
+  }
+
+  .stockist-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+  }
+
+  .stockist-logo {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .stockist-button {
+    background: #FF4400;
+    color: white;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-family: 'Avory I PE', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .stockist-button:hover {
+    background: #FF6622;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .stockist-modal {
+      align-items: flex-start;
+      padding-top: 80px;
+    }
+
+    .modal-content {
+      margin-top: 20px;
+      max-height: calc(100vh - 100px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stockist-modal {
+      align-items: flex-start;
+      padding-top: 70px;
+    }
+
+    .modal-content {
+      margin-top: 10px;
+      max-height: calc(100vh - 80px);
+      border-radius: 20px 20px 0 0;
+    }
+
+    .modal-body {
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .modal-top-section {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .product-image {
+      max-width: 130px;
+    }
+
+    .product-title {
+      font-size: 22px;
+    }
+
+    .section-title {
+      font-size: 20px;
+    }
+
+    .stockists-list {
+      max-width: 100%;
+    }
+
+    .stockist-item {
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .stockist-logo {
+      width: 100px;
+    }
+
+    .stockist-button {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  function initStockistModal() {
+    console.log('🚀 initStockistModal ejecutándose...');
+    
+    const modal = document.getElementById('stockist-modal');
+    console.log('📦 Modal element:', modal);
+    
+    if (!modal) {
+      console.error('❌ No se encontró el elemento stockist-modal');
+      return;
+    }
+
+    const overlay = modal.querySelector('.modal-overlay');
+    const closeBtn = modal.querySelector('.modal-close');
+    const productSelect = document.getElementById('product-select');
+    const weightButtons = document.getElementById('weight-buttons');
+    const productImage = document.getElementById('modal-product-image');
+    const productTitle = document.getElementById('modal-product-title');
+
+    // Función para abrir el modal
+    function openModal(productId) {
+      if (!modal) return;
+      
+      // Seleccionar el producto y actualizar siempre antes de abrir
+      if (productSelect && productId) {
+        const options = Array.from(productSelect.options);
+        const targetOption = options.find(opt => opt.value === productId);
+        if (targetOption) {
+          productSelect.value = productId;
+        }
+        // Actualizar info (imagen, título y gramajes)
+        updateProductInfo();
+      }
+      
+      modal.classList.remove('modal-hidden');
+      setTimeout(() => {
+        if (modal) modal.classList.add('show');
+      }, 10);
+      
+      // Bloquear scroll en body y html
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.remove('show');
+      setTimeout(() => {
+        if (modal) modal.classList.add('modal-hidden');
+        
+        // Restaurar scroll en body y html
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      }, 300);
+    }
+
+    // Función para actualizar la información del producto
+    function updateProductInfo() {
+      if (!productSelect) return;
+      
+      const selectedOption = productSelect.options[productSelect.selectedIndex];
+      const productName = selectedOption.dataset.name || '';
+      const productImageSrc = selectedOption.dataset.image || '';
+      
+      // Obtener pesos desde JSON embebido
+      const productsJsonEl = document.getElementById('stockist-products-json');
+      console.log('📄 Elemento JSON:', productsJsonEl);
+      console.log('📄 Contenido JSON:', productsJsonEl ? productsJsonEl.textContent : 'null');
+      
+      const productsData = productsJsonEl ? JSON.parse(productsJsonEl.textContent || '[]') : [];
+      console.log('📦 Productos parseados:', productsData);
+      
+      const prod = productsData.find(p => p.id === selectedOption.value) || {};
+      console.log('🎯 Producto encontrado:', prod);
+      
+      const weights = prod.weight || [];
+      console.log('⚖️ Gramajes:', weights);
+
+      // Actualizar título e imagen
+      if (productTitle) productTitle.textContent = productName;
+      if (productImage) {
+        productImage.src = productImageSrc;
+        productImage.alt = productName;
+      }
+
+      // Actualizar gramajes
+      if (weightButtons) {
+        console.log('🔘 Contenedor de gramajes encontrado:', weightButtons);
+        weightButtons.innerHTML = '';
+        
+        if (weights.length === 0) {
+          console.warn('⚠️ No hay gramajes para mostrar');
+        }
+        
+        weights.forEach((weight, index) => {
+          const weightDiv = document.createElement('div');
+          weightDiv.className = '';
+          weightDiv.dataset.weight = weight;
+          weightDiv.style.backgroundColor = 'none';
+          weightDiv.style.color = '#FFFFFF';
+          weightDiv.style.padding = '8px 16px';
+          weightDiv.style.border = '1px solid #FFFFFF';
+          weightDiv.style.borderRadius = '8px';
+          weightDiv.style.cursor = 'pointer';
+          weightDiv.textContent = weight;
+          
+          weightButtons.appendChild(weightDiv);
+          console.log('✅ Gramaje agregado:', weight, weightDiv);
+        });
+        
+        console.log('📊 Total de gramajes en el DOM:', weightButtons.children.length);
+      } else {
+        console.error('❌ No se encontró el contenedor weight-buttons');
+      }
+    }
+
+    // Event listeners
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (overlay) overlay.addEventListener('click', closeModal);
+    if (productSelect) productSelect.addEventListener('change', updateProductInfo);
+
+    // Exponer función global para abrir el modal
+    window.openStockistModal = openModal;
+    console.log('✅ window.openStockistModal registrada:', typeof window.openStockistModal);
+
+    // Cerrar con ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('show')) {
+        closeModal();
+      }
+    });
+  }
+
+  // Inicializar en diferentes eventos de Astro
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStockistModal);
+  } else {
+    initStockistModal();
+  }
+  document.addEventListener('astro:page-load', initStockistModal);
+  document.addEventListener('astro:after-swap', initStockistModal);
+</script>

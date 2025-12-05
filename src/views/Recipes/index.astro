@@ -6,6 +6,7 @@ import RecipeCard from '../../components/recipes/RecipeCard.astro';
 import LazyImage from '../../components/common/LazyImage.astro';
 import PixelGrid from '../../components/atoms/PixelGrid.astro';
 import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
+import VideoHero from '../../components/common/VideoHero/VideoHero.astro';
 
 interface Recipe {
   id: string;
@@ -13,6 +14,8 @@ interface Recipe {
   image?: string;
   preparation_time: number;
   type?: string;
+  // Ahora `product` es un array de strings (puede haber más de un producto por receta)
+  product?: string[];
 }
 
 const currentLang = getLocale();
@@ -39,18 +42,30 @@ const noFilterResultsText = currentLang === 'es'
   : 'No results found for the selection';
 
 // Filter labels
-const filterLabels = currentLang === 'es'
-  ? { 
-      all: 'TODAS',
-      breakfast: 'DESAYUNO', 
-      brunch: 'BRUNCH',
-      lunch: 'ALMUERZO'
+const categoryFilterLabels = currentLang === 'es'
+  ? {
+      label: 'Momento del dda',
+      all: 'Todas las recetas',
+      breakfast: 'Desayuno',
+      brunch: 'Brunch',
+      lunch: 'Almuerzo',
     }
   : {
-      all: 'ALL',
-      breakfast: 'BREAKFAST',
-      brunch: 'BRUNCH',
-      lunch: 'LUNCH'
+      label: 'Meal',
+      all: 'All recipes',
+      breakfast: 'Breakfast',
+      brunch: 'Brunch',
+      lunch: 'Lunch',
+    };
+
+const productFilterLabels = currentLang === 'es'
+  ? {
+      label: 'Producto',
+      all: 'Todos los productos',
+    }
+  : {
+      label: 'Product',
+      all: 'All products',
     };
 
 // Normaliza la categoría de receta.
@@ -68,39 +83,92 @@ function normalizeType(r: Recipe): string {
   if (['lunch', 'almuerzo'].includes(raw)) return 'lunch';
   return 'other';
 }
+
+// Unique product options for the product filter (product ahora es un array)
+const productOptions = Array.from(
+  new Set(
+    allRecipes
+      .flatMap((r) => {
+        const p = (r as any).product;
+        if (Array.isArray(p)) return p;
+        return p ? [p] : [];
+      })
+      .map((p) => String(p).trim())
+      .filter((p) => p.length > 0)
+  )
+);
+
+// Video hero config for Recipes page
+const videoUrl = 'https://snack.yummiespromociones.com/taqueritos/videotaqueritos.mp4';
+const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videorecetas.png';
 ---
-<div class="-mt-px -mb-px overflow-hidden" style=" background-image: url('https://snack.yummiespromociones.com/SnacksyummiesAssets/bgcontactzibas.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-  
-  <div class="container mx-auto px-4 mt-0">
-    <div class="pt-4">
-      <Breadcrumb bgColor="bg-transparent" textColor="text-white" hoverColor="hover:text-white" />
-    </div>
-    <div class="pt-0 pb-0">
-      <div class="text-center mb-16 relative z-20 overflow-hidden" >
-        <div class="absolute left-0 top-0 w-[100%] h-[100%] -z-10 pointer-events-none -ml-[250px]">
-          <PixelGrid
-             pixelSize={20}
-             density={0.7}
-             introDuration={800}
-             loopInterval={1100}
-             mutateAmount={50}
-             background="none"
-           />
+<div class="-mt-px -mb-px overflow-hidden" style="background: radial-gradient(circle at 50% 50%, #2c0b0b 0%, #150404 80%);">
+  <div id="herovideo" class="pt-0">
+    <VideoHero
+      videoUrl={videoUrl}
+      fallbackImageUrl={fallbackImageUrl}
+      height="520px"
+      width="100%"
+      showOverlay={false}
+    />
+  </div>
+
+  <div class="container mx-auto px-4 py-18 mt-0">
+
+    <!-- Filter Dropdowns -->
+    <div class="w-full flex flex-col md:flex-row gap-4 mb-10 max-w-5xl mx-auto md:items-end">
+      <!-- Category filter -->
+      <div class="flex-1 text-left">
+        <label for="categoryFilter" class="block text-sm font-semibold text-white mb-2">
+          {categoryFilterLabels.label}
+        </label>
+        <select
+          id="categoryFilter"
+          class="w-full bg-transparent border border-white rounded-md px-4 py-2 text-white text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400"
+        >
+          <option value="all">{categoryFilterLabels.all}</option>
+          <option value="breakfast">{categoryFilterLabels.breakfast}</option>
+          <option value="brunch">{categoryFilterLabels.brunch}</option>
+          <option value="lunch">{categoryFilterLabels.lunch}</option>
+        </select>
+      </div>
+
+      {/* Product filter: solo se muestra si hay productos configurados */}
+      {productOptions.length > 0 && (
+        <div class="flex-1 text-left">
+          <label for="productFilter" class="block text-sm font-semibold text-white mb-2">
+            {productFilterLabels.label}
+          </label>
+          <select
+            id="productFilter"
+            class="w-full bg-transparent border border-white rounded-md px-4 py-2 text-white text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400"
+          >
+            <option value="all">{productFilterLabels.all}</option>
+            {productOptions.map((product) => (
+              <option value={product.toLowerCase()}>{product}</option>
+            ))}
+          </select>
         </div>
-      <h2 class="text-3xl md:text-4xl italic font-bold mt-0 mb-4 text-white relative z-10">
-        {currentLang==='es' ? 'Descubre nuestras' : 'Discover our'}
+      )}
+    </div>
+
+    <!-- Section title above recipes -->
+    <div class="max-w-5xl mx-auto mb-6 px-1">
+      <h2 class="font-title text-2xl md:text-3xl font-bold text-white uppercase leading-snug">
+        {currentLang === 'es' ? (
+          <>
+            Craftea tu siguiente buff:
+            <br />
+            Recetas para subir de nivel
+          </>
+        ) : (
+          <>
+            Craft your next buff:
+            <br />
+            Recipes to level up
+          </>
+        )}
       </h2>
-        <h1 class="text-6xl md:text-9xl italic font-bold mt-0 mb-4 text-white relative z-10 flex items-center justify-center">
-          <span class="font-title pl-2 relative z-10">{currentLang==='es' ? 'Recetas' : 'Recipes'}</span>
-        </h1>
-    </div>
-    </div>
-    <!-- Filter Buttons -->
-    <div id="recipeFilters" class="grid grid-cols-2 gap-3 mb-8 max-w-md mx-auto md:max-w-none md:grid-cols-4 md:gap-4 md:flex md:justify-center">
-      <button class="filter-btn w-full text-center px-6 py-2 rounded-full bg-orange text-white font-bold hover:text-white hover:bg-orange-400 hover:opacity-100 active:text-white active:bg-orange-400 transition-colors border border-white" data-filter="all">{filterLabels.all}</button>
-      <button class="filter-btn w-full text-center px-6 py-2 rounded-full bg-orange text-white font-bold hover:text-white hover:bg-orange-400 hover:opacity-100 active:text-white active:bg-orange-400 transition-colors border border-white" data-filter="breakfast">{filterLabels.breakfast}</button>
-      <button class="filter-btn w-full text-center px-6 py-2 rounded-full bg-orange text-white font-bold hover:text-white hover:bg-orange-400 hover:opacity-100 active:text-white active:bg-orange-400 transition-colors border border-white" data-filter="brunch">{filterLabels.brunch}</button>
-      <button class="filter-btn w-full text-center px-6 py-2 rounded-full bg-orange text-white font-bold hover:text-white hover:bg-orange-400 hover:opacity-100 active:text-white active:bg-orange-400 transition-colors border border-white" data-filter="lunch">{filterLabels.lunch}</button>
     </div>
 
     {allRecipes.length === 0 ? (
@@ -108,7 +176,13 @@ function normalizeType(r: Recipe): string {
     ) : (
       <div id="recipesGrid" class="w-full mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 mt-12" transition:animate="slide">
         {allRecipes.map((recipe: Recipe) => (
-          <div class="recipe-card" data-type={normalizeType(recipe)}>
+          <div
+            class="recipe-card"
+            data-type={normalizeType(recipe)}
+            data-product={Array.isArray((recipe as any).product)
+              ? (recipe as any).product.map((p: string) => String(p).toLowerCase()).join('|')
+              : ((recipe as any).product ? String((recipe as any).product).toLowerCase() : '')}
+          >
             <RecipeCard
               image={recipe.image || '/images/recipes/placeholder.jpg'}
               title={recipe.title}
@@ -142,14 +216,16 @@ function normalizeType(r: Recipe): string {
     });
 
     // Filters
-    const filterButtons = Array.from(document.querySelectorAll('#recipeFilters .filter-btn')) as HTMLButtonElement[];
+    const categorySelect = document.getElementById('categoryFilter') as HTMLSelectElement | null;
+    const productSelect = document.getElementById('productFilter') as HTMLSelectElement | null;
     const cards = Array.from(document.querySelectorAll('#recipesGrid .recipe-card')) as HTMLElement[];
     const noResultsEl = document.getElementById('noResults') as HTMLElement | null;
     const sentinel = document.getElementById('infiniteSentinel');
 
     // Pagination settings
     const pageSize = 6;
-    let currentFilter = 'all';
+    let currentCategory = 'all';
+    let currentProduct = 'all';
     let revealedCount = 0;
 
     // Hide all cards
@@ -157,17 +233,31 @@ function normalizeType(r: Recipe): string {
       cards.forEach((c) => (c.style.display = 'none'));
     }
 
-    // Get cards matching filter
-    function getMatchingCards(filter: string) {
+    // Get cards matching current filters
+    function getMatchingCards() {
       return cards.filter((card) => {
         const type = (card.dataset.type || 'other').toLowerCase();
-        return filter === 'all' || type === filter;
+        const productRaw = (card.dataset.product || '').toLowerCase();
+
+        const matchesCategory = currentCategory === 'all' || type === currentCategory;
+
+        // productRaw puede contener múltiples productos separados por '|'
+        const productTokens = productRaw
+          .split('|')
+          .map((p) => p.trim())
+          .filter((p) => p.length > 0);
+
+        const matchesProduct =
+          currentProduct === 'all' ||
+          (productTokens.length > 0 && productTokens.includes(currentProduct));
+
+        return matchesCategory && matchesProduct;
       });
     }
 
     // Reveal next page of matching cards
     function revealNextPage() {
-      const matching = getMatchingCards(currentFilter);
+      const matching = getMatchingCards();
       const nextBatch = matching.slice(revealedCount, revealedCount + pageSize);
       nextBatch.forEach((card) => (card.style.display = ''));
       revealedCount += nextBatch.length;
@@ -185,50 +275,38 @@ function normalizeType(r: Recipe): string {
       }
     }
 
-    // Apply filter and reset pagination
-    function applyFilter(filter: string) {
-      currentFilter = filter;
+    // Apply filters and reset pagination
+    function applyFilters() {
       revealedCount = 0;
       hideAll();
       revealNextPage();
     }
 
-    function setActive(btn: HTMLButtonElement) {
-      // Reset styles for all buttons
-      filterButtons.forEach(b => {
-        b.classList.remove('bg-orange', 'opacity-40', 'opacity-50', 'text-brown');
-        // Asegurar texto blanco siempre
-        b.classList.add('text-white');
-      });
-      // Highlight active
-      btn.classList.add('bg-orange', 'text-white');
-      // Dim the rest
-      filterButtons.forEach(b => {
-        if (b !== btn) b.classList.add('opacity-40');
+    // Events for dropdowns
+    if (categorySelect) {
+      categorySelect.addEventListener('change', () => {
+        currentCategory = (categorySelect.value || 'all').toLowerCase();
+        applyFilters();
       });
     }
 
-    filterButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-filter') || 'all';
-        setActive(btn as HTMLButtonElement);
-        applyFilter(filter);
+    if (productSelect) {
+      productSelect.addEventListener('change', () => {
+        const value = productSelect.value || 'all';
+        currentProduct = value.toLowerCase();
+        applyFilters();
       });
-    });
+    }
 
     // Initialize default state (ALL)
-    const defaultBtn = filterButtons.find(b => b.getAttribute('data-filter') === 'all');
-    if (defaultBtn) {
-      setActive(defaultBtn);
-      applyFilter('all');
-    }
+    applyFilters();
 
     // Infinite scroll observer
     if ('IntersectionObserver' in window && sentinel) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const matching = getMatchingCards(currentFilter);
+            const matching = getMatchingCards();
             if (revealedCount < matching.length) {
               revealNextPage();
             }

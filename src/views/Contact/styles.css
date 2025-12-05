@@ -1,1 +1,10 @@
+.country-tab {
+  background-color: transparent;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
 
+.country-tab.is-active {
+  background-color: #2b0a07; /* Café oscuro como Honduras */
+  border-color: #ffffff;
+  opacity: 1;
+}

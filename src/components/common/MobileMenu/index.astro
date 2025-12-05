@@ -15,7 +15,21 @@ const { currentLang, headerColorConfig } = Astro.props;
 
 // Obtener los datos de social media y menú desde las traducciones
 const socialMedia = t('social_media', { namespace: 'common', locale: currentLang }) as any;
-const menuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
+const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
+// Quitar el botón de comunidad
+const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
+
+const contactHref = `/${currentLang}/${currentLang === 'es' ? 'contacto' : 'contact'}`;
+const contactMenuItem = {
+  id: 'contact',
+  text: t('contact_us', { namespace: 'common', locale: currentLang }),
+  href: contactHref,
+};
+
+const menuItemsWithContact = [...menuItems, contactMenuItem];
+
+// Obtener productos para el submenú de "Productos"
+const products = t('items', { namespace: 'products', locale: currentLang }) as any[];
 
 // Traducciones
 const openMenuLabel = t('menu_labels.open_main_menu', { namespace: 'common', locale: currentLang }) || 'Open main menu';
@@ -38,10 +52,11 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
       </button>
     </div>
     <nav class="flex flex-col items-center space-y-3 text-center w-full text-white" id="mobile-menu-items">
-      {menuItems && menuItems.map((item: any) => (
+      {menuItemsWithContact && menuItemsWithContact.map((item: any) => (
         <div class="w-full">
           <div class="flex items-center justify-center text-white">
-            {item.submenu ? (
+            {/* Ítem de menú con submenú existente */}
+            {item.submenu && item.id !== 'products' ? (
               <>
                 <a href="#" class="menu-parent block text-xl font-title font-medium hover:text-gray-300 transition-colors py-2">
                   {item.text}
@@ -52,13 +67,36 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
                   </svg>
                 </button>
               </>
-            ) : (
-              <a href={item.href} class="block text-xl font-title font-medium hover:text-gray-300 transition-colors py-2">
+            ) : null}
+
+            {/* Ítem de Productos con submenú de productos */}
+            {item.id === 'products' ? (
+              <>
+                <a href="#" class="menu-parent block text-xl font-title font-medium hover:text-gray-300 transition-colors py-2">
+                  {item.text}
+                </a>
+                <button class="menu-toggle px-2 py-1 text-white hover:text-gray-300 ml-1">
+                  <svg class="w-5 h-5 chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+              </>
+            ) : null}
+
+            {/* Ítems sin submenú */}
+            {!item.submenu && item.id !== 'products' && (
+              <a
+                href={item.href}
+                data-open-stockist={item.id === 'where-buy' ? 'true' : undefined}
+                class="block text-xl font-title font-medium hover:text-gray-300 transition-colors py-2"
+              >
                 {item.text}
               </a>
             )}
           </div>
-          {item.submenu && (
+
+          {/* Submenú estándar existente */}
+          {item.submenu && item.id !== 'products' && (
             <div class="submenu-container hidden mt-1 space-y-1 pl-4 text-center">
               {item.submenu.map((subItem: any) => (
                 <div>
@@ -84,6 +122,20 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
                     </div>
                   )}
                 </div>
+              ))}
+            </div>
+          )}
+
+          {/* Submenú para Productos */}
+          {item.id === 'products' && (
+            <div class="submenu-container hidden mt-1 space-y-1 pl-4 text-center">
+              {products && products.map((product: any) => (
+                <a
+                  href={`/${currentLang}/${currentLang === 'es' ? 'productos' : 'products'}/${product.id}`}
+                  class="block text-lg font-title font-normal text-gray-400 hover:text-gray-200 transition-colors py-1"
+                >
+                  {product.name}
+                </a>
               ))}
             </div>
           )}

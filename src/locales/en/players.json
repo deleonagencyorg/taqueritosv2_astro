@@ -1,0 +1,35 @@
+{
+    "home": {
+      "title": "This is how our",
+      "subtitle": "players level up"
+    },
+    "button": {
+        "title": "Be part of our community"
+    },
+    "players": [
+      {
+        "id": "player-one",
+        "slug": "player-one",
+        "title": "What was your first cosplay and how OP",
+        "subtitle": "do you think it is now?",
+        "user": "@TitanSoul",
+        "comment": "My first cosplay was Cloud from the classic Final Fantasy VII. Back then I felt 200% OP, but looking at it now... the buster sword looked like soggy cardboard."
+      },
+      {
+        "id": "player-two",
+        "slug": "player-two",
+        "title": "What was your first cosplay and how OP",
+        "subtitle": "do you think it is now?",
+        "user": "@TitanSoul",
+        "comment": "My first cosplay was Cloud from the classic Final Fantasy VII. Back then I felt 200% OP, but looking at it now... the buster sword looked like soggy cardboard."
+      },
+      {
+        "id": "player-three",
+        "slug": "player-three",
+        "title": "What was your first cosplay and how OP",
+        "subtitle": "do you think it is now?",
+        "user": "@TitanSoul",
+        "comment": "My first cosplay was Cloud from the classic Final Fantasy VII. Back then I felt 200% OP, but looking at it now... the buster sword looked like soggy cardboard."
+      }
+    ]
+  }

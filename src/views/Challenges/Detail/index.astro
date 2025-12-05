@@ -1,0 +1,364 @@
+---
+import { type Locale, getLocale } from '../../../i18n/i18n';
+import Breadcrumb from '../../../components/common/Breadcrumb/Breadcrumb.astro';
+import LazyImage from '../../../components/common/LazyImage.astro';
+
+interface ChallengeItem {
+  id?: string;
+  slug?: string;
+  title: string;
+  title_down?: string;
+  subtitle?: string;
+  subtitle_down?: string;
+  description?: string;
+  image: string;
+  gallery?: string[];
+  preparation_time?: number;
+  difficulty?: string;
+  people?: string;
+  address?: string;
+  ingredients?: string[];
+  instructions?: string[];
+  ['start-date']?: string;
+  ['end-date']?: string;
+  url?: string;
+}
+
+interface Props {
+  currentLang: Locale;
+  challengeId: string;
+}
+
+const { currentLang, challengeId } = Astro.props;
+
+// Importar todos los archivos de retos con glob estático y filtrar por idioma
+const challengeModules = import.meta.glob<{ default: ChallengeItem }>("../../../locales/*/challenges/*.json");
+const allChallenges: ChallengeItem[] = [];
+for (const path in challengeModules) {
+  const lang = path.split('/')[4];
+  if (lang === currentLang) {
+    const mod = await challengeModules[path]();
+    allChallenges.push(mod.default);
+  }
+}
+
+// Encontrar el reto actual
+const challenge = allChallenges.find((item: ChallengeItem) => item.id === challengeId || item.slug === challengeId);
+
+if (!challenge) {
+  throw new Error(`Challenge with id or slug '${challengeId}' not found for lang ${currentLang}`);
+}
+
+const title = challenge.title;
+const subtitle = challenge.subtitle_down || challenge.subtitle || '';
+const durationLabel = currentLang === 'es' ? 'Duración' : 'Duration';
+const difficultyLabel = currentLang === 'es' ? 'Dificultad' : 'Difficulty';
+const peopleLabel = currentLang === 'es' ? 'Personas' : 'People';
+const inventoryLabel = currentLang === 'es' ? 'Inventario' : 'Inventory';
+const tutorialLabel = currentLang === 'es' ? 'Tutorial' : 'Tutorial';
+const addressLabel = currentLang === 'es' ? 'Dirección' : 'Address';
+const dateLabel = currentLang === 'es' ? 'Fecha' : 'Date';
+const discoverTitle = currentLang === 'es' ? '¡Descubre y disfruta nuestros retos y torneos!' : 'Discover and enjoy our challenges and tournaments!';
+const discoverText = currentLang === 'es'
+  ? 'Somos jugadores, soñadores y apasionados que disfrutan competir y superar desafíos. Aquí encontrarás un espacio donde la diversión y la emoción se viven al máximo.'
+  : 'We are players, dreamers and enthusiasts who love to compete and overcome challenges. Here you will find a space where fun and excitement are always at their peak.';
+const discoverButton = currentLang === 'es' ? 'Descubre más retos' : 'Discover more challenges';
+const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Discover the games list';
+
+const preparationTime = typeof challenge.preparation_time === 'number' ? challenge.preparation_time : 0;
+const difficulty = challenge.difficulty || '---';
+
+const startDate = (challenge as any)['start-date'] as string | undefined;
+const endDate = (challenge as any)['end-date'] as string | undefined;
+const hasAddress = Boolean((challenge as any).address);
+const hasDates = Boolean(startDate || endDate);
+
+// Función para formatear fechas en español
+function formatDateES(dateStr: string): string {
+  const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
+                  'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const date = new Date(dateStr + 'T00:00:00');
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  return `${day} de ${month} de ${year}`;
+}
+
+// Función para formatear fechas en inglés
+function formatDateEN(dateStr: string): string {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+  const date = new Date(dateStr + 'T00:00:00');
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  return `${month} ${day}, ${year}`;
+}
+
+const formattedStartDate = startDate ? (currentLang === 'es' ? formatDateES(startDate) : formatDateEN(startDate)) : '';
+const formattedEndDate = endDate ? (currentLang === 'es' ? formatDateES(endDate) : formatDateEN(endDate)) : '';
+
+interface GameItem {
+  id: string;
+  image: string;
+  title: string;
+  description?: string;
+  url: string;
+}
+
+let games: GameItem[] = [];
+try {
+  const gamesModule = await import(`../../../locales/${currentLang}/games.json`);
+  games = (gamesModule.games || []) as GameItem[];
+} catch (e) {
+  games = [];
+}
+---
+<div style="background: linear-gradient(180deg, #1a0a0a 0%, #0d0404 100%);" class="pb-0 overflow-hidden min-h-screen">
+  <div class="w-full max-w-6xl mx-auto px-4 pt-12 pb-16">
+    <Breadcrumb bgColor="bg-transparent" textColor="text-white" hoverColor="hover:text-white" />
+
+    <!-- Hero: imagen grande -->
+    <section class="pt-8 md:pt-12 pb-6">
+      <div class="w-full overflow-hidden bg-black/50 max-h-[480px]">
+        <LazyImage
+          src={challenge.image}
+          alt={challenge.title}
+          class="w-full h-full max-h-[480px] object-cover"
+          onerror="this.onerror=null;this.src='/images/recipes/placeholder.jpg';"
+        />
+      </div>
+    </section>
+
+    <!-- Título + descripción + datos -->
+    <section class="pb-10">
+      <h1 class="font-title md:text-5xl text-4xl font-bold text-white uppercase italic leading-tight mb-6">
+        {title}
+      </h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-8 items-start">
+        <!-- Columna izquierda: descripción -->
+        <div class="text-white space-y-4">
+          {subtitle && (
+            <p class="text-lg text-white/80">
+              {subtitle}
+            </p>
+          )}
+          {challenge.description && (
+            <p class="text-base md:text-lg text-white/80 leading-relaxed">
+              {challenge.description}
+            </p>
+          )}
+
+          <div class="pt-4">
+            <a
+              href={challenge.url}
+              class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#ff2d2d] to-[#ff6b6b] text-white font-bold uppercase tracking-wide text-sm hover:from-[#ff4b4e] hover:to-[#ff8080] transition-all duration-200 shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
+            >
+              {currentLang === 'es' ? 'Ir al reto' : 'Go to challenge'}
+            </a>
+          </div>
+        </div>
+
+        <!-- Columna derecha: dirección, fechas, duración y dificultad -->
+        {(hasAddress || hasDates) && (
+          <div class="space-y-4 max-w-xs">
+            {hasAddress && (
+              <div class="flex flex-col items-center gap-3 border-2 border-[#ff2d2d] bg-[#1a0808] px-4 py-5 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-[#ff2d2d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s7-4.735 7-11a7 7 0 10-14 0c0 6.265 7 11 7 11z" />
+                </svg>
+                <span class="text-xs uppercase tracking-wider text-white font-bold">{addressLabel}</span>
+                <p class="text-sm text-white/90">
+                  {(challenge as any).address}
+                </p>
+              </div>
+            )}
+
+            {hasDates && (
+              <div class="flex flex-col items-center gap-3 border-2 border-[#ff2d2d] bg-[#1a0808] px-4 py-5 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-[#ff2d2d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span class="text-xs uppercase tracking-wider text-white font-bold">{dateLabel}</span>
+                <div class="text-sm text-white/90">
+                  {formattedStartDate && formattedEndDate
+                    ? (
+                      <div class="space-y-1">
+                        <p>{formattedStartDate}</p>
+                        <p class="text-white/60 text-xs">{currentLang === 'es' ? 'al' : 'to'}</p>
+                        <p>{formattedEndDate}</p>
+                      </div>
+                    )
+                    : formattedStartDate || formattedEndDate}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- CTA de retos -->
+    <section class="mb-10">
+      <div class="w-full border-2 border-[#ff2d2d] bg-[#1a0808] px-6 md:px-10 py-8 flex flex-col md:flex-row items-start md:items-center gap-6 text-white">
+        <div class="flex-1">
+          <h2 class="font-title text-2xl md:text-3xl font-bold uppercase mb-2">
+            {discoverTitle}
+          </h2>
+          <p class="text-sm md:text-base text-white/90">
+            {discoverText}
+          </p>
+        </div>
+        <a
+          href={currentLang === 'es' ? '/es/retos-torneos' : '/en/challenges-tournaments'}
+          class="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-[#ff2d2d] to-[#ff6b6b] text-white font-bold uppercase tracking-wide text-sm hover:from-[#ff4b4e] hover:to-[#ff8080] transition-all duration-200"
+        >
+          {discoverButton}
+        </a>
+      </div>
+    </section>
+
+
+    <!-- Carrusel de juegos -->
+    {games.length > 0 && (
+      <section class="pb-12">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-title text-xl md:text-2xl font-bold text-white uppercase">
+            {gamesTitle}
+          </h2>
+          <div class="flex gap-3">
+            <button
+              type="button"
+              class="games-carousel-btn-prev w-12 h-12 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300"
+              aria-label="Anterior"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="games-carousel-btn-next w-12 h-12 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300"
+              aria-label="Siguiente"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="relative games-carousel-wrapper">
+          <div class="flex gap-4 overflow-x-auto pb-8 pt-3 games-carousel-track" style="scroll-behavior: smooth;">
+            {games.map((game) => (
+              <a
+                href={game.url}
+                class="game-card min-w-[210px] w-[210px] bg-[#1a0808] border-2 border-[#ff2d2d] flex-shrink-0 transition-all duration-300"
+              >
+                <div class="h-56 md:h-72 w-full overflow-hidden bg-black/50">
+                  <LazyImage
+                    src={game.image}
+                    alt={game.title}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </div>
+</div>
+
+<script>
+  // Script para el carrusel de juegos
+  function initGamesCarousel() {
+    const track = document.querySelector('.games-carousel-track') as HTMLElement;
+    const prevBtn = document.querySelector('.games-carousel-btn-prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.games-carousel-btn-next') as HTMLButtonElement;
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const scrollAmount = 220; // ancho de tarjeta + gap
+
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  }
+
+  // Inicializar al cargar la página
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGamesCarousel);
+  } else {
+    initGamesCarousel();
+  }
+
+  // Reinicializar en navegación de Astro
+  document.addEventListener('astro:page-load', initGamesCarousel);
+
+  // Hover: resaltar tarjeta activa con glow rojo y bajar opacidad del resto
+  function initGamesHover() {
+    const cards = Array.from(document.querySelectorAll('.game-card')) as HTMLElement[];
+    if (!cards.length) return;
+
+    cards.forEach((card) => {
+      card.addEventListener('mouseenter', () => {
+        cards.forEach((c) => {
+          c.classList.add('game-card-dim');
+          c.classList.remove('game-card-active');
+        });
+        card.classList.remove('game-card-dim');
+        card.classList.add('game-card-active');
+      });
+
+      card.addEventListener('mouseleave', () => {
+        cards.forEach((c) => {
+          c.classList.remove('game-card-dim', 'game-card-active');
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGamesHover);
+  } else {
+    initGamesHover();
+  }
+
+  document.addEventListener('astro:page-load', initGamesHover);
+</script>
+
+<style>
+  .games-carousel-wrapper {
+    overflow: visible;
+  }
+
+  .games-carousel-track {
+    overflow-y: visible;
+  }
+
+  .game-card {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+
+  .game-card-active {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 0 30px rgba(255, 45, 45, 0.7);
+  }
+
+  .game-card-dim {
+    opacity: 0.45;
+  }
+</style>

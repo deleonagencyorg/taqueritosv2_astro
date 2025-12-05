@@ -40,7 +40,15 @@ const preloadFirstImage = true && firstSlide.mobile && firstSlide.desktop;
 
 <!-- Cargar scripts del carrusel solo en el cliente -->
 <script is:inline define:vars={{ carouselSelector: '.swiper-container.main-carousel' }}>
-  document.addEventListener('DOMContentLoaded', () => {
+  function initMainCarousel() {
+    const el = document.querySelector(carouselSelector);
+    if (!el) return;
+    // Evitar doble inicialización
+    if (el.classList.contains('swiper-initialized') || (el)['swiper']) {
+      // Asegurar actualización por si el contenido cambió
+      try { const sw = (el)['swiper']; if (sw && typeof sw.update === 'function') sw.update(); } catch {}
+      return;
+    }
     setTimeout(() => {
       try {
         const swiper = new Swiper(carouselSelector, {
@@ -63,7 +71,7 @@ const preloadFirstImage = true && firstSlide.mobile && firstSlide.desktop;
           touchMoveStopPropagation: true,
           touchStartPreventDefault: false,
           touchStartForcePreventDefault: false,
-          threshold: 5, // Umbral más bajo para detectar deslizamientos
+          threshold: 5,
           on: {
             init: function() {
               console.log('Swiper inicializado correctamente');
@@ -71,20 +79,32 @@ const preloadFirstImage = true && firstSlide.mobile && firstSlide.desktop;
           }
         });
         
-        // Eliminar los event listeners adicionales para evitar conflictos
-        // y dejar que Swiper maneje directamente los eventos táctiles
-        
         window.addEventListener('load', () => swiper.update());
-        
-        // Asegurar que el swiper se actualice cuando cambie la orientación del dispositivo
         window.addEventListener('orientationchange', () => {
           setTimeout(() => swiper.update(), 200);
         });
       } catch (error) {
         console.error('Error al inicializar Swiper:', error);
       }
-    }, 500);
-  });
+    }, 200);
+  }
+
+  function destroyMainCarousel() {
+    const el = document.querySelector(carouselSelector);
+    const sw = el ? (el)['swiper'] : null;
+    if (sw) {
+      try { sw.destroy(true, true); } catch {}
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMainCarousel);
+  } else {
+    initMainCarousel();
+  }
+  document.addEventListener('astro:page-load', initMainCarousel);
+  document.addEventListener('astro:after-swap', initMainCarousel);
+  document.addEventListener('astro:before-swap', destroyMainCarousel);
 </script>
 
 {loading ? (

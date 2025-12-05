@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "title": "Retos - Taqueritos",
+    "description": "Participa en nuestros retos y gana increíbles premios. Demuestra tu habilidad y diviértete con Taqueritos."
+  },
+  "title": "Retos",
+  "subtitle": "Participa y Gana",
+  "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/challenges-banner.webp",
+  "items": [
+    {
+      "title": "Reto del Sabor Extremo",
+      "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/challenge1.webp",
+      "subtitle": "¿Te atreves con el nivel más picante?",
+      "description": "Prueba nuestros Taqueritos más picantes y comparte tu experiencia. Los participantes más valientes ganarán productos exclusivos y merchandising oficial.",
+      "fecha_inicio": "2024-01-15",
+      "fecha_fin": "2024-02-15",
+      "url": "/es/retos-torneos/sabor-extremo"
+    },
+    {
+      "title": "Reto Creativo Taqueritos",
+      "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/challenge2.webp",
+      "subtitle": "Demuestra tu creatividad",
+      "description": "Crea el mejor contenido con nuestros productos. Fotos, videos o memes creativos. Los ganadores serán destacados en nuestras redes sociales y recibirán premios especiales.",
+      "fecha_inicio": "2024-02-01",
+      "fecha_fin": "2024-03-01",
+      "url": "/es/retos-torneos/creativo"
+    },
+    {
+      "title": "Reto Coleccionista",
+      "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/challenge3.webp",
+      "subtitle": "Colecciona y gana",
+      "description": "Reúne la mayor cantidad de empaques diferentes de Taqueritos. Cada empaque único te da puntos. ¡Acumula y canjea por increíbles premios!",
+      "fecha_inicio": "2024-03-01",
+      "fecha_fin": "2024-04-01",
+      "url": "/es/retos-torneos/coleccionista"
+    },
+    {
+      "title": "Reto Familiar Taqueritos",
+      "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/challenge4.webp",
+      "subtitle": "Disfruta en familia",
+      "description": "Comparte momentos familiares con Taqueritos. Publica tus reuniones y celebraciones donde Taqueritos es la estrella. Las mejores historias ganarán experiencias únicas.",
+      "fecha_inicio": "2024-04-15",
+      "fecha_fin": "2024-05-15",
+      "url": "/es/retos-torneos/familiar"
+    }
+  ]
+}

@@ -36,8 +36,12 @@ const { lang, recipeId } = Astro.params;
 
 // Establecer el idioma para las traducciones
 setLocale(lang as Locale);
+
+const description = lang === 'es'
+  ? `Receta con Taqueritos: ${recipe.title}. Descubre ingredientes y paso a paso para prepararla.`
+  : `Taqueritos recipe: ${recipe.title}. Discover ingredients and step-by-step instructions to prepare it.`;
 ---
 
-<MainLayout title={recipe.title}>
+<MainLayout title={recipe.title} description={description}>
   <RecipeDetail currentLang={currentLang} recipeId={recipeId} />
 </MainLayout>

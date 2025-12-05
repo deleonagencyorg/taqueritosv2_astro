@@ -1,0 +1,36 @@
+{
+    "home": {
+      "title": "Así se levelean",
+      "subtitle": "nuestros players"
+    },
+    "button": {
+        "title": "Sé parte de nuestra comunidad"
+    },
+    "players": [
+      {
+        "id": "player-one",
+        "slug": "player-one",
+        "title": "¿Cuál fue tu primer cosplay y qué tan OP",
+        "subtitle": "lo consideras ahora?",
+        "user": "@TitanSoul",
+        "comment": "Mi primer cosplay fue de Cloud, versión Final Fantasy VII clásico. En ese momento me sentía OP al 200%, pero viéndolo ahora… el espadón parecía de cartón mojado"
+      },
+      {
+        "id": "player-two",
+        "slug": "player-two",
+        "title": "¿Cuál fue tu primer cosplay y qué tan OP",
+        "subtitle": "lo consideras ahora?",
+        "user": "@TitanSoul",
+        "comment": "Mi primer cosplay fue de Cloud, versión Final Fantasy VII clásico. En ese momento me sentía OP al 200%, pero viéndolo ahora… el espadón parecía de cartón mojado"
+      },
+      {
+        "id": "player-three",
+        "slug": "player-three",
+        "title": "¿Cuál fue tu primer cosplay y qué tan OP",
+        "subtitle": "lo consideras ahora?",
+        "user": "@TitanSoul",
+        "comment": "Mi primer cosplay fue de Cloud, versión Final Fantasy VII clásico. En ese momento me sentía OP al 200%, pero viéndolo ahora… el espadón parecía de cartón mojado"
+      }
+    ]
+  }
+  

@@ -44,6 +44,14 @@ export const routesConfig: RouteConfig[] = [
     metaDescriptionKey: 'meta.products.description',
   },
   {
+    id: 'challenges',
+    slugs: { es: 'retos-torneos', en: 'challenges-tournaments' },
+    contentComponent: '@/views/Challenges/index.astro',
+    // Opcional: si se definen en common.json -> meta.challenges.*
+    // metaTitleKey: 'meta.challenges.title',
+    // metaDescriptionKey: 'meta.challenges.description',
+  },
+  {
     id: 'brands',
     slugs: { es: 'marcas', en: 'brands' },
     contentComponent: '@/views/Brands/index.astro',
@@ -63,13 +71,6 @@ export const routesConfig: RouteConfig[] = [
     contentComponent: '@/views/AboutUs/index.astro',
     metaTitleKey: 'meta.about_us.title',
     metaDescriptionKey: 'meta.about_us.description',
-  },
-  {
-    id: 'zibas_creators',
-    slugs: { es: 'zibas-creators',},
-    contentComponent: '@/views/ZibasCreators/index.astro',
-    metaTitleKey: 'meta.zibas_creators.title',
-    metaDescriptionKey: 'meta.zibas_creators.description',
   },
   {
     id: 'participacion',
