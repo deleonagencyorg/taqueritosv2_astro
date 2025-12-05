@@ -1,6 +1,7 @@
 ---
 // src/views/Products/Detail/index.astro
-import RecipesCarousel from '../../../components/recipes/RecipesCarousel.astro';
+import ChallengesCarousel from '../../../components/challenges/ChallengesCarousel.astro';
+import StockistModal from '../../../components/common/StockistModal.astro';
 import { t } from '../../../i18n/i18n';
 import type { Locale } from '../../../i18n/i18n';
 import './styles.css';
@@ -52,7 +53,7 @@ const newsAssets =  t('', { namespace: 'news', locale: currentLang }) || {};
 const brandsList = brandsAssets.brands || [];
 const zibasBrand = brandsList.find((brand: any) => brand.id === 'zibas');
 const taqueritosProducts = (zibasBrand?.products || []).filter((product: any) => product.id !== productId);
-const recipesAssets = t('', { namespace: 'recipes', locale: currentLang }) || {};
+const challengesAssets = t('', { namespace: 'challenges', locale: currentLang }) || {};
 
 // Si el producto no existe, lanzar error
 if (!product || Object.keys(product).length === 0) {
@@ -122,16 +123,14 @@ const carouselProducts = [safeProduct, ...relatedProducts];
             <!-- Botones de presentaciones -->
             {safeProduct.weight && safeProduct.weight.length > 0 && (
               <div class="flex gap-1">
-                {safeProduct.weight.map((weight, index) => (
+                {safeProduct.weight.map((weight) => (
                   <button 
-                    class={`flex-1 h-[78px] rounded-[30px] border-[1.16px] transition-all duration-300 hover:opacity-100 ${
-                      index === 0 ? 'opacity-100' : 'opacity-40'
-                    }`}
+                    class="flex-1 h-[78px] rounded-[30px] border-[1.16px] border-[#4A4A4A] transition-all duration-300 cursor-default"
                     style={{
-                      backgroundColor: index === 0 ? (safeProduct.color_button || '#520406') : '#1C1C1C',
-                      borderColor: index === 0 ? '#FF2D30' : '#4A4A4A',
-                      color: safeProduct.text_color || 'white'
+                      backgroundColor: 'transparent',
+                      color: '#FFFFFF'
                     }}
+                    type="button"
                   >
                     <span class="text-[30px] font-semibold">{weight}</span>
                   </button>
@@ -142,12 +141,14 @@ const carouselProducts = [safeProduct, ...relatedProducts];
             <!-- Botón de comprar y navegación -->
             <div class="flex items-center gap-5">
               <button 
+                id="open-modal-btn"
                 class="button-buy relative md:px-14 md:py-5 rounded-[6.65px] border-[1.33px] shadow-[0_28px_52px_-48px_rgba(255,0,4,0.33)] transition-all duration-300 hover:scale-105"
                 style={{
                   background: 'radial-gradient(ellipse 97.54% 50.91% at 50% 2.46%, #FF5255 0%, #FF0048 100%)',
                   borderColor: '#FF0004',
                   color: safeProduct.text_color || 'white'
                 }}
+                data-product-id={safeProduct.id}
               >
                 <span class="text-[18px] md:text-[26.6px] lg:text-[26.6px] font-semibold">
                   {currentLang === 'es' ? '¿Donde comprar?' : 'Where to buy?'}
@@ -217,27 +218,31 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     </article>
     )}
     
-    <section id="recipes" class="w-full py-12 bg-brown" transition:animate="slide">
-      <div class="container mx-auto px-4 ">
-        {recipesAssets.home?.title && (
-          <div class="container mx-auto px-4 title mb-12">
-            <p>
-              {recipesAssets.home?.title}
-            </p>
-            {recipesAssets.home?.subtitle && (
-              <p>
-                {recipesAssets.home?.subtitle}
-              </p>
-            )}
-          </div>
-        )}
-        <RecipesCarousel 
-          title={recipesAssets.home?.title || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
-          subtitle={recipesAssets.home?.subtitle || 'DESCUBRE NUEVOS SABORES CON NUESTRAS'}
-          textButton={recipesAssets.home?.view_more || 'Ver Todas'}
+    <section id="challenges" class="w-full py-12 bg-brown relative" transition:animate="slide">
+      <div class="container mx-auto px-4 relative" style="padding-top: 60px;">
+        <div class="container mx-auto px-4 mb-12">
+          <p class="text-white font-title text-4xl md:text-5xl lg:text-6xl font-bold uppercase">
+            {currentLang === 'es' ? 'PARTICIPA' : 'PARTICIPATE'}
+          </p>
+          <p class="text-white font-title text-4xl md:text-5xl lg:text-6xl font-bold uppercase">
+            {currentLang === 'es' ? 'EN NUESTROS RETOS' : 'IN OUR CHALLENGES'}
+          </p>
+        </div>
+        <ChallengesCarousel 
+          title={currentLang === 'es' ? 'PARTICIPA' : 'PARTICIPATE'}
+          subtitle={currentLang === 'es' ? 'EN NUESTROS RETOS' : 'IN OUR CHALLENGES'}
+          textButton={challengesAssets.home?.view_more || (currentLang === 'es' ? 'Ver Todos' : 'View All')}
         />
       </div>
     </section>
+
+    <!-- Modal de Stockist -->
+    <StockistModal 
+      products={products}
+      stockists={stockists}
+      initialProduct={safeProduct}
+      locale={currentLang}
+    />
 </div>
 
 
@@ -454,4 +459,48 @@ const carouselProducts = [safeProduct, ...relatedProducts];
       });
     }
   });
+</script>
+
+<script>
+  // Manejar el botón de abrir modal
+  function setupModalButton() {
+    console.log('🔧 setupModalButton ejecutándose...');
+    
+    const modalBtn = document.getElementById('open-modal-btn');
+    console.log('🔘 Botón encontrado:', modalBtn);
+    
+    const modalElement = document.getElementById('stockist-modal');
+    console.log('📦 Modal encontrado:', modalElement);
+    
+    console.log('🌐 window.openStockistModal:', window.openStockistModal);
+    
+    if (!modalBtn) {
+      console.warn('⚠️ No se encontró el botón open-modal-btn');
+      return;
+    }
+
+    modalBtn.addEventListener('click', () => {
+      const productId = modalBtn.getAttribute('data-product-id');
+      console.log('🖱️ Click en botón, productId:', productId);
+      
+      // Verificar que la función global esté disponible
+      if (typeof window.openStockistModal === 'function') {
+        console.log('✅ Abriendo modal...');
+        window.openStockistModal(productId);
+      } else {
+        console.error('❌ openStockistModal no está disponible');
+      }
+    });
+    
+    console.log('✅ Event listener agregado al botón');
+  }
+
+  // Inicializar en diferentes eventos
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupModalButton);
+  } else {
+    setupModalButton();
+  }
+  document.addEventListener('astro:page-load', setupModalButton);
+  document.addEventListener('astro:after-swap', setupModalButton);
 </script>

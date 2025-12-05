@@ -15,23 +15,22 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
 ---
 
 <section class={className}>
-  <div class="gallery-viewport relative !bg-[#071416]">
+  <div class="gallery-viewport relative">
     
     <!-- Header -->
-    <div class="max-w-[1600px] mx-auto px-8 mb-12">
-      <div class="flex flex-col justify-start md:flex-row lg:flex-row md:items-center lg:items-center md:justify-between lg:justify-between md:pt-12 lg:pt-12 md:pl-8 lg:pl-12">
-        <div>
-          {title && (
-            <h2 class="title">
-              {title} <br/>
-            </h2>
-          )}
-          {subtitle && (
-            <p class="title">
-              {subtitle}
-            </p>
-          )}
-        </div>
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-col lg:flex-row lg:justify-between lg:items-center mb-[40px]">
+      <div class="title">
+        {title && (
+          <p class="mb-4">
+            {title}
+          </p>
+        )}
+        {subtitle && (
+          <p>
+            {subtitle}
+          </p>
+        )}
+      </div>
 
         <!-- Botones de Navegación -->
         <div class="carousel-navigation-masonry ">
@@ -53,7 +52,7 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     </div>
 
     <!-- Swiper -->
-    <div class="swiper-container" data-count={items.length}>
+    <div class="swiper-container" data-count={items.length} data-gallery-swiper>
       <div class="swiper-wrapper">
         {items.map((item, idx) => (
           <div class="swiper-slide" data-slide-index={idx}>
@@ -116,39 +115,28 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   .gallery-viewport { 
     position: relative; 
     width: 100%; 
-    background: #071416;
+    background: transparent; /* Usa el mismo fondo que la sección padre */
     overflow: hidden;
   }
 
+  
   .title {
-    color: white;
-    font-size: 35px;
     font-family: 'Avory I PE', sans-serif;
+    font-size: 50px;
     font-weight: 800;
-    text-transform: uppercase;
+    letter-spacing: 2%;
     line-height: 45px;
-    letter-spacing: 0.70px;
-    word-wrap: break-word;
+    color: white;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 10;
   }
 
+  /* Se desactivan los blobs azules para que el fondo se vea uniforme */
   .gallery-viewport::before,
   .gallery-viewport::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50vw;
-    height: 38vw;
-    border-radius: 50%;
-    background: linear-gradient(349deg, #0776C6 0%, #006FFF 100%);
-    filter: blur(80px);
-    opacity: 0.5;
-    pointer-events: none;
-    z-index: 0;
+    content: none;
   }
-
-  .gallery-viewport::before { left: -30vw; }
-  .gallery-viewport::after { right: -30vw; }
 
   /* ✅ CLAVE: Padding reducido para que quepan 4 cards */
   .swiper-container {
@@ -229,6 +217,17 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   .swiper-button-next:active,
   .swiper-button-prev:active {
     transform: translateY(0) !important;
+  }
+
+  /* Ajustes MOBILE: que los botones no se corten */
+  @media (max-width: 767px) {
+    .carousel-navigation-masonry {
+      position: relative;
+      right: auto;
+      margin-top: 16px;
+      justify-content: flex-start;
+      padding-left: 6px;
+    }
   }
 
   .taqueritos-card {
@@ -338,9 +337,8 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   @media (max-width: 767px) {
 
     .title {
-      font-size: 24px;
-      line-height: 28px;
-      margin-left: 20px;
+      font-size: 35px;
+      line-height: 32px;
     }
 
     .carousel-navigation-masonry {
@@ -377,18 +375,21 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   import 'swiper/css';
   import 'swiper/css/navigation';
 
+  const selector = '[data-gallery-swiper]';
+  const swiperMap = new WeakMap();
+
   function initSwiper() {
-    new Swiper('.swiper-container', {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    if (el.classList.contains('swiper-initialized')) return;
+    if (swiperMap.has(el)) { try { const s = swiperMap.get(el); s && s.update && s.update(); } catch {} return; }
+    const s = new Swiper(selector, {
       modules: [Navigation, Autoplay],
       slidesPerView: 5,
       spaceBetween: 20,
       loop: true,
       speed: 600,
-   
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
       breakpoints: {
         320:  { slidesPerView: 1, spaceBetween: 16 },
         640:  { slidesPerView: 2, spaceBetween: 18 },
@@ -398,19 +399,26 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
         1920: { slidesPerView: 4, spaceBetween: 24 },
       },
     });
+    swiperMap.set(el, s);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSwiper);
-  } else {
-    initSwiper();
+  function destroySwiper() {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    const s = swiperMap.get(el);
+    if (s && s.destroy) { try { s.destroy(true, true); } catch {} }
+    swiperMap.delete(el);
   }
+
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initSwiper); } else { initSwiper(); }
+  document.addEventListener('astro:page-load', initSwiper);
+  document.addEventListener('astro:after-swap', initSwiper);
+  document.addEventListener('astro:before-swap', destroySwiper);
 
   document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement | null;
-    const btn = target?.closest('.action-btn') as HTMLElement | null;
+    const target = e.target;
+    const btn = target && target.closest ? target.closest('.action-btn') : null;
     if (!btn) return;
-
     const action = btn.getAttribute('data-action');
     if (action === 'like') btn.classList.toggle('liked');
     if (action === 'bookmark') btn.classList.toggle('bookmarked');

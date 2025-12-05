@@ -25,7 +25,7 @@ const currentLang = getLocale();
     {currentLang === 'es' ? 'No hay recetas relacionadas.' : 'No related recipes.'}
   </div>
 ) : (
-  <div class="w-full" data-related-recipes-carousel>
+  <div class="w-full related-carousel-wrapper" data-related-recipes-carousel>
     <!-- Desktop carousel -->
     <div class="hidden md:block relative">
       <div class="overflow-hidden relative">
@@ -43,12 +43,20 @@ const currentLang = getLocale();
             </div>
           ))}
         </div>
-        <!-- Overlaid nav buttons -->
-        <button id="relPrevDesktop" class="hidden md:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brown w-10 h-10 rounded-full shadow z-10" aria-label="Prev">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+      </div>
+      <!-- Nav buttons estilo ChallengesCarousel -->
+      <div class="related-carousel-nav hidden md:flex">
+        <button id="relPrevDesktop" class="related-nav-btn" aria-label="Prev">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
-        <button id="relNextDesktop" class="hidden md:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brown w-10 h-10 rounded-full shadow z-10" aria-label="Next">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        <button id="relNextDesktop" class="related-nav-btn" aria-label="Next">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
       </div>
     </div>
@@ -71,12 +79,18 @@ const currentLang = getLocale();
           ))}
         </div>
       </div>
-      <!-- Overlaid nav buttons on mobile -->
-      <button id="relPrevMobile" class="md:hidden flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brown w-10 h-10 rounded-full shadow z-10" aria-label="Prev">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+      <!-- Nav buttons mobile -->
+      <button id="relPrevMobile" class="md:hidden flex items-center justify-center absolute left-4 top-[-2.5rem] bg-[rgba(255,45,48,0.16)] border border-red-500 rounded-lg w-11 h-11 text-white shadow" aria-label="Prev">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
-      <button id="relNextMobile" class="md:hidden flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brown w-10 h-10 rounded-full shadow z-10" aria-label="Next">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      <button id="relNextMobile" class="md:hidden flex items-center justify-center absolute right-4 top-[-2.5rem] bg-[rgba(255,45,48,0.16)] border border-red-500 rounded-lg w-11 h-11 text-white shadow" aria-label="Next">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
     </div>
   </div>
@@ -161,3 +175,52 @@ const currentLang = getLocale();
   document.addEventListener('astro:page-load', initAll);
   document.addEventListener('astro:after-swap', initAll);
 </script>
+
+<style>
+  .related-carousel-wrapper {
+    position: relative;
+  }
+
+  .related-carousel-nav {
+    position: absolute;
+    top: -80px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+    z-index: 50;
+  }
+
+  .related-nav-btn {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 45, 48, 0.16);
+    border: 2px solid #ff2c2f;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .related-nav-btn:hover {
+    background: #150404;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4);
+  }
+
+  .related-nav-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  @media (max-width: 767px) {
+    .related-carousel-nav {
+      top: -40px;
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
+</style>

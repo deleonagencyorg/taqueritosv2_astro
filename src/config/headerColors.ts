@@ -129,7 +129,7 @@ export const headerColors: HeaderColors = {
 
   // Configuración para la página de nosotros
   about: {
-    textColor: 'text-primary',
+    textColor: 'text-white',
     backgroundColor: 'bg-brown',
     hoverTextColor: 'hover:text-white',
     hoverBackgroundColor: 'hover:bg-secondary',

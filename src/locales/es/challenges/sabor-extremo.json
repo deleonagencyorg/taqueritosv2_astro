@@ -1,0 +1,36 @@
+{
+  "date": "2024-01-15",
+  "id": "sabor-extremo",
+  "slug": "sabor-extremo",
+  "title": "Reto del Sabor",
+  "title_down": "Extremo",
+  "subtitle": "¿Te atreves con el nivel",
+  "subtitle_down": "más picante?",
+  "people": "1-10",
+  "difficulty": "Difícil",
+  "image": "/images/es/challenges/sabor-extremo.jpg",
+  "gallery": [
+    "/images/es/challenges/sabor-extremo.jpg"
+  ],
+  "type": "image",
+  "category": "challenge",
+  "preparation_time": 30,
+  "ingredients": [
+    "1 Bolsa de Taqueritos Extreme",
+    "1 Vaso de agua fría",
+    "1 Cronómetro",
+    "1 Cámara para grabar",
+    "1 Toalla (¡necesitarás!)"
+  ],
+  "instructions": [
+    "Paso 1. Prepara tu cámara para grabar el reto desde el principio hasta el final.",
+    "Paso 2. Abre la bolsa de Taqueritos Extreme y colócalos en un plato.",
+    "Paso 3. Inicia el cronómetro y come todos los Taqueritos sin beber agua.",
+    "Paso 4. Aguanta el picor durante 2 minutos después de terminar.",
+    "Paso 5. Sube tu video a redes sociales con el hashtag #RetoTaqueritosExtreme."
+  ],
+  "brand": ["taqueritos"],
+   "start-date": "2025-12-31",
+  "end-date":  "2025-12-31",
+  "url": "/es/retos/sabor-extremo"
+}

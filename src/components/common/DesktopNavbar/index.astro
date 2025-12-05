@@ -18,7 +18,21 @@ const currentPath = pathname;
 
 // Obtener los datos de social media y menú desde las traducciones
 const socialMedia = t('social_media', { namespace: 'common', locale: currentLang }) as any;
-const menuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
+const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
+// Quitar el botón de comunidad
+const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
+
+const contactHref = `/${currentLang}/${currentLang === 'es' ? 'contacto' : 'contact'}`;
+const contactMenuItem = {
+  id: 'contact',
+  text: t('contact_us', { namespace: 'common', locale: currentLang }),
+  href: contactHref,
+};
+
+const menuItemsWithContact = [...menuItems, contactMenuItem];
+
+// Obtener productos para el menú desplegable
+const products = t('items', { namespace: 'products', locale: currentLang }) as any[];
 ---
 
 <!-- Desktop Navigation -->
@@ -43,24 +57,44 @@ const menuItems = t('menu_items', { namespace: 'common', locale: currentLang }) 
     <!-- Right Side - Language Switcher and Yummies One -->
     <div class="flex items-center space-x-5">
       <div class="flex space-x-4" id="desktop-menu-items">
-        {menuItems && menuItems.map((item: any) => (
+        {menuItemsWithContact && menuItemsWithContact.map((item: any) => (
           <div class="relative group">
             <a 
-              href={item.href} 
-              class={`${headerColorConfig.textColor} font-title text-[16px] uppercase font-medium transition-colors py-2 px-3 rounded-md flex items-center  ${!item.href.startsWith('#') && currentPath === item.href ? 'bg-quinary' : ''}`}
-              style={`color: ${headerColorConfig.textColor};`}
+              href={item.href}
+              data-open-stockist={item.id === 'where-buy' ? 'true' : undefined}
+              class={`${headerColorConfig.textColor} font-title text-[16px] uppercase font-medium transition-colors py-2 px-3 rounded-md flex items-center ${!item.href.startsWith('#') && currentPath === item.href ? 'bg-primary text-white' : ''}`}
+              style={`color: ${!item.href.startsWith('#') && currentPath === item.href ? '#FFFFFF' : headerColorConfig.textColor};`}
             >
               {item.text}
               {item.submenu && (
                 <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
               )}
             </a>
-            {/* Submenu markup removed (was commented) to avoid Astro parser bug; visible behavior no cambia. */}
+            
+            {/* Submenu de productos */}
+            {item.id === 'products' ? (
+              <div class="products-dropdown absolute left-0 top-full mt-2 w-64 
+                          bg-[rgba(11,2,2,0.85)] backdrop-blur-md 
+                          border border-red-500/80 rounded-xl shadow-lg 
+                          opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                          transition-all duration-300 pointer-events-none group-hover:pointer-events-auto z-[100]">
+                <div class="py-2">
+                  {products && products.map((product: any) => (
+                    <a
+                      href={`/${currentLang}/${currentLang === 'es' ? 'productos' : 'products'}/${product.id}`}
+                      class="block px-4 py-2 text-white hover:bg-white/10 transition-colors text-sm"
+                    >
+                      {product.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         ))}
       </div>
       <!-- Language Switcher -->
-      <!-- <LanguageSwitcher activeLocale={currentLang} headerColorConfig={headerColorConfig} /> -->
+      <LanguageSwitcher activeLocale={currentLang} headerColorConfig={headerColorConfig} />
 
       <!-- <div class="hidden md:flex">
         <SocialMediaIcons 
@@ -76,10 +110,17 @@ const menuItems = t('menu_items', { namespace: 'common', locale: currentLang }) 
       </a> -->
     </div>
 
-    <div class="pl-20">
-      <button class="px-[20px] py-[17px] bg-primary text-white rounded-[5px] w-[150px] h-[47px] flex items-center justify-center">
-        CONTÁCTANOS
-      </button>
+    <div class="pl-20 flex gap-3">
+      {currentLang === 'es' && (
+        <a
+          href="https://gamer.yummiespromociones.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-[20px] py-[17px] bg-primary text-white rounded-[5px] w-[190px] h-[47px] flex items-center justify-center text-sm uppercase font-title"
+        >
+          Taqueritos Gamin
+        </a>
+      )}
     </div>
   </div>
 </nav>

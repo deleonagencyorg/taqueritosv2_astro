@@ -1,0 +1,36 @@
+{
+  "date": "2024-02-01",
+  "id": "creativo",
+  "slug": "creativo",
+  "title": "Creative",
+  "title_down": "Challenge",
+  "subtitle": "Show your",
+  "subtitle_down": "creativity",
+  "people": "1-5",
+  "difficulty": "Medium",
+  "image": "/images/en/challenges/creative.jpg",
+  "gallery": [
+    "/images/en/challenges/creative.jpg"
+  ],
+  "type": "image",
+  "category": "challenge",
+  "preparation_time": 60,
+  "ingredients": [
+    "2 bags of Classic Taqueritos",
+    "1 camera or phone",
+    "Decoration accessories",
+    "Friends to help",
+    "Social media to share"
+  ],
+  "instructions": [
+    "Step 1. Choose the type of content you want to create: photo, video or meme.",
+    "Step 2. Prepare your Taqueritos and the setting for your creation.",
+    "Step 3. Capture the most creative moment with our products.",
+    "Step 4. Edit your content with effects and music if you wish.",
+    "Step 5. Post with #TaqueritosCreative and tag our social media."
+  ],
+  "brand": ["taqueritos"],
+  "start-date": "2024-03-01",
+  "end-date": "2024-04-01",
+  "url": "/en/challenges/creativo"
+}

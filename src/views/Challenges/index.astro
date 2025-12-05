@@ -1,0 +1,253 @@
+---
+import { getLocale } from '../../i18n/i18n';
+import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
+import ChallengesCarousel from '../../components/challenges/ChallengesCarousel.astro';
+import LazyImage from '../../components/common/LazyImage.astro';
+
+interface SummaryChallenge {
+  id?: string;
+  slug?: string;
+  title: string;
+  image: string;
+  subtitle?: string;
+  description?: string;
+  url?: string;
+  ['start-date']?: string;
+  ['end-date']?: string;
+  fecha_inicio?: string;
+  fecha_fin?: string;
+}
+
+const currentLang = getLocale();
+
+// Cargar retos desde archivos individuales ../../locales/{lang}/challenges/*.json
+const challengeModules = import.meta.glob<{ default: SummaryChallenge }>(
+  '../../locales/*/challenges/*.json'
+);
+const summaryItems: SummaryChallenge[] = [];
+for (const path in challengeModules) {
+  const lang = path.split('/')[3];
+  if (lang === currentLang) {
+    const mod = await challengeModules[path]();
+    summaryItems.push(mod.default);
+  }
+}
+
+function parseDate(value?: string): number {
+  if (!value) return 0;
+  const s = String(value).trim();
+  // Soportar dd/mm/yyyy
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+    const [d, m, y] = s.split('/').map(Number);
+    return new Date(y, (m || 1) - 1, d || 1).getTime();
+  }
+  const t = Date.parse(s);
+  return isNaN(t) ? 0 : t;
+}
+
+const todayISO = new Date().toISOString().slice(0, 10);
+const todayTs = Date.parse(todayISO);
+
+function getStart(item: SummaryChallenge): number {
+  const startStr = item['start-date'] || item.fecha_inicio;
+  return parseDate(startStr);
+}
+
+function getEnd(item: SummaryChallenge): number {
+  const endStr = item['end-date'] || item.fecha_fin;
+  return parseDate(endStr);
+}
+
+// Elegir el evento vigente o el más reciente
+let featuredChallenge: SummaryChallenge | null = null;
+if (summaryItems.length > 0) {
+  const withDates = summaryItems.map((it) => ({
+    ...it,
+    _start: getStart(it),
+    _end: getEnd(it),
+  }));
+
+  const current = withDates.filter((it) => it._start && it._end && it._start <= todayTs && todayTs <= it._end);
+  if (current.length > 0) {
+    featuredChallenge = current.sort((a, b) => a._start - b._start)[0];
+  } else {
+    featuredChallenge = withDates.sort((a, b) => b._start - a._start)[0];
+  }
+}
+
+const pageTitle = currentLang === 'es' ? 'Retos y torneos' : 'Challenges & Tournaments';
+const sectionTitle = currentLang === 'es' ? 'Participa en nuestros retos' : 'Join our challenges';
+
+const introTitle = currentLang === 'es'
+  ? '¡Descubre y disfruta nuestros retos y torneos!'
+  : 'Discover and enjoy our challenges and tournaments!';
+
+const introDescription = currentLang === 'es'
+  ? 'Somos jugadores, soñadores y apasionados que disfrutan competir y superar desafíos. Aquí encontrarás un espacio donde la diversión y la emoción se viven al máximo.'
+  : 'We are players, dreamers and enthusiasts who love to compete and overcome challenges. Here you will find a space where fun and excitement are always at their peak.';
+
+const activityCards = currentLang === 'es'
+  ? [
+      {
+        id: 'online',
+        title: 'Actividades online',
+        description:
+          'Compite y diviértete desde cualquier lugar, conectado al instante con la comunidad Taqueritos.',
+      },
+      {
+        id: 'offline',
+        title: 'Actividades offline',
+        description:
+          'Vive la experiencia en persona, con dinámicas que te pondrán a prueba cara a cara.',
+      },
+      {
+        id: 'games',
+        title: 'Nuestros juegos',
+        description:
+          'Explora lo mejor de ambos mundos con dinámicas únicas, creativas y llenas de sabor Taqueritos.',
+      },
+    ]
+  : [
+      {
+        id: 'online',
+        title: 'Online activities',
+        description:
+          'Compete and have fun from anywhere, instantly connected with the Taqueritos community.',
+      },
+      {
+        id: 'offline',
+        title: 'Offline activities',
+        description:
+          'Live the experience in person with dynamics that will challenge you face to face.',
+      },
+      {
+        id: 'games',
+        title: 'Our games',
+        description:
+          'Explore the best of both worlds with unique, creative and crunchy Taqueritos experiences.',
+      },
+    ];
+---
+<div class="-mt-px -mb-px bg-dark-spotlight" >
+  <div class="container mx-auto px-4 pt-24 pb-24 mt-0">
+   
+
+
+
+    <!-- Banner introductorio -->
+    <section class="mb-14 pt-24">
+      <div
+        class="mx-auto max-w-5xl  border border-white/20 bg-cover bg-center bg-no-repeat px-6 md:px-12 py-10 md:py-14 text-center text-white relative overflow-hidden"
+        style="background-image: url('https://snack.yummiespromociones.com/taqueritos/bggames.png'); background-color: rgba(0,0,0,0.75);"
+      >
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-3xl mx-auto">
+          <h2 class="font-title text-2xl md:text-4xl font-bold uppercase mb-4">
+            {introTitle}
+          </h2>
+          <p class="text-sm md:text-base text-white/85 mb-8">
+            {introDescription}
+          </p>
+
+          <button
+            type="button"
+            class="inline-flex items-center justify-center px-8 py-3 rounded-md bg-red text-white font-semibold uppercase tracking-wide text-sm shadow-[0_10px_25px_rgba(0,0,0,0.7)] hover:bg-[#ff4b4e] transition-colors duration-200"
+          >
+            {currentLang === 'es' ? 'Regístrate ahora' : 'Register now'}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards de tipo de actividades (3 columnas) -->
+    <section class="mb-12 p-24">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {activityCards.map((card) => (
+          <div
+            class="relative group border border-red rounded-none bg-black/20 px-6 py-8 text-white transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.02]"
+          >
+            <!-- Icono simple por tipo -->
+            <div class="mb-5 flex justify-center text-white">
+              {card.id === 'online' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
+<path d="M30 46.25H30.0295" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.625 38.75C25.625 33.75 34.375 33.75 39.375 38.75" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M46.25 31.25C36.831 22.9167 23.75 22.9167 13.75 31.25" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5 23.75C20.7895 10.4167 39.2105 10.4167 55 23.7497" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+              )}
+              {card.id === 'offline' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
+<path d="M30 30V50" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M28.75 17.6575C29.1495 17.5547 29.5685 17.5 30 17.5C32.7615 17.5 35 19.7386 35 22.5C35 22.9316 34.9453 23.3505 34.8425 23.75" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M5 5L55 55" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M42.397 15C44.0465 17.174 45 19.745 45 22.5C45 25.255 44.0465 27.826 42.397 30M17.6029 30C15.9536 27.826 15 25.255 15 22.5C15 20.7397 15.3893 19.0545 16.1007 17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M50.7898 10C53.449 13.5752 55 17.8746 55 22.5C55 27.1255 53.449 31.4248 50.7898 35M9.21022 10C6.5509 13.5752 5 17.8746 5 22.5C5 27.1255 6.5509 31.4248 9.21022 35" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+              )}
+              {card.id === 'games' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
+<path d="M23.3121 30C22.8945 30.2022 22.4519 30.4188 21.9799 30.6498L18.1711 32.5132C14.3904 34.363 12.5 35.288 12.5 36.4375C12.5 37.5867 14.3904 38.5117 18.1711 40.3615L21.9799 42.2253C25.7605 44.075 27.651 45 30 45C32.349 45 34.2395 44.075 38.0203 42.2253L41.829 40.3615C45.6097 38.5117 47.5 37.5867 47.5 36.4375C47.5 35.288 45.6097 34.363 41.829 32.5132L38.0203 30.6498C37.548 30.4188 37.1055 30.2022 36.6878 30" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M47.5 36.25V45.6668C47.5 46.9195 45.6097 47.9278 41.829 49.944L38.0203 51.9755C34.2395 53.9917 32.349 55 30 55C27.651 55 25.7605 53.9917 21.9799 51.9755L18.1711 49.944C14.3904 47.9278 12.5 46.9195 12.5 45.6668V36.25" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M38.75 13.75C38.75 18.5825 34.8325 22.5 30 22.5C25.1675 22.5 21.25 18.5825 21.25 13.75C21.25 8.9175 25.1675 5 30 5C34.8325 5 38.75 8.9175 38.75 13.75Z" stroke="white" stroke-width="4"/>
+<path d="M30 22.5V36.25" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+              )}
+            </div>
+
+            <h3 class="font-title text-lg md:text-xl font-bold uppercase mb-2 text-center">
+              {card.title}
+            </h3>
+            <p class="text-sm md:text-base text-white/80 text-center">
+              {card.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {featuredChallenge && (
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start mb-16">
+        <!-- Texto del evento -->
+        <div class="space-y-4 text-white">
+          <h2 class="font-title text-3xl md:text-4xl font-bold uppercase">
+            {featuredChallenge.title}
+          </h2>
+          {featuredChallenge.description && (
+            <p class="text-base md:text-lg leading-relaxed text-white/90">
+              {featuredChallenge.description}
+            </p>
+          )}
+          {featuredChallenge.url && (
+            <a
+              href={featuredChallenge.url}
+              class="inline-flex items-center mt-4 px-6 py-3 rounded-md bg-red text-white font-semibold uppercase tracking-wide text-sm shadow-[0_8px_20px_rgba(0,0,0,0.6)] hover:bg-[#ff4b4e] transition-colors duration-200"
+            >
+              {currentLang === 'es' ? 'Ver detalles del reto' : 'View challenge details'}
+            </a>
+          )}
+        </div>
+
+        <!-- Imagen del evento -->
+        <div class="w-full flex justify-center md:justify-end">
+          <div class="relative w-full max-w-xl rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.7)]">
+            <LazyImage
+              src={featuredChallenge.image}
+              alt={featuredChallenge.title}
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+    )}
+
+    <section class="mt-10 pt-6 pb-4">
+      <h2 class="font-title text-2xl md:text-3xl font-bold text-white uppercase mb-6">
+        {sectionTitle}
+      </h2>
+      <ChallengesCarousel />
+    </section>
+  </div>
+</div>

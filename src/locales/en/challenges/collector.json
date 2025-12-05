@@ -1,0 +1,36 @@
+{
+  "date": "2024-03-01",
+  "id": "coleccionista",
+  "slug": "coleccionista",
+  "title": "Collector",
+  "title_down": "Challenge",
+  "subtitle": "Collect and",
+  "subtitle_down": "win prizes",
+  "people": "1",
+  "difficulty": "Easy",
+  "image": "/images/en/challenges/collector.jpg",
+  "gallery": [
+    "/images/en/challenges/collector.jpg"
+  ],
+  "type": "image",
+  "category": "challenge",
+  "preparation_time": 120,
+  "ingredients": [
+    "Various Taqueritos packages",
+    "1 album or box for collection",
+    "1 camera to document",
+    "Patience and dedication",
+    "Friends to trade with"
+  ],
+  "instructions": [
+    "Step 1. Start buying different varieties of Taqueritos.",
+    "Step 2. Save each different package you find.",
+    "Step 3. Photograph each unique package for your collection.",
+    "Step 4. Trade duplicate packages with other collectors.",
+    "Step 5. Register your complete collection to win exclusive prizes."
+  ],
+  "brand": ["taqueritos"],
+  "start-date": "2024-03-01",
+  "end-date": "2024-04-01",
+  "url": "https://taqueritos.com/en/challenges-tournaments/coleccionista"
+}

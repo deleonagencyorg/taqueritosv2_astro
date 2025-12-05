@@ -92,7 +92,7 @@ import LazyImage from "../LazyImage.astro";
                 <a
                   href={`/${currentLang}/${currentLang === 'es' ? 'productos' : 'products'}/${product.id}`}
                   style={`background: radial-gradient(${product.color_button || "#FF8E52"}, ${product.second_color_button || "#FF4400"} 0%, ${product.color_button || "#FF8E52"} 100%);`}
-                  class="btn-view flex w-full h-[54px] text-[22.02px]  justify-center items-center shrink-0 rounded border border-[0.1px] text-white font-semibold hover:shadow-lg"
+                  class="btn-view flex w-full h-[54px] text-[22.02px]  justify-center items-center shrink-0 rounded border border-[0.1px] text-white font-title hover:shadow-lg"
                   data-no-swipe="true"
                   data-no-animation="true"
                 >
@@ -111,15 +111,13 @@ import LazyImage from "../LazyImage.astro";
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          
-          
+        </svg>
       </button>
       <button class="swiper-button-next">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+        </svg>
       </button>
     </div>
   </div>
@@ -130,7 +128,6 @@ import LazyImage from "../LazyImage.astro";
     font-weight: 800;
     line-height: 100%;
     font-size: 22.52px;
-    font-family: "Avory I PE", sans-serif;
     text-align: center;
     text-transform: none;
   }
@@ -159,12 +156,8 @@ import LazyImage from "../LazyImage.astro";
     display: flex;
     flex-shrink: 0;
     overflow: visible;
-    transform: translate3d(0, 0, -100px) scale(0.96);
-    transition:
-      transform 0.35s ease,
-      opacity 0.35s ease,
-      filter 0.35s ease;
-    will-change: transform;
+    opacity: 1;
+    transition: opacity 0.3s ease;
   }
 
   .product-card {
@@ -192,12 +185,14 @@ import LazyImage from "../LazyImage.astro";
   .product-image-container .product-image {
     width: 300px !important;
     height: 400px !important;
+    min-width: 300px !important;
+    min-height: 400px !important;
+    max-width: 300px !important;
+    max-height: 400px !important;
     object-fit: contain !important;
     border-radius: 50px !important;
     background: transparent !important;
     flex-shrink: 0 !important;
-    max-width: none !important;
-    max-height: none !important;
   }
 
   .product-card .absolute.bottom-0 {
@@ -217,7 +212,6 @@ import LazyImage from "../LazyImage.astro";
     text-decoration: none;
     transition: all 0.3s ease;
     font-size: 15px;
-    font-family: "Avory I PE", sans-serif;
     text-transform: none;
     max-width: 100%;
     min-width: 200px;
@@ -232,57 +226,31 @@ import LazyImage from "../LazyImage.astro";
     transform: none !important;
   }
 
-  /* estados */
-  .swiper-slide:not(.swiper-slide-active) .product-card {
-    filter: brightness(0.7) saturate(0.7);
-    opacity: 0.55;
-    border-color: rgba(255, 90, 90, 0.3);
-    box-shadow: inset 0 0 0 1px rgba(255, 90, 90, 0.12);
-  }
-  
-  .swiper-slide-active .product-card {
-    filter: none;
-    opacity: 1;
-    border-color: #7cb0ff;
-  }
-  
-  .swiper-slide-active .product-image-container {
-    transform: translateX(-50%) scale(1.06);
-  }
-  
-  .swiper-slide-active .btn-view) {
-    border-color: #ffd0d6 !important;
-    opacity: 1;
-    pointer-events: auto;
-  }
-  
-  .swiper-slide:not(.swiper-slide-active) .btn-view {
-    opacity: 0.6;
-    pointer-events: none;
-  }
-  
-  .swiper-slide-active .btn-view:hover {
-    transform: translateY(-2px);
+  /* Hover effects: solo el que tiene hover crece, los demás bajan opacidad */
+  .swiper-slide {
+    transition: opacity 0.3s ease;
   }
 
-  /* Ocultar slides muy lejanos del centro */
-  .swiper-slide) {
-    opacity: 0 !important;
-    pointer-events: none;
+  .swiper-slide .product-card {
+    transition: transform 0.3s ease;
   }
 
-  .swiper-slide-prev),
-  .swiper-slide-active),
-  .swiper-slide-next) {
-    opacity: 1 !important;
-    pointer-events: auto;
+  .swiper-slide .product-image-container {
+    transition: transform 0.3s ease;
   }
 
-  /* Los que están justo al lado del grupo visible deben ser semi-visibles */
-  .swiper-slide-prev) .product-card,
-  .swiper-slide-next) .product-card {
-    filter: brightness(0.5) saturate(0.5);
-    opacity: 0.7;
+  /* Cuando hay hover en el contenedor, todos los slides bajan opacidad */
+  .swiper-container:has(.swiper-slide:hover) .swiper-slide:not(:hover) {
+    opacity: 0.5;
+  }
+
+  /* El slide con hover crece */
+  .swiper-slide:hover .product-card {
+    transform: scale(1.05);
+  }
+
+  .swiper-slide:hover .product-image-container {
+    transform: translateX(-50%) scale(1.08);
   }
   /* botones */
 
@@ -359,6 +327,10 @@ import LazyImage from "../LazyImage.astro";
     .product-image-container .product-image {
       width: 280px !important;
       height: 380px !important;
+      min-width: 280px !important;
+      min-height: 380px !important;
+      max-width: 280px !important;
+      max-height: 380px !important;
     }
     
     .product-card a {
@@ -414,6 +386,10 @@ import LazyImage from "../LazyImage.astro";
     .product-image-container .product-image {
       width: 220px !important;
       height: 320px !important;
+      min-width: 220px !important;
+      min-height: 320px !important;
+      max-width: 220px !important;
+      max-height: 320px !important;
     }
     .product-card a {
       width: 100% !important;
@@ -454,42 +430,7 @@ class ProductsCarousel {
     this.init();
   }
 
-  private apply3DPositions(sw: Swiper) {
-    if (!sw || !sw.slides) return;
-
-    const X_OFFSET = 900;
-    const Z_BACK = 100;
-    const SCALE_D = 0.12;
-
-    sw.slides.forEach((slideEl: any, index: number) => {
-      let p = typeof slideEl.progress === "number" ? slideEl.progress : 0;
-
-      const abs = Math.abs(p);
-      
-      // Solo mostrar los 3 slides centrales (prev, active, next)
-      if (abs > 1.5) {
-        (slideEl as HTMLElement).style.opacity = '0';
-        (slideEl as HTMLElement).style.pointerEvents = 'none';
-        return;
-      }
-
-      const x = p * X_OFFSET;
-      const z = -(abs * Z_BACK);
-      const scale = 1 - (abs * SCALE_D);
-      
-      // Opacidad basada en distancia del centro
-      let opacity = 1;
-      if (abs > 0.5) {
-        opacity = 0.7;
-      }
-
-      const el = slideEl as HTMLElement;
-      el.style.transform = `translate3d(${x}px, 0, ${z}px) scale(${scale})`;
-      el.style.opacity = String(opacity);
-      el.style.zIndex = String(100 - Math.round(abs * 10));
-      el.style.pointerEvents = abs < 0.5 ? 'auto' : 'none';
-    });
-  }
+  // Ya no necesitamos efectos 3D, solo un carousel simple
 
   private init(): void {
     const swiperContainer = this.container.querySelector(
@@ -514,22 +455,13 @@ class ProductsCarousel {
       
       // Loop infinito con slides duplicados
       loop: true,
-      loopAdditionalSlides: 3,
-      
-      centeredSlides: true,
-      slidesPerView: 1,
-      spaceBetween: 0,
-      
-      watchSlidesProgress: true,
-      slideToClickedSlide: true,
+      slidesPerView: 3,
+      spaceBetween: 50,
       speed: 600,
       
-      touchRatio: 1,
-      touchAngle: 45,
-      
       navigation: { 
-        nextEl, 
         prevEl,
+        nextEl,
       },
       
       autoplay: this.options.autoplay
@@ -537,50 +469,25 @@ class ProductsCarousel {
             delay: this.options.speed || 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
-            reverseDirection: false,
+            reverseDirection: true,
           }
         : false,
 
       breakpoints: {
         320: { 
-          slidesPerView: 1, 
-          centeredSlides: true,
+          slidesPerView: 1,
+          spaceBetween: 20,
         },
         768: { 
-          slidesPerView: 2, 
-          centeredSlides: true,
+          slidesPerView: 2,
+          spaceBetween: 30,
         },
         1024: { 
-          slidesPerView: 3, 
-          centeredSlides: true,
+          slidesPerView: 3,
+          spaceBetween: 80,
         },
       },
 
-      on: {
-        init: (sw) => {
-          setTimeout(() => this.apply3DPositions(sw), 50);
-        },
-        progress: (sw) => {
-          this.apply3DPositions(sw);
-        },
-        slideNextTransitionStart: function(sw) {
-          console.log('Next transition start');
-        },
-        slideChange: (sw) => {
-          this.apply3DPositions(sw);
-        },
-        transitionEnd: (sw) => {
-          this.apply3DPositions(sw);
-        },
-        setTransition: (sw, duration) => {
-          if (sw && sw.slides) {
-            sw.slides.forEach((s: any) => {
-              (s as HTMLElement).style.transition =
-                `transform ${duration}ms ease, opacity ${duration}ms ease`;
-            });
-          }
-        },
-      },
     });
 
     // Prevenir interacción con enlaces
@@ -596,7 +503,6 @@ class ProductsCarousel {
     setTimeout(() => {
       if (this.swiper && !this.swiper.destroyed) {
         this.swiper.update();
-        this.apply3DPositions(this.swiper);
       }
     }, 100);
   }
@@ -643,5 +549,7 @@ function initializeCarousels() {
 
 document.addEventListener("DOMContentLoaded", initializeCarousels);
 document.addEventListener("astro:page-load", initializeCarousels);
+document.addEventListener("astro:after-swap", initializeCarousels);
+document.addEventListener("astro:before-swap", cleanupCarousels);
 document.addEventListener("astro:before-preparation", cleanupCarousels);
 </script>

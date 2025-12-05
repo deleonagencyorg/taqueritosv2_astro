@@ -82,6 +82,7 @@
      
     ]
   },
+  "contact_us": "Contacto",
   "menu_labels": {
     "open_main_menu": "Abrir menú principal",
     "explore": "Explorar"
@@ -105,12 +106,12 @@
     {
       "id": "community",
       "text": "Comunidad",
-      "href": "/es/comunidad"
+      "href": "/es/#players"
     },
     {
       "id": "about-taqueritos",
       "text": "Sobre Taqueritos",
-      "href": "/es/sobre-taqueritos"
+      "href": "/es/nosotros"
     },
     {
       "id": "where-buy",

@@ -2,6 +2,36 @@
   "title": "Conoce nuestra",
   "subtitle": "HISTORIA",
   "intro": "Descubre cómo Snacks Yummies se convirtió en la marca líder de snacks en Centroamérica, desde nuestros humildes inicios hasta la actualidad.",
+  "about_section_title": "¿QUIÉNES SOMOS?",
+  "about_section_paragraphs": [
+    "Taqueritos nació de la pasión por crear momentos inolvidables. Somos una marca que entiende la cultura gamer y la fusión perfecta con los sabores más intensos y auténticos de Centroamérica.",
+    "Nuestro compromiso va más allá de ofrecer snacks de calidad. Creamos una comunidad donde gamers, food lovers y creadores de contenido encuentran su espacio para brillar, competir y compartir experiencias únicas.",
+    "Con presencia en múltiples países de Centroamérica y el Caribe, nos dedicamos a impulsar el talento local, organizar torneos épicos y desarrollar productos que se adaptan al estilo de vida dinámico de nuestra comunidad."
+  ],
+  "presence_section_title": "NUESTRA PRESENCIA",
+  "presence_section_description": "Con presencia estratégica en 6 países de Centroamérica y el Caribe, llevamos la experiencia Taqueritos a millones de gamers y food lovers.",
+  "experiences_section_title": "NUESTRAS EXPERIENCIAS",
+  "experiences_section_description": "Explora todo lo que Taqueritos tiene para ofrecerte: desde competencias épicas donde podrás demostrar tus habilidades y ganar increíbles premios, hasta eventos y momentos que se viven junto a nuestra comunidad.",
+  "experiences_cards": [
+    {
+      "id": "products",
+      "title": "NUESTROS PRODUCTOS",
+      "description": "Participa en emocionantes dinámicas y activaciones con nuestros productos estrella. Descubre nuevas combinaciones, sabores intensos y formatos pensados para cada ocasión.",
+      "cta": "EXPLORAR"
+    },
+    {
+      "id": "challenges",
+      "title": "RETOS Y TORNEOS",
+      "description": "Únete a miles de gamers y food lovers. Comparte experiencias, estrategias, recetas y eventos donde la pasión se vive al máximo.",
+      "cta": "EXPLORAR"
+    },
+    {
+      "id": "community",
+      "title": "COMUNIDAD",
+      "description": "Forma parte de la comunidad Taqueritos. Descubre contenidos, dinámicas, creadores y espacios pensados para disfrutar juntos cada momento.",
+      "cta": "EXPLORAR"
+    }
+  ],
   "items": [
     {
       "year": "1973",

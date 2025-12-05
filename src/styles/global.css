@@ -33,6 +33,78 @@ html, body {
   }
   .bg-dark-spotlight::before { left:-30vw; }
   .bg-dark-spotlight::after { right:-30vw; }
+ 
+  /* Versión azul para secciones como la galería */
+  .bg-dark-spotlight-blue {
+    position: relative;
+    background: radial-gradient(ellipse at center, #031019 0%, #031019 50%, #01070C 100%);
+    overflow: hidden;
+  }
+
+  .bg-dark-spotlight-blue::before,
+  .bg-dark-spotlight-blue::after {
+    content:"";
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:50vw;
+    height:38vw;
+    border-radius:50%;
+    background: radial-gradient(ellipse at center, rgba(0,140,255,0.55) 0%, rgba(0,35,80,0) 70%);
+    filter: blur(60px);
+    z-index:1;
+  }
+
+  .bg-dark-spotlight-blue::before { left:-30vw; }
+  .bg-dark-spotlight-blue::after { right:-30vw; }
+
+  /* Versión verde para secciones */
+  .bg-dark-spotlight-green {
+    position: relative;
+    background: radial-gradient(ellipse at center, #081806 0%, #081806 50%, #030803 100%);
+    overflow: hidden;
+  }
+
+  .bg-dark-spotlight-green::before,
+  .bg-dark-spotlight-green::after {
+    content:"";
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:50vw;
+    height:38vw;
+    border-radius:50%;
+    background: radial-gradient(ellipse at center, rgba(34,197,94,0.5) 0%, rgba(21,128,61,0) 70%);
+    filter: blur(60px);
+    z-index:1;
+  }
+
+  .bg-dark-spotlight-green::before { left:-30vw; }
+  .bg-dark-spotlight-green::after { right:-30vw; }
+
+  /* Versión amarilla para secciones */
+  .bg-dark-spotlight-yellow {
+    position: relative;
+    background: radial-gradient(ellipse at center, #1a1004 0%, #1a1004 50%, #0d0802 100%);
+    overflow: hidden;
+  }
+
+  .bg-dark-spotlight-yellow::before,
+  .bg-dark-spotlight-yellow::after {
+    content:"";
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:50vw;
+    height:38vw;
+    border-radius:50%;
+    background: radial-gradient(ellipse at center, rgba(234,179,8,0.5) 0%, rgba(161,98,7,0) 70%);
+    filter: blur(60px);
+    z-index:1;
+  }
+
+  .bg-dark-spotlight-yellow::before { left:-30vw; }
+  .bg-dark-spotlight-yellow::after { right:-30vw; }
   
 
     .cta-button {
