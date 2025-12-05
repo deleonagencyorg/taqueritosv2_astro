@@ -1,5 +1,10 @@
 ---
-// Página deshabilitada intencionalmente
-// Se mantiene el archivo vacío para evitar errores de import, pero sin generar contenido.
+// Página deshabilitada intencionalmente.
+// Esta ruta dinámica se mantiene solo para compatibilidad, pero no genera páginas.
+
+export async function getStaticPaths() {
+  // No generamos ninguna página para esta ruta
+  return [];
+}
 ---
 

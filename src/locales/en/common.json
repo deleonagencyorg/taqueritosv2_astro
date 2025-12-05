@@ -31,6 +31,14 @@
     "yummiesone": {
       "title": "Taqueritos One",
       "description": "Discover Taqueritos One, our new exclusive platform for true snack lovers."
+    },
+    "participacion": {
+      "title": "Participation - Taqueritos Creators",
+      "description": "Complete your registration and upload your creative content to join the Taqueritos Creators contest. Videos, dances, music, art, memes and AI creations in one place."
+    },
+    "jurados": {
+      "title": "Judges - Taqueritos Creators",
+      "description": "Meet the official Taqueritos Creators judges: content creators and entertainment experts who will review your talent and select the winners."
     }
   },
   "social_media": {
