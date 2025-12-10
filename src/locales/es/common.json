@@ -85,7 +85,8 @@
         "alt": "Taqueritos",
         "title": "",
         "description": "",
-        "link": "#"
+        "link": "#",
+        "type": "product"
       }
      
     ]

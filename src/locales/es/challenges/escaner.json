@@ -13,13 +13,14 @@
   "type": "image",
   "category": "challenge",
   "brand": ["taqueritos"],
-  "start-date": "2025-11-01",
+  "preparation_time": 0,
+  "start-date": "2025-10-31",
   "end-date": "2026-01-01",
   "urls": [
     {
-      "title": "Escanea Aquí",
-      "url": "gamer.yummiespromociones.com/"
+      "title": "Participa Aqui",
+      "url": "https://gamer.yummiespromociones.com/"
     }
   ],
-  "terminosycondiciones": "/es/terminos-condiciones/coleccionista"
+  "terminosycondiciones": "https://taqueritos.com/wp-content/uploads/2024/10/TERMINOS-Y-CONDICIONES-COPA-TAQUERITOS-2024.pdf"
 }

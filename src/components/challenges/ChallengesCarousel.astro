@@ -6,6 +6,7 @@ const currentLang = getLocale();
 
 interface Challenge {
   id: string;
+  slug?: string;
   title: string;
   subtitle?: string;
   title_down?: string;
@@ -50,6 +51,16 @@ if (!challengeItems.length) {
     }
   }
 }
+
+// Ordenar para que "escaner" sea el primero
+challengeItems.sort((a, b) => {
+  const aIsEscaner = a.id === 'escaner' || a.slug === 'escaner';
+  const bIsEscaner = b.id === 'escaner' || b.slug === 'escaner';
+  
+  if (aIsEscaner && !bIsEscaner) return -1;
+  if (!aIsEscaner && bIsEscaner) return 1;
+  return 0;
+});
 
 function getCategoryKey(challenge: any): string {
   const raw = (

@@ -59,19 +59,28 @@ function getEnd(item: SummaryChallenge): number {
 }
 
 // Elegir el evento vigente o el más reciente
+// Priorizar el evento "escaner" como principal
 let featuredChallenge: SummaryChallenge | null = null;
 if (summaryItems.length > 0) {
-  const withDates = summaryItems.map((it) => ({
-    ...it,
-    _start: getStart(it),
-    _end: getEnd(it),
-  }));
-
-  const current = withDates.filter((it) => it._start && it._end && it._start <= todayTs && todayTs <= it._end);
-  if (current.length > 0) {
-    featuredChallenge = current.sort((a, b) => a._start - b._start)[0];
+  // Buscar primero el evento "escaner"
+  const escanerEvent = summaryItems.find((it) => it.id === 'escaner' || it.slug === 'escaner');
+  
+  if (escanerEvent) {
+    featuredChallenge = escanerEvent;
   } else {
-    featuredChallenge = withDates.sort((a, b) => b._start - a._start)[0];
+    // Si no existe escaner, usar la lógica anterior
+    const withDates = summaryItems.map((it) => ({
+      ...it,
+      _start: getStart(it),
+      _end: getEnd(it),
+    }));
+
+    const current = withDates.filter((it) => it._start && it._end && it._start <= todayTs && todayTs <= it._end);
+    if (current.length > 0) {
+      featuredChallenge = current.sort((a, b) => a._start - b._start)[0];
+    } else {
+      featuredChallenge = withDates.sort((a, b) => b._start - a._start)[0];
+    }
   }
 }
 

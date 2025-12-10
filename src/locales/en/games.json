@@ -1,38 +1,4 @@
 {"games":[
-    {
-        "id": "game1",
-        "image": "/images/games/game1.jpg",
-        "title": "Juego 1",
-        "description": "Descubre nuestros juegos y retos",
-        "url": "/juegos"
-    },
-    {
-        "id": "game1",
-        "image": "/images/games/game1.jpg",
-        "title": "Juego 1",
-        "description": "Descubre nuestros juegos y retos",
-        "url": "/juegos"
-    },
-    {
-        "id": "game1",
-        "image": "/images/games/game1.jpg",
-        "title": "Juego 1",
-        "description": "Descubre nuestros juegos y retos",
-        "url": "/juegos"
-    },
-    {
-        "id": "game1",
-        "image": "/images/games/game1.jpg",
-        "title": "Juego 1",
-        "description": "Descubre nuestros juegos y retos",
-        "url": "/juegos"
-    },
-    {
-        "id": "game1",
-        "image": "/images/games/game1.jpg",
-        "title": "Juego 1",
-        "description": "Descubre nuestros juegos y retos",
-        "url": "/juegos"
-    }
+   
 ]
 }
