@@ -104,27 +104,29 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       />
     </div>
 
-    <section id="challenges" class="w-full py-12 !bg-brown relative" transition:animate="slide">
-      <div class="container mx-auto px-4 relative" style="padding-top: 60px;">
-        {challengesAssets.title && (
-          <div class="container mx-auto px-4 title mb-12">
-            <p>
-              {challengesAssets.title}
-            </p>
-            {challengesAssets.subtitle && (
+    {currentLang === 'es' && (
+      <section id="challenges" class="w-full py-12 !bg-brown relative" transition:animate="slide">
+        <div class="container mx-auto px-4 relative" style="padding-top: 60px;">
+          {challengesAssets.title && (
+            <div class="container mx-auto px-4 title mb-12">
               <p>
-                {challengesAssets.subtitle}
+                {challengesAssets.title}
               </p>
-            )}
-          </div>
-        )}
-        <ChallengesCarousel 
-          title={challengesAssets.title || (currentLang === 'es' ? 'PARTICIPA EN NUESTROS' : 'PARTICIPATE IN OUR')}
-          subtitle={challengesAssets.subtitle || (currentLang === 'es' ? 'RETOS Y GANA PREMIOS' : 'CHALLENGES')}
-          textButton={challengesAssets.view_more || (currentLang === 'es' ? 'Ver Todos' : 'View All')}
-        />
-      </div>
-    </section>
+              {challengesAssets.subtitle && (
+                <p>
+                  {challengesAssets.subtitle}
+                </p>
+              )}
+            </div>
+          )}
+          <ChallengesCarousel 
+            title={challengesAssets.title || 'PARTICIPA EN NUESTROS'}
+            subtitle={challengesAssets.subtitle || 'RETOS Y GANA PREMIOS'}
+            textButton={challengesAssets.view_more || 'Ver Todos'}
+          />
+        </div>
+      </section>
+    )}
     
     <!-- Sección de Productos taqueritos -->
     {taqueritosProducts.length > 0 && (
