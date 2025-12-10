@@ -13,6 +13,8 @@ interface Challenge {
   image: string;
   hover_image?: string;
   preparation_time: number;
+  "start-date"?: string;
+  "end-date"?: string;
   category?: string;
   category_en?: string;
   categories?: string[];
@@ -79,9 +81,8 @@ function getCategoryKey(challenge: any): string {
                 image={challenge.image}
                 hoverImage={challenge.hover_image || challenge.image}
                 title={challenge.title}
-                title_down={challenge.title_down}
-                subtitle={challenge.subtitle}
-                subtitle_down={challenge.subtitle_down}
+                fecha_inicio={challenge['start-date']}
+                fecha_fin={challenge['end-date']}
                 time={`${challenge.preparation_time}MIN`}
                 id={challenge.id}
                 difficulty={challenge.difficulty || '---'}
@@ -122,9 +123,8 @@ function getCategoryKey(challenge: any): string {
                 image={challenge.image}
                 hoverImage={challenge.hover_image || challenge.image}
                 title={challenge.title}
-                title_down={challenge.title_down}
-                subtitle={challenge.subtitle}
-                subtitle_down={challenge.subtitle_down}
+                fecha_inicio={challenge['start-date']}
+                fecha_fin={challenge['end-date']}
                 time={`${challenge.preparation_time}MIN`}
                 id={challenge.id}
                 difficulty={challenge.difficulty || '---'}
