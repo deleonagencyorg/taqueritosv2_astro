@@ -1,0 +1,26 @@
+{
+  "date": "2025-11-01",
+  "id": "escaner",
+  "slug": "escaner",
+  "title": "Gana un viaje a Gamescome Brasil",
+  "title_down": "escaner",
+  "subtitle": "escaner",
+  "subtitle_down": "Para participar a un viaje al Gamescom de Brasil 2026",
+  "image": "/images/es/gaming/gamescome.avif",
+  "gallery": [
+    "/images/es/gaming/gamescome.avif"
+  ],
+  "type": "image",
+  "category": "challenge",
+ 
+  "brand": ["taqueritos"],
+  "start-date": "2025-11-01",
+  "end-date": "2026-01-01",
+  "urls": [
+    {
+      "title": "Escanea Aquí",
+      "url": "gamer.yummiespromociones.com/"
+    }
+  ],
+  "terminosycondiciones": "/es/terminos-condiciones/coleccionista"
+}

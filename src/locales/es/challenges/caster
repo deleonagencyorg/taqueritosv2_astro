@@ -1,0 +1,30 @@
+{
+  "date": "2025-11-01",
+  "id": "caster",
+  "slug": "caster",
+  "title": "Caters",
+  "title_down": "casters",
+  "subtitle": "casters",
+  "subtitle_down": "¡Queremos conocer nuestros Casters al Fuego! Narra la partida de COD MOBILE de nuestro TIKTOK@TAQUERITOSLATAM Haz dueto o reacciona a la jugada con tu talento y súbelo con #LEVELEATECONTAQUERITOS Así participas para ser ¡Nuestro caster oficial y GANAR $500!",
+  "image": "/images/es/gaming/casters.avif",
+  "gallery": [
+    "/images/es/gaming/casters.avif"
+  ],
+  "type": "image",
+  "category": "challenge",
+ 
+  "brand": ["taqueritos"],
+  "start-date": "2025-11-10",
+  "end-date": "2025-12-7",
+  "urls": [
+    {
+      "title": "!Participa en TikTok¡",
+      "url": "https://www.tiktok.com/@taqueritoslatam/video/7571599757131435275?_r=1&_t=ZM-91K0WxU60eB"
+    },
+    {
+      "title": "¡Participa en Instagram!",
+      "url": "https://www.instagram.com/p/DQ9xrhBDmOW/"
+    }
+  ],
+  "terminosycondiciones": "/es/terminos-condiciones/coleccionista"
+}
