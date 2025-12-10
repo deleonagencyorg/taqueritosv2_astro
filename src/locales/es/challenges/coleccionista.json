@@ -32,5 +32,19 @@
   "brand": ["taqueritos"],
   "start-date": "2024-03-01",
   "end-date": "2024-04-01",
-  "url": "/es/retos-torneos/coleccionista"
+  "urls": [
+    {
+      "title": "Ir al reto",
+      "url": "/es/retos-torneos/coleccionista"
+    },
+    {
+      "title": "Ver galería",
+      "url": "/es/galeria/coleccionista"
+    },
+    {
+      "title": "Reglas del concurso",
+      "url": "/es/reglas/coleccionista"
+    }
+  ],
+  "terminosycondiciones": "/es/terminos-condiciones/coleccionista"
 }
