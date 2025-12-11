@@ -1,4 +1,4 @@
-# Zibas Astro
+# Taqueritos Astro
 
 Sitio web multilingüe para Zibas, construido con Astro y Tailwind CSS. Incluye sistema de internacionalización, efectos parallax, animaciones, y más.
 
