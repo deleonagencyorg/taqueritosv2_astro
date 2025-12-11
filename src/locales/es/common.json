@@ -86,8 +86,55 @@
         "title": "",
         "description": "",
         "link": "#",
-        "type": "product"
-      }
+        "type": "product",
+        "product_hero": "DRAGON DE FUEGO",
+        "product_left": "Sabor intenso,\nDiversión Máxima.",
+        "product_top": "Extra picante que\nenamora",
+        "product_right": "Levéleate al máximo con Taqueritos.\nDragón de Fuego ¿Listo para el reto?",
+        "product_cta_label": "Descubre más",
+        "product_cta_link": "#"
+      } , {
+        "id": "slide2",
+        "desktop": "https://snack.yummiespromociones.com/taqueritos/taqueritosgamer.webp",
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/taqueritosgamer.webp",
+        "alt": "Taqueritos",
+        "title": "",
+        "description": "",
+        "link": "https://gamer.yummiespromociones.com",
+        "type": "image" 
+      },
+
+        {
+        "id": "slide3",
+        "desktop": "https://snack.yummiespromociones.com/taqueritos/copataqueritos.webp", 
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/copataqueritos.webp",
+        "alt": "Taqueritos",
+        "title": "",
+        "description": "",
+        "link": "es/retos-torneos/copa-taqueritos-2025",
+        "type": "image" 
+      },
+        {
+        "id": "slide4",
+        "desktop": "https://snack.yummiespromociones.com/taqueritos/arenataqueritos.webp", 
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/arenataqueritos.webp",
+        "alt": "Taqueritos",
+        "title": "",
+        "description": "",
+        "link": "es/retos-torneos/arena",
+        "type": "image" 
+      },
+      
+        {
+        "id": "slide5",
+        "desktop": "https://snack.yummiespromociones.com/taqueritos/casteralfuego.webp", 
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/casteralfuego.webp",
+        "alt": "Taqueritos",
+        "title": "",
+        "description": "",
+        "link": "es/retos-torneos/caster",
+        "type": "image" 
+      } 
      
     ]
   },
@@ -109,7 +156,7 @@
     },
     {
       "id": "challenges-tournaments",
-      "text": "retos / torneos",
+      "text": "Retos / Torneos",
       "href": "/es/retos-torneos"
     },
     {

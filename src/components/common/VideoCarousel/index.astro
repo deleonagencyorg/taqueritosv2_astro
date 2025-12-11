@@ -10,6 +10,15 @@ interface SlideItem {
   subtitle?: string;
   description?: string;
   link?: string;
+  type?: 'product' | 'image' | 'video';
+
+  // Campos opcionales para slides de producto, leídos desde el JSON
+  product_hero?: string;
+  product_left?: string;
+  product_top?: string;
+  product_right?: string;
+  product_cta_label?: string;
+  product_cta_link?: string;
 }
 
 interface Props {
@@ -42,44 +51,76 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   <div class="swiper-container video-carousel">
     <div class="swiper-wrapper">
       {slides.map((slide, index) => {
-        const isVideo =
+        const hasVideoExtension =
           slide.desktop?.toLowerCase().endsWith('.mp4') ||
           slide.desktop?.toLowerCase().endsWith('.webm');
+        
+        const slideType = slide.type || (hasVideoExtension ? 'video' : 'product');
+        const isVideo = slideType === 'video';
+        const isProduct = slideType === 'product';
+        const isSimpleImage = slideType === 'image';
         const slideId = `slide-${index}`;
 
         return (
-          <div class="swiper-slide" id={slideId}>
-            <div class="slide-content" style={`height: ${height};`}>
-              <!-- Fallback image that shows while video loads or if video fails -->
-              <div class="fallback-image">
-                <img
-                  src={isVideo ? slide.desktop.replace(/\.(mp4|webm)$/i, '.jpg') : slide.desktop}
-                  alt={slide.alt || "Slide background"}
-                  width="980"
-                  height="620"
-                  loading={index === 0 ? "eager" : "lazy"}
-                />
+          <div class="swiper-slide" id={slideId} data-slide-type={slideType}>
+            {isVideo || isSimpleImage ? (
+              /* ========== SLIDES DE IMAGEN/VIDEO (FULLSCREEN) ========== */
+              <div class="media-slide-wrapper">
+                {isVideo ? (
+                  <div class="media-container">
+                    <video
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      class="media-element"
+                      data-slide-id={slideId}
+                      preload={index === 0 ? "auto" : "metadata"}
+                    >
+                      <source src={slide.desktop} type={slide.desktop.toLowerCase().endsWith('.webm') ? 'video/webm' : 'video/mp4'}>
+                    </video>
+                  </div>
+                ) : (
+                  <div class="media-container">
+                    {slide.link ? (
+                      <a href={slide.link} class="media-link" aria-label={slide.alt || "Slide link"}>
+                        <img
+                          src={slide.desktop}
+                          alt={slide.alt || "Slide background"}
+                          class="media-element media-desktop"
+                          loading={index === 0 ? "eager" : "lazy"}
+                        />
+                        <img
+                          src={slide.mobile}
+                          alt={slide.alt || "Slide background"}
+                          class="media-element media-mobile"
+                          loading={index === 0 ? "eager" : "lazy"}
+                        />
+                      </a>
+                    ) : (
+                      <>
+                        <img
+                          src={slide.desktop}
+                          alt={slide.alt || "Slide background"}
+                          class="media-element media-desktop"
+                          loading={index === 0 ? "eager" : "lazy"}
+                        />
+                        <img
+                          src={slide.mobile}
+                          alt={slide.alt || "Slide background"}
+                          class="media-element media-mobile"
+                          loading={index === 0 ? "eager" : "lazy"}
+                        />
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
-
-              
-              {isVideo ? (
-                <!-- Video background -->
-                <div class="video-container">
-                  <video
-                    autoplay
-                    muted
-                    loop
-                    playsinline
-                    class="slide-video"
-                    data-slide-id={slideId}
-                    preload={index === 0 ? "auto" : "metadata"}
-                  >
-                    <source src={slide.desktop} type={slide.desktop.toLowerCase().endsWith('.webm') ? 'video/webm' : 'video/mp4'}>
-                  </video>
-                </div>
-              ) : (
-                <!-- Image background for non-video slides -->
-                <div class="image-container relative w-full h-[680px] md:w-full md:h-full flex md:items-center md:justify-center">
+            ) : (
+              /* ========== SLIDE DE PRODUCTO ========== */
+              <div class="product-slide-wrapper">
+                <div class="slide-content" style={`height: ${height};`}>
+                  <div class="image-container relative w-full h-[680px] md:w-full md:h-full flex md:items-center md:justify-center">
                   <!-- Imagen principal (desktop) -->
                   <img
                     src={slide.desktop}
@@ -165,31 +206,29 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                   </div>
                 </div>
 
-              </div>
-
-              
-
-              )}
-
-              <!-- Overlay with text (conditional) -->
-              {showOverlay && (slide.title || slide.subtitle) && (
-                <div class={`overlay bg-black bg-opacity-${overlayOpacity}`}>
-                  <div class="text-content">
-                    {slide.title && <h1 class={`slide-title ${textColor}`}>{slide.title}</h1>}
-                    {slide.subtitle && <p class={`slide-subtitle ${textColor}`}>{slide.subtitle}</p>}
-                    {slide.link && (
-                      <a href={slide.link} class="slide-link">
-                        <span>{currentLang === 'es' ? 'Ver más' : 'View more'}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                          <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                      </a>
-                    )}
                   </div>
+
+                  <!-- Overlay with text (conditional) -->
+                  {showOverlay && (slide.title || slide.subtitle) && (
+                    <div class={`overlay bg-black bg-opacity-${overlayOpacity}`}>
+                      <div class="text-content">
+                        {slide.title && <h1 class={`slide-title ${textColor}`}>{slide.title}</h1>}
+                        {slide.subtitle && <p class={`slide-subtitle ${textColor}`}>{slide.subtitle}</p>}
+                        {slide.link && (
+                          <a href={slide.link} class="slide-link">
+                            <span>{currentLang === 'es' ? 'Ver más' : 'View more'}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <line x1="5" y1="12" x2="19" y2="12"></line>
+                              <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         );
       })}
@@ -209,19 +248,86 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
 <style>
   .video-carousel-container {
     position: relative;
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
     overflow: hidden;
     background: radial-gradient(circle at 50% 50%, #2c0b0b 0%, #150404 80%);
   }
+
+  /* Swiper debe ocupar todo el alto del contenedor */
+  .video-carousel-container .swiper-container,
+  .video-carousel-container .swiper-wrapper,
+  .video-carousel-container .swiper-slide {
+    width: 100%;
+    height: 100%;
+  }
   
-  /* ======= FONDO ======= */
-  .slide-content {
-    position: relative;
-    background: radial-gradient(ellipse at center, #230405 0%, #230405 50%, #230405 100%);
+  /* ========== SLIDES DE IMAGEN/VIDEO (FULLSCREEN) ========== */
+  .media-slide-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    background: transparent;
+  }
+  
+  .media-container {
+    width: 100%;
+    height: 100%;
     overflow: hidden;
   }
-  .slide-content::before,
-  .slide-content::after {
+  
+  .media-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  
+  .media-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+  }
+  
+  .media-desktop {
+    display: none;
+  }
+  
+  .media-mobile {
+    display: block;
+  }
+  
+  @media (min-width: 768px) {
+    .media-desktop {
+      display: block;
+    }
+    
+    .media-mobile {
+      display: none;
+    }
+  }
+  
+  /* ========== SLIDES DE PRODUCTO ========== */
+  .product-slide-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .product-slide-wrapper .slide-content {
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, #230405 0%, #230405 50%, #230405 100%);
+  }
+  
+  /* Pseudo-elementos (círculos rojos) solo para slides de producto */
+  .product-slide-wrapper .slide-content::before,
+  .product-slide-wrapper .slide-content::after {
     content:"";
     position:absolute;
     top:50%;
@@ -233,8 +339,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     filter: blur(60px);
     z-index:1;
   }
-  .slide-content::before { left:-30vw; }
-  .slide-content::after { right:-30vw; }
+  .product-slide-wrapper .slide-content::before { left:-30vw; }
+  .product-slide-wrapper .slide-content::after { right:-30vw; }
   
   /* ======= LÍNEAS CURVAS ROJAS ======= */
   .slide-image {
@@ -246,7 +352,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
 
 
 
-  .image-container .slide-image {
+  /* Animación flotante SOLO para imágenes de producto */
+  .product-slide-wrapper .image-container .slide-image {
     animation: floatUpDown 2s ease-in-out infinite;
     transition: transform 1s ease-in-out;
   }
@@ -466,7 +573,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     100% { transform: translateY(0); }
   }
 
-  .image-container .slide-image {
+  /* Animación flotante SOLO para imágenes de producto */
+  .product-slide-wrapper .image-container .slide-image {
     animation: floatUpDown 2s ease-in-out infinite;
     transition: transform 1s ease-in-out;
   }
