@@ -27,7 +27,7 @@ html, body {
     width:50vw;
     height:38vw;
     border-radius:50%;
-    background: radial-gradient(ellipse at center, rgba(255,30,40,0.5) 0%, rgba(140,0,0,0) 70%);
+    background: radial-gradient(ellipse at center, rgba(157, 13, 20, 0.5) 0%, rgba(140,0,0,0) 70%);
     filter: blur(60px);
     z-index:1;
   }

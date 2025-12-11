@@ -96,7 +96,7 @@
       } , {
         "id": "slide2",
         "desktop": "https://snack.yummiespromociones.com/taqueritos/taqueritosgamer.webp",
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/taqueritosgamer.webp",
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/gamermobile.webp",
         "alt": "Taqueritos",
         "title": "",
         "description": "",
@@ -117,7 +117,7 @@
         {
         "id": "slide4",
         "desktop": "https://snack.yummiespromociones.com/taqueritos/arenataqueritos.webp", 
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/arenataqueritos.webp",
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/arenamobile.webp",
         "alt": "Taqueritos",
         "title": "",
         "description": "",
@@ -128,7 +128,7 @@
         {
         "id": "slide5",
         "desktop": "https://snack.yummiespromociones.com/taqueritos/casteralfuego.webp", 
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/casteralfuego.webp",
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/castermobile.webp",
         "alt": "Taqueritos",
         "title": "",
         "description": "",
