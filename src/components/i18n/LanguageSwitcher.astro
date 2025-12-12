@@ -38,6 +38,16 @@ const getTranslatedPath = (targetLocale: Locale) => {
   // Para la ruta raíz (/es o /en)
   if (pathParts.length <= 1) return `/${targetLocale}`;
 
+  // Si estamos en retos-torneos y cambiamos a inglés, redirigir al home
+  if (currentRoute.startsWith('retos-torneos') && targetLocale === 'en') {
+    return `/${targetLocale}`;
+  }
+
+  // Si estamos en challenges-tournaments (en inglés) y cambiamos a español, redirigir al home
+  if (currentRoute.startsWith('challenges-tournaments') && targetLocale === 'es') {
+    return `/${targetLocale}`;
+  }
+
   // Si estamos en una ruta mapeada, traducir solo el segmento
   // Ordenar por longitud descendente para que coincidan primero las rutas más específicas
   const sortedTranslations = Object.entries(routeTranslations).sort(

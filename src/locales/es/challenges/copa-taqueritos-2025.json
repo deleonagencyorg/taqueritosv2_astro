@@ -1,0 +1,29 @@
+{
+  "date": "2025-11-01",
+  "id": "copa-taqueritos-2025",
+  "slug": "copa-taqueritos-2025",
+  "title": "Copa Taqueritos",
+  "title_down": "copa",
+  "subtitle": "copa",
+  "subtitle_down": "¿Listo para el reto más grande?",
+  "image": "/images/es/gaming/copa.avif",
+  "gallery": [
+    "/images/es/gaming/copa.avif"
+  ],
+  "type": "image",
+  "category": "challenge",
+  "brand": ["taqueritos"],
+  "start-date": "2025-11-01",
+  "end-date": "2026-01-01",
+  "urls": [
+    {
+      "title": "Clash Royale",
+      "url": "https://www.challengermode.com/s/taqueritos/pages/clashroyale"
+    },
+    {
+      "title": "Call of Duty",
+      "url": "http://challengermode.com/s/taqueritos/pages/COD"
+    }
+  ],
+  "terminosycondiciones": "https://snack.yummiespromociones.com/taqueritos/TERMINOS-Y-CONDICIONES-COPAS-TAQUERITOS.pdf"
+}

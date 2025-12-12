@@ -6,7 +6,6 @@ interface Props {
   image: string;
   hoverImage?: string;
   title: string;
-  title_down?: string;
   subtitle?: string;
   subtitle_down?: string;
   time?: string;
@@ -26,10 +25,11 @@ const {
   image, 
   title, 
   subtitle,
-  title_down,
   subtitle_down,
   time = "---", 
   id,
+  fecha_inicio = '',
+  fecha_fin = '',
   textColor = 'text-blue-900',
   iconColor = 'text-blue-900',
   hoverImage = image,
@@ -71,16 +71,16 @@ const challengeLink = url || `/${currentLocale}/${currentLocale === 'es' ? 'reto
       <!-- Título principal -->
       <h3 class="font-title font-black text-white uppercase sm:text-[24px] md:text-[28px] lg:text-[30px] leading-tight tracking-wider" 
           style="text-shadow: 2px 2px 8px rgba(0,0,0,0.8);">
-        {title} <br/>
-        {title_down}
+        {title}
       </h3>
       
-      <!-- Subtítulo/descripción -->
-      <p class="text-white text-[28px] font-light leading-relaxed"
-         style="text-shadow: 1px 1px 4px rgba(0,0,0,0.8);">
-        {subtitle}<br/>
-        {subtitle_down}
-      </p>
+      <!-- Fechas: inicio / fin (mostrar en lugar de la descripción) -->
+      <div class="text-white text-[18px] font-medium mt-2"
+           style="text-shadow: 1px 1px 4px rgba(0,0,0,0.8);">
+        <span>Inicio: {fecha_inicio || time}</span>
+        <br/>
+        <span>Fin: {fecha_fin || '---'}</span>
+      </div>
     </div>
 
     <!-- Efecto de brillo rojo en hover -->

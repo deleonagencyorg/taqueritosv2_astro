@@ -81,7 +81,34 @@
         "alt": "Taqueritos",
         "title": "",
         "description": "",
-        "link": "#"
+        "link": "#",
+        "type": "product",
+        "product_hero": "DRAGON OF FIRE",
+        "product_left": "Intense flavor,\nMaximum Fun.",
+        "product_top": "Extra spicy that\nyou will love",
+        "product_right": "Level up to the max with Taqueritos.\nDragon of Fire. Ready for the challenge?",
+        "product_cta_label": "Discover more",
+        "product_cta_link": "#"
+      },
+        {
+        "id": "slide2",
+        "desktop": "https://snack.yummiespromociones.com/taqueritos/banner-home-en.webp",
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/homeen.webp",
+        "alt": "Taqueritos",
+        "title": "",
+        "description": "",
+        "link": "https://www.amazon.com/stores/page/7964A27A-5177-44C3-AAEC-6DA181502081?ingress=3",
+        "type": "image" 
+      },
+        {
+        "id": "slide3",
+        "desktop": "https://snack.yummiespromociones.com/taqueritos/banner_chile_toreado_en.webp", 
+        "mobile": "https://snack.yummiespromociones.com/taqueritos/homeen2",
+        "alt": "Taqueritos",
+        "title": "",
+        "description": "",
+        "link": "/en/products/chile-toreado",
+        "type": "image" 
       }
     ]
   },
@@ -100,11 +127,6 @@
       "id": "recipes",
       "text": "Recipes",
       "href": "/en/recipes"
-    },
-    {
-      "id": "challenges-tournaments",
-      "text": "Challenges / Tournaments",
-      "href": "/en/challenges-tournaments"
     },
     {
       "id": "community",

@@ -1,0 +1,29 @@
+{
+  "date": "2025-11-01",
+  "id": "arena",
+  "slug": "arena",
+  "title": "Arena Taqueritos",
+  "title_down": "arena",
+  "subtitle": "arena",
+  "subtitle_down": "Tu campo de batalla en COD mobile y Clash Royale donde el fuego gamer arde cada semana. GANA $100 si sales campeón semanal.",
+  "image": "/images/es/gaming/arena.avif",
+  "gallery": [
+    "/images/es/gaming/arena.avif"
+  ],
+  "type": "image",
+  "category": "challenge",
+  "brand": ["taqueritos"],
+  "start-date": "2025-11-04",
+  "end-date": "2025-12-14",
+  "urls": [
+    {
+      "title": "Clash Royale",
+      "url": "https://www.challengermode.com/s/taqueritos/pages/torneosaon"
+    },
+    {
+      "title": "Call of Duty",
+      "url": "https://www.challengermode.com/s/taqueritos/pages/torneosaon"
+    }
+  ],
+  "terminosycondiciones": "https://snack.yummiespromociones.com/taqueritos/TERMINOS-Y-CONDICIONES-ARENA-TAQUERITOS.pdf"
+}

@@ -6,6 +6,7 @@ const currentLang = getLocale();
 
 interface Challenge {
   id: string;
+  slug?: string;
   title: string;
   subtitle?: string;
   title_down?: string;
@@ -13,6 +14,8 @@ interface Challenge {
   image: string;
   hover_image?: string;
   preparation_time: number;
+  "start-date"?: string;
+  "end-date"?: string;
   category?: string;
   category_en?: string;
   categories?: string[];
@@ -49,6 +52,16 @@ if (!challengeItems.length) {
   }
 }
 
+// Ordenar para que "escaner" sea el primero
+challengeItems.sort((a, b) => {
+  const aIsEscaner = a.id === 'escaner' || a.slug === 'escaner';
+  const bIsEscaner = b.id === 'escaner' || b.slug === 'escaner';
+  
+  if (aIsEscaner && !bIsEscaner) return -1;
+  if (!aIsEscaner && bIsEscaner) return 1;
+  return 0;
+});
+
 function getCategoryKey(challenge: any): string {
   const raw = (
     challenge?.category_en ||
@@ -71,30 +84,6 @@ function getCategoryKey(challenge: any): string {
     
     <!-- Carousel MOBILE -->
     <div class="challenges-carousel-mobile relative md:hidden">
-      <div class="challenges-carousel-container overflow-hidden w-full">
-        <div class="challenges-carousel-track flex items-start w-full gap-4 transition-transform duration-300" id="challengesTrackMobile">
-          {challengeItems.map((challenge, index) => (
-            <div class="challenge-slide-mobile flex-shrink-0 w-full mt-[100px]" data-category={getCategoryKey(challenge)}>
-              <ChallengeCardCarousel
-                image={challenge.image}
-                hoverImage={challenge.hover_image || challenge.image}
-                title={challenge.title}
-                title_down={challenge.title_down}
-                subtitle={challenge.subtitle}
-                subtitle_down={challenge.subtitle_down}
-                time={`${challenge.preparation_time}MIN`}
-                id={challenge.id}
-                difficulty={challenge.difficulty || '---'}
-                servings={challenge.servings || 0}
-                rating={challenge.rating || 0}
-                isMainCard={false}
-                url={challenge.url}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-  
       <div class="carousel-navigation">
         <button class="carousel-btn-prev" type="button" aria-label="Anterior" id="prevBtnMobile">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -110,6 +99,29 @@ function getCategoryKey(challenge: any): string {
           </svg>
         </button>
       </div>
+
+      <div class="challenges-carousel-container overflow-hidden w-full">
+        <div class="challenges-carousel-track flex items-start w-full gap-4 transition-transform duration-300" id="challengesTrackMobile">
+          {challengeItems.map((challenge, index) => (
+            <div class="challenge-slide-mobile flex-shrink-0 w-full mt-[48px]" data-category={getCategoryKey(challenge)}>
+              <ChallengeCardCarousel
+                image={challenge.image}
+                hoverImage={challenge.hover_image || challenge.image}
+                title={challenge.title}
+                fecha_inicio={challenge['start-date']}
+                fecha_fin={challenge['end-date']}
+                time={`${challenge.preparation_time}MIN`}
+                id={challenge.id}
+                difficulty={challenge.difficulty || '---'}
+                servings={challenge.servings || 0}
+                rating={challenge.rating || 0}
+                isMainCard={false}
+                url={challenge.url}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
 
     <!-- Carousel DESKTOP -->
@@ -122,9 +134,8 @@ function getCategoryKey(challenge: any): string {
                 image={challenge.image}
                 hoverImage={challenge.hover_image || challenge.image}
                 title={challenge.title}
-                title_down={challenge.title_down}
-                subtitle={challenge.subtitle}
-                subtitle_down={challenge.subtitle_down}
+                fecha_inicio={challenge['start-date']}
+                fecha_fin={challenge['end-date']}
                 time={`${challenge.preparation_time}MIN`}
                 id={challenge.id}
                 difficulty={challenge.difficulty || '---'}
@@ -329,10 +340,15 @@ function getCategoryKey(challenge: any): string {
       display: none;
     }
 
+    /* En mobile los botones van debajo del título, alineados a la izquierda */
     .carousel-navigation {
-      top: -20px;
-      right: 50%;
-      transform: translateX(50%);
+      position: relative;
+      top: 0;
+      right: auto;
+      left: 0;
+      transform: none;
+      margin-top: 16px;
+      justify-content: flex-start;
     }
 
     .carousel-btn-prev,

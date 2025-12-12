@@ -1,0 +1,24 @@
+{
+  "date": "2025-11-01",
+  "id": "ruleta",
+  "slug": "ruleta",
+  "title": "Ruleta",
+  "title_down": "ruleta",
+  "subtitle": "ruleta",
+  "subtitle_down": "¡GIRA Y GANA! Busca tu punto de venta más cercano. Compra Taqueritos y participa en nuestra ruleta para ganar premios al instante",
+  "image": "/images/es/gaming/ruleta.avif",
+  "gallery": [
+    "/images/es/gaming/ruleta.avif"
+  ],
+  "type": "image",
+  "category": "challenge",
+  "brand": ["taqueritos"],
+  "start-date": "2025-11-01",
+  "end-date": "2026-01-01",
+  "urls": [
+    {
+      "title": "Aplica a Guatemala y El Salvador",
+      "url": "#"
+    }
+  ]
+}
