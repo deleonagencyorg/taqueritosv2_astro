@@ -44,7 +44,7 @@ const noFilterResultsText = currentLang === 'es'
 // Filter labels
 const categoryFilterLabels = currentLang === 'es'
   ? {
-      label: 'Momento del dda',
+      label: 'Momento del dia',
       all: 'Todas las recetas',
       breakfast: 'Desayuno',
       brunch: 'Brunch',
@@ -186,7 +186,7 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
             <RecipeCard
               image={recipe.image || '/images/recipes/placeholder.jpg'}
               title={recipe.title}
-              time={`${recipe.preparation_time}MIN`}
+              time={`${recipe.preparation_time} MIN`}
               id={recipe.id}
               textColor="text-white"
               iconColor="text-white"

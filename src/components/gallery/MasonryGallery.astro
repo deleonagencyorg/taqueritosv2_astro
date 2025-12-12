@@ -219,17 +219,6 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     transform: translateY(0) !important;
   }
 
-  /* Ajustes MOBILE: que los botones no se corten */
-  @media (max-width: 767px) {
-    .carousel-navigation-masonry {
-      position: relative;
-      right: auto;
-      margin-top: 16px;
-      justify-content: flex-start;
-      padding-left: 6px;
-    }
-  }
-
   .taqueritos-card {
     position: relative;
     width: 100%;
@@ -337,17 +326,19 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   @media (max-width: 767px) {
 
     .title {
-      font-size: 35px;
-      line-height: 32px;
+      font-size: 32px;
+      line-height: 1.1;
+      margin-bottom: 8px;
     }
 
+    /* En mobile el header se vuelve columna y los botones se colocan debajo del texto */
     .carousel-navigation-masonry {
-      position: absolute;
-      left: 50px;
-      margin-top: 80px;
+      position: relative;
+      right: auto;
+      margin-top: 16px;
       display: flex;
       gap: 12px;
-      z-index: 10;
+      justify-content: flex-start;
     }
 
     .swiper-button-next,
@@ -360,7 +351,7 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     .action-icon { width: 22px; height: 22px; }
 
     .swiper-container {
-      padding: 110px 50px 100px 50px;
+      padding: 110px 24px 80px 24px;
       position: relative;
       z-index: 1;
       width: 100%;

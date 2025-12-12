@@ -84,10 +84,26 @@ function getCategoryKey(challenge: any): string {
     
     <!-- Carousel MOBILE -->
     <div class="challenges-carousel-mobile relative md:hidden">
+      <div class="carousel-navigation">
+        <button class="carousel-btn-prev" type="button" aria-label="Anterior" id="prevBtnMobile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <button class="carousel-btn-next" type="button" aria-label="Siguiente" id="nextBtnMobile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
       <div class="challenges-carousel-container overflow-hidden w-full">
         <div class="challenges-carousel-track flex items-start w-full gap-4 transition-transform duration-300" id="challengesTrackMobile">
           {challengeItems.map((challenge, index) => (
-            <div class="challenge-slide-mobile flex-shrink-0 w-full mt-[100px]" data-category={getCategoryKey(challenge)}>
+            <div class="challenge-slide-mobile flex-shrink-0 w-full mt-[48px]" data-category={getCategoryKey(challenge)}>
               <ChallengeCardCarousel
                 image={challenge.image}
                 hoverImage={challenge.hover_image || challenge.image}
@@ -105,22 +121,6 @@ function getCategoryKey(challenge: any): string {
             </div>
           ))}
         </div>
-      </div>
-  
-      <div class="carousel-navigation">
-        <button class="carousel-btn-prev" type="button" aria-label="Anterior" id="prevBtnMobile">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        
-        <button class="carousel-btn-next" type="button" aria-label="Siguiente" id="nextBtnMobile">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
       </div>
     </div>
 
@@ -340,10 +340,15 @@ function getCategoryKey(challenge: any): string {
       display: none;
     }
 
+    /* En mobile los botones van debajo del título, alineados a la izquierda */
     .carousel-navigation {
-      top: -20px;
-      right: 50%;
-      transform: translateX(50%);
+      position: relative;
+      top: 0;
+      right: auto;
+      left: 0;
+      transform: none;
+      margin-top: 16px;
+      justify-content: flex-start;
     }
 
     .carousel-btn-prev,

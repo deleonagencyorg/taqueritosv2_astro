@@ -50,11 +50,11 @@ const headerColors = {
       
       <!-- Left Column - Contact Info -->
     <div class="w-[100%] lg:w-[40%] pl-8 lg:pl-16 flex flex-col justify-center h-[100%] lg:h-[600px]">
-        <h1 class="text-white font-title text-7xl uppercase md:text-6xl lg:text-7xl font-bold mb-6">
+        <h1 class="text-white font-title text-4xl md:text-6xl lg:text-7xl uppercase font-bold mb-6">
           {contact.title}
         </h1>
         
-        <p class="text-white font-bold text-2xl lg:text-2xl mb-8 leading-relaxed ">
+        <p class="text-white font-bold text-base md:text-xl lg:text-2xl mb-8 leading-relaxed ">
           {contact.description}
         </p>
      
@@ -68,10 +68,10 @@ const headerColors = {
     
     <!-- Offices Section -->
     <div class="mx-auto p-8">
-      <h3 class="text-white md:text-4xl text-4xl italic font-title uppercase font-bold mb-4 flex items-center justify-center gap-1">
+      <h3 class="text-white text-2xl md:text-4xl italic font-title uppercase font-bold mb-4 flex items-center justify-center gap-1">
         <span class="font-title">{contact.offices.title.split(' ')[0]} {contact.offices.title.split(' ')[1]}</span>
       </h3>
-      <h1 class="text-white md:text-9xl text-12xl italic font-title uppercase font-bold mb-4 flex items-center justify-center gap-1">
+      <h1 class="text-white text-5xl md:text-7xl lg:text-9xl italic font-title uppercase font-bold mb-4 flex items-center justify-center gap-1">
         <span class="font-title">{contact.offices.title.split(' ').slice(2).join(' ')}</span>
       </h1>
       
@@ -124,7 +124,7 @@ const headerColors = {
           <div id="officeInfo" class="rounded-2xl p-8 ">
             <div class="flex flex-col lg:flex-row justify-between items-center">
               <div class="space-y-4">
-                <h3 id="officeName" class="text-white font-sans text-9xl md:text-7xl uppercase font-extrabold  mb-4">
+                <h3 id="officeName" class="text-white font-sans text-4xl md:text-6xl lg:text-7xl uppercase font-extrabold mb-4">
                   {contact.offices.locations["+504"].name}
                 </h3>
                 
