@@ -2,7 +2,7 @@
   "meta": {
     "home": {
       "title": "Taqueritos - Disfruta tus Taqueritos en todo momento",
-      "description": "Tus hojuelas de papa frita favoritas llegan con sabores naturalmente auténticos para todos los gustos."
+      "description": "Si de intensidad hablamos, los populares Taqueritos tienen la mezcla de sabor ideal para hacer estallar tus sentidos."
     },
     "contact": {
       "title": "Contacto",
@@ -25,8 +25,8 @@
       "description": "Descubre Taqueritos, Zambos, Ranchitas y Superman. Cada marca con sabores únicos y auténticos que conquistan Centroamérica."
     },
     "about_us": {
-      "title": "Nosotros - Historia y Valores",
-      "description": "Conoce la historia de Taqueritos, empresa líder en snacks de Centroamérica desde 1990. Nuestra misión, valores y compromiso con la calidad."
+      "title": "Sobre Taqueritos - ¿Quiénes somos?",
+      "description": "Taqueritos nació para crear momentos inolvidables. Somos una marca que entiende la cultura gamer y reúne sabores intensos de Centroamérica, impulsando una comunidad para competir, compartir y vivir experiencias únicas."
     },
     "yummiesone": {
       "title": "Taqueritos One",
@@ -185,7 +185,7 @@
   "home": {
     "meta": {
       "title": " Taqueritos - Disfruta tus Taqueritos en todo momento",
-      "description": "Tus hojuelas de papa frita favoritas llegan con sabores naturalmente auténticos para todos los gustos."
+      "description": "Si de intensidad hablamos, los populares Taqueritos tienen la mezcla de sabor ideal para hacer estallar tus sentidos."
     },
     "newsletter":{
       "placeholder":"tucorreo@email.com",
