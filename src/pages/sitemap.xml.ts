@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import config from '../i18n/config';
 import enProducts from '../locales/en/products.json';
 
-const staticPages = ['/', '/menu', '/nosotros', '/contacto'];
+const staticPages = ['/', '/nosotros', '/about-us', '/contacto', '/contact', '/blog'];
 
 // Menu URLs from both languages (landing pages)
 const menuUrls = [
@@ -11,7 +11,6 @@ const menuUrls = [
   '/productos', '/products',
   '/recetas', '/recipes',
   '/retos-torneos', '/challenges-tournaments',
-  '/yummiesone',
   '/blog',
   '/contacto', '/contact',
   '/encontranos', '/find-us'

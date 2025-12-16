@@ -2,7 +2,7 @@
   "meta": {
     "home": {
       "title": "Taqueritos - Enjoy your Taqueritos at any moment",
-      "description": "Your favorite potato chip flakes come with naturally authentic flavors for all tastes."
+      "description": "When it comes to intensity, the popular Taqueritos have the ideal flavor mix to make your senses explode."
     },
     "contact": {
       "title": "Contact", 
@@ -25,8 +25,8 @@
       "description": "Discover Taqueritos, Zambos, Ranchitas and Superman. Each brand with unique and authentic flavors that conquer Central America."
     },
     "about_us": {
-      "title": "About Us - History and Values",
-      "description": "Learn about the history of Taqueritos, a leading snack company in Central America since 1990. Our mission, values and commitment to quality."
+      "title": "About Taqueritos - Who We Are",
+      "description": "Taqueritos was born from a passion for creating unforgettable moments. We understand gamer culture and bring bold Central American flavors together, building a community to shine, compete and share unique experiences."
     },
     "yummiesone": {
       "title": "Taqueritos One",
@@ -154,7 +154,7 @@
   "home": {
     "meta": {
       "title": "Taqueritos - Enjoy your Taqueritos at any moment",
-      "description": "Your favorite potato chip flakes come with naturally authentic flavors for all tastes."
+      "description": "When it comes to intensity, the popular Taqueritos have the ideal flavor mix to make your senses explode."
     },
     "newsletter":{
       "placeholder":"email@email.com",
