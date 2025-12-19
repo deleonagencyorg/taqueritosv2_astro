@@ -1,7 +1,6 @@
 ---
 // src/views/Products/Detail/index.astro
 import ChallengesCarousel from '../../../components/challenges/ChallengesCarousel.astro';
-import StockistModal from '../../../components/common/StockistModal.astro';
 import { t } from '../../../i18n/i18n';
 import type { Locale } from '../../../i18n/i18n';
 import './styles.css';
@@ -65,7 +64,7 @@ const safeProduct: Product = {
   id: product.id || '',
   name: product.name || '',
   text_color: product.text_color || '#FFFFFF',
-  name_description: product.name_description || '',
+  name_description: product.name_description || product.name || '',
   image: product.image || '',
   background_image: product.background_color || '',
   background_color: product.background_color || '#150404',
@@ -93,12 +92,12 @@ const carouselProducts = [safeProduct, ...relatedProducts];
   {safeProduct.background_color && (
     <article
       id="product-detail"
-      class="product-detail relative min-h-screen overflow-hidden"
+      class="product-detail relative overflow-hidden"
       style={{ backgroundColor: safeProduct.background_color || '#150404' }}
       transition:animate="slide"
     >
       <!-- Cambiar a grid en lugar de flex -->
-      <div class="container mx-auto px-6 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10 min-h-screen">
+      <div class="container mx-auto px-6 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-2 gap-10 relative z-10">
         <!-- Contenido del lado izquierdo -->
         <div class="flex flex-col gap-12 relative z-20 lg:mt-[100px] mt-[100px]">
           <!-- Título principal -->
@@ -107,7 +106,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
               class="text-[80px] md:text-[120px] font-black uppercase leading-[90px] md:leading-[110px]"
               style={{ color: safeProduct.text_color }}
             >
-              {safeProduct.name_description}
+              {safeProduct.name}
           </h1>
     
           <div class="flex flex-col gap-12 max-w-[488px]">
@@ -218,31 +217,25 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     </article>
     )}
     
-    <section id="challenges" class="w-full py-12 bg-brown relative" transition:animate="slide">
-      <div class="container mx-auto px-4 relative" style="padding-top: 60px;">
-        <div class="container mx-auto px-4 mb-12">
-          <p class="text-white font-title text-4xl md:text-5xl lg:text-6xl font-bold uppercase">
-            {currentLang === 'es' ? 'PARTICIPA' : 'PARTICIPATE'}
-          </p>
-          <p class="text-white font-title text-4xl md:text-5xl lg:text-6xl font-bold uppercase">
-            {currentLang === 'es' ? 'EN NUESTROS RETOS' : 'IN OUR CHALLENGES'}
-          </p>
+    {currentLang === 'es' && (
+      <section id="challenges" class="w-full py-6 md:py-8 bg-brown relative -mt-12 md:-mt-16 lg:-mt-20" transition:animate="slide">
+        <div class="container mx-auto px-4 relative">
+          <div class="container mx-auto px-4 mb-12">
+            <p class="text-white font-title text-4xl md:text-5xl lg:text-6xl font-bold uppercase">
+              PARTICIPA
+            </p>
+            <p class="text-white font-title text-4xl md:text-5xl lg:text-6xl font-bold uppercase">
+              EN NUESTROS RETOS
+            </p>
+          </div>
+          <ChallengesCarousel 
+            title="PARTICIPA"
+            subtitle="EN NUESTROS RETOS"
+            textButton={challengesAssets.home?.view_more || 'Ver Todos'}
+          />
         </div>
-        <ChallengesCarousel 
-          title={currentLang === 'es' ? 'PARTICIPA' : 'PARTICIPATE'}
-          subtitle={currentLang === 'es' ? 'EN NUESTROS RETOS' : 'IN OUR CHALLENGES'}
-          textButton={challengesAssets.home?.view_more || (currentLang === 'es' ? 'Ver Todos' : 'View All')}
-        />
-      </div>
-    </section>
-
-    <!-- Modal de Stockist -->
-    <StockistModal 
-      products={products}
-      stockists={stockists}
-      initialProduct={safeProduct}
-      locale={currentLang}
-    />
+      </section>
+    )}
 </div>
 
 
@@ -395,10 +388,10 @@ const carouselProducts = [safeProduct, ...relatedProducts];
       const product = productsData[index];
       if (!product) return;
 
-      // Actualizar título
+      // Actualizar título usando siempre el campo "name"
       const titleEl = document.getElementById('product-title');
       if (titleEl) {
-        titleEl.textContent = product.name_description || product.name;
+        titleEl.textContent = product.name || '';
         titleEl.style.color = product.text_color || '#FFFFFF';
       }
 
