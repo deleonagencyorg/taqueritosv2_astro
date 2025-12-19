@@ -30,25 +30,18 @@
                     "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
                     "imageMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp"
                 },
-                {
-                    "id": "taqueritos-queso-fusion",
-                    "slug": "taqueritos-queso-fusion",
-                    "title": "Taqueritos Queso Fusion",
-                    "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-queso-fusion-2.webp",
-                    "imageMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-queso-fusion-2.webp"
-                }
-                ,
+                
                 {
                     "id": "taqueritos-dragon-de-hielo",
                     "slug": "taqueritos-dragon-de-hielo",
-                    "title": "Taqueritos Dragón de Hielo",
+                    "title": "Taqueritos Dragon Ice",
                     "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-hielo-2.webp",
                     "imageMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-hielo-2.webp"
                 },
                 {
                     "id": "taqueritos-dragon-de-fuego",
                     "slug": "taqueritos-dragon-de-fuego",
-                    "title": "Taqueritos Dragón de Fuego",
+                    "title": "Taqueritos Dragon Fire",
                     "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-fuego-2.webp",
                     "imageMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-fuego-2.webp"
                 }

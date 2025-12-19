@@ -19,8 +19,8 @@
    "items": [
             {
       "id": "taqueritos-dragon-de-fuego",
-      "name": "Taqueritos Dragón de Fuego",
-      "name_description": "Dragón de Fuego",
+      "name": "Taqueritos Dragon Fire",
+      "name_description": "Taqueritos Dragon Fire",
       "image": "https://snack.yummiespromociones.com/taqueritos/taqueritodragonfuegousa.webp",
       "background_color": "#250909",
       "header_color": "#FDE820",
@@ -40,15 +40,13 @@
         }
       ],
       "weight": [
-        "180gr",
-        "80gr",
-        "34gr"
+       "8oz"
       ]
     },
     {
       "id": "taqueritos-dragon-de-hielo",
-      "name": "Taqueritos Dragón Hielo",
-      "name_description": "Dragón de Hielo",
+      "name": "Taqueritos Dragon Ice",
+      "name_description": "Taqueritos Dragon Ice",
       "image": "https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
       "background_color": "#0e121a",
       "header_color": "#FDE820",
@@ -57,7 +55,6 @@
       "header_text_color": "#5B3F2E",
       "color_button": "#1567D3",
       "second_color_button": "#519CFF",
-      "product": "Taquerito Dragón Hielo",
       "boder_color": "#92bffb",
       "description": "",
       "available":"https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
@@ -75,7 +72,7 @@
      {
       "id": "taqueritos-chile-toreado",
       "name": "Taqueritos Chile Toreado",
-      "name_description": "Chile Toreado",
+      "name_description": "Taqueritos Chile Toreado",
       "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
       "background_color": "#081806",
       "header_color": "#FDE820",

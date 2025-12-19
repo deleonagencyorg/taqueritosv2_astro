@@ -26,7 +26,7 @@
         {
       "id": "taqueritos-dragon-de-fuego",
       "name": "Taqueritos Dragón de Fuego",
-      "name_description": "Dragón de Fuego",
+      "name_description": "Taqueritos Dragón de Fuego",
       "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-fuego-2.webp",
       "background_color": "#250909",
       "header_color": "#FDE820",
@@ -54,7 +54,7 @@
     {
       "id": "taqueritos-dragon-de-hielo",
       "name": "Taqueritos Dragón Hielo",
-      "name_description": "Dragón  de Hielo",
+      "name_description": "Taqueritos Dragón Hielo",
       "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-hielo-2.webp",
       "background_color": "#0e121a",
       "header_color": "#FDE820",
@@ -82,7 +82,7 @@
         {
       "id": "taqueritos-chile-toreado",
       "name": "Taqueritos Chile Toreado",
-      "name_description": "Chile Toreado",
+      "name_description": "Taqueritos Chile Toreado",
       "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
       "background_color": "#081806",
       "header_color": "#FDE820",
@@ -111,7 +111,7 @@
     {
       "id": "taqueritos-queso-fusion",
       "name": "Taqueritos Queso Fusión",
-      "name_description": "Queso Fusión",
+      "name_description": "Taqueritos Queso Fusión",
       "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-queso-fusion-2.webp",
       "background_color": "#251008",
       "header_color": "#FDE820",
