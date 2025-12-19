@@ -30,9 +30,9 @@
       "color_button": "#FF0048",
       "second_color_button": "#FF5255",
       "boder_color": "#ff585b",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
-      "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
+      "description": "",
+      "available": "https://snack.yummiespromociones.com/taqueritos/taqueritodragonfuegousa.webp",
+      "background_image": "https://snack.yummiespromociones.com/taqueritos/taqueritodragonfuegousa.webp",
       "sizes": [
         {
           "value": "150",
@@ -59,9 +59,9 @@
       "second_color_button": "#519CFF",
       "product": "Taquerito Dragón Hielo",
       "boder_color": "#92bffb",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
-      "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
+      "description": "",
+      "available":"https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
+      "background_image": "https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
       "sizes": [
         {
           "value": "150",
@@ -85,9 +85,9 @@
       "color_button": "#055E24",
       "second_color_button": "#08B63E",
       "boder_color": "#7CD546",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
-      "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
+      "description": "",
+      "available":  "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
+      "background_image":  "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
       "sizes": [
         {
           "value": "150",
