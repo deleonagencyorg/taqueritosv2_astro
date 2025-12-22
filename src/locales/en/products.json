@@ -94,6 +94,32 @@
       "weight": [
         "8oz"
       ]
+    } ,
+         {
+      "id": "taqueritos-chili-pack",
+      "name": "Taqueritos Chili Pack",
+      "name_description": "Taqueritos Chili Pack",
+      "image": "https://snack.yummiespromociones.com/taqueritos/taqueritos-chili-pack.webp",
+       "background_color": "#250909",
+      "header_color": "#FDE820",
+      "text_color": "#FFF",
+      "header_background": "#FDE820",
+      "header_text_color": "#5B3F2E",
+      "color_button": "#250909",
+      "second_color_button": "#FF5255",
+      "boder_color": "#ff585b",
+      "description": "",
+      "available":  "https://snack.yummiespromociones.com/taqueritos/taqueritos-chili-pack.webp",
+      "background_image":  "https://snack.yummiespromociones.com/taqueritos/taqueritos-chili-pack.webp",
+      "sizes": [
+        {
+          "value": "150",
+          "image": "taquerito.png"
+        }
+      ],
+      "weight": [
+        "20oz"
+      ]
     } 
   ]
 }
