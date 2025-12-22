@@ -141,16 +141,11 @@ const carouselProducts = [safeProduct, ...relatedProducts];
             <div class="flex items-center gap-5">
               <button 
                 id="open-modal-btn"
-                class="button-buy relative md:px-14 md:py-5 rounded-[6.65px] border-[1.33px] shadow-[0_28px_52px_-48px_rgba(255,0,4,0.33)] transition-all duration-300 hover:scale-105"
-                style={{
-                  background: 'radial-gradient(ellipse 97.54% 50.91% at 50% 2.46%, #FF5255 0%, #FF0048 100%)',
-                  borderColor: '#FF0004',
-                  color: safeProduct.text_color || 'white'
-                }}
+                class="w-full flex justify-center items-center border border-[#FF0048] rounded-[16px] bg-gradient-to-b from-[#FF0048] to-[#FF5255] shadow-[0_3px_0_0_rgba(88,0,29,0.9)] hover:shadow-[0_1px_0_0_rgba(88,0,29,0.9)] hover:translate-y-[2px] transition-all duration-150 text-white py-[10px] md:py-[16px] lg:py-[16px]"
                 data-product-id={safeProduct.id}
               >
                 <span class="text-[18px] md:text-[26.6px] lg:text-[26.6px] font-semibold">
-                  {currentLang === 'es' ? '¿Donde comprar?' : 'Where to buy?'}
+                  {currentLang === 'es' ? '¿Donde comprar?' : 'Find it on Amazon'}
                 </span>
               </button>
     
