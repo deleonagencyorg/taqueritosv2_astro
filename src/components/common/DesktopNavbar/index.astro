@@ -41,11 +41,11 @@ const products = t('items', { namespace: 'products', locale: currentLang }) as a
          border border-white/20 rounded-[200px] 
          w-[95%] max-w-[1400px] shadow-lg transition-all duration-300"
   data-current-lang={currentLang}>
-  <div class="hidden md:flex items-center justify-center w-full py-3 px-6 ">
+  <div class="hidden md:flex items-center justify-center w-full py-2 md:py-2.5 lg:py-3 px-3 lg:px-6">
     <!-- Logo -->
-    <div class="flex-shrink-0 pr-20">
-      <a href={`/${currentLang}/`} class="block">
-        <img src={logos.principal.url} alt={logos.principal.alt} class="h-14 w-auto" />
+    <div class="flex-shrink-0 pr-2 lg:pr-12 xl:pr-20 flex items-center">
+      <a href={`/${currentLang}/`} class="flex items-center">
+        <img src={logos.principal.url} alt={logos.principal.alt} class="h-8 lg:h-12 xl:h-14 w-auto" />
       </a>
     </div>
 
@@ -55,19 +55,19 @@ const products = t('items', { namespace: 'products', locale: currentLang }) as a
     </div> -->
 
     <!-- Right Side - Language Switcher and Yummies One -->
-    <div class="flex items-center space-x-5">
-      <div class="flex space-x-4" id="desktop-menu-items">
+    <div class="flex items-center space-x-0.5 md:space-x-1 lg:space-x-3 xl:space-x-5">
+      <div class="flex items-center space-x-0 md:space-x-0.5 lg:space-x-2 xl:space-x-4" id="desktop-menu-items">
         {menuItemsWithContact && menuItemsWithContact.map((item: any) => (
-          <div class="relative group">
+          <div class="relative group flex items-center">
             <a 
               href={item.href}
               data-open-stockist={item.id === 'where-buy' ? 'true' : undefined}
-              class={`${headerColorConfig.textColor} font-title text-[16px] uppercase font-medium transition-colors py-2 px-3 rounded-md flex items-center ${!item.href.startsWith('#') && currentPath === item.href ? 'bg-primary text-white' : ''}`}
+              class={`${headerColorConfig.textColor} font-title text-[10px] lg:text-[14px] xl:text-[16px] uppercase font-medium transition-colors py-1.5 md:py-2 px-1 md:px-1.5 lg:px-2.5 xl:px-3 rounded-md flex items-center justify-center whitespace-nowrap ${!item.href.startsWith('#') && currentPath === item.href ? 'bg-primary text-white' : ''}`}
               style={`color: ${!item.href.startsWith('#') && currentPath === item.href ? '#FFFFFF' : headerColorConfig.textColor};`}
             >
-              {item.text}
+              <span class="flex items-center justify-center text-center leading-tight">{item.text}</span>
               {item.submenu && (
-                <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                <svg class="w-2.5 h-2.5 lg:w-4 lg:h-4 ml-0.5 lg:ml-1 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
               )}
             </a>
             
@@ -110,15 +110,15 @@ const products = t('items', { namespace: 'products', locale: currentLang }) as a
       </a> -->
     </div>
 
-    <div class="pl-20 flex gap-3">
+    <div class="pl-2 lg:pl-12 xl:pl-20 flex items-center gap-3">
       {currentLang === 'es' && (
         <a
           href="https://gamer.yummiespromociones.com/"
           target="_blank"
           rel="noopener noreferrer"
-          class="px-[20px] py-[17px] bg-primary text-white rounded-[5px] w-[190px] h-[47px] flex items-center justify-center text-sm uppercase font-title"
+          class="px-[5px] bg-primary text-white rounded-[5px] h-[32px] md:h-[36px] lg:h-[42px] xl:h-[47px] flex items-center justify-center text-[9px] md:text-[10px] lg:text-[11px] xl:text-sm uppercase font-title leading-none"
         >
-          Taqueritos Gaming
+          <span class="flex items-center justify-center text-center whitespace-nowrap">Taqueritos Gaming</span>
         </a>
       )}
     </div>
