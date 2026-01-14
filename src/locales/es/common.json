@@ -102,17 +102,6 @@
         "description": "",
         "link": "https://gamer.yummiespromociones.com",
         "type": "image" 
-      },
-
-        {
-        "id": "slide4",
-        "desktop": "https://snack.yummiespromociones.com/taqueritos/arenataqueritos.webp", 
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/arenamobile.webp",
-        "alt": "Taqueritos",
-        "title": "",
-        "description": "",
-        "link": "es/retos-torneos/arena",
-        "type": "image" 
       }
     ]
   },
