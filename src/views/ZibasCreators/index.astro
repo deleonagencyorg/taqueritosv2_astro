@@ -72,10 +72,7 @@ try {
   const participationData = await getParticipations(promotionId, initialPage, initialPageSize);
   participations = participationData.data;
   pagination = participationData.meta?.pagination || pagination;
-  console.log('[ZibasCreatorsView] Participations loaded:', participations);
-} catch (error) {
-  console.error('[ZibasCreatorsView] Failed to load participations:', error);
-}
+} catch (error) {}
 
 ---
 

@@ -95,7 +95,7 @@ const t = texts[locale as keyof typeof texts] || texts.es;
             <div id="weight-buttons" class="weight-buttons">
               {(initialProduct?.weight || products[0]?.weight || []).map((weight) => (
                 <div 
-                  class=""  style={{ backgroundColor: 'transparent', color: '#FFFFFF !important' }}
+                  class="weight-btn"
                   data-weight={weight}
                 >
                   {weight}
@@ -450,31 +450,28 @@ const t = texts[locale as keyof typeof texts] || texts.es;
 
 <script>
   function initStockistModal() {
-    console.log('🚀 initStockistModal ejecutándose...');
     
     const modal = document.getElementById('stockist-modal');
-    console.log('📦 Modal element:', modal);
     
     if (!modal) {
-      console.error('❌ No se encontró el elemento stockist-modal');
       return;
     }
 
     const overlay = modal.querySelector('.modal-overlay');
     const closeBtn = modal.querySelector('.modal-close');
-    const productSelect = document.getElementById('product-select');
-    const weightButtons = document.getElementById('weight-buttons');
-    const productImage = document.getElementById('modal-product-image');
-    const productTitle = document.getElementById('modal-product-title');
+    const productSelect = document.getElementById('product-select') as HTMLSelectElement | null;
+    const weightButtons = document.getElementById('weight-buttons') as HTMLElement | null;
+    const productImage = document.getElementById('modal-product-image') as HTMLImageElement | null;
+    const productTitle = document.getElementById('modal-product-title') as HTMLElement | null;
 
     // Función para abrir el modal
-    function openModal(productId) {
+    function openModal(productId?: string) {
       if (!modal) return;
       
       // Seleccionar el producto y actualizar siempre antes de abrir
       if (productSelect && productId) {
         const options = Array.from(productSelect.options);
-        const targetOption = options.find(opt => opt.value === productId);
+        const targetOption = options.find((opt) => opt.value === productId);
         if (targetOption) {
           productSelect.value = productId;
         }
@@ -515,17 +512,14 @@ const t = texts[locale as keyof typeof texts] || texts.es;
       
       // Obtener pesos desde JSON embebido
       const productsJsonEl = document.getElementById('stockist-products-json');
-      console.log('📄 Elemento JSON:', productsJsonEl);
-      console.log('📄 Contenido JSON:', productsJsonEl ? productsJsonEl.textContent : 'null');
       
-      const productsData = productsJsonEl ? JSON.parse(productsJsonEl.textContent || '[]') : [];
-      console.log('📦 Productos parseados:', productsData);
       
-      const prod = productsData.find(p => p.id === selectedOption.value) || {};
-      console.log('🎯 Producto encontrado:', prod);
+      const productsData = productsJsonEl ? (JSON.parse(productsJsonEl.textContent || '[]') as any[]) : ([] as any[]);
+      
+      
+      const prod = productsData.find((p: any) => p.id === selectedOption.value) || ({} as any);
       
       const weights = prod.weight || [];
-      console.log('⚖️ Gramajes:', weights);
 
       // Actualizar título e imagen
       if (productTitle) productTitle.textContent = productName;
@@ -536,32 +530,21 @@ const t = texts[locale as keyof typeof texts] || texts.es;
 
       // Actualizar gramajes
       if (weightButtons) {
-        console.log('🔘 Contenedor de gramajes encontrado:', weightButtons);
         weightButtons.innerHTML = '';
         
-        if (weights.length === 0) {
-          console.warn('⚠️ No hay gramajes para mostrar');
-        }
         
-        weights.forEach((weight, index) => {
+        
+        weights.forEach((weight: any, index: number) => {
           const weightDiv = document.createElement('div');
-          weightDiv.className = '';
+          weightDiv.className = 'weight-btn';
           weightDiv.dataset.weight = weight;
-          weightDiv.style.backgroundColor = 'none';
-          weightDiv.style.color = '#FFFFFF';
-          weightDiv.style.padding = '8px 16px';
-          weightDiv.style.border = '1px solid #FFFFFF';
-          weightDiv.style.borderRadius = '8px';
-          weightDiv.style.cursor = 'pointer';
           weightDiv.textContent = weight;
           
           weightButtons.appendChild(weightDiv);
-          console.log('✅ Gramaje agregado:', weight, weightDiv);
+          
         });
         
-        console.log('📊 Total de gramajes en el DOM:', weightButtons.children.length);
-      } else {
-        console.error('❌ No se encontró el contenedor weight-buttons');
+        
       }
     }
 
@@ -571,8 +554,8 @@ const t = texts[locale as keyof typeof texts] || texts.es;
     if (productSelect) productSelect.addEventListener('change', updateProductInfo);
 
     // Exponer función global para abrir el modal
-    window.openStockistModal = openModal;
-    console.log('✅ window.openStockistModal registrada:', typeof window.openStockistModal);
+    (window as any).openStockistModal = openModal;
+    
 
     // Cerrar con ESC
     document.addEventListener('keydown', (e) => {

@@ -7,6 +7,7 @@ import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
 import { fade } from 'astro:transitions';
 import VideoHero from '../../components/common/VideoHero/VideoHero.astro';
 import LazyImage from '../../components/common/LazyImage.astro';
+import InteractiveMap from '../../components/map/InteractiveMap.astro';
 
 // Importar estilos separados
 import './styles.css';
@@ -112,13 +113,7 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/loopvi
           </p>
         )}
         <div class="mt-4">
-          <div class="inline-block rounded-3xl border border-white/10 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.7)] bg-[#1b0505]">
-            <img
-              src="https://snack.yummiespromociones.com/taqueritos/mapataqueritos.png"
-              alt={presenceSectionTitle}
-              class="w-full max-w-5xl h-auto object-cover object-center transform scale-110"
-            />
-          </div>
+          <InteractiveMap title={presenceSectionTitle} />
         </div>
       </div>
     </section>

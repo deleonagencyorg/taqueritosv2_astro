@@ -52,6 +52,24 @@ if (!challengeItems.length) {
   }
 }
 
+// Filtrar solo retos activos por fecha (start-date <= hoy <= end-date)
+function parseDateSafe(s?: string): number {
+  if (!s) return NaN;
+  // Soporta formatos ISO (YYYY-MM-DD) y otros parseables por Date.parse
+  const t = Date.parse(s);
+  return isNaN(t) ? NaN : t;
+}
+
+const now = Date.now();
+challengeItems = challengeItems.filter((c) => {
+  const start = parseDateSafe(c["start-date"]);
+  const end = parseDateSafe(c["end-date"]);
+  // Si hay ambas fechas, validar el rango. Si falta alguna, considerar activa por seguridad sólo si no contradice.
+  const afterStart = isNaN(start) ? true : now >= start;
+  const beforeEnd = isNaN(end) ? true : now <= end;
+  return afterStart && beforeEnd;
+});
+
 // Ordenar para que "escaner" sea el primero
 challengeItems.sort((a, b) => {
   const aIsEscaner = a.id === 'escaner' || a.slug === 'escaner';
@@ -216,7 +234,7 @@ function getCategoryKey(challenge: any): string {
     width: 710px;
     min-width: 710px;
     position: relative;
-    transition: opacity 50ms;
+    transition: opacity 200ms ease-in-out;
   }
 
   /* Animaciones DESKTOP */
@@ -225,38 +243,34 @@ function getCategoryKey(challenge: any): string {
       transform: translateX(0) translateY(0) scale(1);
       opacity: 1;
     }
-    30% {
-      transform: translateX(300px) translateY(-20px) scale(1.08);
-      opacity: 1;
-    }
     100% {
-      transform: translateX(1200px) translateY(0) scale(0.95);
-      opacity: 0;
+      transform: translateX(1000px) translateY(0) scale(0.98);
+      opacity: 0.2;
     }
   }
 
   @keyframes slideFromBehind {
     0% {
-      transform: translateX(0) scale(0.9);
-      opacity: 0.3;
+      transform: translateX(0) scale(0.94);
+      opacity: 0.4;
     }
     100% {
-      transform: translateX(-1200px) scale(0.9);
-      opacity: 0.3;
+      transform: translateX(-1000px) scale(0.94);
+      opacity: 0.4;
     }
   }
 
   @keyframes bounceIn {
     0% {
-      transform: translateX(0) scale(0.85);
-      opacity: 0;
+      transform: translateX(0) scale(0.92);
+      opacity: 0.2;
     }
     60% {
-      transform: translateX(0) scale(1.05);
+      transform: translateX(0) scale(1.01);
       opacity: 1;
     }
     80% {
-      transform: translateX(0) scale(0.98);
+      transform: translateX(0) scale(0.995);
     }
     100% {
       transform: translateX(0) scale(1);
@@ -268,18 +282,18 @@ function getCategoryKey(challenge: any): string {
     position: fixed !important;
     z-index: 9999 !important;
     pointer-events: none !important;
-    animation: flyAcrossRight 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: flyAcrossRight 520ms ease-in-out forwards;
   }
 
   .flying-card-left {
     position: fixed !important;
     z-index: 1 !important;
     pointer-events: none !important;
-    animation: slideFromBehind 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideFromBehind 520ms ease-in-out forwards;
   }
 
   .bounce-in {
-    animation: bounceIn 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    animation: bounceIn 600ms ease-in-out forwards;
   }
 
   .carousel-navigation {
@@ -363,8 +377,7 @@ function getCategoryKey(challenge: any): string {
   function initChallengesCarousel(root: Element) {
     if (!root || (root as any).dataset.rcInitialized === 'true') return;
     (root as any).dataset.rcInitialized = 'true';
-
-    console.log('🎠 Inicializando carruseles');
+    
 
     // MOBILE CAROUSEL - Simple
     const trackMobile = root.querySelector('#challengesTrackMobile') as HTMLElement;
@@ -403,7 +416,7 @@ function getCategoryKey(challenge: any): string {
       // Recalcular en resize
       window.addEventListener('resize', updateMobile);
 
-      console.log('✅ Carrusel mobile inicializado');
+      
     }
 
     // DESKTOP CAROUSEL - Con efectos
@@ -452,7 +465,7 @@ function getCategoryKey(challenge: any): string {
           firstSlide.style.visibility = 'visible';
           flyingClone.remove();
           isAnimating = false;
-        }, 280);
+        }, 520);
       });
 
       prevBtnDesktop.addEventListener('click', () => {
@@ -499,11 +512,11 @@ function getCategoryKey(challenge: any): string {
             lastSlide.classList.remove('bounce-in');
             lastSlide.style.opacity = '1';
             isAnimating = false;
-          }, 400);
-        }, 280);
+          }, 600);
+        }, 520);
       });
 
-      console.log('✅ Carrusel desktop inicializado');
+      
     }
   }
 

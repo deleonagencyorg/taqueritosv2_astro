@@ -316,7 +316,7 @@ function getCategoryKey(recipe: any): string {
     if (!root || (root as any).dataset.rcInitialized === 'true') return;
     (root as any).dataset.rcInitialized = 'true';
 
-    console.log('🎠 Inicializando carruseles');
+    
 
     // MOBILE CAROUSEL - Simple
     const trackMobile = root.querySelector('#recipesTrackMobile') as HTMLElement;
@@ -350,7 +350,7 @@ function getCategoryKey(recipe: any): string {
         updateMobile();
       });
 
-      console.log('✅ Carrusel mobile inicializado');
+      
     }
 
     // DESKTOP CAROUSEL - Con efectos
@@ -450,7 +450,7 @@ function getCategoryKey(recipe: any): string {
         }, 280);
       });
 
-      console.log('✅ Carrusel desktop inicializado');
+      
     }
   }
 

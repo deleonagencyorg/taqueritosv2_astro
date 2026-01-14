@@ -371,7 +371,6 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     const swiperContainer = document.querySelector('.products-swiper');
     
     if (!swiperContainer) {
-      console.log('No swiper container found');
       return;
     }
 
@@ -452,35 +451,28 @@ const carouselProducts = [safeProduct, ...relatedProducts];
 <script>
   // Manejar el botón de abrir modal
   function setupModalButton() {
-    console.log('🔧 setupModalButton ejecutándose...');
     
     const modalBtn = document.getElementById('open-modal-btn');
-    console.log('🔘 Botón encontrado:', modalBtn);
     
     const modalElement = document.getElementById('stockist-modal');
-    console.log('📦 Modal encontrado:', modalElement);
     
-    console.log('🌐 window.openStockistModal:', window.openStockistModal);
     
     if (!modalBtn) {
-      console.warn('⚠️ No se encontró el botón open-modal-btn');
+      
       return;
     }
 
     modalBtn.addEventListener('click', () => {
       const productId = modalBtn.getAttribute('data-product-id');
-      console.log('🖱️ Click en botón, productId:', productId);
       
       // Verificar que la función global esté disponible
       if (typeof window.openStockistModal === 'function') {
-        console.log('✅ Abriendo modal...');
         window.openStockistModal(productId);
       } else {
-        console.error('❌ openStockistModal no está disponible');
+        
       }
     });
     
-    console.log('✅ Event listener agregado al botón');
   }
 
   // Inicializar en diferentes eventos
