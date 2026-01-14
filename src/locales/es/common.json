@@ -105,16 +105,6 @@
       },
 
         {
-        "id": "slide3",
-        "desktop": "https://snack.yummiespromociones.com/taqueritos/copataqueritos.webp", 
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/copataqueritos.webp",
-        "alt": "Taqueritos",
-        "title": "",
-        "description": "",
-        "link": "es/retos-torneos/copa-taqueritos-2025",
-        "type": "image" 
-      },
-        {
         "id": "slide4",
         "desktop": "https://snack.yummiespromociones.com/taqueritos/arenataqueritos.webp", 
         "mobile": "https://snack.yummiespromociones.com/taqueritos/arenamobile.webp",
@@ -123,19 +113,7 @@
         "description": "",
         "link": "es/retos-torneos/arena",
         "type": "image" 
-      },
-      
-        {
-        "id": "slide5",
-        "desktop": "https://snack.yummiespromociones.com/taqueritos/casteralfuego.webp", 
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/castermobile.webp",
-        "alt": "Taqueritos",
-        "title": "",
-        "description": "",
-        "link": "es/retos-torneos/caster",
-        "type": "image" 
-      } 
-     
+      }
     ]
   },
   "contact_us": "Contacto",
