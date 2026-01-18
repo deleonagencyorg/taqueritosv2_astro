@@ -301,7 +301,10 @@ const options = dynamicOptions[locale];
       'Santo Domingo', 'Valverde'
     ]
   };
-
+  
+  // Store default placeholders to restore when needed
+  let defaultMessagePlaceholder = '';
+  
   // Simple file validation function
   function validateFile(file) {
     if (file.size > 10 * 1024 * 1024) {
@@ -360,6 +363,16 @@ const options = dynamicOptions[locale];
       const template = getTemplateByContactReason(formData.contactReason);
       multipartData.append('template', template);
       multipartData.append('site', "Taqueritos");
+      
+      // Winner-specific field formatting
+      if (formData.contactReason === 'Soy un ganador') {
+        if (formData.dynamicOrPromotion) {
+          formData.dynamicOrPromotion = `Dinámica o promoción: ${String(formData.dynamicOrPromotion)}`;
+        }
+        if (formData.award) {
+          formData.award = `Premio adjudicado: ${String(formData.award)}`;
+        }
+      }
       // Add all form fields according to the API structure
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
@@ -415,6 +428,25 @@ const options = dynamicOptions[locale];
         message: error instanceof Error ? error.message : (locale === 'es' ? 'Error al enviar el formulario' : 'Error sending form')
       };
     }
+    
+    // Winner-specific UI behaviors
+    const phoneInput = document.querySelector('input[name="phone"]');
+    const messageTextarea = document.querySelector('textarea[name="message"]');
+    if (contactReason === 'Soy un ganador') {
+      if (phoneInput) {
+        phoneInput.required = true;
+      }
+      if (messageTextarea) {
+        messageTextarea.placeholder = 'Escribe la promoción en la que ganaste o detalla el premio que ganaste. Ej, PS5, giftcards, etc';
+      }
+    } else {
+      if (phoneInput) {
+        phoneInput.required = false;
+      }
+      if (messageTextarea) {
+        messageTextarea.placeholder = defaultMessagePlaceholder;
+      }
+    }
   }
 
   // Initialize the form functionality
@@ -442,7 +474,13 @@ const options = dynamicOptions[locale];
       console.error('Required form elements not found');
       return;
     }
-
+    
+    // Cache default message placeholder
+    const baseMessageTextarea = document.querySelector('textarea[name="message"]');
+    if (baseMessageTextarea) {
+      defaultMessagePlaceholder = baseMessageTextarea.getAttribute('placeholder') || '';
+    }
+    
     // Populate countries
     if (countrySelect) {
       // Make sure we don't add duplicates
@@ -777,6 +815,11 @@ const options = dynamicOptions[locale];
       <div>
         <label class="block text-white font-medium mb-2">Premio adjudicado *</label>
         <input type="text" name="award" required class="w-full px-4 py-3 border-[1.5px] border-white rounded-lg bg-brown text-white focus:text-black focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+      </div>
+      <div>
+        <label class="block text-white font-medium mb-2">${labels.file}</label>
+        <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" class="w-full px-4 py-3 border-[1.5px] border-white rounded-lg bg-brown text-white focus:text-black focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+        <p class="text-sm text-white mt-1">${labels.fileHelp}</p>
       </div>
     `;
   }
