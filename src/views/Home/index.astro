@@ -29,6 +29,25 @@ const { loading = false } = Astro.props;
 
 // Language and Data Setup
 const currentLang = getLocale();
+
+interface GameItem {
+  id: number;
+  titulo: string;
+  enlace: string;
+  descripcion: string;
+  imagen: string;
+}
+
+let games: GameItem[] = [];
+try {
+  const gamesModule = await import(`../../locales/${currentLang}/games.json`);
+  games = gamesModule.default.games || [];
+} catch (e) {
+  games = [];
+}
+
+const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Discover the games list';
+
 const homeAssets = t('home', { namespace: 'common', locale: currentLang }) || {};
 const challengesAssets = t('', { namespace: 'challenges', locale: currentLang }) || {};
 const galleryAssets = t('', { namespace: 'gallery', locale: currentLang }) || {};
@@ -322,8 +341,181 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
   </div>
 </section> -->
 
-
-
-
+    <!-- Carrusel de juegos -->
+    {games.length > 0 && (
+      <section class="w-full py-16 bg-gradient-to-b from-[#0a0a0a] to-[#1a0a0a]">
+        <div class="w-full max-w-6xl mx-auto px-4">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="font-title text-xl md:text-2xl font-bold text-white uppercase">
+              {gamesTitle}
+            </h2>
+            <div class="flex gap-3">
+              <button
+                type="button"
+                class="games-carousel-btn-prev w-12 h-12 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300"
+                aria-label="Anterior"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="games-carousel-btn-next w-12 h-12 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300"
+                aria-label="Siguiente"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="relative games-carousel-wrapper">
+            <div class="flex gap-4 overflow-x-auto pb-8 pt-3 games-carousel-track" style="scroll-behavior: smooth;">
+            {games.map((game) => (
+              <a
+                href={game.enlace}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="game-card min-w-[210px] w-[210px] bg-[#1a0808] border-2 border-[#ff2d2d] flex-shrink-0 transition-all duration-300"
+              >
+                <div class="h-32 w-full overflow-hidden bg-black/50">
+                  <LazyImage
+                    src={game.imagen}
+                    alt={game.titulo}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="p-4">
+                  <h3 class="font-title text-sm font-bold text-white uppercase mb-2 leading-tight">
+                    {game.titulo}
+                  </h3>
+                  <p class="text-xs text-white/80 leading-relaxed">
+                    {game.descripcion}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
 
   </main>
+
+<script>
+  // Script para el carrusel de juegos
+  function initGamesCarousel() {
+    const track = document.querySelector('.games-carousel-track') as HTMLElement;
+    const prevBtn = document.querySelector('.games-carousel-btn-prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.games-carousel-btn-next') as HTMLButtonElement;
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const scrollAmount = 220; // ancho de tarjeta + gap
+
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  }
+
+  // Inicializar al cargar la página
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGamesCarousel);
+  } else {
+    initGamesCarousel();
+  }
+
+  // Reinicializar en navegación de Astro
+  document.addEventListener('astro:page-load', initGamesCarousel);
+
+  // Hover: resaltar tarjeta activa con glow rojo y bajar opacidad del resto
+  function initGamesHover() {
+    const cards = Array.from(document.querySelectorAll('.game-card')) as HTMLElement[];
+    if (!cards.length) return;
+
+    cards.forEach((card) => {
+      card.addEventListener('mouseenter', () => {
+        cards.forEach((c) => {
+          c.classList.add('game-card-dim');
+          c.classList.remove('game-card-active');
+        });
+        card.classList.remove('game-card-dim');
+        card.classList.add('game-card-active');
+      });
+
+      card.addEventListener('mouseleave', () => {
+        cards.forEach((c) => {
+          c.classList.remove('game-card-dim', 'game-card-active');
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGamesHover);
+  } else {
+    initGamesHover();
+  }
+
+  document.addEventListener('astro:page-load', initGamesHover);
+</script>
+
+<style>
+  .games-carousel-wrapper {
+    overflow: visible;
+  }
+
+  .games-carousel-track {
+    overflow-y: visible;
+  }
+
+  .game-card {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+
+  .game-card-active {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 0 30px rgba(255, 45, 45, 0.7);
+  }
+
+  .game-card-dim {
+    opacity: 0.45;
+  }
+</style>
+
+<style>
+  .games-carousel-wrapper {
+    overflow: visible;
+  }
+
+  .games-carousel-track {
+    overflow-y: visible;
+  }
+
+  .game-card {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+
+  .game-card-active {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 0 30px rgba(255, 45, 45, 0.7);
+  }
+
+  .game-card-dim {
+    opacity: 0.45;
+  }
+</style>

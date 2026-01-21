@@ -1,0 +1,126 @@
+---
+import GameCardCarousel from './GameCardCarousel.astro';
+import { getLocale } from '../../i18n/i18n';
+
+const currentLang = getLocale();
+
+interface Game {
+  id: number;
+  titulo: string;
+  enlace: string;
+  descripcion: string;
+  imagen: string;
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  textButton?: string;
+  items?: any[];
+}
+
+const {
+  textButton = currentLang === 'es' ? 'Ver Todas' : 'View All',
+  items
+} = Astro.props;
+
+let gameItems: Game[] = Array.isArray(items) ? (items as unknown as Game[]) : [];
+if (!gameItems.length) {
+  if (currentLang === 'es') {
+    const gamesModule = await import('../../locales/es/games.json');
+    gameItems = gamesModule.default.games || [];
+  }
+}
+---
+
+<div class="w-full games-carousel-wrapper" data-games-carousel>
+  <div class="w-full px-4">
+    
+    <!-- Carousel MOBILE -->
+    <div class="games-carousel-mobile relative md:hidden">
+      <div class="games-carousel-container overflow-x-auto w-full pb-4">
+        <div class="games-carousel-track flex items-start w-max gap-4 px-4">
+          {gameItems.map((game, index) => (
+            <div class="game-slide-mobile flex-shrink-0 w-[280px]">
+              <GameCardCarousel
+                image={game.imagen}
+                title={game.titulo}
+                description={game.descripcion}
+                enlace={game.enlace}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Carousel DESKTOP -->
+    <div class="games-carousel-desktop relative hidden md:block">
+      <div class="games-carousel-container overflow-x-auto w-full pb-4">
+        <div class="games-carousel-track flex items-start w-max gap-6 px-4">
+          {gameItems.map((game, index) => (
+            <div class="game-slide-desktop flex-shrink-0">
+              <GameCardCarousel
+                image={game.imagen}
+                title={game.titulo}
+                description={game.descripcion}
+                enlace={game.enlace}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<style>
+  /* Mobile - Carrusel simple con scroll horizontal */
+  .games-carousel-track {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .game-slide-mobile {
+    flex-shrink: 0;
+    width: 280px;
+  }
+
+  /* Desktop - Carrusel con scroll horizontal */
+  .carousel-track-desktop {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .game-slide-desktop {
+    flex-shrink: 0;
+    width: 710px;
+  }
+
+  /* Scrollbar styling */
+  .games-carousel-container::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .games-carousel-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  .games-carousel-container::-webkit-scrollbar-thumb {
+    background: rgba(239, 68, 68, 0.8);
+    border-radius: 4px;
+  }
+
+  .games-carousel-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(239, 68, 68, 1);
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .games-carousel-container {
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+</style>

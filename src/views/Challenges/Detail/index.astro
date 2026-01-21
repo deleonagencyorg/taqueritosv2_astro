@@ -106,17 +106,17 @@ const formattedStartDate = startDate ? (currentLang === 'es' ? formatDateES(star
 const formattedEndDate = endDate ? (currentLang === 'es' ? formatDateES(endDate) : formatDateEN(endDate)) : '';
 
 interface GameItem {
-  id: string;
-  image: string;
-  title: string;
-  description?: string;
-  url: string;
+  id: number;
+  titulo: string;
+  enlace: string;
+  descripcion: string;
+  imagen: string;
 }
 
 let games: GameItem[] = [];
 try {
   const gamesModule = await import(`../../../locales/${currentLang}/games.json`);
-  games = (gamesModule.games || []) as GameItem[];
+  games = gamesModule.default.games || [];
 } catch (e) {
   games = [];
 }
@@ -291,16 +291,26 @@ try {
           <div class="flex gap-4 overflow-x-auto pb-8 pt-3 games-carousel-track" style="scroll-behavior: smooth;">
             {games.map((game) => (
               <a
-                href={game.url}
+                href={game.enlace}
+                target="_blank"
+                rel="noopener noreferrer"
                 class="game-card min-w-[210px] w-[210px] bg-[#1a0808] border-2 border-[#ff2d2d] flex-shrink-0 transition-all duration-300"
               >
-                <div class="h-56 md:h-72 w-full overflow-hidden bg-black/50">
+                <div class="h-32 w-full overflow-hidden bg-black/50">
                   <LazyImage
-                    src={game.image}
-                    alt={game.title}
+                    src={game.imagen}
+                    alt={game.titulo}
                     class="w-full h-full object-cover"
                     loading="lazy"
                   />
+                </div>
+                <div class="p-4">
+                  <h3 class="font-title text-sm font-bold text-white uppercase mb-2 leading-tight">
+                    {game.titulo}
+                  </h3>
+                  <p class="text-xs text-white/80 leading-relaxed">
+                    {game.descripcion}
+                  </p>
                 </div>
               </a>
             ))}

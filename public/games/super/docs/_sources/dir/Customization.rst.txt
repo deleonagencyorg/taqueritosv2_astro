@@ -1,0 +1,285 @@
+
+Customization
+=============
+
+You can customize the game by editing *config.json* (public/ or dist/ folder) or insert javascript code into intializing code in *index.html*
+
+config.json
+-----------
+
+* General parameters
+
+.. list-table:: 
+   :widths: 30 25 25 50
+   :header-rows: 1
+
+   * - Name
+     - Type
+     - Default
+     - Description
+   * - useHelpPanel
+     - boolean
+     - true
+     - Enable or disable help panel
+   * - useCreditPanel
+     - boolean
+     - true
+     - Enable or disable credit panel
+   * - useBackgroundMusic
+     - boolean
+     - true
+     - Enable or disable background music
+
+
+* String resources for changing home screen text interfaces: 
+
+  .. list-table:: 
+     :widths: 20 35
+     :header-rows: 1
+
+     * - Name
+       - Description
+     * - APP_TITLE
+       - Game title
+     * - APP_INFO
+       - Game extra info under the title
+     * - NEW_GAME
+       - New game button string
+     * - HELP
+       - Help button string
+     * - SETTING
+       - Setting button string
+     * - CREDIT
+       - Credit button string
+     * - CREDIT_TEXT
+       - Credit text in credit panel
+
+
+Help Text
+----------
+
+To customize the help text, edit the file "helpcontent.html" in "assets/text/helpcontent" folder
+
+
+Remove Credit Panel
+-------------------
+
+Set "useCreditPanel" to false in "config.json"
+
+
+Replace Game Logo
+-------------------
+
+Edit and replace "logo.png" in "assets/graphics" folder
+
+
+Add Coin Types
+--------------
+
+1) Open *config.json* and edit "data" - "coins" properties
+2) Add more coin names in the "coins" array
+3) Add coin textures in "assets/graphics" folder with the exact same names that you've entered in step 2. The texture size should be 128x128 for optimal performance
+
+
+SASS
+-----
+
+By editing SASS files (src/sass) you can customize various look and feel of the game, refer to Development section to set up development environment before editing SASS files:
+
+* Filename details
+
+  .. list-table:: 
+     :widths: 20 35 
+     :header-rows: 1
+
+     * - File
+       - Description
+     * - _creditpanel.scss
+       - Customize Credit Panel in homepage
+     * - _game.scss
+       - Customize general color scheme and game container style, cursor and selection behaviour
+     * - _gamebutton.scss
+       - All game button appearances like color and size
+     * - _gamefont.scss
+       - Font used in game
+     * - _gameheader.scss
+       - Game header component including all header buttons
+     * - _gameicon.scss
+       - Game icon style, including icon classes, color and siz
+     * - _heartbar.scss
+       - Customize the heart bar
+     * - _helppanel.scss
+       - Help Panel appearances like color and dimension
+     * - _hscreenheader.scss
+       - Customize the home screen header including game title and logo
+     * - _hscreenmenu.scss
+       - Home screen menu buttons color and size
+     * - _responsive.scss
+       - Responsive parameters for specific screen size
+     * - _trophypanel.scss
+       - Trophy panel appearances and dimension
+
+
+Color scheme
+------------
+
+To change major color scheme, open ""_game.scss"" and edit these variables: $accentColor, $secondColor and $thirdColor
+
+
+Javascript
+----------
+
+You can pass an argument object to the game instance to config its behaviour. Inside "index.html" (production folder) :
+
+.. code-block:: typescript
+ :linenos:
+
+  const el = document.querySelector('.rs-cm3d');
+  const cm3d = new CryptoMan(el);
+
+* Input parameters
+
+.. list-table:: 
+   :widths: 20 35
+   :header-rows: 1
+
+   * - Name
+     - Description
+   * - pieceSpecular
+     - Overal specular color of game objects material
+   * - pieceEmissive
+     - Overal emissive color of game objects material
+   * - pieceColor
+     - Overal diffuse color of game objects material
+   * - boardDimension
+     - Game board dimension
+   * - boardThickness
+     - Game board thickness
+   * - boardDepth
+     - Game board depth
+   * - boardMaxWidth
+     - Game board max width
+   * - boardMaxHeight
+     - Game board max height
+   * - fitFactor
+     - Game scale fitting factor
+   * - ambientLight
+     - Game scene ambient color
+   * - lightMovingSpeed
+     - Point light moving speed inside the game
+   * - runningDuration
+     - Customize character running duration
+   * - numCoins
+     - Total coins in the scene
+   * - coinSpeed
+     - Coin falling speed
+   * - numCrystals
+     - Total crystal in the scne
+   * - crystalSpeed
+     - Crystal falling speed
+   * - gravity
+     - Game general gravity
+   * - maxHealth
+     - Character max health
+   * - scoreUnit
+     - Scoring unit per coin
+   * - shatterDuration
+     - Duration for shattering animation
+
+For example to change character max health and scoring unit as well as game scaling:
+
+.. code-block:: typescript
+ :linenos:
+
+  const el = document.querySelector('.rs-cm3d');
+  const cm3d = new CryptoMan(el, {maxHealth:5, scoreUnit:20, fitFactor:5});
+
+
+Source Tree
+-----------
+
+Source code are very well commented and well organized into package and module, simply edit a specific file in development environment will auto trigger the rebuilt
+process and refesh the page:
+
+.. code-block:: typescript
+ :linenos:
+
+    src
+    ├── entry.ts
+    ├── rs
+    │   ├── cm3d
+    │   │   ├── anim
+    │   │   │   ├── BaseAnimation.ts
+    │   │   │   ├── EnergyBustAnimation.ts
+    │   │   │   ├── EnergyBuzzAnimation.ts
+    │   │   │   ├── EnergyExplodeAnimation.ts
+    │   │   │   └── FireTargetAnimation.ts
+    │   │   ├── AssetManager.ts
+    │   │   ├── CryptoMan.ts
+    │   │   ├── entity
+    │   │   │   ├── AnimatedModel.ts
+    │   │   │   ├── Coin.ts
+    │   │   │   ├── Crystal.ts
+    │   │   │   ├── GameBoard.ts
+    │   │   │   ├── ItemContainer.ts
+    │   │   │   ├── Platform.ts
+    │   │   │   ├── Starfield.ts
+    │   │   │   ├── Superman.ts
+    │   │   │   ├── WalkingStep.ts
+    │   │   │   └── WalkingStepPool.ts
+    │   │   ├── Game3D.ts
+    │   │   ├── Game3DContainer.ts
+    │   │   ├── GameConfig.ts
+    │   │   ├── GameLight.ts
+    │   │   ├── GameOption.ts
+    │   │   ├── Preferences.ts
+    │   │   ├── screen
+    │   │   │   ├── GameScreen.ts
+    │   │   │   └── HomeScreen.ts
+    │   │   └── ui
+    │   │       ├── CreditPanel.ts
+    │   │       ├── GameButton.ts
+    │   │       ├── GameOverPanel.ts
+    │   │       ├── GameScreenButtonBar.ts
+    │   │       ├── GameScreenHeader.ts
+    │   │       ├── GameScreenLoseBar.ts
+    │   │       ├── GameScreenWonBar.ts
+    │   │       ├── HeartBar.ts
+    │   │       ├── HelpPanel.ts
+    │   │       ├── HomeScreenHeader.ts
+    │   │       ├── HomeScreenMenu.ts
+    │   │       ├── ShatterButton.ts
+    │   │       └── TrophyPanel.ts
+    │   ├── game
+    │   │   ├── BasePanel.ts
+    │   │   ├── GameButton.ts
+    │   │   ├── IconButton.ts
+    │   │   ├── ImageButton.ts
+    │   │   ├── ImagePanel.ts
+    │   │   └── Scroller.ts
+    │   ├── game3d
+    │   │   ├── Firework3D.ts
+    │   │   └── Firework3DSet.ts
+    │   ├── three
+    │   │   └── BaseApp.ts
+    │   └── ui
+    ├── sass
+    │   ├── cm3d
+    │   │   ├── _creditpanel.scss
+    │   │   ├── _fsbtn.scss
+    │   │   ├── _game.scss
+    │   │   ├── _gamebutton.scss
+    │   │   ├── _gamefont.scss
+    │   │   ├── _gameheader.scss
+    │   │   ├── _gameicon.scss
+    │   │   ├── _heartbar.scss
+    │   │   ├── _helppanel.scss
+    │   │   ├── _hscreenheader.scss
+    │   │   ├── _hscreenmenu.scss
+    │   │   ├── _responsive.scss
+    │   │   ├── _site.scss
+    │   │   └── _trophypanel.scss
+    │   ├── cm3d.scss
+    │   └── game
+    │       └── _panel.scss
+    └── vite-env.d.ts
