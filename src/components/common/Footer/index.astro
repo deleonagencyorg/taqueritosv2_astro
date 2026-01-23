@@ -38,12 +38,12 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
 ) : (
   <footer class="bg-brown text-white relative overflow-hidden">
     <div class="container text-center flex justify-center items-center mx-auto px-6 py-8 md:py-12">
-      <div class="flex flex-col lg:flex-row lg:gap-32 xl:gap-64">
+      <div class="flex flex-col md:flex-row md:gap-32 xl:gap-64">
         
         <!-- Columna 1: Logo y Navegación -->
         <div class="flex flex-col">
           <!-- Logo -->
-          <div class="mb-8 md:mb-12 lg:mt-12">
+          <div class="mb-8 md:mb-12 md:mt-12">
             <a href={`/${currentLang}/`}>
               <LazyImage 
                 src={logos.principal.url} 
@@ -54,11 +54,11 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
           </div>
           
           <!-- Navegación -->
-          <div class="flex flex-col items-start justify-start mb-12 lg:mb-24">
+          <div class="flex flex-col items-start justify-start mb-12 md:mb-24">
             <h3 class="font-title text-xl md:text-2xl font-bold mb-4 uppercase">
               {currentLang === 'es' ? 'Navegación' : 'Navigation'}
             </h3>
-            <nav class="grid grid-cols-2 gap-x-6 md:gap-x-8 lg:gap-x-12 gap-y-2 text-left w-full">
+            <nav class="grid grid-cols-2 gap-x-6 md:gap-x-12 gap-y-2 text-left w-full">
               {menuItems && menuItems.map((item: any) => (
                 <a
                   href={item.href}
@@ -73,7 +73,7 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
         </div>
         
         <!-- Columna 2: Contacto -->
-        <div class="flex flex-col space-y-8 md:space-y-12 lg:mt-12">
+        <div class="flex flex-col space-y-8 md:space-y-12 md:mt-12">
           
           <!-- Escríbenos -->
           <div class="text-left">
@@ -81,12 +81,12 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
           </div>
           
           <!-- Contáctanos -->
-          <div class="flex flex-col sm:flex-col md:flex-col lg:flex-row">
-              <div class="pb-8 lg:pb-0">
+          <div class="flex flex-col sm:flex-col md:flex-row">
+              <div class="pb-8 md:pb-0">
               <h3 class="font-title text-xl md:text-2xl font-bold mb-4 uppercase">
                 {contactUs}
               </h3>
-              <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 md:gap-4 lg:gap-x-16 xl:gap-x-24 text-sm md:text-base">
+              <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 md:gap-4 md:gap-x-16 xl:gap-x-24 text-sm md:text-base">
                 
                 <!-- Guatemala -->
                 <div class="flex items-center justify-start space-x-2">
@@ -205,7 +205,7 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
                 
               </div>
             </div>
-            <div class="lg:mt-[100px] lg:ml-[50px] mt-8">
+            <div class="md:mt-[100px] md:ml-[50px] mt-8">
               <div class="flex flex-col items-center md:items-start gap-2 text-center md:text-left">
                 <p class="mb-1">{followUs}</p>
                 <SocialMediaIcons currentLang={currentLang} iconColor="white" centered={false} />
