@@ -132,6 +132,11 @@
       "href": "/es/#players"
     },
     {
+      "id": "games",
+      "text": "Juegos",
+      "href": "#games"
+    },
+    {
       "id": "about-taqueritos",
       "text": "Sobre Taqueritos",
       "href": "/es/nosotros"
@@ -140,6 +145,48 @@
       "id": "where-buy",
       "text": "Dónde comprar",
       "href": "/es/donde-comprar"
+    }
+  ],
+  "games": [
+    {
+      "id": "galaxian",
+      "name": "Galaxian",
+      "href": "/games/Galaxian/index.html"
+    },
+    {
+      "id": "christmas-santa-run",
+      "name": "Christmas Santa Run",
+      "href": "/games/navidad/index.html"
+    },
+    {
+      "id": "pac-taquerito",
+      "name": "Pac Taquerito",
+      "href": "/games/PacTaquerito/index.html"
+    },
+    {
+      "id": "taqueritos-racer",
+      "name": "Taqueritos Racer",
+      "href": "/games/Racer/index.html"
+    },
+    {
+      "id": "soccer",
+      "name": "Soccer",
+      "href": "/games/SOCCER/index.html"
+    },
+    {
+      "id": "treasure-hunt",
+      "name": "Treasure Hunt",
+      "href": "/games/submarino/index.html"
+    },
+    {
+      "id": "3d-crypto-man",
+      "name": "3D Crypto Man",
+      "href": "/games/super/dist/index.html"
+    },
+    {
+      "id": "super-taquerito-bros",
+      "name": "Super Taquerito Bros",
+      "href": "/games/taqueritobros/index.html"
     }
   ],
   "about_us": {

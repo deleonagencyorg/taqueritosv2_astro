@@ -1,0 +1,163 @@
+---
+import GameCardCarousel from './GameCardCarousel.astro';
+import { getLocale } from '../../i18n/i18n';
+
+const currentLang = getLocale();
+
+interface Game {
+  id: number;
+  titulo: string;
+  enlace: string;
+  descripcion: string;
+  imagen: string;
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  textButton?: string;
+  items?: any[];
+}
+
+const {
+  textButton = currentLang === 'es' ? 'Ver Todas' : 'View All',
+  items
+} = Astro.props;
+
+let gameItems: Game[] = Array.isArray(items) ? (items as unknown as Game[]) : [];
+if (!gameItems.length) {
+  if (currentLang === 'es') {
+    const gamesModule = await import('../../locales/es/games.json');
+    gameItems = gamesModule.default.games || [];
+  }
+}
+
+// Swiper CDN
+const swiperCss = 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css';
+const swiperJs = 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js';
+---
+
+
+<link rel="stylesheet" href={swiperCss} />
+<script is:inline src={swiperJs}></script>
+
+<div class="w-full games-carousel-wrapper relative">
+  <div class="w-full px-4">
+    <div class="swiper games-swiper">
+      <div class="swiper-wrapper">
+        {gameItems.map((game) => (
+          <div class="swiper-slide flex justify-center items-center">
+            <GameCardCarousel
+              image={game.imagen}
+              title={game.titulo}
+              description={game.descripcion}
+              enlace={game.enlace}
+            />
+          </div>
+        ))}
+      </div>
+      <!-- Flechas de navegación -->
+      <div class="swiper-button-prev games-swiper-prev"></div>
+      <div class="swiper-button-next games-swiper-next"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.Swiper) {
+      new Swiper('.games-swiper', {
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 20,
+        navigation: {
+          nextEl: '.games-swiper-next',
+          prevEl: '.games-swiper-prev',
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 32,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 40,
+          },
+        },
+        on: {
+          init: function () {
+            // Forzar visibilidad de flechas
+            document.querySelectorAll('.games-swiper-prev, .games-swiper-next').forEach(btn => btn.style.display = 'flex');
+          }
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .games-carousel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+  }
+  .games-swiper {
+    width: 100%;
+    padding-bottom: 40px;
+  }
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+  }
+  .games-swiper-prev,
+  .games-swiper-next {
+    background: rgba(255, 45, 48, 0.16);
+    border: 2px solid #ff2c2f;
+    border-radius: 10px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.2);
+    transition: all 0.3s;
+    color: #fff;
+    z-index: 10;
+  }
+  .games-swiper-prev:hover,
+  .games-swiper-next:hover {
+    background: #150404;
+    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4);
+  }
+  .games-swiper-prev {
+    left: 0;
+  }
+  .games-swiper-next {
+    right: 0;
+  }
+  .swiper-pagination {
+    bottom: 0 !important;
+  }
+  @media (max-width: 767px) {
+    .games-swiper {
+      padding-bottom: 32px;
+    }
+    .games-swiper-prev,
+    .games-swiper-next {
+      width: 44px;
+      height: 44px;
+      top: 90%;
+      transform: translateY(-50%);
+    }
+  }
+</style>
