@@ -125,19 +125,19 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                   <img
                     src={slide.desktop}
                     alt={slide.alt || "Slide background"}
-                    class="slide-image desktop-image h-auto z-20 bg-transparent w-[1200px] h-[900px]"
+                    class="slide-image desktop-image h-auto z-20 bg-transparent w-[1200px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 
                   <img
                     src={slide.mobile}
                     alt={slide.alt || "Slide background"}
-                    class="slide-image mobile-image h-auto z-20 bg-transparent w-[1200px] h-[800px]"
+                    class="slide-image mobile-image h-auto z-20 bg-transparent w-[1200px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 
-                  <h1 class="dragon-text font-bold uppercase leading-[90%] tracking-[0]  whitespace-nowrap select-none">
-                    {currentLang === 'es' ? 'DRAGON DE FUEGO' : 'DRAGON OF FIRE'}
+                  <h1 class="dragon-text font-bold uppercase leading-[90%] tracking-[0] select-none">
+                    {currentLang === 'es' ? 'DRAGON FUEGO' : 'DRAGON FIRE'}
                   </h1>
                  
                 </div>
@@ -181,7 +181,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                 {currentLang === 'es' ? (
                   <p class="text-leveleate ">Levéleate al máximo con Taqueritos.<br/>Dragón de Fuego ¿Listo para el reto?</p>
                 ) : (
-                  <p class="text-leveleate ">Level up to the max with Taqueritos.<br/>Dragon of Fire. Ready for the challenge?</p>
+                  <p class="text-leveleate ">Level up to the max with Taqueritos.<br/>Dragon  Fire. Ready for the challenge?</p>
                 )}
                 
                 <div class="flex flex-row items-center">
@@ -261,6 +261,12 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     width: 100%;
     height: 100%;
   }
+
+  /* Asegura que cada slide y su wrapper interno rellenen la altura del carrusel */
+  .video-carousel .swiper-slide { display: flex; }
+  .video-carousel .swiper-slide > .media-slide-wrapper,
+  .video-carousel .swiper-slide > .product-slide-wrapper { flex: 1 1 auto; height: 100%; width: 100%; }
+  .product-slide-wrapper .slide-content { height: 100%; }
   
   /* ========== SLIDES DE IMAGEN/VIDEO (FULLSCREEN) ========== */
   .media-slide-wrapper {
@@ -388,6 +394,9 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     line-height: 100%;
     text-transform: uppercase;
     display: flex;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
    .right-text-top {
@@ -671,34 +680,67 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   }
 
   @media (max-width: 767px){
-    .slide-content{ height: 78vh !important; }
+    .video-carousel-container { height: 500px; }
+    .slide-content{ height: 500px !important; padding: 0 20px; }
     .dragon-text{ 
-      font-size: 132px !important;
-      margin-top: 130px !important;
-      padding-right: 400px !important;
+      font-size: 72px !important;
+      margin-top: 98px !important;
+      transform: translateY(18px);
+      padding-right: 0 !important;
+      white-space: normal !important;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      line-height: 0.92;
+      text-align: left;
+      width: 100%;
+      max-width: 340px;
     }
     .right-text-top-div { display: none !important;}
     .left-text {display: none !important;}
 
     .swiper-pagination.pills {
       position: absolute;
-      bottom: auto; /* Quitar bottom */
-      top: 77%; /* O ajusta según necesites */
+      bottom: 20px;
+      top: auto;
       left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 40; /* Asegura que esté por encima */
+      transform: translateX(-50%);
+      z-index: 40;
     }
 
     .right-text {
-      margin-top: 350px;
-      margin-left: 50px;
-      position: relative;
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 78px;
+      margin: 0;
+      padding: 0;
+      gap: 12px;
       z-index: 30;
     }
 
-    .slide-content {
-      height: 120vh !important;
+    .text-leveleate {
+      font-size: 15px !important;
+      line-height: 1.4 !important;
+      margin-bottom: 12px;
     }
+
+    .cta-button {
+      width: auto;
+      min-width: 190px;
+      padding: 0.8rem 1.4rem;
+      font-size: 0.9rem;
+    }
+
+    .button-play {
+      margin-left: 14px !important;
+    }
+
+    /* Reducir altura de la imagen principal en mobile */
+    .product-slide-wrapper .image-container { height: 260px !important; }
+    .mobile-image { height: 100% !important; width: auto; object-fit: contain; }
+
+    /* Mejorar envoltura de títulos en overlay */
+    .text-content .slide-title { white-space: normal; word-break: normal; overflow-wrap: normal; }
 
   }
 
@@ -734,11 +776,11 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     });
     
     // Handle video playback
-    const videos = document.querySelectorAll('.slide-video');
-    const fallbackImages = document.querySelectorAll('.fallback-image');
+    const videos = document.querySelectorAll('.slide-video') as NodeListOf<HTMLVideoElement>;
+    const fallbackImages = document.querySelectorAll('.fallback-image') as NodeListOf<HTMLElement>;
     
     // Function to play video
-    function playVideo(video) {
+    function playVideo(video: HTMLVideoElement) {
       if (!video) return;
       
       const playPromise = video.play();
@@ -748,12 +790,12 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
           .then(() => {
             // Video playback started successfully
             const slideId = video.getAttribute('data-slide-id');
-            const fallbackImage = document.querySelector(`#${slideId} .fallback-image`);
+            const fallbackImage = document.querySelector(`#${slideId} .fallback-image`) as HTMLElement | null;
             if (fallbackImage) {
               fallbackImage.style.opacity = '0';
             }
           })
-          .catch(error => {
+          .catch((error: any) => {
             // Auto-play was prevented
             console.warn('Video playback was prevented:', error);
           });
@@ -762,7 +804,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     
     // Function to pause all videos
     function pauseAllVideos() {
-      videos.forEach(video => {
+      videos.forEach((video: HTMLVideoElement) => {
         video.pause();
       });
     }
@@ -771,8 +813,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     swiper.on('slideChange', () => {
       pauseAllVideos();
       
-      const activeSlide = swiper.slides[swiper.activeIndex];
-      const activeVideo = activeSlide?.querySelector('.slide-video');
+      const activeSlide = swiper.slides[swiper.activeIndex] as HTMLElement | undefined;
+      const activeVideo = activeSlide?.querySelector('.slide-video') as HTMLVideoElement | null;
       
       if (activeVideo) {
         setTimeout(() => playVideo(activeVideo), 300);
@@ -780,15 +822,15 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     });
     
     // Play initial video
-    const initialVideo = swiper.slides[swiper.activeIndex]?.querySelector('.slide-video');
+    const initialVideo = swiper.slides[swiper.activeIndex]?.querySelector('.slide-video') as HTMLVideoElement | null;
     if (initialVideo) {
       playVideo(initialVideo);
     }
     
     // Handle video loading and fallback
-    videos.forEach((video) => {
+    videos.forEach((video: HTMLVideoElement) => {
       const slideId = video.getAttribute('data-slide-id');
-      const fallbackImage = document.querySelector(`#${slideId} .fallback-image`);
+      const fallbackImage = document.querySelector(`#${slideId} .fallback-image`) as HTMLElement | null;
       
       // Hide fallback image once video can play
       video.addEventListener('canplay', () => {

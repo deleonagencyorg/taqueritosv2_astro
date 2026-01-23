@@ -12,15 +12,6 @@ const { currentLang, headerColorConfig } = Astro.props;
 // Traducciones
 const openMenuLabel = t('menu_labels.open_main_menu', { namespace: 'common', locale: currentLang }) || 'Open main menu';
 
-// SVG Icons
-const menuIconSvg = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-</svg>`;
-
-const closeIconSvg = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-</svg>`;
-
 // Usar colores por defecto si no se proporciona configuración
 const textColor = headerColorConfig?.textColor || 'text-white';
 const hoverTextColor = headerColorConfig?.hoverTextColor || 'hover:text-gray-300';
@@ -37,27 +28,73 @@ const hoverBackgroundColor = headerColorConfig?.hoverBackgroundColor || 'hover:b
     aria-label={openMenuLabel}
   >
     <span class="sr-only">{openMenuLabel}</span>
-    <div id="menu-icon-container" class="w-8 h-8 flex items-center justify-center" set:html={menuIconSvg}></div>
+    <div id="menu-icon-container" class="w-8 h-8 flex items-center justify-center">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </div>
   </button>
 </div>
 
-<script define:vars={{ astroMenuIconSvg: menuIconSvg, astroCloseIconSvg: closeIconSvg }}>
-// Función para manejar el clic en el botón del menú móvil
-function handleMobileMenuButtonClick(event) {
-  const menuButton = event.currentTarget;
-  const menuIconContainer = document.getElementById('menu-icon-container');
+<script>
+// SVG Icons como constantes globales
+const MENU_ICON_SVG = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+</svg>`;
+
+const CLOSE_ICON_SVG = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+</svg>`;
+
+// Estado del menú
+let isMenuOpen = false;
+
+// Función para abrir el menú
+function openMobileMenu() {
   const mobileMenu = document.getElementById('mobile-menu');
+  const menuButton = document.getElementById('mobile-menu-button');
+  const menuIconContainer = document.getElementById('menu-icon-container');
   
   if (mobileMenu && menuIconContainer) {
-    mobileMenu.classList.toggle('hidden');
-    if (!mobileMenu.classList.contains('hidden')) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    isMenuOpen = true;
+    mobileMenu.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    menuIconContainer.innerHTML = CLOSE_ICON_SVG;
+    if (menuButton) {
+      menuButton.setAttribute('aria-expanded', 'true');
     }
-    const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
-    menuButton.setAttribute('aria-expanded', (!isExpanded).toString());
-    menuIconContainer.innerHTML = isExpanded ? astroMenuIconSvg : astroCloseIconSvg;
+  }
+}
+
+// Función para cerrar el menú
+function closeMobileMenu() {
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuButton = document.getElementById('mobile-menu-button');
+  const menuIconContainer = document.getElementById('menu-icon-container');
+  
+  if (mobileMenu && menuIconContainer) {
+    isMenuOpen = false;
+    mobileMenu.classList.add('hidden');
+    document.body.style.overflow = '';
+    menuIconContainer.innerHTML = MENU_ICON_SVG;
+    if (menuButton) {
+      menuButton.setAttribute('aria-expanded', 'false');
+    }
+  }
+}
+
+// Función para alternar el menú
+function toggleMobileMenu(event: Event) {
+  event.preventDefault();
+  event.stopPropagation();
+  
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileMenu) {
+    if (mobileMenu.classList.contains('hidden')) {
+      openMobileMenu();
+    } else {
+      closeMobileMenu();
+    }
   }
 }
 
@@ -66,25 +103,36 @@ function initMobileMenuButton() {
   const menuButton = document.getElementById('mobile-menu-button');
   
   if (menuButton) {
-    // Eliminar cualquier event listener existente para evitar duplicados
-    menuButton.removeEventListener('click', handleMobileMenuButtonClick);
-    menuButton.removeEventListener('touchstart', handleMobileMenuButtonClick);
+    // Clonar el botón para eliminar todos los event listeners anteriores
+    const newButton = menuButton.cloneNode(true) as HTMLElement;
+    menuButton.parentNode?.replaceChild(newButton, menuButton);
     
-    // Agregar event listeners para clic y toque
-    menuButton.addEventListener('click', handleMobileMenuButtonClick);
-    menuButton.addEventListener('touchstart', handleMobileMenuButtonClick, { passive: true });
+    // Agregar event listener solo para click (funciona en móvil y desktop)
+    newButton.addEventListener('click', toggleMobileMenu);
   }
+  
+  // Resetear estado al inicializar
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+    mobileMenu.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+  isMenuOpen = false;
 }
 
+// Exponer funciones globalmente para que otros scripts puedan usarlas
+(window as any).openMobileMenu = openMobileMenu;
+(window as any).closeMobileMenu = closeMobileMenu;
+(window as any).toggleMobileMenu = toggleMobileMenu;
+
 // Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', initMobileMenuButton);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMobileMenuButton);
+} else {
+  initMobileMenuButton();
+}
 
 // Volver a inicializar cuando cambie el contenido de la página (navegación entre secciones)
 document.addEventListener('astro:page-load', initMobileMenuButton);
 document.addEventListener('astro:after-swap', initMobileMenuButton);
-
-// Asegurarse de que el botón funcione incluso si se carga dinámicamente
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  setTimeout(initMobileMenuButton, 100);
-}
 </script>

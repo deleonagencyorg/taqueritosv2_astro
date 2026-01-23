@@ -42,7 +42,7 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
 ---
 
 <!-- Menú Móvil Global -->
-<div id="mobile-menu" class="hidden md:hidden fixed inset-0 w-screen h-screen z-[2147483647] bg-primary bg-opacity-50 overflow-y-auto" data-current-lang={currentLang}>
+<div id="mobile-menu" class="hidden fixed inset-0 w-screen h-screen z-[2147483647] bg-primary bg-opacity-50 overflow-y-auto lg:hidden" data-current-lang={currentLang}>
   <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-8">
       <a href={`/${currentLang}/`} class="block">
@@ -215,6 +215,11 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
 </div>
 
 <script>
+// SVG para el icono del menú
+const MENU_ICON_SVG = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+</svg>`;
+
 // Función para alternar la visibilidad del submenú
 function toggleSubmenu(submenuContainer: Element, toggleButton: Element): void {
   submenuContainer.classList.toggle('hidden');
@@ -231,21 +236,27 @@ function toggleSubmenu(submenuContainer: Element, toggleButton: Element): void {
 }
 
 // Función para manejar el clic en el botón de cierre del menú móvil
-function handleCloseButtonClick() {
-  const mobileMenu = document.getElementById('mobile-menu');
-  if (mobileMenu) {
-    mobileMenu.classList.add('hidden');
-    document.body.style.overflow = '';
-    
-    // Actualizar el botón del header
-    const menuButton = document.getElementById('mobile-menu-button');
-    const menuIconContainer = document.getElementById('menu-icon-container');
-    if (menuButton && menuIconContainer) {
-      menuButton.setAttribute('aria-expanded', 'false');
-      // Restaurar icono de menú
-      menuIconContainer.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>`;
+function handleCloseButtonClick(e: Event) {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  // Usar la función global si está disponible
+  if (typeof (window as any).closeMobileMenu === 'function') {
+    (window as any).closeMobileMenu();
+  } else {
+    // Fallback: cerrar el menú manualmente
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu) {
+      mobileMenu.classList.add('hidden');
+      document.body.style.overflow = '';
+      
+      // Actualizar el botón del header
+      const menuButton = document.getElementById('mobile-menu-button');
+      const menuIconContainer = document.getElementById('menu-icon-container');
+      if (menuButton && menuIconContainer) {
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuIconContainer.innerHTML = MENU_ICON_SVG;
+      }
     }
   }
 }
@@ -253,6 +264,7 @@ function handleCloseButtonClick() {
 // Función para manejar el clic en los toggles del menú (primer nivel)
 function handleMenuToggleClick(e: Event): void {
   e.preventDefault();
+  e.stopPropagation();
   const toggle = e.currentTarget as Element;
   const parentDiv = toggle.closest('.w-full');
   const submenuContainer = parentDiv?.querySelector('.submenu-container');
@@ -265,6 +277,7 @@ function handleMenuToggleClick(e: Event): void {
 // Función para manejar el clic en los elementos padre del menú (primer nivel)
 function handleMenuParentClick(e: Event): void {
   e.preventDefault();
+  e.stopPropagation();
   const parent = e.currentTarget as Element;
   const parentDiv = parent.closest('.w-full');
   const submenuContainer = parentDiv?.querySelector('.submenu-container');
@@ -278,6 +291,7 @@ function handleMenuParentClick(e: Event): void {
 // Función para manejar el clic en los toggles del submenú (segundo nivel)
 function handleSubmenuToggleClick(e: Event): void {
   e.preventDefault();
+  e.stopPropagation();
   const toggle = e.currentTarget as Element;
   const parentDiv = toggle.closest('div');
   const thirdLevelSubmenu = parentDiv?.nextElementSibling;
@@ -290,6 +304,7 @@ function handleSubmenuToggleClick(e: Event): void {
 // Función para manejar el clic en los elementos padre del submenú (segundo nivel)
 function handleSubmenuParentClick(e: Event): void {
   e.preventDefault();
+  e.stopPropagation();
   const parent = e.currentTarget as Element;
   const parentDiv = parent.closest('div');
   const thirdLevelSubmenu = parentDiv?.nextElementSibling;
@@ -302,44 +317,53 @@ function handleSubmenuParentClick(e: Event): void {
 
 // Función para inicializar el menú móvil
 function initMobileMenu() {
-  // Botón de cierre
+  // Botón de cierre - clonar para eliminar event listeners anteriores
   const closeButton = document.getElementById('mobile-menu-close');
   if (closeButton) {
-    closeButton.removeEventListener('click', handleCloseButtonClick);
-    closeButton.addEventListener('click', handleCloseButtonClick);
+    const newCloseButton = closeButton.cloneNode(true) as HTMLElement;
+    closeButton.parentNode?.replaceChild(newCloseButton, closeButton);
+    newCloseButton.addEventListener('click', handleCloseButtonClick);
   }
   
-  // Toggles del menú (primer nivel)
-  const menuToggles = document.querySelectorAll('.menu-toggle');
+  // Toggles del menú (primer nivel) - clonar para eliminar event listeners
+  const menuToggles = document.querySelectorAll('#mobile-menu .menu-toggle');
   menuToggles.forEach(toggle => {
-    toggle.removeEventListener('click', handleMenuToggleClick);
-    toggle.addEventListener('click', handleMenuToggleClick);
+    const newToggle = toggle.cloneNode(true) as HTMLElement;
+    toggle.parentNode?.replaceChild(newToggle, toggle);
+    newToggle.addEventListener('click', handleMenuToggleClick);
   });
   
   // Elementos padre del menú (primer nivel)
-  const menuParents = document.querySelectorAll('.menu-parent');
+  const menuParents = document.querySelectorAll('#mobile-menu .menu-parent');
   menuParents.forEach(parent => {
-    parent.removeEventListener('click', handleMenuParentClick);
-    parent.addEventListener('click', handleMenuParentClick);
+    const newParent = parent.cloneNode(true) as HTMLElement;
+    parent.parentNode?.replaceChild(newParent, parent);
+    newParent.addEventListener('click', handleMenuParentClick);
   });
   
   // Toggles del submenú (segundo nivel)
-  const submenuToggles = document.querySelectorAll('.submenu-toggle');
+  const submenuToggles = document.querySelectorAll('#mobile-menu .submenu-toggle');
   submenuToggles.forEach(toggle => {
-    toggle.removeEventListener('click', handleSubmenuToggleClick);
-    toggle.addEventListener('click', handleSubmenuToggleClick);
+    const newToggle = toggle.cloneNode(true) as HTMLElement;
+    toggle.parentNode?.replaceChild(newToggle, toggle);
+    newToggle.addEventListener('click', handleSubmenuToggleClick);
   });
   
   // Elementos padre del submenú (segundo nivel)
-  const submenuParents = document.querySelectorAll('.submenu-parent');
+  const submenuParents = document.querySelectorAll('#mobile-menu .submenu-parent');
   submenuParents.forEach(parent => {
-    parent.removeEventListener('click', handleSubmenuParentClick);
-    parent.addEventListener('click', handleSubmenuParentClick);
+    const newParent = parent.cloneNode(true) as HTMLElement;
+    parent.parentNode?.replaceChild(newParent, parent);
+    newParent.addEventListener('click', handleSubmenuParentClick);
   });
 }
 
 // Ejecutar cuando se carga la página
-document.addEventListener('DOMContentLoaded', initMobileMenu);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMobileMenu);
+} else {
+  initMobileMenu();
+}
 
 // Ejecutar cuando Astro navega a una nueva página
 document.addEventListener('astro:page-load', initMobileMenu);

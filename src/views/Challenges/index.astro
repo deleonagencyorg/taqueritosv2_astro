@@ -248,28 +248,30 @@ const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Disco
           {games.length > 0 && (
             <div>
               <div class="flex items-center justify-between mb-6">
-                <h2 class="font-title text-xl md:text-2xl font-bold text-white uppercase">
-                  {gamesTitle}
-                </h2>
+                <div class="title">
+                  <p>
+                    {gamesTitle}
+                  </p>
+                </div>
                 <div class="flex gap-3">
                   <button
                     type="button"
-                    class="games-carousel-btn-prev w-12 h-12 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300"
+                    class="games-carousel-btn-prev w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
                     aria-label="Anterior"
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                       <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                   </button>
                   <button
                     type="button"
-                    class="games-carousel-btn-next w-12 h-12 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300"
+                    class="games-carousel-btn-next w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
                     aria-label="Siguiente"
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.2002 7 15.2002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                   </button>
                 </div>
@@ -282,9 +284,9 @@ const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Disco
                       href={game.enlace}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="game-card min-w-[210px] w-[210px] border-2 border-[#ff2d2d] flex-shrink-0 transition-all duration-300"
+                      class="game-card min-w-[260px] w-[260px] sm:min-w-[280px] sm:w-[280px] border-2 border-[#ff2d2d] flex-shrink-0 transition-all duration-300"
                     >
-                      <div class="h-32 w-full overflow-hidden">
+                      <div class="h-40 sm:h-44 w-full overflow-hidden">
                         <LazyImage
                           src={game.imagen}
                           alt={game.titulo}
@@ -293,10 +295,10 @@ const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Disco
                         />
                       </div>
                       <div class="p-4">
-                        <h3 class="font-title text-sm font-bold text-white uppercase mb-2 leading-tight">
+                        <h3 class="font-title text-base font-bold text-white uppercase mb-2 leading-tight">
                           {game.titulo}
                         </h3>
-                        <p class="text-xs text-white/80 leading-relaxed">
+                        <p class="text-sm text-white/80 leading-relaxed">
                           {game.descripcion}
                         </p>
                       </div>
@@ -322,18 +324,22 @@ const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Disco
 
     if (!track || !prevBtn || !nextBtn) return;
 
+    const trackEl = track as HTMLElement;
+    const prevBtnEl = prevBtn as HTMLButtonElement;
+    const nextBtnEl = nextBtn as HTMLButtonElement;
+
     // Habilitar scroll snapping para alinear tarjetas exactamente
-    track.style.scrollSnapType = 'x mandatory';
-    Array.from(track.querySelectorAll('.game-card')).forEach((c: Element) => {
+    trackEl.style.scrollSnapType = 'x mandatory';
+    Array.from(trackEl.querySelectorAll('.game-card')).forEach((c: Element) => {
       (c as HTMLElement).style.scrollSnapAlign = 'start';
     });
 
     function getScrollAmount() {
-      const first = track.querySelector('.game-card') as HTMLElement | null;
+      const first = trackEl.querySelector('.game-card') as HTMLElement | null;
       if (!first) return 220;
       const cardWidth = Math.round(first.getBoundingClientRect().width);
       // intentamos obtener el gap (soporte moderno para flex gap)
-      const gapStyle = getComputedStyle(track).columnGap || getComputedStyle(track).gap || '0px';
+      const gapStyle = getComputedStyle(trackEl).columnGap || getComputedStyle(trackEl).gap || '0px';
       const gap = Math.round(parseFloat(gapStyle) || 0);
       return cardWidth + gap;
     }
@@ -347,12 +353,12 @@ const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Disco
       resizeTimeout = setTimeout(() => { scrollAmount = getScrollAmount(); }, 120);
     });
 
-    prevBtn.addEventListener('click', () => {
-      track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    prevBtnEl.addEventListener('click', () => {
+      trackEl.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     });
 
-    nextBtn.addEventListener('click', () => {
-      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    nextBtnEl.addEventListener('click', () => {
+      trackEl.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     });
   }
 
