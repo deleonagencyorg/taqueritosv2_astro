@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { getLocale } from '../../../i18n/i18n';
+import LazyImage from '../LazyImage.astro';
 
 interface SlideItem {
   desktop: string;
@@ -84,13 +85,13 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                   <div class="media-container">
                     {slide.link ? (
                       <a href={slide.link} class="media-link" aria-label={slide.alt || "Slide link"}>
-                        <img
+                        <LazyImage
                           src={slide.desktop}
                           alt={slide.alt || "Slide background"}
                           class="media-element media-desktop"
                           loading={index === 0 ? "eager" : "lazy"}
                         />
-                        <img
+                        <LazyImage
                           src={slide.mobile}
                           alt={slide.alt || "Slide background"}
                           class="media-element media-mobile"
@@ -99,13 +100,13 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                       </a>
                     ) : (
                       <>
-                        <img
+                        <LazyImage
                           src={slide.desktop}
                           alt={slide.alt || "Slide background"}
                           class="media-element media-desktop"
                           loading={index === 0 ? "eager" : "lazy"}
                         />
-                        <img
+                        <LazyImage
                           src={slide.mobile}
                           alt={slide.alt || "Slide background"}
                           class="media-element media-mobile"
@@ -122,14 +123,14 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                 <div class="slide-content" style={`height: ${height};`}>
                   <div class="image-container relative w-full h-[680px] md:w-full md:h-full flex md:items-center md:justify-center">
                   <!-- Imagen principal (desktop) -->
-                  <img
+                  <LazyImage
                     src={slide.desktop}
                     alt={slide.alt || "Slide background"}
                     class="slide-image desktop-image h-auto z-20 bg-transparent w-[1200px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 
-                  <img
+                  <LazyImage
                     src={slide.mobile}
                     alt={slide.alt || "Slide background"}
                     class="slide-image mobile-image h-auto z-20 bg-transparent w-[1200px]"
@@ -736,8 +737,18 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     }
 
     /* Reducir altura de la imagen principal en mobile */
-    .product-slide-wrapper .image-container { height: 260px !important; }
-    .mobile-image { height: 100% !important; width: auto; object-fit: contain; }
+    .product-slide-wrapper .image-container {
+      height: 320px !important;
+      align-items: center;
+      justify-content: center;
+    }
+    .mobile-image {
+      height: 100% !important;
+      width: auto;
+      object-fit: contain;
+      transform: scale(1.08);
+      transform-origin: center;
+    }
 
     /* Mejorar envoltura de títulos en overlay */
     .text-content .slide-title { white-space: normal; word-break: normal; overflow-wrap: normal; }
