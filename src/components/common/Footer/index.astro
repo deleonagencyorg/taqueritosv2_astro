@@ -33,17 +33,17 @@ const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
 const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taqueritos-2019-300x100.webp';
 ---
 
-{loading ? (
+ {loading ? (
   <Skeleton />
 ) : (
   <footer class="bg-brown text-white relative overflow-hidden">
-    <div class="container text-center flex justify-center items-center mx-auto px-6 py-8 md:py-12">
+    <div class="container text-center flex justify-center items-center mx-auto px-6 py-8 md:py-4">
       <div class="flex flex-col md:flex-row md:gap-32 xl:gap-64">
         
         <!-- Columna 1: Logo y Navegación -->
         <div class="flex flex-col">
           <!-- Logo -->
-          <div class="mb-8 md:mb-12 md:mt-12">
+          <div class="mb-8 md:mb-8 md:mt-0">
             <a href={`/${currentLang}/`}>
               <LazyImage 
                 src={logos.principal.url} 
@@ -54,7 +54,7 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
           </div>
           
           <!-- Navegación -->
-          <div class="flex flex-col items-start justify-start mb-12 md:mb-24">
+          <div class="flex flex-col items-start justify-start mb-10 md:mb-12">
             <h3 class="font-title text-xl md:text-2xl font-bold mb-4 uppercase">
               {currentLang === 'es' ? 'Navegación' : 'Navigation'}
             </h3>
@@ -73,7 +73,7 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
         </div>
         
         <!-- Columna 2: Contacto -->
-        <div class="flex flex-col space-y-8 md:space-y-12 md:mt-12">
+        <div class="flex flex-col space-y-8 md:space-y-12 md:mt-0">
           
           <!-- Escríbenos -->
           <div class="text-left">
@@ -205,7 +205,7 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
                 
               </div>
             </div>
-            <div class="md:mt-[100px] md:ml-[50px] mt-8">
+            <div class="md:mt-10 md:ml-[50px] mt-8">
               <div class="flex flex-col items-center md:items-start gap-2 text-center md:text-left">
                 <p class="mb-1">{followUs}</p>
                 <SocialMediaIcons currentLang={currentLang} iconColor="white" centered={false} />

@@ -46,8 +46,8 @@ const currentTexts = texts[currentLang as keyof typeof texts];
 const productsItems = Array.isArray(products) ? products : [];
 
 // Duplicar productos para loop infinito con 3 items
-const itemsToRender = productsItems.length <= 3 
-  ? [...productsItems, ...productsItems, ...productsItems] 
+const itemsToRender = productsItems.length <= 3 && productsItems.length > 1
+  ? [...productsItems, ...productsItems, ...productsItems]
   : productsItems;
 
 import LazyImage from "../LazyImage.astro";
@@ -59,68 +59,73 @@ import LazyImage from "../LazyImage.astro";
   data-speed={speed}
   data-count={productsItems.length}
 >
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      {
-        itemsToRender.map((product) => (
-          <div class="swiper-slide">
-            <div
-              class="product-card rounded-[22.02px] border"
-              style={`background-color: ${product.background_color || "#F08C00"}; border-color: ${product.boder_color || "#F08C00"}`}
-            >
-              <div class="product-image-container">
-                <LazyImage
-                  src={product.imageMobile || product.image}
-                  alt={product.name}
-                  class="product-image  md:mt-[0px] -mt-[35px]"
-                  width={300}
-                  height={400}
-                />
-              </div>
+  {productsItems.length === 0 ? (
+    <div class="w-full py-10 flex items-center justify-center">
+      <p class="text-white text-center text-lg md:text-xl font-semibold">No hay contenido disponible</p>
+    </div>
+  ) : (
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        {
+          itemsToRender.map((product) => (
+            <div class="swiper-slide">
+              <div
+                class="product-card rounded-[22.02px] border"
+                style={`background-color: ${product.background_color || "#F08C00"}; border-color: ${product.boder_color || "#F08C00"}`}
+              >
+                <div class="product-image-container">
+                  <LazyImage
+                    src={product.imageMobile || product.image}
+                    alt={product.name}
+                    class="product-image  md:mt-[0px] -mt-[35px]"
+                    width={300}
+                    height={400}
+                  />
+                </div>
 
-              <div class="absolute bottom-0 left-0">
-                <p
-                  class="product-name whitespace-nowrap pb-[12px]"
-                  style={`color: ${product.text_color || "#10b981"}`}
-                >
-                  {product.name}
-                </p>
+                <div class="absolute bottom-0 left-0">
+                  <p
+                    class="product-name whitespace-nowrap pb-[12px]"
+                    style={`color: ${product.text_color || "#10b981"}`}
+                  >
+                    {product.name}
+                  </p>
 
-                 {/* TODO: redirigir a la página del producto */}
-                {/* href={`/${currentLang}/${currentLang === 'es' ? 'productos' : 'products'}/${product.id}`} */}
-
-                <a
-                  href={`/${currentLang}/${currentLang === 'es' ? 'productos' : 'products'}/${product.id}`}
-                  style={`background: radial-gradient(${product.color_button || "#FF8E52"}, ${product.second_color_button || "#FF4400"} 0%, ${product.color_button || "#FF8E52"} 100%);`}
-                  class="btn-view flex w-full h-[54px] text-[22.02px]  justify-center items-center shrink-0 rounded border border-[0.1px] text-white font-title hover:shadow-lg"
-                  data-no-swipe="true"
-                  data-no-animation="true"
-                >
-                  {currentTexts.viewMore}
-                </a>
+                  <a
+                    href={`/${currentLang}/${currentLang === 'es' ? 'productos' : 'products'}/${product.id}`}
+                    style={`background: radial-gradient(${product.color_button || "#FF8E52"}, ${product.second_color_button || "#FF4400"} 0%, ${product.color_button || "#FF8E52"} 100%);`}
+                    class="btn-view flex w-full h-[54px] text-[22.02px]  justify-center items-center shrink-0 rounded border-[0.1px] text-white font-title hover:shadow-lg"
+                    data-no-swipe="true"
+                    data-no-animation="true"
+                  >
+                    {currentTexts.viewMore}
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        ))
-      }
-    </div>
+          ))
+        }
+      </div>
 
-    <!-- Navegación -->
-    <div class="carousel-navigation">
-      <button class="swiper-button-prev">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <button class="swiper-button-next">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+      <!-- Navegación -->
+      {productsItems.length > 1 && (
+        <div class="carousel-navigation">
+          <button class="swiper-button-prev">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="swiper-button-next">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      )}
     </div>
-  </div>
+  )}
 </div>
 
 <style>
@@ -438,6 +443,11 @@ class ProductsCarousel {
     ) as HTMLElement;
     if (!swiperContainer) return;
 
+    // Si hay 0 o 1 productos reales, no inicializar Swiper (no hay navegación)
+    if (this.total <= 1) {
+      return;
+    }
+
     const nextEl = this.container.querySelector(
       ".swiper-button-next",
     ) as HTMLElement;
@@ -454,7 +464,7 @@ class ProductsCarousel {
       modules: [Navigation, Autoplay],
       
       // Loop infinito con slides duplicados
-      loop: true,
+      loop: this.total > 1,
       slidesPerView: 3,
       spaceBetween: 50,
       speed: 600,

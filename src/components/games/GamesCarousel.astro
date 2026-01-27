@@ -33,32 +33,40 @@ const defaultTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Dis
 const displayTitle = title || defaultTitle;
 ---
 
-{gameItems.length > 0 && (
+{gameItems.length === 0 ? (
+  <div class="w-full py-10 flex items-center justify-center">
+    <p class="text-white text-center text-lg md:text-xl font-semibold">
+      {currentLang === 'es' ? 'No hay juegos disponibles' : 'No games available'}
+    </p>
+  </div>
+) : (
   <div class="games-carousel-container">
     <div class="flex items-center justify-between mb-6">
       <slot name="title" />
-      <div class="flex gap-3">
-        <button
-          type="button"
-          class="games-carousel-btn-prev w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
-          aria-label="Anterior"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <button
-          type="button"
-          class="games-carousel-btn-next w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
-          aria-label="Siguiente"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.2002 7 15.2002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
+      {gameItems.length > 1 && (
+        <div class="flex gap-3">
+          <button
+            type="button"
+            class="games-carousel-btn-prev w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
+            aria-label="Anterior"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="games-carousel-btn-next w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
+            aria-label="Siguiente"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.2002 7 15.2002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      )}
     </div>
     <div class="relative games-carousel-wrapper">
       <div class="flex gap-4 overflow-x-auto pb-8 pt-3 games-carousel-track">
@@ -73,7 +81,7 @@ const displayTitle = title || defaultTitle;
               <LazyImage
                 src={game.imagen}
                 alt={game.titulo}
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover object-center"
                 loading="lazy"
               />
             </div>

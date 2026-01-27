@@ -27,6 +27,11 @@ const {
 } = Astro.props;
 ---
 
+{players.length === 0 ? (
+  <div class="w-full py-10 flex items-center justify-center bg-[#081806]">
+    <p class="text-white text-center text-lg md:text-xl font-semibold">No hay contenido disponible</p>
+  </div>
+) : (
 <div class="players-carousel-container relative overflow-hidden">
   <!-- Header fijo FUERA del carrusel -->
   <div class="flex flex-col md:flex-col lg:flex-row lg:justify-between lg:items-center lg:ml-[20px] lg:mr-[80px] mt-[40px] mb-[40px]">
@@ -78,6 +83,7 @@ const {
     </div>
   </div>
 </div>
+)}
 
 <style>
   .players-carousel-container {
@@ -303,6 +309,8 @@ const {
   function initPlayersCarousel() {
     const el = document.querySelector(selector);
     if (!el) return;
+    const slidesCount = el.querySelectorAll('.swiper-slide').length;
+    if (slidesCount <= 1) return;
     if (el.classList.contains('swiper-initialized')) return;
     if (swiperMap.has(el)) { try { const s = swiperMap.get(el); s && s.update && s.update(); } catch {} return; }
     const s = new Swiper(selector, {
