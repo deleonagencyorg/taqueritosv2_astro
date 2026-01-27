@@ -11,6 +11,7 @@
       ],      
       "type":"image",
       "preparation_time": 60,
+      "category": "lunch",
       "ingredients": [
         "12 alitas de pollo",
         "Salpimentar al gusto",
