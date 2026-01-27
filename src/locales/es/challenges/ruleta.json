@@ -1,5 +1,5 @@
 {
-  "date": "2025-11-01",
+  "date": "2025-27-01",
   "id": "ruleta",
   "slug": "ruleta",
   "title": "Ruleta",
@@ -14,7 +14,7 @@
   "category": "challenge",
   "brand": ["taqueritos"],
   "start-date": "2026-01-27",
-  "end-date": "2026-05-27",
+  "end-date": "2026-02-28",
   "urls": [
     {
       "title": "Aplica a Guatemala y El Salvador",
