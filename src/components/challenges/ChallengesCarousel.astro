@@ -70,14 +70,13 @@ challengeItems = challengeItems.filter((c) => {
   return afterStart && beforeEnd;
 });
 
-// Ordenar para que "escaner" sea el primero
+// Ordenar por fecha de inicio: más reciente primero
 challengeItems.sort((a, b) => {
-  const aIsEscaner = a.id === 'escaner' || a.slug === 'escaner';
-  const bIsEscaner = b.id === 'escaner' || b.slug === 'escaner';
-  
-  if (aIsEscaner && !bIsEscaner) return -1;
-  if (!aIsEscaner && bIsEscaner) return 1;
-  return 0;
+  const aStart = parseDateSafe(a["start-date"]);
+  const bStart = parseDateSafe(b["start-date"]);
+  const aVal = isNaN(aStart) ? 0 : aStart;
+  const bVal = isNaN(bStart) ? 0 : bStart;
+  return bVal - aVal;
 });
 
 function getCategoryKey(challenge: any): string {
@@ -365,15 +364,16 @@ function getCategoryKey(challenge: any): string {
       display: none;
     }
 
-    /* En mobile los botones van debajo del título, alineados a la izquierda */
+    /* En mobile los botones van debajo del título, alineados a la derecha */
     .carousel-navigation {
       position: relative;
       top: 0;
       right: auto;
       left: 0;
       transform: none;
+      width: 100%;
       margin-top: 16px;
-      justify-content: flex-start;
+      justify-content: flex-end;
     }
 
     .carousel-btn-prev,

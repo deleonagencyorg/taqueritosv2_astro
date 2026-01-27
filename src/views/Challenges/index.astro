@@ -59,31 +59,27 @@ function getEnd(item: SummaryChallenge): number {
   return parseDate(endStr);
 }
 
-// Elegir el evento vigente o el más reciente
-// Priorizar el evento "escaner" como principal
-let featuredChallenge: SummaryChallenge | null = null;
-if (summaryItems.length > 0) {
-  // Buscar primero el evento "escaner"
-  const escanerEvent = summaryItems.find((it) => it.id === 'escaner' || it.slug === 'escaner');
-  
-  if (escanerEvent) {
-    featuredChallenge = escanerEvent;
-  } else {
-    // Si no existe escaner, usar la lógica anterior
-    const withDates = summaryItems.map((it) => ({
-      ...it,
-      _start: getStart(it),
-      _end: getEnd(it),
-    }));
+// Ordenar retos por fecha de inicio (más reciente primero)
+const orderedChallenges = summaryItems
+  .map((it) => ({
+    ...it,
+    _start: getStart(it),
+    _end: getEnd(it),
+  }))
+  .sort((a, b) => (b._start || 0) - (a._start || 0));
 
-    const current = withDates.filter((it) => it._start && it._end && it._start <= todayTs && todayTs <= it._end);
-    if (current.length > 0) {
-      featuredChallenge = current.sort((a, b) => a._start - b._start)[0];
-    } else {
-      featuredChallenge = withDates.sort((a, b) => b._start - a._start)[0];
-    }
-  }
-}
+// Elegir promo/featured: preferir el reto vigente cuya fecha de inicio sea la más reciente.
+const activeChallenges = orderedChallenges.filter((it) => {
+  const hasStart = Boolean(it._start);
+  const hasEnd = Boolean(it._end);
+  if (hasStart && hasEnd) return it._start <= todayTs && todayTs <= it._end;
+  if (hasStart && !hasEnd) return it._start <= todayTs;
+  if (!hasStart && hasEnd) return todayTs <= it._end;
+  return true;
+});
+
+const featuredChallenge: SummaryChallenge | null =
+  (activeChallenges.length > 0 ? activeChallenges[0] : orderedChallenges[0]) || null;
 
 const pageTitle = currentLang === 'es' ? 'Retos y torneos' : 'Challenges & Tournaments';
 const sectionTitle = currentLang === 'es' ? 'Participa en nuestros retos' : 'Join our challenges';
@@ -242,80 +238,6 @@ const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Disco
       </div>
     </section>
 
-    {currentLang === 'es' && (
-      <section class="w-full py-16" style="background: transparent !important;">
-        <div class="w-full max-w-6xl mx-auto px-4">
-          {games.length > 0 && (
-            <div>
-              <div class="flex items-center justify-between mb-6">
-                <div class="title">
-                  <p>
-                    {gamesTitle}
-                  </p>
-                </div>
-                {games.length > 1 && (
-                  <div class="flex gap-3">
-                    <button
-                      type="button"
-                      class="games-carousel-btn-prev w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
-                      aria-label="Anterior"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-                    <button
-                      type="button"
-                      class="games-carousel-btn-next w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
-                      aria-label="Siguiente"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.2002 7 15.2002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <div class="relative games-carousel-wrapper" id="games">
-                <div class="flex gap-4 overflow-x-auto pb-8 pt-3 games-carousel-track" style="scroll-behavior: smooth;">
-                  {games.map((game) => (
-                    <a
-                      href={game.enlace}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="game-card min-w-[260px] w-[260px] sm:min-w-[280px] sm:w-[280px] border-2 border-[#ff2d2d] flex-shrink-0 transition-all duration-300"
-                    >
-                      <div class="h-40 sm:h-44 w-full overflow-hidden">
-                        <LazyImage
-                          src={game.imagen}
-                          alt={game.titulo}
-                          class="w-full h-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div class="p-4">
-                        <h3 class="font-title text-base font-bold text-white uppercase mb-2 leading-tight">
-                          {game.titulo}
-                        </h3>
-                        <p class="text-sm text-white/80 leading-relaxed">
-                          {game.descripcion}
-                        </p>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              {/* padding extra abajo para separación */}
-              <div class="h-8 md:h-12"></div>
-            </div>
-          )}
-        </div>
-      </section>
-    )}
 
 <script>
   // Script para el carrusel de juegos (mejorado: cálculo dinámico del desplazamiento y snap)
@@ -506,7 +428,18 @@ const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Disco
       <h2 class="font-title text-2xl md:text-3xl font-bold text-white uppercase mb-6">
         {sectionTitle}
       </h2>
-      <ChallengesCarousel />
+      <ChallengesCarousel items={orderedChallenges} />
     </section>
+        {games.length > 0 && (
+      <section class="w-full py-8 bg-brown" id="games">
+        <div class="container mx-auto px-4">
+          <GamesCarousel items={games}>
+            <div slot="title" class="title">
+              <p>{gamesTitle}</p>
+            </div>
+          </GamesCarousel>
+        </div>
+      </section>
+    )}
   </div>
 </div>
