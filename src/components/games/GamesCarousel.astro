@@ -34,13 +34,13 @@ const displayTitle = title || defaultTitle;
 ---
 
 {gameItems.length === 0 ? (
-  <div class="w-full py-10 flex items-center justify-center">
+  <div class="w-full py-18 flex items-center justify-center">
     <p class="text-white text-center text-lg md:text-xl font-semibold">
       {currentLang === 'es' ? 'No hay juegos disponibles' : 'No games available'}
     </p>
   </div>
 ) : (
-  <div class="games-carousel-container">
+  <div class="games-carousel-container py-12" data-games-carousel>
     <div class="flex items-center justify-between mb-6">
       <slot name="title" />
       {gameItems.length > 1 && (
@@ -68,32 +68,36 @@ const displayTitle = title || defaultTitle;
         </div>
       )}
     </div>
-    <div class="relative games-carousel-wrapper">
-      <div class="flex gap-4 overflow-x-auto pb-8 pt-3 games-carousel-track">
+
+    <!-- Carousel con overflow hidden y translateX -->
+    <div class="games-carousel-viewport overflow-hidden">
+      <div class="games-carousel-track flex transition-transform duration-300 ease-out" data-games-track>
         {gameItems.map((game) => (
-          <a
-            href={game.enlace}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="game-card min-w-[260px] w-[260px] sm:min-w-[280px] sm:w-[280px] bg-[#1a0808] border-2 border-[#ff2d2d] flex-shrink-0 transition-all duration-300"
-          >
-            <div class="h-52 md:h-72 w-full overflow-hidden bg-black/50">
-              <LazyImage
-                src={game.imagen}
-                alt={game.titulo}
-                class="w-full h-full object-cover object-center"
-                loading="lazy"
-              />
-            </div>
-            <div class="p-5">
-              <h3 class="font-title text-base font-bold text-white uppercase mb-2 leading-tight">
-                {game.titulo}
-              </h3>
-              <p class="text-sm text-white/80 leading-relaxed">
-                {game.descripcion}
-              </p>
-            </div>
-          </a>
+          <div class="game-slide flex-shrink-0 px-2">
+            <a
+              href={game.enlace}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="game-card flex flex-col w-full h-full bg-[#1a0808] border-2 border-[#ff2d2d] transition-all duration-300 rounded-sm"
+            >
+              <div class="game-card-image w-full flex-shrink-0 overflow-hidden bg-black/50">
+                <LazyImage
+                  src={game.imagen}
+                  alt={game.titulo}
+                  class="w-full h-full object-cover object-center"
+                  loading="lazy"
+                />
+              </div>
+              <div class="game-card-content flex flex-col flex-grow p-4 md:p-5">
+                <h3 class="font-title text-sm md:text-base font-bold text-white uppercase mb-2 leading-tight line-clamp-2">
+                  {game.titulo}
+                </h3>
+                <p class="text-xs md:text-sm text-white/80 leading-relaxed line-clamp-3">
+                  {game.descripcion}
+                </p>
+              </div>
+            </a>
+          </div>
         ))}
       </div>
     </div>
@@ -102,53 +106,89 @@ const displayTitle = title || defaultTitle;
 
 <script>
   function initGamesCarousel() {
-    const track = document.querySelector('.games-carousel-track') as HTMLElement;
-    const prevBtn = document.querySelector('.games-carousel-btn-prev') as HTMLButtonElement;
-    const nextBtn = document.querySelector('.games-carousel-btn-next') as HTMLButtonElement;
+    const containers = document.querySelectorAll('[data-games-carousel]');
+    
+    containers.forEach((container) => {
+      if ((container as any)._gamesCarouselInit) return;
+      (container as any)._gamesCarouselInit = true;
 
-    if (!track || !prevBtn || !nextBtn) return;
+      const track = container.querySelector('[data-games-track]') as HTMLElement;
+      const prevBtn = container.querySelector('.games-carousel-btn-prev') as HTMLButtonElement;
+      const nextBtn = container.querySelector('.games-carousel-btn-next') as HTMLButtonElement;
+      const slides = Array.from(container.querySelectorAll('.game-slide')) as HTMLElement[];
 
-    function getScrollAmount() {
-      const first = track.querySelector('.game-card') as HTMLElement | null;
-      if (!first) return 220;
-      const cardWidth = Math.round(first.getBoundingClientRect().width);
-      const gapStyle = getComputedStyle(track).columnGap || getComputedStyle(track).gap || '0px';
-      const gap = Math.round(parseFloat(gapStyle) || 0);
-      return cardWidth + gap;
-    }
+      if (!track || slides.length === 0) return;
 
-    let scrollAmount = getScrollAmount();
+      let currentIndex = 0;
 
-    let resizeTimeout: any = null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        scrollAmount = getScrollAmount();
-      }, 120);
-    });
+      function getVisibleCount(): number {
+        const width = window.innerWidth;
+        if (width >= 1024) return 4; // Desktop: 4 cards
+        if (width >= 768) return 2;  // Tablet: 2 cards
+        return 1;                     // Mobile: 1 card
+      }
 
-    prevBtn.addEventListener('click', () => {
-      track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    });
+      function getMaxIndex(): number {
+        const visible = getVisibleCount();
+        return Math.max(0, slides.length - visible);
+      }
 
-    nextBtn.addEventListener('click', () => {
-      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      function updateCarousel() {
+        const visible = getVisibleCount();
+        const slideWidth = 100 / visible;
+        
+        slides.forEach((slide) => {
+          slide.style.width = `${slideWidth}%`;
+        });
+
+        const offset = currentIndex * slideWidth;
+        track.style.transform = `translateX(-${offset}%)`;
+      }
+
+      function goNext() {
+        const maxIndex = getMaxIndex();
+        if (currentIndex < maxIndex) {
+          currentIndex++;
+        } else {
+          currentIndex = 0;
+        }
+        updateCarousel();
+      }
+
+      function goPrev() {
+        if (currentIndex > 0) {
+          currentIndex--;
+        } else {
+          currentIndex = getMaxIndex();
+        }
+        updateCarousel();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', goPrev);
+      if (nextBtn) nextBtn.addEventListener('click', goNext);
+
+      let resizeTimeout: any = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const maxIndex = getMaxIndex();
+          if (currentIndex > maxIndex) currentIndex = maxIndex;
+          updateCarousel();
+        }, 100);
+      });
+
+      updateCarousel();
     });
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGamesCarousel);
-  } else {
-    initGamesCarousel();
-  }
-
-  document.addEventListener('astro:page-load', initGamesCarousel);
 
   function initGamesHover() {
     const cards = Array.from(document.querySelectorAll('.game-card')) as HTMLElement[];
     if (!cards.length) return;
 
     cards.forEach((card) => {
+      if ((card as any)._hoverInit) return;
+      (card as any)._hoverInit = true;
+
       card.addEventListener('mouseenter', () => {
         cards.forEach((c) => {
           c.classList.add('game-card-dim');
@@ -166,38 +206,68 @@ const displayTitle = title || defaultTitle;
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGamesHover);
-  } else {
+  function initAll() {
+    initGamesCarousel();
     initGamesHover();
   }
 
-  document.addEventListener('astro:page-load', initGamesHover);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+
+  document.addEventListener('astro:page-load', initAll);
+  document.addEventListener('astro:after-swap', initAll);
 </script>
 
 <style>
-  .games-carousel-wrapper {
-    overflow: visible;
+  .games-carousel-container {
+    width: 100%;
+  }
+
+  .games-carousel-viewport {
+    width: 100%;
+    overflow: hidden;
   }
 
   .games-carousel-track {
-    overflow-y: visible;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-  }
-  
-  .games-carousel-track::-webkit-scrollbar {
-    display: none;
-    height: 0;
+    display: flex;
+    will-change: transform;
+    align-items: stretch;
   }
 
-  .games-carousel-track > a:first-child { margin-left: 1rem; }
-  .games-carousel-track > a:last-child { margin-right: 1rem; }
-  
+  .game-slide {
+    flex-shrink: 0;
+    padding: 0 8px;
+    box-sizing: border-box;
+    display: flex;
+  }
+
+  .game-card-image {
+    height: 140px;
+  }
+
+  @media (min-width: 768px) {
+    .game-card-image {
+      height: 160px;
+    }
+  }
+
   @media (min-width: 1024px) {
-    .games-carousel-track > a:first-child { margin-left: 1.5rem; }
-    .games-carousel-track > a:last-child { margin-right: 1.5rem; }
+    .game-card-image {
+      height: 180px;
+    }
+  }
+
+  .game-card-content {
+    min-height: 100px;
+  }
+
+  @media (min-width: 768px) {
+    .game-card-content {
+      min-height: 110px;
+    }
   }
 
   .game-card {
@@ -206,13 +276,18 @@ const displayTitle = title || defaultTitle;
     box-shadow: none;
   }
 
+  .game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 25px rgba(255, 45, 45, 0.5);
+  }
+
   .game-card-active {
     opacity: 1;
-    transform: translateY(-6px) scale(1.04);
+    transform: translateY(-6px) scale(1.02);
     box-shadow: 0 0 30px rgba(255, 45, 45, 0.7);
   }
 
   .game-card-dim {
-    opacity: 0.45;
+    opacity: 0.5;
   }
 </style>

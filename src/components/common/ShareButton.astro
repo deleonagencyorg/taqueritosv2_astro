@@ -13,7 +13,25 @@ const { modalId, lang, className = '', url } = Astro.props;
 const derivedLang = (lang || Astro.url.pathname.split('/')[1] || 'es') as 'es' | 'en';
 const label = derivedLang === 'es' ? 'Compartir:' : 'Share:';
 
-const rawUrl = url || Astro.url.href;
+const siteOrigin = (
+  (import.meta as any).env?.PUBLIC_SITE_URL ||
+  (Astro.site ? Astro.site.origin : '') ||
+  'https://taqueritos.com'
+);
+
+function toAbsoluteUrl(input: string): string {
+  try {
+    // Si ya es absoluta, la dejamos tal cual
+    return new URL(input).href;
+  } catch {
+    // Si es relativa, la resolvemos contra el sitio
+    return new URL(input, siteOrigin).href;
+  }
+}
+
+const rawUrl = url
+  ? toAbsoluteUrl(url)
+  : new URL(`${Astro.url.pathname}${Astro.url.search}`, siteOrigin).href;
 const encodedUrl = encodeURIComponent(rawUrl);
 const encodedText = encodeURIComponent('');
 ---

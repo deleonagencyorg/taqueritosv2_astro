@@ -33,52 +33,27 @@ const currentLang = getLocale();
     data-prev-btn-id={prevBtnId}
     data-next-btn-id={nextBtnId}
   >
-    <!-- Desktop carousel -->
-    <div class="hidden md:block relative">
-      <div class="overflow-hidden relative">
-        <div id="relatedTrackDesktop" class="flex gap-6 transition-transform duration-300 will-change-transform">
-          {items.map((recipe) => (
-            <div class="w-[360px] flex-shrink-0">
-              <RecipeCard
-                image={recipe.image || '/images/recipes/placeholder.jpg'}
-                title={recipe.title}
-                time={`${recipe.preparation_time} MIN`}
-                id={recipe.id}
-                textColor="text-white"
-                iconColor="text-white"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile carousel -->
-    <div class="md:hidden relative">
-      <div class="overflow-hidden relative">
-        <div id="relatedTrackMobile" class="flex gap-0 transition-transform duration-300 will-change-transform">
-          {items.map((recipe) => (
-            <div class="w-full flex-shrink-0 flex justify-center">
-              <div class="w-full max-w-sm">
-                <RecipeCard
-                  image={recipe.image || '/images/recipes/placeholder.jpg'}
-                  title={recipe.title}
-                  time={`${recipe.preparation_time} MIN`}
-                  id={recipe.id}
-                  textColor="text-white"
-                  iconColor="text-white"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+    <!-- Unified responsive carousel -->
+    <div class="related-carousel-viewport overflow-hidden">
+      <div class="related-carousel-track flex transition-transform duration-300 ease-out" data-related-track>
+        {items.map((recipe) => (
+          <div class="related-slide flex-shrink-0 px-2">
+            <RecipeCard
+              image={recipe.image || '/images/recipes/placeholder.jpg'}
+              title={recipe.title}
+              time={`${recipe.preparation_time} MIN`}
+              id={recipe.id}
+              textColor="text-white"
+              iconColor="text-white"
+            />
+          </div>
+        ))}
       </div>
     </div>
   </div>
 )}
 
 <script>
-  // Initialize carousel (no TS types to avoid lint issues in Astro script)
   function initRelatedCarousel(root: any) {
     if (!root || root._relInit) return;
     root._relInit = true;
@@ -87,73 +62,70 @@ const currentLang = getLocale();
     const nextBtnId = root.dataset.nextBtnId;
     const prevBtn = prevBtnId ? document.getElementById(prevBtnId) : null;
     const nextBtn = nextBtnId ? document.getElementById(nextBtnId) : null;
+    const track = root.querySelector('[data-related-track]') as HTMLElement;
+    const slides = Array.from(root.querySelectorAll('.related-slide')) as HTMLElement[];
 
-    // Desktop
-    const trackD = root.querySelector('#relatedTrackDesktop');
-    const prevD = prevBtn;
-    const nextD = nextBtn;
+    if (!track || slides.length === 0) return;
 
-    let indexD = 0;
-    function getStepD() {
-      // Card width 360 + gap 24 (gap-6)
-      return 384;
-    }
-    function getVisibleCount() {
-      const container = trackD?.parentElement;
-      if (!container) return 3;
-      return Math.max(1, Math.floor(container.clientWidth / getStepD()));
-    }
-    function updateDesktop() {
-      if (!trackD) return;
-      trackD.style.transform = `translateX(-${indexD * getStepD()}px)`;
-      const maxIndex = Math.max(0, trackD.children.length - getVisibleCount());
-      // clamp indexD
-      if (indexD > maxIndex) indexD = maxIndex;
-    }
-    if (trackD && prevD && nextD) {
-      prevD.addEventListener('click', () => {
-        if (window.matchMedia('(min-width: 768px)').matches) {
-          indexD = Math.max(0, indexD - 1);
-          updateDesktop();
-        }
-      });
-      nextD.addEventListener('click', () => {
-        if (window.matchMedia('(min-width: 768px)').matches) {
-          const maxIndex = Math.max(0, trackD.children.length - getVisibleCount());
-          indexD = Math.min(maxIndex, indexD + 1);
-          updateDesktop();
-        }
-      });
-      window.addEventListener('resize', updateDesktop);
-      updateDesktop();
+    let currentIndex = 0;
+
+    function getVisibleCount(): number {
+      const width = window.innerWidth;
+      if (width >= 1024) return 3; // Desktop: 3 cards
+      if (width >= 768) return 2;  // Tablet: 2 cards
+      return 1;                     // Mobile: 1 card
     }
 
-    // Mobile
-    const trackM = root.querySelector('#relatedTrackMobile');
-    const prevM = prevBtn;
-    const nextM = nextBtn;
+    function getMaxIndex(): number {
+      const visible = getVisibleCount();
+      return Math.max(0, slides.length - visible);
+    }
 
-    let indexM = 0;
-    function updateMobile() {
-      if (!trackM) return;
-      trackM.style.transform = `translateX(-${indexM * 100}%)`;
-    }
-    if (trackM && prevM && nextM) {
-      prevM.addEventListener('click', () => {
-        if (!window.matchMedia('(min-width: 768px)').matches) {
-          indexM = Math.max(0, indexM - 1);
-          updateMobile();
-        }
+    function updateCarousel() {
+      const visible = getVisibleCount();
+      const slideWidth = 100 / visible;
+      
+      slides.forEach((slide) => {
+        slide.style.width = `${slideWidth}%`;
       });
-      nextM.addEventListener('click', () => {
-        if (!window.matchMedia('(min-width: 768px)').matches) {
-          const maxIndex = Math.max(0, trackM.children.length - 1);
-          indexM = Math.min(maxIndex, indexM + 1);
-          updateMobile();
-        }
-      });
-      updateMobile();
+
+      const offset = currentIndex * slideWidth;
+      track.style.transform = `translateX(-${offset}%)`;
     }
+
+    function goNext() {
+      const maxIndex = getMaxIndex();
+      if (currentIndex < maxIndex) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+      updateCarousel();
+    }
+
+    function goPrev() {
+      if (currentIndex > 0) {
+        currentIndex--;
+      } else {
+        currentIndex = getMaxIndex();
+      }
+      updateCarousel();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', goPrev);
+    if (nextBtn) nextBtn.addEventListener('click', goNext);
+
+    let resizeTimeout: any = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const maxIndex = getMaxIndex();
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updateCarousel();
+      }, 100);
+    });
+
+    updateCarousel();
   }
 
   function initAll() {
@@ -172,5 +144,40 @@ const currentLang = getLocale();
 <style>
   .related-carousel-wrapper {
     position: relative;
+    width: 100%;
+  }
+
+  .related-carousel-viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .related-carousel-track {
+    display: flex;
+    will-change: transform;
+    align-items: stretch;
+  }
+
+  .related-slide {
+    flex-shrink: 0;
+    padding: 0 8px;
+    box-sizing: border-box;
+    display: flex;
+  }
+
+  .related-slide > :global(*) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .related-slide :global(.block.h-full) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .related-slide :global(.p-5) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 </style>
