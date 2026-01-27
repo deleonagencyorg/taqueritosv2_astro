@@ -317,45 +317,70 @@ function handleSubmenuParentClick(e: Event): void {
 
 // Función para inicializar el menú móvil
 function initMobileMenu() {
-  // Botón de cierre - clonar para eliminar event listeners anteriores
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (!mobileMenu) return;
+  
+  // Marcar como inicializado para evitar duplicados
+  if ((mobileMenu as any)._menuInit) return;
+  (mobileMenu as any)._menuInit = true;
+  
+  // Botón de cierre
   const closeButton = document.getElementById('mobile-menu-close');
   if (closeButton) {
-    const newCloseButton = closeButton.cloneNode(true) as HTMLElement;
-    closeButton.parentNode?.replaceChild(newCloseButton, closeButton);
-    newCloseButton.addEventListener('click', handleCloseButtonClick);
+    closeButton.addEventListener('click', handleCloseButtonClick);
+    closeButton.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleCloseButtonClick(e);
+    }, { passive: false });
   }
   
-  // Toggles del menú (primer nivel) - clonar para eliminar event listeners
-  const menuToggles = document.querySelectorAll('#mobile-menu .menu-toggle');
+  // Toggles del menú (primer nivel)
+  const menuToggles = mobileMenu.querySelectorAll('.menu-toggle');
   menuToggles.forEach(toggle => {
-    const newToggle = toggle.cloneNode(true) as HTMLElement;
-    toggle.parentNode?.replaceChild(newToggle, toggle);
-    newToggle.addEventListener('click', handleMenuToggleClick);
+    toggle.addEventListener('click', handleMenuToggleClick);
+    toggle.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleMenuToggleClick(e);
+    }, { passive: false });
   });
   
   // Elementos padre del menú (primer nivel)
-  const menuParents = document.querySelectorAll('#mobile-menu .menu-parent');
+  const menuParents = mobileMenu.querySelectorAll('.menu-parent');
   menuParents.forEach(parent => {
-    const newParent = parent.cloneNode(true) as HTMLElement;
-    parent.parentNode?.replaceChild(newParent, parent);
-    newParent.addEventListener('click', handleMenuParentClick);
+    parent.addEventListener('click', handleMenuParentClick);
+    parent.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleMenuParentClick(e);
+    }, { passive: false });
   });
   
   // Toggles del submenú (segundo nivel)
-  const submenuToggles = document.querySelectorAll('#mobile-menu .submenu-toggle');
+  const submenuToggles = mobileMenu.querySelectorAll('.submenu-toggle');
   submenuToggles.forEach(toggle => {
-    const newToggle = toggle.cloneNode(true) as HTMLElement;
-    toggle.parentNode?.replaceChild(newToggle, toggle);
-    newToggle.addEventListener('click', handleSubmenuToggleClick);
+    toggle.addEventListener('click', handleSubmenuToggleClick);
+    toggle.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleSubmenuToggleClick(e);
+    }, { passive: false });
   });
   
   // Elementos padre del submenú (segundo nivel)
-  const submenuParents = document.querySelectorAll('#mobile-menu .submenu-parent');
+  const submenuParents = mobileMenu.querySelectorAll('.submenu-parent');
   submenuParents.forEach(parent => {
-    const newParent = parent.cloneNode(true) as HTMLElement;
-    parent.parentNode?.replaceChild(newParent, parent);
-    newParent.addEventListener('click', handleSubmenuParentClick);
+    parent.addEventListener('click', handleSubmenuParentClick);
+    parent.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleSubmenuParentClick(e);
+    }, { passive: false });
   });
+}
+
+// Reset flag on page swap
+function resetMobileMenuInit() {
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileMenu) {
+    (mobileMenu as any)._menuInit = false;
+  }
 }
 
 // Ejecutar cuando se carga la página
@@ -367,5 +392,8 @@ if (document.readyState === 'loading') {
 
 // Ejecutar cuando Astro navega a una nueva página
 document.addEventListener('astro:page-load', initMobileMenu);
-document.addEventListener('astro:after-swap', initMobileMenu);
+document.addEventListener('astro:after-swap', () => {
+  resetMobileMenuInit();
+  initMobileMenu();
+});
 </script>

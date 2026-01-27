@@ -210,14 +210,23 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
 </div>
 
 <script>
-  // This script runs only on the client side
-  document.addEventListener('DOMContentLoaded', () => {
+  function initRecipesFilters() {
+    const recipesGrid = document.getElementById('recipesGrid');
+    if (!recipesGrid) return;
+    
+    // Prevent double initialization
+    if ((recipesGrid as any)._filtersInit) return;
+    (recipesGrid as any)._filtersInit = true;
+
     // Fallback image handling
     const images = document.querySelectorAll('img');
     images.forEach((img) => {
-      img.addEventListener('error', function() {
-        this.src = '/images/recipes/placeholder.jpg';
-      });
+      if (!(img as any)._errorHandlerAdded) {
+        (img as any)._errorHandlerAdded = true;
+        img.addEventListener('error', function() {
+          this.src = '/images/recipes/placeholder.jpg';
+        });
+      }
     });
 
     // Filters
@@ -230,8 +239,8 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
 
     // Pagination settings
     const pageSize = 6;
-    let currentCategory = 'all';
-    let currentProduct = 'all';
+    let currentCategory = categorySelect?.value || 'all';
+    let currentProduct = productSelect?.value || 'all';
     let revealedCount = 0;
 
     // Hide all cards
@@ -339,6 +348,24 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
       });
       io.observe(sentinel);
     }
+  }
+
+  // Initialize on first load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRecipesFilters);
+  } else {
+    initRecipesFilters();
+  }
+
+  // Re-initialize on Astro page navigation (View Transitions)
+  document.addEventListener('astro:page-load', initRecipesFilters);
+  document.addEventListener('astro:after-swap', () => {
+    // Reset init flag on swap so it can re-init
+    const recipesGrid = document.getElementById('recipesGrid');
+    if (recipesGrid) {
+      (recipesGrid as any)._filtersInit = false;
+    }
+    initRecipesFilters();
   });
 </script>
 
