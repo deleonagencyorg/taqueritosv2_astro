@@ -10,7 +10,8 @@
          "mango-preparado-con-taqueritos-queso-fusion-y-chile-toreado.webp"
       ],      
       "type":"image",
-      "preparation_time":15,
+      "preparation_time": 10,
+      "category": "snack",
       "ingredients": [
         "1 mango en trozos",
         "Sal al gusto",
