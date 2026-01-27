@@ -48,19 +48,24 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                          firstSlide.desktop?.toLowerCase().endsWith('.webm');
 ---
 
-<div class="video-carousel-container relative overflow-hidden">
-  <div class="swiper-container video-carousel">
-    <div class="swiper-wrapper">
-      {slides.map((slide, index) => {
-        const hasVideoExtension =
-          slide.desktop?.toLowerCase().endsWith('.mp4') ||
-          slide.desktop?.toLowerCase().endsWith('.webm');
+{slides.length === 0 ? (
+  <div class="w-full h-[60vh] flex items-center justify-center bg-brown text-white text-2xl font-bold">
+    No hay contenido disponible
+  </div>
+) : (
+  <div class="video-carousel-container relative overflow-hidden">
+    <div class="swiper-container video-carousel">
+      <div class="swiper-wrapper">
+        {slides.map((slide, index) => {
+          const hasVideoExtension =
+            slide.desktop?.toLowerCase().endsWith('.mp4') ||
+            slide.desktop?.toLowerCase().endsWith('.webm');
         
-        const slideType = slide.type || (hasVideoExtension ? 'video' : 'product');
-        const isVideo = slideType === 'video';
-        const isProduct = slideType === 'product';
-        const isSimpleImage = slideType === 'image';
-        const slideId = `slide-${index}`;
+          const slideType = slide.type || (hasVideoExtension ? 'video' : 'product');
+          const isVideo = slideType === 'video';
+          const isProduct = slideType === 'product';
+          const isSimpleImage = slideType === 'image';
+          const slideId = `slide-${index}`;
 
         return (
           <div class="swiper-slide" id={slideId} data-slide-type={slideType}>
@@ -187,9 +192,9 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                 
                 <div class="flex flex-row items-center">
                   <div class="cta">
-                    <a href={slide.link || "#"} class="cta-button">{currentLang === 'es' ? 'Descubre más' : 'Discover more'}</a>
+                    <a href={`/${currentLang}/#products`} class="cta-button">{currentLang === 'es' ? 'Descubre más' : 'Discover more'}</a>
                   </div>
-                  <div class="button-play ml-[35px]">
+                  <a href={`/${currentLang}/#products`} class="button-play ml-[35px]" aria-label={currentLang === 'es' ? 'Ir a productos' : 'Go to products'}>
                     <div class="button-inner">
                       <svg
                         width="12"
@@ -204,7 +209,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                         />
                       </svg>
                     </div>
-                  </div>
+                  </a>
                 </div>
 
                   </div>
@@ -232,18 +237,19 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
             )}
           </div>
         );
-      })}
+        })}
+      </div>
+
+      <!-- Navigation controls -->
+      <!-- <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div> -->
+      {slides.length > 1 && <div class="swiper-pagination pills"></div>}
+
+
     </div>
-
-    <!-- Navigation controls -->
-    <!-- <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-pagination"></div> -->
-    <div class="swiper-pagination pills"></div>
-
-
   </div>
-</div>
+)}
 
 
 <style>
@@ -764,98 +770,101 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   import 'swiper/css';
   import 'swiper/css/navigation';
   import 'swiper/css/pagination';
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Swiper
-    const swiper = new Swiper('.video-carousel', {
-      modules: [Navigation, Pagination, Autoplay],
-      slidesPerView: 1,
-      spaceBetween: 0,
-      loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-    });
-    
-    // Handle video playback
-    const videos = document.querySelectorAll('.slide-video') as NodeListOf<HTMLVideoElement>;
-    const fallbackImages = document.querySelectorAll('.fallback-image') as NodeListOf<HTMLElement>;
-    
-    // Function to play video
-    function playVideo(video: HTMLVideoElement) {
-      if (!video) return;
-      
-      const playPromise = video.play();
-      
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            // Video playback started successfully
-            const slideId = video.getAttribute('data-slide-id');
-            const fallbackImage = document.querySelector(`#${slideId} .fallback-image`) as HTMLElement | null;
-            if (fallbackImage) {
-              fallbackImage.style.opacity = '0';
-            }
-          })
-          .catch((error: any) => {
-            // Auto-play was prevented
-            console.warn('Video playback was prevented:', error);
-          });
+
+  const swiperMap = new WeakMap<Element, Swiper>();
+
+  function initVideoCarousel() {
+    document.querySelectorAll('.video-carousel').forEach((el) => {
+      const slidesCount = el.querySelectorAll('.swiper-slide').length;
+      const paginationEl = el.querySelector('.swiper-pagination') as HTMLElement | null;
+
+      if (slidesCount <= 1) {
+        if (paginationEl) paginationEl.style.display = 'none';
+        const existing = swiperMap.get(el);
+        if (existing && !existing.destroyed) {
+          try { existing.destroy(true, true); } catch {}
+        }
+        swiperMap.delete(el);
+        return;
       }
-    }
-    
-    // Function to pause all videos
-    function pauseAllVideos() {
-      videos.forEach((video: HTMLVideoElement) => {
-        video.pause();
+
+      if (paginationEl) paginationEl.style.display = '';
+
+      const existing = swiperMap.get(el);
+      if (existing && !existing.destroyed) {
+        try { existing.update(); } catch {}
+        return;
+      }
+
+      const swiper = new Swiper(el as any, {
+        modules: [Navigation, Pagination, Autoplay],
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+          el: paginationEl || '.swiper-pagination',
+          clickable: true,
+        },
       });
-    }
-    
-    // Play video on active slide
-    swiper.on('slideChange', () => {
-      pauseAllVideos();
-      
-      const activeSlide = swiper.slides[swiper.activeIndex] as HTMLElement | undefined;
-      const activeVideo = activeSlide?.querySelector('.slide-video') as HTMLVideoElement | null;
-      
-      if (activeVideo) {
-        setTimeout(() => playVideo(activeVideo), 300);
+
+      swiperMap.set(el, swiper);
+
+      const videos = el.querySelectorAll('video[data-slide-id]') as NodeListOf<HTMLVideoElement>;
+
+      function playVideo(video: HTMLVideoElement) {
+        if (!video) return;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
       }
-    });
-    
-    // Play initial video
-    const initialVideo = swiper.slides[swiper.activeIndex]?.querySelector('.slide-video') as HTMLVideoElement | null;
-    if (initialVideo) {
-      playVideo(initialVideo);
-    }
-    
-    // Handle video loading and fallback
-    videos.forEach((video: HTMLVideoElement) => {
-      const slideId = video.getAttribute('data-slide-id');
-      const fallbackImage = document.querySelector(`#${slideId} .fallback-image`) as HTMLElement | null;
-      
-      // Hide fallback image once video can play
-      video.addEventListener('canplay', () => {
-        if (fallbackImage) {
-          fallbackImage.style.opacity = '0';
+
+      function pauseAllVideos() {
+        videos.forEach((video) => {
+          try { video.pause(); } catch {}
+        });
+      }
+
+      swiper.on('slideChange', () => {
+        pauseAllVideos();
+        const activeSlide = swiper.slides[swiper.activeIndex] as HTMLElement | undefined;
+        const activeVideo = activeSlide?.querySelector('video[data-slide-id]') as HTMLVideoElement | null;
+        if (activeVideo) {
+          setTimeout(() => playVideo(activeVideo), 250);
         }
       });
-      
-      // Show fallback image if video errors
-      video.addEventListener('error', () => {
-        if (fallbackImage) {
-          fallbackImage.style.opacity = '1';
-        }
-      });
+
+      const initialVideo = swiper.slides[swiper.activeIndex]?.querySelector('video[data-slide-id]') as HTMLVideoElement | null;
+      if (initialVideo) {
+        playVideo(initialVideo);
+      }
     });
-  });
+  }
+
+  function destroyVideoCarousel() {
+    document.querySelectorAll('.video-carousel').forEach((el) => {
+      const existing = swiperMap.get(el);
+      if (existing && !existing.destroyed) {
+        try { existing.destroy(true, true); } catch {}
+      }
+      swiperMap.delete(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVideoCarousel);
+  } else {
+    initVideoCarousel();
+  }
+  document.addEventListener('astro:page-load', initVideoCarousel);
+  document.addEventListener('astro:after-swap', initVideoCarousel);
+  document.addEventListener('astro:before-swap', destroyVideoCarousel);
 </script>

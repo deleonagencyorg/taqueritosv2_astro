@@ -43,6 +43,17 @@ const preloadFirstImage = true && firstSlide.mobile && firstSlide.desktop;
   function initMainCarousel() {
     const el = document.querySelector(carouselSelector);
     if (!el) return;
+
+    const slidesCount = el.querySelectorAll('.swiper-slide').length;
+    if (slidesCount <= 1) {
+      const nextEl = el.querySelector('.swiper-button-next');
+      const prevEl = el.querySelector('.swiper-button-prev');
+      const paginationEl = el.querySelector('.swiper-pagination');
+      if (nextEl) nextEl.style.display = 'none';
+      if (prevEl) prevEl.style.display = 'none';
+      if (paginationEl) paginationEl.style.display = 'none';
+      return;
+    }
     // Evitar doble inicialización
     if (el.classList.contains('swiper-initialized') || (el)['swiper']) {
       // Asegurar actualización por si el contenido cambió
@@ -109,6 +120,10 @@ const preloadFirstImage = true && firstSlide.mobile && firstSlide.desktop;
 
 {loading ? (
   <Skeleton items={3} />
+) : slides.length === 0 ? (
+  <div class="w-full h-[60vh] flex items-center justify-center bg-primary text-white text-2xl font-bold">
+    No hay contenido disponible
+  </div>
 ) : (
   <div class="relative overflow-hidden w-screen" transition:animate="fade">
     {preloadFirstImage && (
@@ -139,9 +154,13 @@ const preloadFirstImage = true && firstSlide.mobile && firstSlide.desktop;
       </div>
       
       <!-- Controles de navegación -->
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-pagination"></div>
+      {slides.length > 1 && (
+        <>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-pagination"></div>
+        </>
+      )}
     </div>
   </div>
 )}

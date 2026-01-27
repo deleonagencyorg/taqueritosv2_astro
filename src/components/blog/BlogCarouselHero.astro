@@ -74,33 +74,37 @@ const viewBlogText = currentLang === 'es' ? 'Leer más' : 'Read more';
         </div>
       ))}
     </div>
-    <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
-      {latestNews.map((_, idx) => (
+    {latestNews.length > 1 && (
+      <>
+        <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
+          {latestNews.map((_, idx) => (
+            <button
+              class="w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 transition-all duration-300"
+              data-indicator={idx}
+              aria-label={`Go to slide ${idx + 1}`}
+            ></button>
+          ))}
+        </div>
         <button
-          class="w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 transition-all duration-300"
-          data-indicator={idx}
-          aria-label={`Go to slide ${idx + 1}`}
-        ></button>
-      ))}
-    </div>
-    <button
-      class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-2 rounded-full transition-all duration-300"
-      id="prev-slide"
-      aria-label="Previous slide"
-    >
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
-    </button>
-    <button
-      class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-2 rounded-full transition-all duration-300"
-      id="next-slide"
-      aria-label="Next slide"
-    >
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-      </svg>
-    </button>
+          class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-2 rounded-full transition-all duration-300"
+          id="prev-slide"
+          aria-label="Previous slide"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-2 rounded-full transition-all duration-300"
+          id="next-slide"
+          aria-label="Next slide"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </>
+    )}
   </div>
 )}
 

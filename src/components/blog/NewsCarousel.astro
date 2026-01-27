@@ -101,11 +101,15 @@ const noContent = currentLang === 'es' ? 'No hay contenido disponible' : 'No con
         track.style.transform = 'translateX(0)';
         index = 0;
         if (empty) { empty.classList.remove('hidden'); empty.classList.add('flex'); }
+        if (prev) prev.style.display = 'none';
+        if (next) next.style.display = 'none';
         return;
       }
       if (empty) { empty.classList.add('hidden'); empty.classList.remove('flex'); }
 
       const groups = chunk(data, 4);
+      if (prev) prev.style.display = groups.length > 1 ? 'flex' : 'none';
+      if (next) next.style.display = groups.length > 1 ? 'flex' : 'none';
       groups.forEach((group) => {
         const slide = document.createElement('div');
         slide.className = 'w-full flex-shrink-0 px-1';
