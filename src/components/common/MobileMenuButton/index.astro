@@ -103,12 +103,16 @@ function initMobileMenuButton() {
   const menuButton = document.getElementById('mobile-menu-button');
   
   if (menuButton) {
-    // Clonar el botón para eliminar todos los event listeners anteriores
-    const newButton = menuButton.cloneNode(true) as HTMLElement;
-    menuButton.parentNode?.replaceChild(newButton, menuButton);
+    // Remover listener anterior si existe
+    menuButton.removeEventListener('click', toggleMobileMenu);
+    menuButton.removeEventListener('touchend', toggleMobileMenu);
     
-    // Agregar event listener solo para click (funciona en móvil y desktop)
-    newButton.addEventListener('click', toggleMobileMenu);
+    // Agregar event listeners para click y touch
+    menuButton.addEventListener('click', toggleMobileMenu);
+    menuButton.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      toggleMobileMenu(e);
+    }, { passive: false });
   }
   
   // Resetear estado al inicializar
@@ -118,12 +122,21 @@ function initMobileMenuButton() {
     document.body.style.overflow = '';
   }
   isMenuOpen = false;
+  
+  // Exponer funciones globalmente
+  (window as any).openMobileMenu = openMobileMenu;
+  (window as any).closeMobileMenu = closeMobileMenu;
+  (window as any).toggleMobileMenu = toggleMobileMenu;
+  (window as any).MENU_ICON_SVG = MENU_ICON_SVG;
+  (window as any).CLOSE_ICON_SVG = CLOSE_ICON_SVG;
 }
 
-// Exponer funciones globalmente para que otros scripts puedan usarlas
+// Exponer funciones globalmente inmediatamente
 (window as any).openMobileMenu = openMobileMenu;
 (window as any).closeMobileMenu = closeMobileMenu;
 (window as any).toggleMobileMenu = toggleMobileMenu;
+(window as any).MENU_ICON_SVG = MENU_ICON_SVG;
+(window as any).CLOSE_ICON_SVG = CLOSE_ICON_SVG;
 
 // Inicializar cuando el DOM esté listo
 if (document.readyState === 'loading') {
