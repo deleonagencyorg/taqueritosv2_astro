@@ -16,10 +16,6 @@ module.exports = {
     ],
   theme: {
     extend: {
-      screens: {
-        xxs: '250px',
-        'xxs-only': { raw: '(min-width: 250px) and (max-width: 320px)' },
-      },
       colors: {
         primary: '#FF050B',
         secondary: '#0167F7',
