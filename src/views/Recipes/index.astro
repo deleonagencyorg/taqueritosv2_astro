@@ -115,6 +115,8 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
 
   <div class="container mx-auto px-4 py-18 mt-0">
 
+    <div class="h-8 md:h-12"></div>
+
     <!-- Filter Dropdowns -->
     <div class="w-full flex flex-col md:flex-row gap-4 mb-10 max-w-5xl mx-auto md:items-end">
       <!-- Category filter -->
@@ -154,30 +156,23 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
 
     <!-- Section title above recipes -->
     <div class="max-w-5xl mx-auto mb-6 px-1">
-      <h2 class="font-title text-2xl md:text-3xl font-bold text-white uppercase leading-snug">
-        {currentLang === 'es' ? (
-          <>
-            Craftea tu siguiente buff:
-            <br />
-            Recetas para subir de nivel
-          </>
-        ) : (
-          <>
-            Craft your next buff:
-            <br />
-            Recipes to level up
-          </>
-        )}
-      </h2>
+      <div class="title">
+        <p>
+          {currentLang === 'es' ? 'Craftea tu siguiente buff:' : 'Craft your next buff:'}
+        </p>
+        <p>
+          {currentLang === 'es' ? 'Recetas para subir de nivel' : 'Recipes to level up'}
+        </p>
+      </div>
     </div>
 
     {allRecipes.length === 0 ? (
       <p class="text-center text-gray-500">{noRecipesText}</p>
     ) : (
-      <div id="recipesGrid" class="w-full mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 mt-12" transition:animate="slide">
+      <div id="recipesGrid" class="w-full mx-auto grid items-stretch grid-cols-2 xxs-only:grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mt-12" transition:animate="slide">
         {allRecipes.map((recipe: Recipe) => (
           <div
-            class="recipe-card"
+            class="recipe-card h-full"
             data-type={normalizeType(recipe)}
             data-product={Array.isArray((recipe as any).product)
               ? (recipe as any).product.map((p: string) => String(p).toLowerCase()).join('|')
@@ -194,6 +189,17 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
           </div>
         ))}
       </div>
+
+      <div class="w-full flex justify-center mt-10">
+        <button
+          id="recipesLoadMore"
+          type="button"
+          class="hidden w-full max-w-xs border border-[#FF0048] rounded-[16px] bg-gradient-to-b from-[#FF0048] to-[#FF5255] shadow-[0_3px_0_0_rgba(88,0,29,0.9)] hover:shadow-[0_1px_0_0_rgba(88,0,29,0.9)] hover:translate-y-[2px] transition-all duration-150 text-white py-3 px-6"
+        >
+          {currentLang === 'es' ? 'Cargar más' : 'Load more'}
+        </button>
+      </div>
+
       <!-- No results message for filters -->
       <div id="noResults" class="hidden mt-6 items-center justify-center h-48 md:h-64">
         <span class="text-white text-lg md:text-xl font-semibold">{noFilterResultsText}</span>
@@ -221,6 +227,7 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
     const cards = Array.from(document.querySelectorAll('#recipesGrid .recipe-card')) as HTMLElement[];
     const noResultsEl = document.getElementById('noResults') as HTMLElement | null;
     const sentinel = document.getElementById('infiniteSentinel');
+    const loadMoreBtn = document.getElementById('recipesLoadMore') as HTMLButtonElement | null;
 
     // Pagination settings
     const pageSize = 6;
@@ -273,6 +280,15 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
           noResultsEl.classList.add('flex');
         }
       }
+
+      if (loadMoreBtn) {
+        const canLoadMore = revealedCount < matching.length;
+        if (anyVisible && canLoadMore) {
+          loadMoreBtn.classList.remove('hidden');
+        } else {
+          loadMoreBtn.classList.add('hidden');
+        }
+      }
     }
 
     // Apply filters and reset pagination
@@ -300,6 +316,15 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
 
     // Initialize default state (ALL)
     applyFilters();
+
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => {
+        const matching = getMatchingCards();
+        if (revealedCount < matching.length) {
+          revealNextPage();
+        }
+      });
+    }
 
     // Infinite scroll observer
     if ('IntersectionObserver' in window && sentinel) {
