@@ -130,14 +130,14 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                   <!-- Imagen principal (desktop) -->
                   <LazyImage
                     src={slide.desktop}
-                    alt={slide.alt || "Slide background"}
+                    alt={slide.alt || "Taqueritos Fuego"}
                     class="slide-image desktop-image h-auto z-20 bg-transparent w-[1200px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 
                   <LazyImage
                     src={slide.mobile}
-                    alt={slide.alt || "Slide background"}
+                    alt={slide.alt || "Taqueritos Fuego"}
                     class="slide-image mobile-image h-auto z-20 bg-transparent w-[1200px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
@@ -149,7 +149,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                 </div>
 
                 <!-- Bloque de texto lateral izquierdo -->
-              <div class="left-text">
+              <div class="left-text mt-18">
                 {currentLang === 'es' ? (
                   <p>
                     Sabor intenso,<br />

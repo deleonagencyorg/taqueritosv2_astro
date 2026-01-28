@@ -103,7 +103,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
           <!-- Título principal -->
           <h1 
               id="product-title"
-              class="text-[80px] md:text-[120px] font-black uppercase leading-[90px] md:leading-[110px]"
+              class="text-[40px] md:text-[90px] font-black uppercase  md:leading-[110px]"
               style={{ color: safeProduct.text_color }}
             >
               {safeProduct.name}
@@ -114,24 +114,24 @@ const carouselProducts = [safeProduct, ...relatedProducts];
             <p 
               id="product-description"
               class="text-2xl md:text-[26.6px] font-normal"
-              style={{ color: safeProduct.text_color }}
+              
             >
-              {safeProduct.description || 'Totopos de maiz enrollados con sabor a…'}
+              {safeProduct.description }
             </p>
     
             <!-- Botones de presentaciones -->
             {safeProduct.weight && safeProduct.weight.length > 0 && (
-              <div class="flex gap-1">
+              <div class="flex gap-1 -mt-12">
                 {safeProduct.weight.map((weight) => (
                   <button 
-                    class="flex-1 h-[78px] rounded-[30px] border-[1.16px] border-[#4A4A4A] transition-all duration-300 cursor-default"
+                    class="flex-1 md:h-[78px] h-[40px] rounded-[30px] border-[1.16px] border-[#4A4A4A] transition-all duration-300 cursor-default"
                     style={{
                       backgroundColor: 'transparent',
                       color: '#FFFFFF'
                     }}
                     type="button"
                   >
-                    <span class="text-[30px] font-semibold">{weight}</span>
+                    <span class="md:text-[30px] text-[18px] font-semibold">{weight}</span>
                   </button>
                 ))}
               </div>
@@ -171,16 +171,16 @@ const carouselProducts = [safeProduct, ...relatedProducts];
         </div>
     
         <!-- Carousel de productos - SOLO lado derecho -->
-        <div class="relative flex items-center justify-center overflow-hidden lg:mt-[100px]">
+        <div class="relative flex items-center justify-center overflow-visible lg:mt-[100px]">
           {relatedProducts.length > 0 && (
             <div class="swiper products-swiper w-full h-full">
               <div class="swiper-wrapper">
                 <!-- Producto actual primero -->
                 <div class="swiper-slide">
-                  <div class="relative w-[300px] md:w-[600px] lg:w-[500px] h-[600px] md:h-[800px]">
-                    <div class="absolute top-0 right-0 w-[80%] h-auto">
+                  <div class="relative w-[300px] md:w-[600px] lg:w-[500px] h-[300px] md:h-[600px]">
+                    <div class="absolute top-10 right-0 w-[80%] h-auto">
                       <img 
-                        class="w-[300px] md:w-[600px] lg:w-[500px] h-auto rotate-[32deg] transition-transform duration-500 hover:scale-105 mt-[100px]"
+                        class="product-float w-[300px] md:w-[600px] lg:w-[500px] h-auto rotate-[18deg] transition-transform duration-500 hover:scale-105"
                         src={safeProduct.image} 
                         alt={safeProduct.name}
                         transition:name={`product-image-${safeProduct.id}`}
@@ -193,9 +193,9 @@ const carouselProducts = [safeProduct, ...relatedProducts];
                 {relatedProducts.map((relatedProduct: Product) => (
                   <div class="swiper-slide">
                     <div class="relative w-[300px] md:w-[600px] lg:w-[500px] h-[600px] md:h-[800px]">
-                      <div class="absolute top-0 right-0 w-[80%] h-auto mt-[100px]">
+                      <div class="absolute top-10 right-0 w-[80%] h-auto">
                         <img 
-                          class="w-[300px] md:w-[600px] lg:w-[500px] h-auto rotate-[32deg] transition-transform duration-500 hover:scale-105 cursor-pointer"
+                          class="product-float w-[300px] md:w-[600px] lg:w-[500px] h-auto rotate-[18deg] transition-transform duration-500 hover:scale-105 cursor-pointer"
                           src={relatedProduct.image} 
                           alt={relatedProduct.name}
                           loading="lazy"
@@ -343,6 +343,23 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     cursor: not-allowed !important;
   }
 
+  @keyframes product-float {
+    0% { translate: 0 0; }
+    50% { translate: 0 -10px; }
+    100% { translate: 0 0; }
+  }
+
+  .product-float {
+    animation: product-float 3.5s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-float {
+      animation: none;
+    }
+  }
+
   @media (max-width: 767px) {
     .swiper-button-next,
     .swiper-button-prev {
@@ -363,7 +380,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
 
 <script>
   import Swiper from 'swiper';
-  import { Navigation, Autoplay } from 'swiper/modules';
+  import { Navigation } from 'swiper/modules';
   import 'swiper/css';
   import 'swiper/css/navigation';
 
@@ -399,17 +416,14 @@ const carouselProducts = [safeProduct, ...relatedProducts];
 
     // Inicializar Swiper
     const swiper = new Swiper('.products-swiper', {
-      modules: [Navigation, Autoplay],
+      modules: [Navigation],
       slidesPerView: 1,
       spaceBetween: 0,
       loop: true,
       speed: 800,
       centeredSlides: true,
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true
-      },
+      allowTouchMove: false,
+      simulateTouch: false,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
@@ -434,17 +448,6 @@ const carouselProducts = [safeProduct, ...relatedProducts];
         }
       }
     });
-
-    // Pausar autoplay al hacer hover
-    if (swiperContainer) {
-      swiperContainer.addEventListener('mouseenter', () => {
-        swiper.autoplay.stop();
-      });
-      
-      swiperContainer.addEventListener('mouseleave', () => {
-        swiper.autoplay.start();
-      });
-    }
   });
 </script>
 
