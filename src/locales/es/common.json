@@ -93,16 +93,7 @@
         "product_right": "Levéleate al máximo con Taqueritos.\nDragón de Fuego ¿Listo para el reto?",
         "product_cta_label": "Descubre más",
         "product_cta_link": "#"
-      } , {
-        "id": "slide2",
-        "desktop": "https://snack.yummiespromociones.com/taqueritos/taqueritosgamer.webp",
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/gamermobile.webp",
-        "alt": "Taqueritos",
-        "title": "",
-        "description": "",
-        "link": "https://gamer.yummiespromociones.com",
-        "type": "image" 
-      }
+      } 
     ]
   },
   "contact_us": "Contacto",

@@ -220,6 +220,92 @@ const MENU_ICON_SVG = `<svg class="w-6 h-6" fill="none" stroke="currentColor" vi
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
 </svg>`;
 
+// Avoid double-trigger on touch devices (pointer/touch + synthetic click)
+let lastPointerUpTs = 0;
+
+function shouldIgnoreClick(): boolean {
+  return Date.now() - lastPointerUpTs < 400;
+}
+
+function onClosePointerUp(e: PointerEvent) {
+  lastPointerUpTs = Date.now();
+  handleCloseButtonClick(e);
+}
+
+function onCloseClick(e: MouseEvent) {
+  if (shouldIgnoreClick()) return;
+  handleCloseButtonClick(e);
+}
+
+function onMenuTogglePointerUp(e: PointerEvent): void {
+  lastPointerUpTs = Date.now();
+  handleMenuToggleClick(e);
+}
+
+function onMenuToggleClick(e: MouseEvent): void {
+  if (shouldIgnoreClick()) return;
+  handleMenuToggleClick(e);
+}
+
+function onMenuParentPointerUp(e: PointerEvent): void {
+  lastPointerUpTs = Date.now();
+  handleMenuParentClick(e);
+}
+
+function onMenuParentClick(e: MouseEvent): void {
+  if (shouldIgnoreClick()) return;
+  handleMenuParentClick(e);
+}
+
+function onSubmenuTogglePointerUp(e: PointerEvent): void {
+  lastPointerUpTs = Date.now();
+  handleSubmenuToggleClick(e);
+}
+
+function onSubmenuToggleClick(e: MouseEvent): void {
+  if (shouldIgnoreClick()) return;
+  handleSubmenuToggleClick(e);
+}
+
+function onSubmenuParentPointerUp(e: PointerEvent): void {
+  lastPointerUpTs = Date.now();
+  handleSubmenuParentClick(e);
+}
+
+function onSubmenuParentClick(e: MouseEvent): void {
+  if (shouldIgnoreClick()) return;
+  handleSubmenuParentClick(e);
+}
+
+function handleMenuLinkNavigation(e: Event) {
+  const target = e.target as Element | null;
+  if (!target) return;
+  const a = target.closest('a');
+  if (!a) return;
+
+  const href = a.getAttribute('href');
+  if (!href || href === '#') return;
+
+  if (a.getAttribute('data-open-stockist') === 'true') return;
+
+  if (typeof (window as any).closeMobileMenu === 'function') {
+    (window as any).closeMobileMenu();
+  } else {
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu) {
+      mobileMenu.classList.add('hidden');
+      document.body.style.overflow = '';
+
+      const menuButton = document.getElementById('mobile-menu-button');
+      const menuIconContainer = document.getElementById('menu-icon-container');
+      if (menuButton && menuIconContainer) {
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuIconContainer.innerHTML = MENU_ICON_SVG;
+      }
+    }
+  }
+}
+
 // Función para alternar la visibilidad del submenú
 function toggleSubmenu(submenuContainer: Element, toggleButton: Element): void {
   submenuContainer.classList.toggle('hidden');
@@ -327,52 +413,51 @@ function initMobileMenu() {
   // Botón de cierre
   const closeButton = document.getElementById('mobile-menu-close');
   if (closeButton) {
-    closeButton.addEventListener('click', handleCloseButtonClick);
-    closeButton.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleCloseButtonClick(e);
-    }, { passive: false });
+    closeButton.removeEventListener('pointerup', onClosePointerUp);
+    closeButton.removeEventListener('click', onCloseClick);
+    closeButton.addEventListener('pointerup', onClosePointerUp);
+    closeButton.addEventListener('click', onCloseClick);
   }
   
   // Toggles del menú (primer nivel)
   const menuToggles = mobileMenu.querySelectorAll('.menu-toggle');
   menuToggles.forEach(toggle => {
-    toggle.addEventListener('click', handleMenuToggleClick);
-    toggle.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleMenuToggleClick(e);
-    }, { passive: false });
+    toggle.removeEventListener('pointerup', onMenuTogglePointerUp);
+    toggle.removeEventListener('click', onMenuToggleClick);
+    toggle.addEventListener('pointerup', onMenuTogglePointerUp);
+    toggle.addEventListener('click', onMenuToggleClick);
   });
   
   // Elementos padre del menú (primer nivel)
   const menuParents = mobileMenu.querySelectorAll('.menu-parent');
   menuParents.forEach(parent => {
-    parent.addEventListener('click', handleMenuParentClick);
-    parent.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleMenuParentClick(e);
-    }, { passive: false });
+    parent.removeEventListener('pointerup', onMenuParentPointerUp);
+    parent.removeEventListener('click', onMenuParentClick);
+    parent.addEventListener('pointerup', onMenuParentPointerUp);
+    parent.addEventListener('click', onMenuParentClick);
   });
   
   // Toggles del submenú (segundo nivel)
   const submenuToggles = mobileMenu.querySelectorAll('.submenu-toggle');
   submenuToggles.forEach(toggle => {
-    toggle.addEventListener('click', handleSubmenuToggleClick);
-    toggle.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleSubmenuToggleClick(e);
-    }, { passive: false });
+    toggle.removeEventListener('pointerup', onSubmenuTogglePointerUp);
+    toggle.removeEventListener('click', onSubmenuToggleClick);
+    toggle.addEventListener('pointerup', onSubmenuTogglePointerUp);
+    toggle.addEventListener('click', onSubmenuToggleClick);
   });
   
   // Elementos padre del submenú (segundo nivel)
   const submenuParents = mobileMenu.querySelectorAll('.submenu-parent');
   submenuParents.forEach(parent => {
-    parent.addEventListener('click', handleSubmenuParentClick);
-    parent.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleSubmenuParentClick(e);
-    }, { passive: false });
+    parent.removeEventListener('pointerup', onSubmenuParentPointerUp);
+    parent.removeEventListener('click', onSubmenuParentClick);
+    parent.addEventListener('pointerup', onSubmenuParentPointerUp);
+    parent.addEventListener('click', onSubmenuParentClick);
   });
+
+  // Close menu on any navigable link
+  mobileMenu.removeEventListener('click', handleMenuLinkNavigation);
+  mobileMenu.addEventListener('click', handleMenuLinkNavigation);
 }
 
 // Reset flag on page swap
