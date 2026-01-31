@@ -97,6 +97,7 @@ import LazyImage from "../LazyImage.astro";
                     class="btn-view flex w-full h-[54px] text-[22.02px]  justify-center items-center shrink-0 rounded border-[0.1px] text-white font-title hover:shadow-lg"
                     data-no-swipe="true"
                     data-no-animation="true"
+                    data-astro-reload="false"
                   >
                     {currentTexts.viewMore}
                   </a>
@@ -304,7 +305,7 @@ import LazyImage from "../LazyImage.astro";
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
   background: #180607 !important;
-  transform: translateY(-2px) !important;
+  /* transform: translateY(-2px) !important; */
   box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4) !important;
 }
 

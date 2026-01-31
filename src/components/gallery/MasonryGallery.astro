@@ -182,6 +182,7 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     justify-content: center !important;
     cursor: pointer !important;
     padding: 0 !important;
+    pointer-events: auto !important;
   }
 
   .swiper-button-next svg,
@@ -195,7 +196,7 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   .swiper-button-prev:hover {
     background: rgba(45, 160, 255, 0.3) !important;
     border-color: #4DB5FF !important;
-    transform: translateY(-2px) !important;
+    /* transform: translateY(-2px) !important; */
     box-shadow: 0 8px 20px rgba(45, 160, 255, 0.4) !important;
   }
 
@@ -366,11 +367,18 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     if (!el) return;
     if (el.classList.contains('swiper-initialized')) return;
     if (swiperMap.has(el)) { try { const s = swiperMap.get(el); s && s.update && s.update(); } catch {} return; }
+    
+    // Get the number of slides
+    const slideCount = parseInt(el.getAttribute('data-count') || '0', 10);
+    
+    // Only enable loop if we have enough slides (at least 8 for desktop with 4 slides per view)
+    const enableLoop = slideCount >= 8;
+    
     const s = new Swiper(selector, {
       modules: [Navigation, Autoplay],
       slidesPerView: 5,
       spaceBetween: 20,
-      loop: true,
+      loop: enableLoop,
       speed: 600,
       navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
       breakpoints: {

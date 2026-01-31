@@ -45,11 +45,11 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/loopvi
 ---
 
 <Layout title={title} class="bg-brown" description={metaDescription}>
-  <section>
+  <section class="hero-section">
     <VideoHero
       videoUrl={videoUrl}
       fallbackImageUrl={fallbackImageUrl}
-      height="800px"
+      height="100%"
       overlayOpacity="0"
       textColor="text-white"
       showOverlay={false}
@@ -218,6 +218,22 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/loopvi
 </Layout>
 
 <style>
+  .hero-section {
+    height: 400px;
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hero-section {
+      height: 600px;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .hero-section {
+      height: 800px;
+    }
+  }
+
   .about-cards {
     perspective: 1200px;
   }
