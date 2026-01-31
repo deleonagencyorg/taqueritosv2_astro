@@ -49,9 +49,6 @@ const CLOSE_ICON_SVG = `<svg class="w-6 h-6" fill="none" stroke="currentColor" v
 // Estado del menú
 let isMenuOpen = false;
 
-// Avoid double-trigger on touch devices (touchend + click)
-let lastPointerUpTs = 0;
-
 // Función para abrir el menú
 function openMobileMenu() {
   const mobileMenu = document.getElementById('mobile-menu');
@@ -107,12 +104,8 @@ function initMobileMenuButton() {
   
   if (menuButton) {
     // Remover listener anterior si existe
-    menuButton.removeEventListener('click', onClick);
-    menuButton.removeEventListener('pointerup', onPointerUp);
-
-    // Prefer pointer events to unify mouse/touch and avoid double firing.
-    menuButton.addEventListener('pointerup', onPointerUp);
-    menuButton.addEventListener('click', onClick);
+    menuButton.removeEventListener('click', toggleMobileMenu);
+    menuButton.addEventListener('click', toggleMobileMenu);
   }
   
   // Resetear estado al inicializar
@@ -131,16 +124,6 @@ function initMobileMenuButton() {
   (window as any).CLOSE_ICON_SVG = CLOSE_ICON_SVG;
 }
 
-function onPointerUp(e: PointerEvent) {
-  lastPointerUpTs = Date.now();
-  toggleMobileMenu(e);
-}
-
-function onClick(e: MouseEvent) {
-  // If a pointer event just happened, ignore the synthetic click.
-  if (Date.now() - lastPointerUpTs < 400) return;
-  toggleMobileMenu(e);
-}
 
 // Exponer funciones globalmente inmediatamente
 (window as any).openMobileMenu = openMobileMenu;

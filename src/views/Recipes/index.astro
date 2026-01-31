@@ -174,7 +174,7 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
     {allRecipes.length === 0 ? (
       <p class="text-center text-gray-500">{noRecipesText}</p>
     ) : (
-      <div id="recipesGrid" class="w-full mx-auto grid items-stretch grid-cols-2 xxs-only:grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mt-12" transition:animate="slide">
+      <div id="recipesGrid" class="w-full mx-auto grid items-stretch grid-cols-2 xxs-only:grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mt-12">
         {allRecipes.map((recipe: Recipe) => (
           <div
             class="recipe-card h-full"

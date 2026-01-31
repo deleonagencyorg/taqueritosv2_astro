@@ -384,11 +384,19 @@ const carouselProducts = [safeProduct, ...relatedProducts];
   import 'swiper/css';
   import 'swiper/css/navigation';
 
-  document.addEventListener('DOMContentLoaded', () => {
+  let swiperInstance: Swiper | null = null;
+
+  function initializeSwiper() {
     const swiperContainer = document.querySelector('.products-swiper');
     
     if (!swiperContainer) {
       return;
+    }
+
+    // Destruir instancia previa si existe
+    if (swiperInstance && !swiperInstance.destroyed) {
+      swiperInstance.destroy(true, true);
+      swiperInstance = null;
     }
 
     // Obtener datos de productos
@@ -415,7 +423,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     }
 
     // Inicializar Swiper
-    const swiper = new Swiper('.products-swiper', {
+    swiperInstance = new Swiper('.products-swiper', {
       modules: [Navigation],
       slidesPerView: 1,
       spaceBetween: 0,
@@ -448,7 +456,25 @@ const carouselProducts = [safeProduct, ...relatedProducts];
         }
       }
     });
-  });
+  }
+
+  function cleanupSwiper() {
+    if (swiperInstance && !swiperInstance.destroyed) {
+      swiperInstance.destroy(true, true);
+      swiperInstance = null;
+    }
+  }
+
+  // Inicializar en carga inicial
+  document.addEventListener('DOMContentLoaded', initializeSwiper);
+  
+  // Inicializar en navegación con View Transitions
+  document.addEventListener('astro:page-load', initializeSwiper);
+  document.addEventListener('astro:after-swap', initializeSwiper);
+  
+  // Limpiar antes de cambiar de página
+  document.addEventListener('astro:before-swap', cleanupSwiper);
+  document.addEventListener('astro:before-preparation', cleanupSwiper);
 </script>
 
 <script>
