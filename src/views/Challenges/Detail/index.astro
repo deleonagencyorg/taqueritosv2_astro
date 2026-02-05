@@ -127,7 +127,7 @@ try {
   
     <!-- Hero: imagen grande -->
     <section class="pt-8 md:pt-12 pb-6 mt-4">
-      <div class="w-full overflow-hidden bg-black/50 max-h-[480px]">
+      <div class="w-full overflow-hidden max-h-[480px]">
         <LazyImage
           src={challenge.image}
           alt={challenge.title}
@@ -161,12 +161,20 @@ try {
             {challenge.urls && challenge.urls.length > 0 ? (
               <div class="flex flex-wrap gap-3">
                 {challenge.urls.map((urlItem) => (
-                  <a
-                    href={urlItem.url}
-                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#ff2d2d] to-[#ff6b6b] text-white font-bold uppercase tracking-wide text-sm hover:from-[#ff4b4e] hover:to-[#ff8080] transition-all duration-200 shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
-                  >
-                    {urlItem.title}
-                  </a>
+                  urlItem.url && urlItem.url !== '#' && urlItem.url.trim() !== '' ? (
+                    <a
+                      href={urlItem.url}
+                      class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#ff2d2d] to-[#ff6b6b] text-white font-bold uppercase tracking-wide text-sm hover:from-[#ff4b4e] hover:to-[#ff8080] transition-all duration-200 shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
+                    >
+                      {urlItem.title}
+                    </a>
+                  ) : (
+                    <span
+                      class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#ff2d2d]/50 to-[#ff6b6b]/50 text-white/60 font-bold uppercase tracking-wide text-sm cursor-not-allowed shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
+                    >
+                      {urlItem.title}
+                    </span>
+                  )
                 ))}
               </div>
             ) : challenge.url ? (
