@@ -70,7 +70,7 @@ const displayTitle = title || defaultTitle;
     </div>
 
     <!-- Carousel con overflow hidden y translateX -->
-    <div class="games-carousel-viewport overflow-hidden">
+    <div class="games-carousel-viewport overflow-x-hidden overflow-y-visible py-2">
       <div class="games-carousel-track flex transition-transform duration-300 ease-out" data-games-track>
         {gameItems.map((game) => (
           <div class="game-slide flex-shrink-0 px-2">
@@ -228,7 +228,8 @@ const displayTitle = title || defaultTitle;
 
   .games-carousel-viewport {
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
   }
 
   .games-carousel-track {
