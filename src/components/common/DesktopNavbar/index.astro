@@ -19,8 +19,8 @@ const currentPath = pathname;
 // Obtener los datos de social media y menú desde las traducciones
 const socialMedia = t('social_media', { namespace: 'common', locale: currentLang }) as any;
 const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
-// Quitar el botón de comunidad
-const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
+// Quitar el botón de taqueritos gaming (solo para desktop)
+const menuItems = rawMenuItems.filter((item) => item.id !== 'community' && item.id !== 'taqueritos-gaming');
 // Filtrar juegos solo para español
 const menuItemsFiltered = menuItems.filter((item) => item.id !== 'games' || currentLang === 'es');
 
@@ -142,7 +142,7 @@ const games = t('games', { namespace: 'common', locale: currentLang }) as any[];
     <div class="pl-2 lg:pl-12 xl:pl-20 flex items-center gap-3">
       {currentLang === 'es' && (
         <a
-          href="https://gamer.yummiespromociones.com/"
+          href="https://www.challengermode.com/s/taqueritos/pages/laruta"
           target="_blank"
           rel="noopener noreferrer"
           class="px-[5px] bg-primary text-white rounded-[5px] h-[32px] md:h-[36px] lg:h-[42px] xl:h-[47px] flex items-center justify-center text-[9px] md:text-[10px] lg:text-[11px] xl:text-sm uppercase font-title leading-none"
