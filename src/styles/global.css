@@ -11,6 +11,23 @@ html, body {
   background-color: white;
 }
 
+/* Prevenir FOUC y saltos visuales */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Asegurar que todas las secciones tengan posición relativa */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Prevenir shifts de layout durante la carga */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 
 
   .bg-dark-spotlight {

@@ -164,6 +164,8 @@ import LazyImage from "../LazyImage.astro";
     overflow: visible;
     opacity: 1;
     transition: opacity 0.3s ease;
+    max-width: 100%;
+    flex: 0 0 auto;
   }
 
   .product-card {
@@ -175,6 +177,8 @@ import LazyImage from "../LazyImage.astro";
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    flex-shrink: 0;
+    box-sizing: border-box;
   }
 
   .product-image-container {
@@ -315,6 +319,10 @@ import LazyImage from "../LazyImage.astro";
 }
 
 /* Responsive */
+  @media (min-width: 1024px) {
+    /* Swiper gestiona el ancho automáticamente */
+  }
+
   @media (min-width: 768px) and (max-width: 1024px) {
     .products-carousel {
       padding-top: 150px;
@@ -322,6 +330,7 @@ import LazyImage from "../LazyImage.astro";
     .swiper-container {
       padding: 0 20px;
     }
+    /* width managed by swiper */
     .product-card {
       min-height: 480px;
       padding: 1.5rem;
@@ -355,6 +364,7 @@ import LazyImage from "../LazyImage.astro";
 
     .swiper-slide {
       padding-top: 120px;
+      /* width managed by swiper */
     }
     .carousel-navigation {
       position: absolute;
@@ -481,6 +491,14 @@ class ProductsCarousel {
       spaceBetween: 50,
       speed: 600,
       
+      // Observer para detectar cambios en el DOM
+      observer: true,
+      observeParents: true,
+      observeSlideChildren: true,
+      
+      // Prevenir overflow
+      watchOverflow: true,
+      
       navigation: { 
         prevEl,
         nextEl,
@@ -499,14 +517,17 @@ class ProductsCarousel {
         320: { 
           slidesPerView: 1,
           spaceBetween: 20,
+          centeredSlides: true,
         },
         768: { 
           slidesPerView: 2,
           spaceBetween: 30,
+          centeredSlides: false,
         },
         1024: { 
           slidesPerView: 3,
           spaceBetween: 80,
+          centeredSlides: false,
         },
       },
 
@@ -521,17 +542,32 @@ class ProductsCarousel {
       link.addEventListener('click', (e) => e.stopPropagation());
     });
 
-    // Actualización final
+    // Actualización múltiple para asegurar dimensiones correctas
+    if (this.swiper && !this.swiper.destroyed) {
+      this.swiper.update();
+      this.swiper.updateSize();
+      this.swiper.updateSlides();
+    }
+    
     setTimeout(() => {
       if (this.swiper && !this.swiper.destroyed) {
         this.swiper.update();
+        this.swiper.updateSize();
+        this.swiper.updateSlides();
       }
     }, 100);
+    
+    requestAnimationFrame(() => {
+      if (this.swiper && !this.swiper.destroyed) {
+        this.swiper.update();
+      }
+    });
   }
 
   public destroy(): void {
     if (this.swiper && !this.swiper.destroyed) {
-      this.swiper.destroy(true, true);
+      // cleanStyles = false para evitar deformación durante la transición de salida
+      this.swiper.destroy(true, false);
       this.swiper = null;
     }
   }
@@ -571,7 +607,23 @@ function initializeCarousels() {
 
 document.addEventListener("DOMContentLoaded", initializeCarousels);
 document.addEventListener("astro:page-load", initializeCarousels);
-document.addEventListener("astro:after-swap", initializeCarousels);
+document.addEventListener("astro:after-swap", () => {
+  // Delay para asegurar que el DOM esté completamente renderizado
+  setTimeout(initializeCarousels, 50);
+});
 document.addEventListener("astro:before-swap", cleanupCarousels);
 document.addEventListener("astro:before-preparation", cleanupCarousels);
+
+// Actualizar cuando la página se vuelve visible
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    carouselInstances.forEach((instance) => {
+      if ((instance as any).swiper && !(instance as any).swiper.destroyed) {
+        (instance as any).swiper.update();
+        (instance as any).swiper.updateSize();
+        (instance as any).swiper.updateSlides();
+      }
+    });
+  }
+});
 </script>
