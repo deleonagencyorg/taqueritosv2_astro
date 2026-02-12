@@ -11,7 +11,7 @@
   ],
   "type": "image",
   "preparation_time": 20,
-      "category": "lunch",
+  "category": "lunch",
   "ingredients": [
     "2 tablespoon oil",
     "1 pound minced beef roast",
@@ -29,5 +29,8 @@
   ],
   "brand": [
     "taqueritos"
+  ],
+  "product": [
+    "Taqueritos Chile Toreado"
   ]
 }
