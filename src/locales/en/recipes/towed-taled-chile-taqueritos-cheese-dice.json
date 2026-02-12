@@ -11,7 +11,7 @@
   ],
   "type": "image",
   "preparation_time": 15,
-      "category": "snack",
+  "category": "snack",
   "ingredients": [
     "1 Cream cheese pound or cheese in dice.",
     "1 cup of flour",
@@ -27,5 +27,8 @@
   ],
   "brand": [
     "taqueritos"
+  ],
+  "product": [
+    "Taqueritos Chile Toreado"
   ]
 }

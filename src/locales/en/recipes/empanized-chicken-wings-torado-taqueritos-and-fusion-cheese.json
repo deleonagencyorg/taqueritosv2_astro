@@ -11,7 +11,7 @@
   ],
   "type": "image",
   "preparation_time": 60,
-      "category": "lunch",
+  "category": "lunch",
   "ingredients": [
     "12 chicken wings",
     "Salpimentar to taste",
@@ -35,5 +35,9 @@
   ],
   "brand": [
     "taqueritos"
+  ],
+  "product": [
+    "Taqueritos Chile Toreado",
+    "Taqueritos Queso Fusión"
   ]
 }

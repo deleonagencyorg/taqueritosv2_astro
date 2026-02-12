@@ -22,6 +22,7 @@ export interface Props {
   headerColors?: {
     backgroundColor?: string;
     textColor?: string;
+    isSpecialBackground?: boolean;
   };
 }
 
@@ -53,7 +54,8 @@ if (headerColors) {
   customHeaderConfig = {
     ...headerColorConfig,
     backgroundColor: headerColors.backgroundColor ? `bg-[${headerColors.backgroundColor}]` : headerColorConfig.backgroundColor,
-    textColor: headerColors.textColor ? headerColors.textColor : headerColorConfig.textColor, // Mantener el textColor original de getHeaderColors
+    textColor: headerColors.textColor ? headerColors.textColor : headerColorConfig.textColor,
+    isSpecialBackground: headerColors.isSpecialBackground ?? headerColorConfig.isSpecialBackground,
   };
 }
 ---

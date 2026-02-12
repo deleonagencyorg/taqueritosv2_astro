@@ -11,7 +11,7 @@
   ],
   "type": "image",
   "preparation_time": 10,
-      "category": "snack",
+  "category": "snack",
   "ingredients": [
     "1 green mango.",
     "1 red apple.",
@@ -26,5 +26,8 @@
   ],
   "brand": [
     "taqueritos"
+  ],
+  "product": [
+    "Taqueritos Chile Toreado"
   ]
 }
