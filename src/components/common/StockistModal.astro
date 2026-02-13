@@ -548,6 +548,7 @@ const t = texts[locale as keyof typeof texts] || texts.es;
           weightDiv.className = 'weight-btn';
           weightDiv.dataset.weight = weight;
           weightDiv.textContent = weight;
+          weightDiv.style.cssText = 'background:transparent;border:1.5px solid #FFFFFF;border-radius:30px;padding:10px 24px;color:#FFFFFF;font-size:16px;font-weight:600;display:inline-block;';
           
           weightButtons.appendChild(weightDiv);
           
