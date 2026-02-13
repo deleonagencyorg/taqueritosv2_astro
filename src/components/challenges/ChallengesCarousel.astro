@@ -24,6 +24,7 @@ interface Challenge {
   servings?: number;
   rating?: number;
   url?: string;
+  openInNewTab?: boolean;
 }
 
 export interface Props {
@@ -78,6 +79,22 @@ challengeItems.sort((a, b) => {
   const bVal = isNaN(bStart) ? 0 : bStart;
   return bVal - aVal;
 });
+
+// Agregar tarjeta personalizada de La Ruta
+const rutaTruckCard: Challenge = {
+  id: 'ruta-truck',
+  title: currentLang === 'es' ? 'La Ruta' : 'The Route',
+  image: 'https://snack.yummiespromociones.com/SnacksyummiesAssets/rutatruck.webp?w=1024&q=80',
+  hover_image: 'https://snack.yummiespromociones.com/SnacksyummiesAssets/rutatruck.webp?w=1024&q=80',
+  preparation_time: 0,
+  "start-date": '2026-01-01',
+  "end-date": '2026-12-31',
+  url: 'https://www.challengermode.com/s/taqueritos/pages/laruta',
+  category: 'other',
+  category_en: 'other',
+  openInNewTab: true
+};
+challengeItems.unshift(rutaTruckCard);
 
 function getCategoryKey(challenge: any): string {
   const raw = (
@@ -143,6 +160,7 @@ function getCategoryKey(challenge: any): string {
                 rating={challenge.rating || 0}
                 isMainCard={false}
                 url={challenge.url}
+                openInNewTab={challenge.openInNewTab}
               />
             </div>
           ))}
@@ -169,6 +187,7 @@ function getCategoryKey(challenge: any): string {
                 rating={challenge.rating || 0}
                 isMainCard={false}
                 url={challenge.url}
+                openInNewTab={challenge.openInNewTab}
               />
             </div>
           ))}
@@ -197,38 +216,42 @@ function getCategoryKey(challenge: any): string {
 )}
 
 <style>
-  /* Mobile - Carrusel simple */
+  /* ===== MOBILE CAROUSEL ===== */
+  .challenges-carousel-mobile {
+    position: relative;
+    width: 100%;
+  }
+
+  .challenges-carousel-container {
+    overflow: hidden;
+    width: 100%;
+  }
+
   .challenges-carousel-track {
     display: flex;
-    transition: transform 400ms ease-in-out;
+    transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
     gap: 1rem;
-    padding: 0 1rem;
+    width: 100%;
   }
 
   .challenge-slide-mobile {
     flex-shrink: 0;
-    width: calc(100vw - 2rem); /* Ancho completo menos padding */
-    max-width: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 0.5rem;
   }
 
-  .challenge-slide-mobile > a {
-    width: 100% !important;
-    max-width: 500px;
-    height: auto !important;
+  /* ===== DESKTOP CAROUSEL ===== */
+  .challenges-carousel-desktop {
+    position: relative;
+    width: 100%;
+    padding-top: 20px;
   }
 
-  .challenge-slide-mobile .recipe-card > div {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 255px;
-  }
-
-  /* Desktop */
   .carousel-container-desktop {
-    overflow: visible; /* Permite que el glow/sombra de las cards no se corte */
+    overflow: hidden;
     width: 100%;
     position: relative;
   }
@@ -236,7 +259,8 @@ function getCategoryKey(challenge: any): string {
   .carousel-track-desktop {
     display: flex;
     gap: 2rem;
-    position: relative;
+    transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
   }
 
   .carousel-slide-desktop {
@@ -244,68 +268,9 @@ function getCategoryKey(challenge: any): string {
     width: 710px;
     min-width: 710px;
     position: relative;
-    transition: opacity 200ms ease-in-out;
   }
 
-  /* Animaciones DESKTOP */
-  @keyframes flyAcrossRight {
-    0% {
-      transform: translateX(0) translateY(0) scale(1);
-      opacity: 1;
-    }
-    100% {
-      transform: translateX(1000px) translateY(0) scale(0.98);
-      opacity: 0.2;
-    }
-  }
-
-  @keyframes slideFromBehind {
-    0% {
-      transform: translateX(0) scale(0.94);
-      opacity: 0.4;
-    }
-    100% {
-      transform: translateX(-1000px) scale(0.94);
-      opacity: 0.4;
-    }
-  }
-
-  @keyframes bounceIn {
-    0% {
-      transform: translateX(0) scale(0.92);
-      opacity: 0.2;
-    }
-    60% {
-      transform: translateX(0) scale(1.01);
-      opacity: 1;
-    }
-    80% {
-      transform: translateX(0) scale(0.995);
-    }
-    100% {
-      transform: translateX(0) scale(1);
-      opacity: 1;
-    }
-  }
-
-  .flying-card-right {
-    position: fixed !important;
-    z-index: 9999 !important;
-    pointer-events: none !important;
-    animation: flyAcrossRight 520ms ease-in-out forwards;
-  }
-
-  .flying-card-left {
-    position: fixed !important;
-    z-index: 1 !important;
-    pointer-events: none !important;
-    animation: slideFromBehind 520ms ease-in-out forwards;
-  }
-
-  .bounce-in {
-    animation: bounceIn 600ms ease-in-out forwards;
-  }
-
+  /* ===== NAVIGATION BUTTONS ===== */
   .carousel-navigation {
     position: absolute;
     top: -80px;
@@ -319,11 +284,6 @@ function getCategoryKey(challenge: any): string {
     position: relative;
   }
 
-  .challenges-carousel-desktop {
-    position: relative;
-    padding-top: 20px;
-  }
-
   .carousel-btn-prev,
   .carousel-btn-next {
     position: relative;
@@ -333,11 +293,24 @@ function getCategoryKey(challenge: any): string {
     border: 2px solid #ff2c2f;
     border-radius: 12px;
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+  }
+
+  .carousel-btn-prev:disabled,
+  .carousel-btn-next:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .carousel-btn-prev:not(:disabled):hover,
+  .carousel-btn-next:not(:disabled):hover {
+    background: #150404;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4);
   }
 
   .carousel-btn-prev svg,
@@ -346,13 +319,7 @@ function getCategoryKey(challenge: any): string {
     height: 26px !important;
   }
 
-  .carousel-btn-prev:hover,
-  .carousel-btn-next:hover {
-    background: #150404;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4);
-  }
-
+  /* ===== RESPONSIVE ===== */
   @media (min-width: 768px) {
     .challenges-carousel-mobile {
       display: none;
@@ -364,7 +331,6 @@ function getCategoryKey(challenge: any): string {
       display: none;
     }
 
-    /* En mobile los botones van debajo del título, alineados a la derecha */
     .carousel-navigation {
       position: relative;
       top: 0;
@@ -374,12 +340,48 @@ function getCategoryKey(challenge: any): string {
       width: 100%;
       margin-top: 16px;
       justify-content: flex-end;
+      padding-right: 0.5rem;
     }
 
     .carousel-btn-prev,
     .carousel-btn-next {
       width: 50px;
       height: 50px;
+    }
+
+    .carousel-btn-prev svg,
+    .carousel-btn-next svg {
+      width: 22px !important;
+      height: 22px !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .carousel-btn-prev,
+    .carousel-btn-next {
+      width: 44px;
+      height: 44px;
+    }
+
+    .carousel-btn-prev svg,
+    .carousel-btn-next svg {
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
+
+  /* ===== TABLET & SMALL DESKTOP ===== */
+  @media (min-width: 768px) and (max-width: 1200px) {
+    .carousel-slide-desktop {
+      width: 600px;
+      min-width: 600px;
+    }
+  }
+
+  @media (min-width: 1201px) and (max-width: 1400px) {
+    .carousel-slide-desktop {
+      width: 650px;
+      min-width: 650px;
     }
   }
 </style>
@@ -388,9 +390,8 @@ function getCategoryKey(challenge: any): string {
   function initChallengesCarousel(root: Element) {
     if (!root || (root as any).dataset.rcInitialized === 'true') return;
     (root as any).dataset.rcInitialized = 'true';
-    
 
-    // MOBILE CAROUSEL - Simple
+    // ===== MOBILE CAROUSEL =====
     const trackMobile = root.querySelector('#challengesTrackMobile') as HTMLElement;
     const prevBtnMobile = root.querySelector('#prevBtnMobile') as HTMLButtonElement;
     const nextBtnMobile = root.querySelector('#nextBtnMobile') as HTMLButtonElement;
@@ -400,134 +401,162 @@ function getCategoryKey(challenge: any): string {
       let currentIndexMobile = 0;
 
       function updateMobile() {
-        const slideWidth = slidesMobile[0]?.offsetWidth || 0;
-        const gap = 16; // 1rem gap
-        const offset = currentIndexMobile * (slideWidth + gap);
+        const containerWidth = trackMobile.parentElement?.offsetWidth || 0;
+        const offset = currentIndexMobile * containerWidth;
         trackMobile.style.transform = `translateX(-${offset}px)`;
+        
+        // Update button states
+        prevBtnMobile.disabled = currentIndexMobile === 0;
+        nextBtnMobile.disabled = currentIndexMobile === slidesMobile.length - 1;
       }
 
       prevBtnMobile.addEventListener('click', () => {
         if (currentIndexMobile > 0) {
           currentIndexMobile--;
-        } else {
-          currentIndexMobile = slidesMobile.length - 1;
+          updateMobile();
         }
-        updateMobile();
       });
 
       nextBtnMobile.addEventListener('click', () => {
         if (currentIndexMobile < slidesMobile.length - 1) {
           currentIndexMobile++;
-        } else {
-          currentIndexMobile = 0;
+          updateMobile();
         }
+      });
+
+      // Recalcular en resize con debounce
+      let resizeTimeout: number;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(updateMobile, 150) as unknown as number;
+      });
+
+      // Touch/Swipe support
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+
+      trackMobile.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+        trackMobile.style.transition = 'none';
+      });
+
+      trackMobile.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        const diff = currentX - startX;
+        const containerWidth = trackMobile.parentElement?.offsetWidth || 0;
+        const currentOffset = currentIndexMobile * containerWidth;
+        trackMobile.style.transform = `translateX(-${currentOffset - diff}px)`;
+      });
+
+      trackMobile.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        trackMobile.style.transition = 'transform 500ms cubic-bezier(0.4, 0, 0.2, 1)';
+        
+        const diff = currentX - startX;
+        const threshold = 50;
+        
+        if (diff > threshold && currentIndexMobile > 0) {
+          currentIndexMobile--;
+        } else if (diff < -threshold && currentIndexMobile < slidesMobile.length - 1) {
+          currentIndexMobile++;
+        }
+        
         updateMobile();
       });
 
-      // Recalcular en resize
-      window.addEventListener('resize', updateMobile);
-
-      
+      updateMobile();
     }
 
-    // DESKTOP CAROUSEL - Con efectos
+    // ===== DESKTOP CAROUSEL =====
     const trackDesktop = root.querySelector('#challengesTrackDesktop') as HTMLElement;
     const containerDesktop = root.querySelector('.carousel-container-desktop') as HTMLElement;
-    const prevBtnDesktop = root.querySelector('.carousel-btn-prev:not(#prevBtnMobile)') as HTMLButtonElement;
-    const nextBtnDesktop = root.querySelector('.carousel-btn-next:not(#nextBtnMobile)') as HTMLButtonElement;
+    const prevBtnDesktop = root.querySelector('.challenges-carousel-desktop .carousel-btn-prev') as HTMLButtonElement;
+    const nextBtnDesktop = root.querySelector('.challenges-carousel-desktop .carousel-btn-next') as HTMLButtonElement;
 
     if (trackDesktop && prevBtnDesktop && nextBtnDesktop && containerDesktop) {
+      let currentIndexDesktop = 0;
       let isAnimating = false;
+
+      function getVisibleSlides(): number {
+        const containerWidth = containerDesktop.offsetWidth;
+        const slideWidth = 710; // Width of each slide
+        const gap = 32; // 2rem gap
+        return Math.floor((containerWidth + gap) / (slideWidth + gap));
+      }
+
+      function updateDesktop(animated = true) {
+        if (!animated) {
+          trackDesktop.style.transition = 'none';
+        }
+        
+        const slideWidth = 710;
+        const gap = 32;
+        const offset = currentIndexDesktop * (slideWidth + gap);
+        trackDesktop.style.transform = `translateX(-${offset}px)`;
+        
+        if (!animated) {
+          void trackDesktop.offsetWidth; // Force reflow
+          trackDesktop.style.transition = 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+
+        // Update button states
+        const slides = Array.from(trackDesktop.children);
+        const visibleSlides = getVisibleSlides();
+        prevBtnDesktop.disabled = currentIndexDesktop === 0;
+        nextBtnDesktop.disabled = currentIndexDesktop >= slides.length - visibleSlides;
+      }
 
       nextBtnDesktop.addEventListener('click', () => {
         if (isAnimating) return;
-        isAnimating = true;
-
-        const slides = Array.from(trackDesktop.children) as HTMLElement[];
-        if (slides.length === 0) {
-          isAnimating = false;
-          return;
-        }
-
-        const firstSlide = slides[0];
-        const rect = firstSlide.getBoundingClientRect();
-
-        const flyingClone = firstSlide.cloneNode(true) as HTMLElement;
-        flyingClone.style.cssText = `
-          position: fixed !important;
-          top: ${rect.top}px !important;
-          width: ${rect.width}px !important;
-          height: ${rect.height}px !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          z-index: 9999 !important;
-          pointer-events: none !important;
-        `;
-        flyingClone.classList.add('flying-card-right');
         
-        document.body.appendChild(flyingClone);
-
-        firstSlide.style.opacity = '0';
-        firstSlide.style.visibility = 'hidden';
-
-        setTimeout(() => {
-          trackDesktop.appendChild(firstSlide);
-          firstSlide.style.opacity = '1';
-          firstSlide.style.visibility = 'visible';
-          flyingClone.remove();
-          isAnimating = false;
-        }, 520);
+        const slides = Array.from(trackDesktop.children);
+        const visibleSlides = getVisibleSlides();
+        
+        if (currentIndexDesktop < slides.length - visibleSlides) {
+          isAnimating = true;
+          currentIndexDesktop++;
+          updateDesktop();
+          
+          setTimeout(() => {
+            isAnimating = false;
+          }, 600);
+        }
       });
 
       prevBtnDesktop.addEventListener('click', () => {
         if (isAnimating) return;
-        isAnimating = true;
-
-        const slides = Array.from(trackDesktop.children) as HTMLElement[];
-        if (slides.length === 0) {
-          isAnimating = false;
-          return;
-        }
-
-        const lastSlide = slides[slides.length - 1];
-        const rect = lastSlide.getBoundingClientRect();
-
-        const flyingClone = lastSlide.cloneNode(true) as HTMLElement;
-        flyingClone.style.cssText = `
-          position: fixed !important;
-          left: ${rect.left}px !important;
-          top: ${rect.top}px !important;
-          width: ${rect.width}px !important;
-          height: ${rect.height}px !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          z-index: 1 !important;
-          pointer-events: none !important;
-        `;
-        flyingClone.classList.add('flying-card-left');
         
-        document.body.appendChild(flyingClone);
-
-        lastSlide.style.opacity = '0';
-        lastSlide.style.visibility = 'hidden';
-
-        setTimeout(() => {
-          trackDesktop.insertBefore(lastSlide, trackDesktop.firstChild);
-          lastSlide.style.opacity = '0';
-          lastSlide.style.visibility = 'visible';
-          lastSlide.classList.add('bounce-in');
-          void lastSlide.offsetWidth;
-          flyingClone.remove();
+        if (currentIndexDesktop > 0) {
+          isAnimating = true;
+          currentIndexDesktop--;
+          updateDesktop();
           
           setTimeout(() => {
-            lastSlide.classList.remove('bounce-in');
-            lastSlide.style.opacity = '1';
             isAnimating = false;
           }, 600);
-        }, 520);
+        }
       });
 
-      
+      // Recalcular en resize con debounce
+      let resizeTimeoutDesktop: number;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeoutDesktop);
+        resizeTimeoutDesktop = setTimeout(() => {
+          // Reset to first slide if current position is invalid
+          const slides = Array.from(trackDesktop.children);
+          const visibleSlides = getVisibleSlides();
+          if (currentIndexDesktop >= slides.length - visibleSlides) {
+            currentIndexDesktop = Math.max(0, slides.length - visibleSlides);
+          }
+          updateDesktop(false);
+        }, 150) as unknown as number;
+      });
+
+      updateDesktop(false);
     }
   }
 

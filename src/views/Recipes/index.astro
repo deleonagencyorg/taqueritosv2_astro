@@ -130,7 +130,7 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
         </label>
         <select
           id="categoryFilter"
-          class="w-full bg-transparent border border-white rounded-md px-4 py-2 text-white text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400"
+          class="w-full bg-transparent border border-white rounded-md px-4 py-2 text-white text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400 [&>option]:text-gray-900 [&>option]:bg-white"
         >
           <option value="all">{categoryFilterLabels.all}</option>
           <option value="breakfast">{categoryFilterLabels.breakfast}</option>
@@ -148,7 +148,7 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
           </label>
           <select
             id="productFilter"
-            class="w-full bg-transparent border border-white rounded-md px-4 py-2 text-white text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400"
+            class="w-full bg-transparent border border-white rounded-md px-4 py-2 text-white text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400 [&>option]:text-gray-900 [&>option]:bg-white"
           >
             <option value="all">{productFilterLabels.all}</option>
             {productOptions.map((product) => (
