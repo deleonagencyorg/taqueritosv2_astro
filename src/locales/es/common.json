@@ -93,6 +93,16 @@
         "product_right": "Levéleate al máximo con Taqueritos.\nDragón de Fuego ¿Listo para el reto?",
         "product_cta_label": "Descubre más",
         "product_cta_link": "#"
+      },
+      {
+        "id": "slide2",
+        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/rutatruck.webp",
+        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/rutatruck.webp",
+        "alt": "La Ruta Taqueritos - Compite en FC26 y gana un viaje a Gamescom Brasil 2026",
+        "title": "La Ruta Taqueritos",
+        "description": "Compite en FC26 y gana un viaje a Gamescom Brasil 2026",
+        "link": "https://www.challengermode.com/s/taqueritos/pages/laruta",
+        "type": "image"
       } 
     ]
   },

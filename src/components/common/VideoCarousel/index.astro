@@ -131,14 +131,14 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                   <LazyImage
                     src={slide.desktop}
                     alt={slide.alt || "Taqueritos Fuego"}
-                    class="slide-image desktop-image h-auto z-20 bg-transparent w-[1200px]"
+                    class="slide-image desktop-image h-auto z-10 bg-transparent w-[1200px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 
                   <LazyImage
                     src={slide.mobile}
                     alt={slide.alt || "Taqueritos Fuego"}
-                    class="slide-image mobile-image h-auto z-20 bg-transparent w-[1200px]"
+                    class="slide-image mobile-image h-auto z-10 bg-transparent w-[1200px]"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 

@@ -222,63 +222,6 @@ const MENU_ICON_SVG = `<svg class="w-6 h-6" fill="none" stroke="currentColor" vi
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
 </svg>`;
 
-// Avoid double-trigger on touch devices (pointer/touch + synthetic click)
-let lastPointerUpTs = 0;
-
-function shouldIgnoreClick(): boolean {
-  return Date.now() - lastPointerUpTs < 400;
-}
-
-function onClosePointerUp(e: PointerEvent) {
-  lastPointerUpTs = Date.now();
-  handleCloseButtonClick(e);
-}
-
-function onCloseClick(e: MouseEvent) {
-  if (shouldIgnoreClick()) return;
-  handleCloseButtonClick(e);
-}
-
-function onMenuTogglePointerUp(e: PointerEvent): void {
-  lastPointerUpTs = Date.now();
-  handleMenuToggleClick(e);
-}
-
-function onMenuToggleClick(e: MouseEvent): void {
-  if (shouldIgnoreClick()) return;
-  handleMenuToggleClick(e);
-}
-
-function onMenuParentPointerUp(e: PointerEvent): void {
-  lastPointerUpTs = Date.now();
-  handleMenuParentClick(e);
-}
-
-function onMenuParentClick(e: MouseEvent): void {
-  if (shouldIgnoreClick()) return;
-  handleMenuParentClick(e);
-}
-
-function onSubmenuTogglePointerUp(e: PointerEvent): void {
-  lastPointerUpTs = Date.now();
-  handleSubmenuToggleClick(e);
-}
-
-function onSubmenuToggleClick(e: MouseEvent): void {
-  if (shouldIgnoreClick()) return;
-  handleSubmenuToggleClick(e);
-}
-
-function onSubmenuParentPointerUp(e: PointerEvent): void {
-  lastPointerUpTs = Date.now();
-  handleSubmenuParentClick(e);
-}
-
-function onSubmenuParentClick(e: MouseEvent): void {
-  if (shouldIgnoreClick()) return;
-  handleSubmenuParentClick(e);
-}
-
 function handleMenuLinkNavigation(e: Event) {
   const target = e.target as Element | null;
   if (!target) return;
@@ -415,46 +358,36 @@ function initMobileMenu() {
   // Botón de cierre
   const closeButton = document.getElementById('mobile-menu-close');
   if (closeButton) {
-    closeButton.removeEventListener('pointerup', onClosePointerUp);
-    closeButton.removeEventListener('click', onCloseClick);
-    closeButton.addEventListener('pointerup', onClosePointerUp);
-    closeButton.addEventListener('click', onCloseClick);
+    closeButton.removeEventListener('click', handleCloseButtonClick);
+    closeButton.addEventListener('click', handleCloseButtonClick);
   }
   
   // Toggles del menú (primer nivel)
   const menuToggles = mobileMenu.querySelectorAll('.menu-toggle');
   menuToggles.forEach(toggle => {
-    toggle.removeEventListener('pointerup', onMenuTogglePointerUp);
-    toggle.removeEventListener('click', onMenuToggleClick);
-    toggle.addEventListener('pointerup', onMenuTogglePointerUp);
-    toggle.addEventListener('click', onMenuToggleClick);
+    toggle.removeEventListener('click', handleMenuToggleClick);
+    toggle.addEventListener('click', handleMenuToggleClick);
   });
   
   // Elementos padre del menú (primer nivel)
   const menuParents = mobileMenu.querySelectorAll('.menu-parent');
   menuParents.forEach(parent => {
-    parent.removeEventListener('pointerup', onMenuParentPointerUp);
-    parent.removeEventListener('click', onMenuParentClick);
-    parent.addEventListener('pointerup', onMenuParentPointerUp);
-    parent.addEventListener('click', onMenuParentClick);
+    parent.removeEventListener('click', handleMenuParentClick);
+    parent.addEventListener('click', handleMenuParentClick);
   });
   
   // Toggles del submenú (segundo nivel)
   const submenuToggles = mobileMenu.querySelectorAll('.submenu-toggle');
   submenuToggles.forEach(toggle => {
-    toggle.removeEventListener('pointerup', onSubmenuTogglePointerUp);
-    toggle.removeEventListener('click', onSubmenuToggleClick);
-    toggle.addEventListener('pointerup', onSubmenuTogglePointerUp);
-    toggle.addEventListener('click', onSubmenuToggleClick);
+    toggle.removeEventListener('click', handleSubmenuToggleClick);
+    toggle.addEventListener('click', handleSubmenuToggleClick);
   });
   
   // Elementos padre del submenú (segundo nivel)
   const submenuParents = mobileMenu.querySelectorAll('.submenu-parent');
   submenuParents.forEach(parent => {
-    parent.removeEventListener('pointerup', onSubmenuParentPointerUp);
-    parent.removeEventListener('click', onSubmenuParentClick);
-    parent.addEventListener('pointerup', onSubmenuParentPointerUp);
-    parent.addEventListener('click', onSubmenuParentClick);
+    parent.removeEventListener('click', handleSubmenuParentClick);
+    parent.addEventListener('click', handleSubmenuParentClick);
   });
 
   // Close menu on any navigable link

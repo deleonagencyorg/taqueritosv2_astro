@@ -138,7 +138,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
             )}
     
             <!-- Botón de comprar y navegación -->
-            <div class="flex items-center gap-5">
+            <div class="flex items-center gap-5 pb-20 md:pb-0">
               <button 
                 id="open-modal-btn"
                 class="w-full flex justify-center items-center border border-[#FF0048] rounded-[16px] bg-gradient-to-b from-[#FF0048] to-[#FF5255] shadow-[0_3px_0_0_rgba(88,0,29,0.9)] hover:shadow-[0_1px_0_0_rgba(88,0,29,0.9)] hover:translate-y-[2px] transition-all duration-150 text-white py-[10px] md:py-[16px] lg:py-[16px]"
@@ -192,7 +192,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
                 <!-- Productos relacionados -->
                 {relatedProducts.map((relatedProduct: Product) => (
                   <div class="swiper-slide">
-                    <div class="relative w-[300px] md:w-[600px] lg:w-[500px] h-[600px] md:h-[800px]">
+                    <div class="relative w-[300px] md:w-[600px] lg:w-[500px] h-[400px] md:h-[800px]">
                       <div class="absolute top-10 right-0 w-[80%] h-auto">
                         <img 
                           class="product-float w-[300px] md:w-[600px] lg:w-[500px] h-auto rotate-[18deg] transition-transform duration-500 hover:scale-105 cursor-pointer"
@@ -384,11 +384,19 @@ const carouselProducts = [safeProduct, ...relatedProducts];
   import 'swiper/css';
   import 'swiper/css/navigation';
 
-  document.addEventListener('DOMContentLoaded', () => {
+  let swiperInstance: Swiper | null = null;
+
+  function initializeSwiper() {
     const swiperContainer = document.querySelector('.products-swiper');
     
     if (!swiperContainer) {
       return;
+    }
+
+    // Destruir instancia previa si existe
+    if (swiperInstance && !swiperInstance.destroyed) {
+      swiperInstance.destroy(true, true);
+      swiperInstance = null;
     }
 
     // Obtener datos de productos
@@ -415,7 +423,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     }
 
     // Inicializar Swiper
-    const swiper = new Swiper('.products-swiper', {
+    swiperInstance = new Swiper('.products-swiper', {
       modules: [Navigation],
       slidesPerView: 1,
       spaceBetween: 0,
@@ -448,7 +456,25 @@ const carouselProducts = [safeProduct, ...relatedProducts];
         }
       }
     });
-  });
+  }
+
+  function cleanupSwiper() {
+    if (swiperInstance && !swiperInstance.destroyed) {
+      swiperInstance.destroy(true, true);
+      swiperInstance = null;
+    }
+  }
+
+  // Inicializar en carga inicial
+  document.addEventListener('DOMContentLoaded', initializeSwiper);
+  
+  // Inicializar en navegación con View Transitions
+  document.addEventListener('astro:page-load', initializeSwiper);
+  document.addEventListener('astro:after-swap', initializeSwiper);
+  
+  // Limpiar antes de cambiar de página
+  document.addEventListener('astro:before-swap', cleanupSwiper);
+  document.addEventListener('astro:before-preparation', cleanupSwiper);
 </script>
 
 <script>

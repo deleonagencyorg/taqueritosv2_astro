@@ -11,7 +11,7 @@
   ],
   "type": "image",
   "preparation_time": 10,
-      "category": "snack",
+  "category": "snack",
   "ingredients": [
     "1 container for Ice Cream",
     "1 vanilla ice cream ball",
@@ -29,5 +29,8 @@
   ],
   "brand": [
     "taqueritos"
+  ],
+  "product": [
+    "Taqueritos Chile Toreado"
   ]
 }

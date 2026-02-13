@@ -34,7 +34,7 @@ const currentLang = getLocale();
     data-next-btn-id={nextBtnId}
   >
     <!-- Unified responsive carousel -->
-    <div class="related-carousel-viewport overflow-hidden">
+    <div class="related-carousel-viewport overflow-x-hidden overflow-y-visible py-2">
       <div class="related-carousel-track flex transition-transform duration-300 ease-out" data-related-track>
         {items.map((recipe) => (
           <div class="related-slide flex-shrink-0 px-2">
@@ -149,7 +149,8 @@ const currentLang = getLocale();
 
   .related-carousel-viewport {
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
   }
 
   .related-carousel-track {

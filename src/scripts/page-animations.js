@@ -1,7 +1,14 @@
 // Animaciones para las páginas principales
-document.addEventListener('DOMContentLoaded', () => {
+(function() {
+  'use strict';
+  
   // Función para aplicar animaciones a elementos específicos
   function applyAnimations() {
+    // Verificar que el sistema de animaciones esté listo
+    if (!document.documentElement.classList.contains('animations-ready')) {
+      document.documentElement.classList.add('animations-ready');
+    }
+    
     // Home page animations
     const homeElements = {
       // Spotify section
@@ -114,6 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // Ejecutar animaciones
-  applyAnimations();
-});
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyAnimations);
+  } else {
+    applyAnimations();
+  }
+  
+  // Reinicializar en navegación de Astro
+  document.addEventListener('astro:page-load', applyAnimations);
+})();
