@@ -120,9 +120,8 @@ const carouselProducts = [safeProduct, ...relatedProducts];
             </p>
     
             <!-- Botones de presentaciones -->
-            {safeProduct.weight && safeProduct.weight.length > 0 && (
-              <div class="flex gap-1 -mt-12">
-                {safeProduct.weight.map((weight) => (
+              <div id="product-weights" class="flex gap-1 -mt-12" style={(!safeProduct.weight || safeProduct.weight.length === 0) ? 'display:none' : ''}>
+                {safeProduct.weight && safeProduct.weight.map((weight) => (
                   <button 
                     class="flex-1 md:h-[78px] h-[40px] rounded-[30px] border-[1.16px] border-[#4A4A4A] transition-all duration-300 cursor-default"
                     style={{
@@ -135,7 +134,6 @@ const carouselProducts = [safeProduct, ...relatedProducts];
                   </button>
                 ))}
               </div>
-            )}
     
             <!-- Botón de comprar y navegación -->
             <div class="flex items-center gap-5 pb-20 md:pb-0">
@@ -419,6 +417,26 @@ const carouselProducts = [safeProduct, ...relatedProducts];
       if (descEl) {
         descEl.textContent = product.description || '';
         descEl.style.color = product.text_color || '#FFFFFF';
+      }
+
+      // Actualizar weights
+      const weightsEl = document.getElementById('product-weights');
+      if (weightsEl) {
+        const weights: string[] = Array.isArray(product.weight) ? product.weight : [];
+        if (weights.length > 0) {
+          weightsEl.style.display = 'flex';
+          weightsEl.innerHTML = weights.map((w: string) =>
+            `<button class="flex-1 md:h-[78px] h-[40px] rounded-[30px] border-[1.16px] border-[#4A4A4A] transition-all duration-300 cursor-default" style="background-color:transparent;color:#FFFFFF" type="button"><span class="md:text-[30px] text-[18px] font-semibold">${w}</span></button>`
+          ).join('');
+        } else {
+          weightsEl.style.display = 'none';
+        }
+      }
+
+      // Actualizar data-product-id del botón del modal
+      const modalBtn = document.getElementById('open-modal-btn');
+      if (modalBtn) {
+        modalBtn.setAttribute('data-product-id', product.id || '');
       }
     }
 
