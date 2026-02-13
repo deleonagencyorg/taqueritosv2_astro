@@ -14,6 +14,7 @@ export interface Props {
   headerColors?: {
     backgroundColor?: string;
     textColor?: string;
+    isSpecialBackground?: boolean;
   };
 }
 
@@ -36,6 +37,7 @@ if (headerColors) {
     // Mantener las clases base pero también usar estilos inline
     backgroundColor: headerColors.backgroundColor ? headerColors.backgroundColor : headerColorConfig.backgroundColor,
     textColor: headerColors.textColor ? headerColors.textColor : headerColorConfig.textColor,
+    isSpecialBackground: headerColors.isSpecialBackground ?? headerColorConfig.isSpecialBackground,
   };
   
   // Crear estilos inline para los colores personalizados

@@ -14,6 +14,25 @@ export const onRequest = defineMiddleware(async ({ request, redirect }, next) =>
   const url = new URL(request.url);
   const pathSegments = url.pathname.split('/').filter(Boolean);
   
+  // Redirección especial: /gaming -> retos/torneos (preservar query params/UTMs)
+  // Debe aplicar incluso cuando no viene prefijo de idioma.
+  const isGamingRoot = pathSegments.length === 1 && pathSegments[0] === 'gaming';
+  const isGamingWithLang =
+    pathSegments.length >= 2 &&
+    (pathSegments[0] === 'es' || pathSegments[0] === 'en') &&
+    pathSegments[1] === 'gaming';
+
+  if (isGamingRoot || isGamingWithLang) {
+    const targetBase = 'https://www.taqueritos.com/es/retos-torneos';
+    const targetUrl = `${targetBase}${url.search}`;
+    return new Response(null, {
+      status: 301,
+      headers: {
+        Location: targetUrl,
+      },
+    });
+  }
+  
   // Si no hay suficientes segmentos para verificar (necesitamos al menos [lang]/[section])
   if (pathSegments.length < 2) {
     return next();

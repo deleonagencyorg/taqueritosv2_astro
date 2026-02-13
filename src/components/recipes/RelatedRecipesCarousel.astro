@@ -14,9 +14,11 @@ interface RecipeItem {
 
 export interface Props {
   items: RecipeItem[];
+  prevBtnId?: string;
+  nextBtnId?: string;
 }
 
-const { items = [] } = Astro.props as { items: RecipeItem[] };
+const { items = [], prevBtnId, nextBtnId } = Astro.props as { items: RecipeItem[]; prevBtnId?: string; nextBtnId?: string };
 const currentLang = getLocale();
 ---
 
@@ -25,142 +27,105 @@ const currentLang = getLocale();
     {currentLang === 'es' ? 'No hay recetas relacionadas.' : 'No related recipes.'}
   </div>
 ) : (
-  <div class="w-full related-carousel-wrapper" data-related-recipes-carousel>
-    <!-- Desktop carousel -->
-    <div class="hidden md:block relative">
-      <div class="overflow-hidden relative">
-        <div id="relatedTrackDesktop" class="flex gap-6 transition-transform duration-300 will-change-transform">
-          {items.map((recipe) => (
-            <div class="w-[360px] flex-shrink-0">
-              <RecipeCard
-                image={recipe.image || '/images/recipes/placeholder.jpg'}
-                title={recipe.title}
-                time={`${recipe.preparation_time} MIN`}
-                id={recipe.id}
-                textColor="text-white"
-                iconColor="text-white"
-              />
-            </div>
-          ))}
-        </div>
+  <div
+    class="w-full related-carousel-wrapper"
+    data-related-recipes-carousel
+    data-prev-btn-id={prevBtnId}
+    data-next-btn-id={nextBtnId}
+  >
+    <!-- Unified responsive carousel -->
+    <div class="related-carousel-viewport overflow-x-hidden overflow-y-visible py-2">
+      <div class="related-carousel-track flex transition-transform duration-300 ease-out" data-related-track>
+        {items.map((recipe) => (
+          <div class="related-slide flex-shrink-0 px-2">
+            <RecipeCard
+              image={recipe.image || '/images/recipes/placeholder.jpg'}
+              title={recipe.title}
+              time={`${recipe.preparation_time} MIN`}
+              id={recipe.id}
+              textColor="text-white"
+              iconColor="text-white"
+            />
+          </div>
+        ))}
       </div>
-      <!-- Nav buttons estilo ChallengesCarousel -->
-      <div class="related-carousel-nav hidden md:flex">
-        <button id="relPrevDesktop" class="related-nav-btn" aria-label="Prev">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <button id="relNextDesktop" class="related-nav-btn" aria-label="Next">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile carousel -->
-    <div class="md:hidden relative">
-      <div class="overflow-hidden relative">
-        <div id="relatedTrackMobile" class="flex gap-4 transition-transform duration-300 will-change-transform">
-          {items.map((recipe) => (
-            <div class="w-[85%] flex-shrink-0">
-              <RecipeCard
-                image={recipe.image || '/images/recipes/placeholder.jpg'}
-                title={recipe.title}
-                time={`${recipe.preparation_time} MIN`}
-                id={recipe.id}
-                textColor="text-white"
-                iconColor="text-white"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-      <!-- Nav buttons mobile -->
-      <button id="relPrevMobile" class="md:hidden flex items-center justify-center absolute left-4 top-[-2.5rem] bg-[rgba(255,45,48,0.16)] border border-red-500 rounded-lg w-11 h-11 text-white shadow" aria-label="Prev">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <button id="relNextMobile" class="md:hidden flex items-center justify-center absolute right-4 top-[-2.5rem] bg-[rgba(255,45,48,0.16)] border border-red-500 rounded-lg w-11 h-11 text-white shadow" aria-label="Next">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
     </div>
   </div>
 )}
 
 <script>
-  // Initialize carousel (no TS types to avoid lint issues in Astro script)
   function initRelatedCarousel(root: any) {
     if (!root || root._relInit) return;
     root._relInit = true;
 
-    // Desktop
-    const trackD = root.querySelector('#relatedTrackDesktop');
-    const prevD = root.querySelector('#relPrevDesktop');
-    const nextD = root.querySelector('#relNextDesktop');
+    const prevBtnId = root.dataset.prevBtnId;
+    const nextBtnId = root.dataset.nextBtnId;
+    const prevBtn = prevBtnId ? document.getElementById(prevBtnId) : null;
+    const nextBtn = nextBtnId ? document.getElementById(nextBtnId) : null;
+    const track = root.querySelector('[data-related-track]') as HTMLElement;
+    const slides = Array.from(root.querySelectorAll('.related-slide')) as HTMLElement[];
 
-    let indexD = 0;
-    function getStepD() {
-      // Card width 360 + gap 24 (gap-6)
-      return 384;
-    }
-    function getVisibleCount() {
-      const container = trackD?.parentElement;
-      if (!container) return 3;
-      return Math.max(1, Math.floor(container.clientWidth / getStepD()));
-    }
-    function updateDesktop() {
-      if (!trackD) return;
-      trackD.style.transform = `translateX(-${indexD * getStepD()}px)`;
-      const maxIndex = Math.max(0, trackD.children.length - getVisibleCount());
-      // clamp indexD
-      if (indexD > maxIndex) indexD = maxIndex;
-    }
-    if (trackD && prevD && nextD) {
-      prevD.addEventListener('click', () => {
-        indexD = Math.max(0, indexD - 1);
-        updateDesktop();
-      });
-      nextD.addEventListener('click', () => {
-        const maxIndex = Math.max(0, trackD.children.length - getVisibleCount());
-        indexD = Math.min(maxIndex, indexD + 1);
-        updateDesktop();
-      });
-      window.addEventListener('resize', updateDesktop);
-      updateDesktop();
+    if (!track || slides.length === 0) return;
+
+    let currentIndex = 0;
+
+    function getVisibleCount(): number {
+      const width = window.innerWidth;
+      if (width >= 1024) return 3; // Desktop: 3 cards
+      if (width >= 768) return 2;  // Tablet: 2 cards
+      return 1;                     // Mobile: 1 card
     }
 
-    // Mobile
-    const trackM = root.querySelector('#relatedTrackMobile');
-    const prevM = root.querySelector('#relPrevMobile');
-    const nextM = root.querySelector('#relNextMobile');
+    function getMaxIndex(): number {
+      const visible = getVisibleCount();
+      return Math.max(0, slides.length - visible);
+    }
 
-    let indexM = 0;
-    function updateMobile() {
-      if (!trackM) return;
-      // translate by 100% of slide width + gap approximate (85% width + ~15% gap area)
-      trackM.style.transform = `translateX(-${indexM * 100}%)`;
-    }
-    if (trackM && prevM && nextM) {
-      prevM.addEventListener('click', () => {
-        indexM = Math.max(0, indexM - 1);
-        updateMobile();
+    function updateCarousel() {
+      const visible = getVisibleCount();
+      const slideWidth = 100 / visible;
+      
+      slides.forEach((slide) => {
+        slide.style.width = `${slideWidth}%`;
       });
-      nextM.addEventListener('click', () => {
-        const maxIndex = Math.max(0, trackM.children.length - 1);
-        indexM = Math.min(maxIndex, indexM + 1);
-        updateMobile();
-      });
-      updateMobile();
+
+      const offset = currentIndex * slideWidth;
+      track.style.transform = `translateX(-${offset}%)`;
     }
+
+    function goNext() {
+      const maxIndex = getMaxIndex();
+      if (currentIndex < maxIndex) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+      updateCarousel();
+    }
+
+    function goPrev() {
+      if (currentIndex > 0) {
+        currentIndex--;
+      } else {
+        currentIndex = getMaxIndex();
+      }
+      updateCarousel();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', goPrev);
+    if (nextBtn) nextBtn.addEventListener('click', goNext);
+
+    let resizeTimeout: any = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const maxIndex = getMaxIndex();
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updateCarousel();
+      }, 100);
+    });
+
+    updateCarousel();
   }
 
   function initAll() {
@@ -179,48 +144,41 @@ const currentLang = getLocale();
 <style>
   .related-carousel-wrapper {
     position: relative;
+    width: 100%;
   }
 
-  .related-carousel-nav {
-    position: absolute;
-    top: -80px;
-    right: 20px;
+  .related-carousel-viewport {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .related-carousel-track {
     display: flex;
-    gap: 12px;
-    z-index: 50;
+    will-change: transform;
+    align-items: stretch;
   }
 
-  .related-nav-btn {
-    position: relative;
-    width: 56px;
-    height: 56px;
-    background: rgba(255, 45, 48, 0.16);
-    border: 2px solid #ff2c2f;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
+  .related-slide {
+    flex-shrink: 0;
+    padding: 0 8px;
+    box-sizing: border-box;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
   }
 
-  .related-nav-btn:hover {
-    background: #150404;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 68, 0, 0.4);
+  .related-slide > :global(*) {
+    width: 100%;
+    height: 100%;
   }
 
-  .related-nav-btn svg {
-    width: 26px;
-    height: 26px;
+  .related-slide :global(.block.h-full) {
+    display: flex;
+    flex-direction: column;
   }
 
-  @media (max-width: 767px) {
-    .related-carousel-nav {
-      top: -40px;
-      right: 50%;
-      transform: translateX(50%);
-    }
+  .related-slide :global(.p-5) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 </style>

@@ -48,19 +48,19 @@
   "social_media": {
    "facebook": {
       "name": "Facebook",
-      "url": "https://www.facebook.com/zibaslatam/",
+      "url": "https://www.facebook.com/taqueritoslatam/",  
       "alt": "Facebook de Taqueritos",
       "iconUrl": "https://snack.yummiespromociones.com/snacksyummies/facebook.svg"
     },
     "instagram": {
       "name": "Instagram",
-      "url": "https://www.instagram.com/zibaslatam",
+      "url": "https://www.instagram.com/taqueritoslatam/?hl=es",
       "alt": "Instagram de Taqueritos",
       "iconUrl": "https://snack.yummiespromociones.com/snacksyummies/instagram.svg"
     },
     "tiktok": {
       "name": "TikTok",
-      "url": "https://www.tiktok.com/@zibaslatam",
+      "url": "https://www.tiktok.com/@taqueritoslatam",
       "alt": "TikTok de Taqueritos",
       "iconUrl": "https://snack.yummiespromociones.com/snacksyummies/tiktok.svg"
     }
@@ -87,22 +87,23 @@
         "description": "",
         "link": "#",
         "type": "product",
-        "product_hero": "DRAGON DE FUEGO",
+        "product_hero": "DRAGON FUEGO",
         "product_left": "Sabor intenso,\nDiversión Máxima.",
         "product_top": "Extra picante que\nenamora",
         "product_right": "Levéleate al máximo con Taqueritos.\nDragón de Fuego ¿Listo para el reto?",
         "product_cta_label": "Descubre más",
         "product_cta_link": "#"
-      } , {
+      },
+      {
         "id": "slide2",
-        "desktop": "https://snack.yummiespromociones.com/taqueritos/taqueritosgamer.webp",
-        "mobile": "https://snack.yummiespromociones.com/taqueritos/gamermobile.webp",
-        "alt": "Taqueritos",
-        "title": "",
-        "description": "",
-        "link": "https://gamer.yummiespromociones.com",
-        "type": "image" 
-      }
+        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/rutatruck.webp",
+        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/rutatruck.webp",
+        "alt": "La Ruta Taqueritos - Compite en FC26 y gana un viaje a Gamescom Brasil 2026",
+        "title": "La Ruta Taqueritos",
+        "description": "Compite en FC26 y gana un viaje a Gamescom Brasil 2026",
+        "link": "https://www.challengermode.com/s/taqueritos/pages/laruta",
+        "type": "image"
+      } 
     ]
   },
   "contact_us": "Contacto",
@@ -132,6 +133,16 @@
       "href": "/es/#players"
     },
     {
+      "id": "games",
+      "text": "Juegos",
+      "href": "#games"
+    },
+    {
+      "id": "taqueritos-gaming",
+      "text": "TAQUERITOS GAMING",
+      "href": "https://www.challengermode.com/s/taqueritos/pages/laruta"
+    },
+    {
       "id": "about-taqueritos",
       "text": "Sobre Taqueritos",
       "href": "/es/nosotros"
@@ -140,6 +151,48 @@
       "id": "where-buy",
       "text": "Dónde comprar",
       "href": "/es/donde-comprar"
+    }
+  ],
+  "games": [
+    {
+      "id": "galaxian",
+      "name": "Galaxian",
+      "href": "/games/Galaxian/index.html"
+    },
+    {
+      "id": "christmas-santa-run",
+      "name": "Christmas Santa Run",
+      "href": "/games/navidad/index.html"
+    },
+    {
+      "id": "pac-taquerito",
+      "name": "Pac Taquerito",
+      "href": "/games/PacTaquerito/index.html"
+    },
+    {
+      "id": "taqueritos-racer",
+      "name": "Taqueritos Racer",
+      "href": "/games/Racer/index.html"
+    },
+    {
+      "id": "soccer",
+      "name": "Soccer",
+      "href": "/games/SOCCER/index.html"
+    },
+    {
+      "id": "treasure-hunt",
+      "name": "Treasure Hunt",
+      "href": "/games/submarino/index.html"
+    },
+    {
+      "id": "3d-crypto-man",
+      "name": "3D Crypto Man",
+      "href": "/games/super/dist/index.html"
+    },
+    {
+      "id": "super-taquerito-bros",
+      "name": "Super Taquerito Bros",
+      "href": "/games/taqueritobros/index.html"
     }
   ],
   "about_us": {

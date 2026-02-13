@@ -17,37 +17,22 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
 <section class={className}>
   <div class="gallery-viewport relative">
     
-    <!-- Header -->
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-col lg:flex-row lg:justify-between lg:items-center mb-[40px]">
-      <div class="title">
-        {title && (
-          <p class="mb-4">
-            {title}
-          </p>
-        )}
-        {subtitle && (
-          <p>
-            {subtitle}
-          </p>
-        )}
-      </div>
-
-        <!-- Botones de Navegación -->
-        <div class="carousel-navigation-masonry ">
-          <button class="swiper-button-prev" aria-label="Anterior">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          
-          <button class="swiper-button-next" aria-label="Siguiente">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
+    <!-- Botones de Navegación (título se renderiza en Home) -->
+    <div class="container mx-auto px-4 flex justify-end mb-4">
+      <div class="carousel-navigation-masonry">
+        <button class="swiper-button-prev" aria-label="Anterior">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <button class="swiper-button-next" aria-label="Siguiente">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -197,6 +182,7 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     justify-content: center !important;
     cursor: pointer !important;
     padding: 0 !important;
+    pointer-events: auto !important;
   }
 
   .swiper-button-next svg,
@@ -210,7 +196,7 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   .swiper-button-prev:hover {
     background: rgba(45, 160, 255, 0.3) !important;
     border-color: #4DB5FF !important;
-    transform: translateY(-2px) !important;
+    /* transform: translateY(-2px) !important; */
     box-shadow: 0 8px 20px rgba(45, 160, 255, 0.4) !important;
   }
 
@@ -335,7 +321,7 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     .carousel-navigation-masonry {
       position: relative;
       right: auto;
-      margin-top: 16px;
+      margin-top: 8px;
       display: flex;
       gap: 12px;
       justify-content: flex-start;
@@ -347,16 +333,23 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
       height: 48px !important;
     }
 
-    .taqueritos-card { padding: 14px 16px 16px 16px; }
+    .taqueritos-card { padding: 12px 14px 14px 14px; }
     .action-icon { width: 22px; height: 22px; }
 
     .swiper-container {
-      padding: 110px 24px 80px 24px;
+      padding: 40px 16px 48px 16px;
       position: relative;
       z-index: 1;
       width: 100%;
       overflow: visible;
     }
+
+    /* Hacer las tarjetas un poco más pequeñas y alinear verticalmente */
+    .image-container { aspect-ratio: 4 / 4; }
+    .swiper-slide:nth-child(even) .taqueritos-card,
+    .swiper-slide:nth-child(odd) .taqueritos-card { transform: none; }
+    .swiper-slide:nth-child(even) .taqueritos-card:hover,
+    .swiper-slide:nth-child(odd) .taqueritos-card:hover { transform: none; }
   }
 </style>
 
@@ -374,11 +367,18 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     if (!el) return;
     if (el.classList.contains('swiper-initialized')) return;
     if (swiperMap.has(el)) { try { const s = swiperMap.get(el); s && s.update && s.update(); } catch {} return; }
+    
+    // Get the number of slides
+    const slideCount = parseInt(el.getAttribute('data-count') || '0', 10);
+    
+    // Only enable loop if we have enough slides (at least 8 for desktop with 4 slides per view)
+    const enableLoop = slideCount >= 8;
+    
     const s = new Swiper(selector, {
       modules: [Navigation, Autoplay],
       slidesPerView: 5,
       spaceBetween: 20,
-      loop: true,
+      loop: enableLoop,
       speed: 600,
       navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
       breakpoints: {

@@ -36,11 +36,11 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
 
 <a
   href={recipeLink}
-  class="block group overflow-hidden rounded-2xl border border-[#FF6A2A] bg-[#1A0505] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(255,106,42,0.9)] hover:border-[#FF2C2F]"
+  class="recipe-card-link block h-full group overflow-hidden rounded-2xl border border-[#FF6A2A] bg-[#1A0505] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(255,106,42,0.9)] hover:border-[#FF2C2F]"
   transition:animate="fade"
 >
   <!-- Imagen superior -->
-  <div class="relative w-full h-48 md:h-56 overflow-hidden">
+  <div class="recipe-card-image relative w-full overflow-hidden">
     <LazyImage
       src={image}
       alt={title}
@@ -51,12 +51,12 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
   </div>
 
   <!-- Contenido inferior -->
-  <div class="p-5 flex flex-col gap-3">
-    <h3 class="font-title text-lg md:text-xl font-bold text-white leading-snug line-clamp-2">
+  <div class="recipe-card-content p-4 md:p-5 flex flex-col">
+    <h3 class="font-title text-base md:text-lg font-bold text-white leading-snug line-clamp-2">
       {title}
     </h3>
 
-    <div class="flex items-center justify-between text-sm text-white/80 mt-1">
+    <div class="flex items-center justify-between text-sm text-white/80 mt-auto pt-3">
       <div class="flex items-center gap-2">
         <svg class="h-4 w-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -72,3 +72,26 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
     </div>
   </div>
 </a>
+
+<style>
+  .recipe-card-link {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .recipe-card-image {
+    height: 160px;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .recipe-card-image {
+      height: 180px;
+    }
+  }
+
+  .recipe-card-content {
+    flex: 1;
+    min-height: 100px;
+  }
+</style>

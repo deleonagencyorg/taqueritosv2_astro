@@ -10,7 +10,8 @@
     "ensalada-cesar-con-pollo-toreado-y-taqueritos-queso-fusion.webp"
   ],
   "type": "image",
-  "preparation_time": 15,
+  "preparation_time": 20,
+  "category": "lunch",
   "ingredients": [
     "1 romaine lettuce",
     "1 chicken breast",
@@ -30,5 +31,8 @@
   ],
   "brand": [
     "taqueritos"
+  ],
+  "product": [
+    "Taqueritos Queso Fusión"
   ]
 }

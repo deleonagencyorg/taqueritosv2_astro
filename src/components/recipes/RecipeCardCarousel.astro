@@ -42,11 +42,11 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
 
 <a 
   href={recipeLink} 
-  class="recipe-card block group relative transition-all duration-500 ease-in-out flex-shrink-0 w-[710px] h-[255px]"
+  class="recipe-card block group relative transition-all duration-500 ease-in-out w-full"
   transition:animate="fade"
 >
   <!-- Container principal -->
-  <div class="relative overflow-hidden w-[710px] h-[255px] rounded-[2px] shadow-[0_0_30px_rgba(239,68,68,0.5)]"
+  <div class="recipe-card-container relative overflow-hidden w-full rounded-[2px] shadow-[0_0_30px_rgba(239,68,68,0.5)]"
        style="border: 2px solid; border-image-source: linear-gradient(237.56deg, #FF2D2D 1.39%, #FF9E9B 47.74%, #FF2D2D 100%); border-image-slice: 1;">
     
     <!-- Imagen de fondo -->
@@ -54,7 +54,7 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
       <LazyImage
         src={image}
         alt={title}
-        class="w-[500px] h-[255px] md:w-full md:h-full object-fill md:object-cover"
+        class="w-full h-full object-cover"
         transition:name={`recipe-image-${id}`}
       />
       <!-- Overlay oscuro con gradiente -->
@@ -62,20 +62,22 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
     </div>
     
     <!-- Contenido de texto -->
-    <div class="absolute inset-0 flex flex-col justify-end p-8">
+    <div class="absolute inset-0 flex flex-col justify-end p-4 md:p-6 lg:p-8">
       <!-- Título principal -->
-      <h3 class="font-title font-black text-white uppercase sm:text-[24px] md:text-[28px] lg:text-[30px] leading-tight tracking-wider" 
+      <h3 class="font-title font-black text-white uppercase text-lg sm:text-xl md:text-2xl lg:text-[28px] leading-tight tracking-wider line-clamp-2" 
           style="text-shadow: 2px 2px 8px rgba(0,0,0,0.8);">
-        {title} <br/>
-        {title_down}
+        {title}
+        {title_down && <><br/>{title_down}</>}
       </h3>
       
       <!-- Subtítulo/descripción -->
-      <p class="text-white text-[28px] font-light leading-relaxed"
-         style="text-shadow: 1px 1px 4px rgba(0,0,0,0.8);">
-        {subtitle}<br/>
-        {subtitle_down}
-      </p>
+      {(subtitle || subtitle_down) && (
+        <p class="text-white text-sm md:text-lg lg:text-xl font-light leading-relaxed mt-1 line-clamp-2"
+           style="text-shadow: 1px 1px 4px rgba(0,0,0,0.8);">
+          {subtitle}
+          {subtitle_down && <><br/>{subtitle_down}</>}
+        </p>
+      )}
     </div>
 
     <!-- Efecto de brillo rojo en hover -->
@@ -92,5 +94,15 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
   .recipe-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 0 40px rgba(255, 45, 45, 0.7);
+  }
+
+  .recipe-card-container {
+    aspect-ratio: 16/9;
+  }
+
+  @media (min-width: 768px) {
+    .recipe-card-container {
+      aspect-ratio: 2.8/1;
+    }
   }
 </style>

@@ -18,6 +18,8 @@ const socialMedia = t('social_media', { namespace: 'common', locale: currentLang
 const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
 // Quitar el botón de comunidad
 const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
+// Filtrar juegos solo para español
+const menuItemsFiltered = menuItems.filter((item) => item.id !== 'games' || currentLang === 'es');
 
 const contactHref = `/${currentLang}/${currentLang === 'es' ? 'contacto' : 'contact'}`;
 const contactMenuItem = {
@@ -26,10 +28,12 @@ const contactMenuItem = {
   href: contactHref,
 };
 
-const menuItemsWithContact = [...menuItems, contactMenuItem];
+const menuItemsWithContact = [...menuItemsFiltered, contactMenuItem];
 
 // Obtener productos para el submenú de "Productos"
 const products = t('items', { namespace: 'products', locale: currentLang }) as any[];
+// Obtener juegos para el submenú de "Juegos"
+const games = t('games', { namespace: 'common', locale: currentLang }) as any[];
 
 // Traducciones
 const openMenuLabel = t('menu_labels.open_main_menu', { namespace: 'common', locale: currentLang }) || 'Open main menu';
@@ -38,7 +42,7 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
 ---
 
 <!-- Menú Móvil Global -->
-<div id="mobile-menu" class="hidden md:hidden fixed inset-0 w-screen h-screen z-[2147483647] bg-primary bg-opacity-50 overflow-y-auto" data-current-lang={currentLang}>
+<div id="mobile-menu" class="hidden fixed inset-0 w-screen h-screen z-[2147483647] bg-brown bg-opacity-96 overflow-y-auto lg:hidden" data-current-lang={currentLang}>
   <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-8">
       <a href={`/${currentLang}/`} class="block">
@@ -56,7 +60,7 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
         <div class="w-full">
           <div class="flex items-center justify-center text-white">
             {/* Ítem de menú con submenú existente */}
-            {item.submenu && item.id !== 'products' ? (
+            {item.submenu && item.id !== 'products' && item.id !== 'games' ? (
               <>
                 <a href="#" class="menu-parent block text-xl font-title font-medium hover:text-gray-300 transition-colors py-2">
                   {item.text}
@@ -83,11 +87,27 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
               </>
             ) : null}
 
+            {/* Ítem de Juegos con submenú de juegos */}
+            {item.id === 'games' ? (
+              <>
+                <a href="#" class="menu-parent block text-xl font-title font-medium hover:text-gray-300 transition-colors py-2">
+                  {item.text}
+                </a>
+                <button class="menu-toggle px-2 py-1 text-white hover:text-gray-300 ml-1">
+                  <svg class="w-5 h-5 chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+              </>
+            ) : null}
+
             {/* Ítems sin submenú */}
-            {!item.submenu && item.id !== 'products' && (
+            {!item.submenu && item.id !== 'products' && item.id !== 'games' && (
               <a
                 href={item.href}
                 data-open-stockist={item.id === 'where-buy' ? 'true' : undefined}
+                target={item.id === 'taqueritos-gaming' ? '_blank' : undefined}
+                rel={item.id === 'taqueritos-gaming' ? 'noopener noreferrer' : undefined}
                 class="block text-xl font-title font-medium hover:text-gray-300 transition-colors py-2"
               >
                 {item.text}
@@ -139,6 +159,22 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
               ))}
             </div>
           )}
+
+          {/* Submenú para Juegos */}
+          {item.id === 'games' && (
+            <div class="submenu-container hidden mt-1 space-y-1 pl-4 text-center">
+              {games && games.map((game: any) => (
+                <a
+                  href={game.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block text-lg font-title font-normal text-gray-400 hover:text-gray-200 transition-colors py-1"
+                >
+                  {game.name}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </nav>
@@ -181,6 +217,40 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
 </div>
 
 <script>
+// SVG para el icono del menú
+const MENU_ICON_SVG = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+</svg>`;
+
+function handleMenuLinkNavigation(e: Event) {
+  const target = e.target as Element | null;
+  if (!target) return;
+  const a = target.closest('a');
+  if (!a) return;
+
+  const href = a.getAttribute('href');
+  if (!href || href === '#') return;
+
+  if (a.getAttribute('data-open-stockist') === 'true') return;
+
+  if (typeof (window as any).closeMobileMenu === 'function') {
+    (window as any).closeMobileMenu();
+  } else {
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu) {
+      mobileMenu.classList.add('hidden');
+      document.body.style.overflow = '';
+
+      const menuButton = document.getElementById('mobile-menu-button');
+      const menuIconContainer = document.getElementById('menu-icon-container');
+      if (menuButton && menuIconContainer) {
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuIconContainer.innerHTML = MENU_ICON_SVG;
+      }
+    }
+  }
+}
+
 // Función para alternar la visibilidad del submenú
 function toggleSubmenu(submenuContainer: Element, toggleButton: Element): void {
   submenuContainer.classList.toggle('hidden');
@@ -197,21 +267,27 @@ function toggleSubmenu(submenuContainer: Element, toggleButton: Element): void {
 }
 
 // Función para manejar el clic en el botón de cierre del menú móvil
-function handleCloseButtonClick() {
-  const mobileMenu = document.getElementById('mobile-menu');
-  if (mobileMenu) {
-    mobileMenu.classList.add('hidden');
-    document.body.style.overflow = '';
-    
-    // Actualizar el botón del header
-    const menuButton = document.getElementById('mobile-menu-button');
-    const menuIconContainer = document.getElementById('menu-icon-container');
-    if (menuButton && menuIconContainer) {
-      menuButton.setAttribute('aria-expanded', 'false');
-      // Restaurar icono de menú
-      menuIconContainer.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>`;
+function handleCloseButtonClick(e: Event) {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  // Usar la función global si está disponible
+  if (typeof (window as any).closeMobileMenu === 'function') {
+    (window as any).closeMobileMenu();
+  } else {
+    // Fallback: cerrar el menú manualmente
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu) {
+      mobileMenu.classList.add('hidden');
+      document.body.style.overflow = '';
+      
+      // Actualizar el botón del header
+      const menuButton = document.getElementById('mobile-menu-button');
+      const menuIconContainer = document.getElementById('menu-icon-container');
+      if (menuButton && menuIconContainer) {
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuIconContainer.innerHTML = MENU_ICON_SVG;
+      }
     }
   }
 }
@@ -219,6 +295,7 @@ function handleCloseButtonClick() {
 // Función para manejar el clic en los toggles del menú (primer nivel)
 function handleMenuToggleClick(e: Event): void {
   e.preventDefault();
+  e.stopPropagation();
   const toggle = e.currentTarget as Element;
   const parentDiv = toggle.closest('.w-full');
   const submenuContainer = parentDiv?.querySelector('.submenu-container');
@@ -231,6 +308,7 @@ function handleMenuToggleClick(e: Event): void {
 // Función para manejar el clic en los elementos padre del menú (primer nivel)
 function handleMenuParentClick(e: Event): void {
   e.preventDefault();
+  e.stopPropagation();
   const parent = e.currentTarget as Element;
   const parentDiv = parent.closest('.w-full');
   const submenuContainer = parentDiv?.querySelector('.submenu-container');
@@ -244,6 +322,7 @@ function handleMenuParentClick(e: Event): void {
 // Función para manejar el clic en los toggles del submenú (segundo nivel)
 function handleSubmenuToggleClick(e: Event): void {
   e.preventDefault();
+  e.stopPropagation();
   const toggle = e.currentTarget as Element;
   const parentDiv = toggle.closest('div');
   const thirdLevelSubmenu = parentDiv?.nextElementSibling;
@@ -256,6 +335,7 @@ function handleSubmenuToggleClick(e: Event): void {
 // Función para manejar el clic en los elementos padre del submenú (segundo nivel)
 function handleSubmenuParentClick(e: Event): void {
   e.preventDefault();
+  e.stopPropagation();
   const parent = e.currentTarget as Element;
   const parentDiv = parent.closest('div');
   const thirdLevelSubmenu = parentDiv?.nextElementSibling;
@@ -268,6 +348,13 @@ function handleSubmenuParentClick(e: Event): void {
 
 // Función para inicializar el menú móvil
 function initMobileMenu() {
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (!mobileMenu) return;
+  
+  // Marcar como inicializado para evitar duplicados
+  if ((mobileMenu as any)._menuInit) return;
+  (mobileMenu as any)._menuInit = true;
+  
   // Botón de cierre
   const closeButton = document.getElementById('mobile-menu-close');
   if (closeButton) {
@@ -276,38 +363,57 @@ function initMobileMenu() {
   }
   
   // Toggles del menú (primer nivel)
-  const menuToggles = document.querySelectorAll('.menu-toggle');
+  const menuToggles = mobileMenu.querySelectorAll('.menu-toggle');
   menuToggles.forEach(toggle => {
     toggle.removeEventListener('click', handleMenuToggleClick);
     toggle.addEventListener('click', handleMenuToggleClick);
   });
   
   // Elementos padre del menú (primer nivel)
-  const menuParents = document.querySelectorAll('.menu-parent');
+  const menuParents = mobileMenu.querySelectorAll('.menu-parent');
   menuParents.forEach(parent => {
     parent.removeEventListener('click', handleMenuParentClick);
     parent.addEventListener('click', handleMenuParentClick);
   });
   
   // Toggles del submenú (segundo nivel)
-  const submenuToggles = document.querySelectorAll('.submenu-toggle');
+  const submenuToggles = mobileMenu.querySelectorAll('.submenu-toggle');
   submenuToggles.forEach(toggle => {
     toggle.removeEventListener('click', handleSubmenuToggleClick);
     toggle.addEventListener('click', handleSubmenuToggleClick);
   });
   
   // Elementos padre del submenú (segundo nivel)
-  const submenuParents = document.querySelectorAll('.submenu-parent');
+  const submenuParents = mobileMenu.querySelectorAll('.submenu-parent');
   submenuParents.forEach(parent => {
     parent.removeEventListener('click', handleSubmenuParentClick);
     parent.addEventListener('click', handleSubmenuParentClick);
   });
+
+  // Close menu on any navigable link
+  mobileMenu.removeEventListener('click', handleMenuLinkNavigation);
+  mobileMenu.addEventListener('click', handleMenuLinkNavigation);
+}
+
+// Reset flag on page swap
+function resetMobileMenuInit() {
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileMenu) {
+    (mobileMenu as any)._menuInit = false;
+  }
 }
 
 // Ejecutar cuando se carga la página
-document.addEventListener('DOMContentLoaded', initMobileMenu);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMobileMenu);
+} else {
+  initMobileMenu();
+}
 
 // Ejecutar cuando Astro navega a una nueva página
 document.addEventListener('astro:page-load', initMobileMenu);
-document.addEventListener('astro:after-swap', initMobileMenu);
+document.addEventListener('astro:after-swap', () => {
+  resetMobileMenuInit();
+  initMobileMenu();
+});
 </script>

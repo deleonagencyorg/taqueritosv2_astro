@@ -223,7 +223,7 @@ const t = texts[locale as keyof typeof texts] || texts.es;
 
   .product-image-section {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
   }
 
@@ -397,18 +397,20 @@ const t = texts[locale as keyof typeof texts] || texts.es;
   @media (max-width: 768px) {
     .stockist-modal {
       align-items: flex-start;
-      padding-top: 70px;
+      padding-top: 60px;
+      padding-bottom: 20px;
     }
 
     .modal-content {
       margin-top: 10px;
-      max-height: calc(100vh - 80px);
-      border-radius: 20px 20px 0 0;
+      margin-bottom: 20px;
+      max-height: calc(100vh - 140px);
+      border-radius: 20px;
     }
 
     .modal-body {
       gap: 24px;
-      padding: 24px;
+      padding: 32px;
     }
 
     .modal-top-section {
@@ -416,8 +418,15 @@ const t = texts[locale as keyof typeof texts] || texts.es;
       gap: 24px;
     }
 
+    .product-image-section {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .product-image {
-      max-width: 130px;
+      max-width: 140px;
     }
 
     .product-title {
@@ -539,6 +548,7 @@ const t = texts[locale as keyof typeof texts] || texts.es;
           weightDiv.className = 'weight-btn';
           weightDiv.dataset.weight = weight;
           weightDiv.textContent = weight;
+          weightDiv.style.cssText = 'background:transparent;border:1.5px solid #FFFFFF;border-radius:30px;padding:10px 24px;color:#FFFFFF;font-size:16px;font-weight:600;display:inline-block;';
           
           weightButtons.appendChild(weightDiv);
           

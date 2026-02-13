@@ -11,6 +11,7 @@
   ],
   "type": "image",
   "preparation_time": 15,
+  "category": "breakfast",
   "ingredients": [
     "2 eggs.",
     "Salt and pepper to taste.",
@@ -28,5 +29,8 @@
   ],
   "brand": [
     "taqueritos"
+  ],
+  "product": [
+    "Taqueritos Chile Toreado"
   ]
 }

@@ -10,7 +10,8 @@
     "jalapeno-poppers-con-taqueritos-chile-toreado.webp"
   ],
   "type": "image",
-  "preparation_time": 30,
+  "preparation_time": 25,
+  "category": "snack",
   "ingredients": [
     "12 seeded jalapenos",
     "2 cups of cream cheese",
@@ -34,5 +35,8 @@
   ],
   "brand": [
     "taqueritos"
+  ],
+  "product": [
+    "Taqueritos Chile Toreado"
   ]
 }

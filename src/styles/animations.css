@@ -1,40 +1,45 @@
-/* Estilos base para elementos animados */
+/* Estilos base para elementos animados - IMPORTANTE: elementos visibles por defecto */
 .animate-on-scroll {
-  opacity: 0;
+  opacity: 1;
   transform: translateY(0);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-/* Animación de entrada */
-.animate-in {
-  opacity: 1;
-  transform: translateY(0);
+/* Solo ocultar cuando JS está listo */
+.animations-ready .animate-on-scroll {
+  opacity: 0;
 }
 
-/* Direcciones de animación */
-.animate-from-up {
+/* Animación de entrada */
+.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Direcciones de animación - solo aplican cuando animations-ready está activo */
+.animations-ready .animate-on-scroll.animate-from-up {
   transform: translateY(-50px);
 }
 
-.animate-from-down {
+.animations-ready .animate-on-scroll.animate-from-down {
   transform: translateY(50px);
 }
 
-.animate-from-left {
+.animations-ready .animate-on-scroll.animate-from-left {
   transform: translateX(-50px);
 }
 
-.animate-from-right {
+.animations-ready .animate-on-scroll.animate-from-right {
   transform: translateX(50px);
 }
 
 /* Animación de fade in */
-.animate-fade {
+.animations-ready .animate-fade {
   opacity: 0;
 }
 
 /* Animación de zoom */
-.animate-zoom {
+.animations-ready .animate-zoom {
   transform: scale(0.8);
 }
 

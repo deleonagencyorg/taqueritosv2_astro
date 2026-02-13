@@ -86,7 +86,7 @@
         "product_hero": "DRAGON OF FIRE",
         "product_left": "Intense flavor,\nMaximum Fun.",
         "product_top": "Extra spicy that\nyou will love",
-        "product_right": "Level up to the max with Taqueritos.\nDragon of Fire. Ready for the challenge?",
+        "product_right": "Level up to the max with Taqueritos.\nDragon  Fire. Ready for the challenge?",
         "product_cta_label": "Discover more",
         "product_cta_link": "#"
       },
@@ -107,7 +107,7 @@
         "alt": "Taqueritos",
         "title": "",
         "description": "",
-        "link": "/en/products/chile-toreado",
+        "link": "https://www.amazon.com/Taqueritos-tortilla-enrollados-toreado-paquete/dp/B09LHQXPSH?ref_=ast_sto_dp",
         "type": "image" 
       }
     ]
@@ -142,6 +142,48 @@
       "id": "where-buy",
       "text": "Where to buy",
       "href": "/en/where-to-buy"
+    }
+  ],
+  "games": [
+    {
+      "id": "galaxian",
+      "name": "Galaxian",
+      "href": "/games/Galaxian/index.html"
+    },
+    {
+      "id": "christmas-santa-run",
+      "name": "Christmas Santa Run",
+      "href": "/games/navidad/index.html"
+    },
+    {
+      "id": "pac-taquerito",
+      "name": "Pac Taquerito",
+      "href": "/games/PacTaquerito/index.html"
+    },
+    {
+      "id": "taqueritos-racer",
+      "name": "Taqueritos Racer",
+      "href": "/games/Racer/index.html"
+    },
+    {
+      "id": "soccer",
+      "name": "Soccer",
+      "href": "/games/SOCCER/index.html"
+    },
+    {
+      "id": "treasure-hunt",
+      "name": "Treasure Hunt",
+      "href": "/games/submarino/index.html"
+    },
+    {
+      "id": "3d-crypto-man",
+      "name": "3D Crypto Man",
+      "href": "/games/super/dist/index.html"
+    },
+    {
+      "id": "super-taquerito-bros",
+      "name": "Super Taquerito Bros",
+      "href": "/games/taqueritobros/index.html"
     }
   ],
   "about_us": {

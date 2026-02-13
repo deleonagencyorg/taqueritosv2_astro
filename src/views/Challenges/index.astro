@@ -2,6 +2,7 @@
 import { getLocale } from '../../i18n/i18n';
 import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
 import ChallengesCarousel from '../../components/challenges/ChallengesCarousel.astro';
+import GamesCarousel from '../../components/games/GamesCarousel.astro';
 import LazyImage from '../../components/common/LazyImage.astro';
 
 interface SummaryChallenge {
@@ -58,31 +59,27 @@ function getEnd(item: SummaryChallenge): number {
   return parseDate(endStr);
 }
 
-// Elegir el evento vigente o el más reciente
-// Priorizar el evento "escaner" como principal
-let featuredChallenge: SummaryChallenge | null = null;
-if (summaryItems.length > 0) {
-  // Buscar primero el evento "escaner"
-  const escanerEvent = summaryItems.find((it) => it.id === 'escaner' || it.slug === 'escaner');
-  
-  if (escanerEvent) {
-    featuredChallenge = escanerEvent;
-  } else {
-    // Si no existe escaner, usar la lógica anterior
-    const withDates = summaryItems.map((it) => ({
-      ...it,
-      _start: getStart(it),
-      _end: getEnd(it),
-    }));
+// Ordenar retos por fecha de inicio (más reciente primero)
+const orderedChallenges = summaryItems
+  .map((it) => ({
+    ...it,
+    _start: getStart(it),
+    _end: getEnd(it),
+  }))
+  .sort((a, b) => (b._start || 0) - (a._start || 0));
 
-    const current = withDates.filter((it) => it._start && it._end && it._start <= todayTs && todayTs <= it._end);
-    if (current.length > 0) {
-      featuredChallenge = current.sort((a, b) => a._start - b._start)[0];
-    } else {
-      featuredChallenge = withDates.sort((a, b) => b._start - a._start)[0];
-    }
-  }
-}
+// Elegir promo/featured: preferir el reto vigente cuya fecha de inicio sea la más reciente.
+const activeChallenges = orderedChallenges.filter((it) => {
+  const hasStart = Boolean(it._start);
+  const hasEnd = Boolean(it._end);
+  if (hasStart && hasEnd) return it._start <= todayTs && todayTs <= it._end;
+  if (hasStart && !hasEnd) return it._start <= todayTs;
+  if (!hasStart && hasEnd) return todayTs <= it._end;
+  return true;
+});
+
+const featuredChallenge: SummaryChallenge | null =
+  (activeChallenges.length > 0 ? activeChallenges[0] : orderedChallenges[0]) || null;
 
 const pageTitle = currentLang === 'es' ? 'Retos y torneos' : 'Challenges & Tournaments';
 const sectionTitle = currentLang === 'es' ? 'Participa en nuestros retos' : 'Join our challenges';
@@ -113,7 +110,7 @@ const activityCards = currentLang === 'es'
         id: 'games',
         title: 'Nuestros juegos',
         description:
-          'Explora lo mejor de ambos mundos con dinámicas únicas, creativas y llenas de sabor Taqueritos.',
+          'Explora lo mejor de ambos mundos con dinámicas únicas, creativas y llenas de sabor Taqueritos.', 
       },
     ]
   : [
@@ -141,6 +138,24 @@ const activityCards = currentLang === 'es'
 const featuredChallengeLink = featuredChallenge
   ? (featuredChallenge.url || `/${currentLang}/${currentLang === 'es' ? 'retos-torneos' : 'challenges-tournaments'}/${featuredChallenge.id}`)
   : '#';
+
+interface GameItem {
+  id: number;
+  titulo: string;
+  enlace: string;
+  descripcion: string;
+  imagen: string;
+}
+
+let games: GameItem[] = [];
+try {
+  const gamesModule = await import(`../../locales/${currentLang}/games.json`);
+  games = gamesModule.default.games || [];
+} catch (e) {
+  games = [];
+}
+
+const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Discover the games list';
 ---
 <div class="-mt-px -mb-px bg-dark-spotlight" >
   <div class="container mx-auto px-4 pt-24 pb-24 mt-0">
@@ -165,7 +180,7 @@ const featuredChallengeLink = featuredChallenge
           </p>
 
           <a
-            href="https://www.snacksyummies.com/es/yummiesonehttps://www.snacksyummies.com/es/yummiesone"
+            href="https://www.snacksyummies.com/es/yummiesone"
             class="inline-flex items-center justify-center px-8 py-3 rounded-md bg-red text-white font-semibold uppercase tracking-wide text-sm shadow-[0_10px_25px_rgba(0,0,0,0.7)] hover:bg-[#ff4b4e] transition-colors duration-200"
           >
             {currentLang === 'es' ? 'Regístrate ahora' : 'Register now'}
@@ -223,6 +238,153 @@ const featuredChallengeLink = featuredChallenge
       </div>
     </section>
 
+
+<script>
+  // Script para el carrusel de juegos (mejorado: cálculo dinámico del desplazamiento y snap)
+  function initGamesCarousel() {
+    const track = document.querySelector('.games-carousel-track') as HTMLElement | null;
+    const prevBtn = document.querySelector('.games-carousel-btn-prev') as HTMLButtonElement | null;
+    const nextBtn = document.querySelector('.games-carousel-btn-next') as HTMLButtonElement | null;
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const trackEl = track as HTMLElement;
+    const prevBtnEl = prevBtn as HTMLButtonElement;
+    const nextBtnEl = nextBtn as HTMLButtonElement;
+
+    // Habilitar scroll snapping para alinear tarjetas exactamente
+    trackEl.style.scrollSnapType = 'x mandatory';
+    Array.from(trackEl.querySelectorAll('.game-card')).forEach((c: Element) => {
+      (c as HTMLElement).style.scrollSnapAlign = 'start';
+    });
+
+    function getScrollAmount() {
+      const first = trackEl.querySelector('.game-card') as HTMLElement | null;
+      if (!first) return 220;
+      const cardWidth = Math.round(first.getBoundingClientRect().width);
+      // intentamos obtener el gap (soporte moderno para flex gap)
+      const gapStyle = getComputedStyle(trackEl).columnGap || getComputedStyle(trackEl).gap || '0px';
+      const gap = Math.round(parseFloat(gapStyle) || 0);
+      return cardWidth + gap;
+    }
+
+    let scrollAmount = getScrollAmount();
+
+    // Recalcular al redimensionar para mantener exactitud
+    let resizeTimeout: any = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => { scrollAmount = getScrollAmount(); }, 120);
+    });
+
+    prevBtnEl.addEventListener('click', () => {
+      trackEl.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    nextBtnEl.addEventListener('click', () => {
+      trackEl.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  }
+
+  // Inicializar al cargar la página
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGamesCarousel);
+  } else {
+    initGamesCarousel();
+  }
+
+  // Reinicializar en navegación de Astro
+  document.addEventListener('astro:page-load', initGamesCarousel);
+
+  // Hover: resaltar tarjeta activa con glow rojo y bajar opacidad del resto
+  function initGamesHover() {
+    const cards = Array.from(document.querySelectorAll('.game-card')) as HTMLElement[];
+    if (!cards.length) return;
+
+    cards.forEach((card) => {
+      card.addEventListener('mouseenter', () => {
+        cards.forEach((c) => {
+          c.classList.add('game-card-dim');
+          c.classList.remove('game-card-active');
+        });
+        card.classList.remove('game-card-dim');
+        card.classList.add('game-card-active');
+      });
+
+      card.addEventListener('mouseleave', () => {
+        cards.forEach((c) => {
+          c.classList.remove('game-card-dim', 'game-card-active');
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGamesHover);
+  } else {
+    initGamesHover();
+  }
+
+  document.addEventListener('astro:page-load', initGamesHover);
+</script>
+
+<style>
+  /* Forzar transparencia para que use el fondo de la página de retos-torneos */
+  .games-carousel-wrapper,
+  .games-carousel-track {
+    background: transparent !important;
+  }
+
+  .game-card {
+    background: transparent !important;
+    border-color: #ff2d2d;
+  }
+
+  .game-card > .p-4,
+  .game-card .p-4 {
+    background: transparent !important;
+  }
+
+  /* Asegurar que el contenedor de la imagen no pinte fondo */
+  .game-card .h-32 {
+    background: transparent !important;
+  }
+
+  /* Ajustes menores de scroll-snap y padding */
+  .games-carousel-track {
+    scroll-padding-left: 0;
+  }
+</style>
+
+<style>
+  .games-carousel-wrapper {
+    overflow: visible;
+    background: transparent !important;
+  }
+
+  .games-carousel-track {
+    overflow-y: visible;
+    background: transparent !important;
+    scroll-padding-left: 0;
+  }
+
+  .game-card {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+
+  .game-card-active {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 0 30px rgba(255, 45, 45, 0.7);
+  }
+
+  .game-card-dim {
+    opacity: 0.45;
+  }
+</style>
+
     {featuredChallenge && (
       <section class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start mb-16">
         <!-- Texto del evento -->
@@ -262,11 +424,22 @@ const featuredChallengeLink = featuredChallenge
       </section>
     )}
 
-    <section class="mt-10 pt-6 pb-4">
+    <section class="mt-10 pt-6 pb-4 " >
       <h2 class="font-title text-2xl md:text-3xl font-bold text-white uppercase mb-6">
         {sectionTitle}
       </h2>
-      <ChallengesCarousel />
+      <ChallengesCarousel items={orderedChallenges} />
     </section>
+        {games.length > 0 && (
+      <section class="w-full py-8 bg-brown" id="games">
+        <div class="container mx-auto px-4">
+          <GamesCarousel items={games}>
+            <div slot="title" class="title">
+              <p>{gamesTitle}</p>
+            </div>
+          </GamesCarousel>
+        </div>
+      </section>
+    )}
   </div>
 </div>
