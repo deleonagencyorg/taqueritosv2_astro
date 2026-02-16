@@ -109,6 +109,11 @@ const t = texts[locale as keyof typeof texts] || texts.es;
       <!-- Sección inferior: Stockists centrados -->
       <div class="stockists-section">
         <h3 class="section-title">{t.whereToFind}</h3>
+        <img 
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/arrow-down-circle.png" 
+          alt="arrow down" 
+          class="arrow-down-icon"
+        />
 
         <!-- Lista de Stockists -->
         <div class="stockists-list">
@@ -318,8 +323,24 @@ const t = texts[locale as keyof typeof texts] || texts.es;
     font-weight: 800;
     color: white;
     text-transform: uppercase;
-    margin: 0 0 16px 0;
+    margin: 0 0 8px 0;
     text-align: center;
+  }
+
+  .arrow-down-icon {
+    width: 80px;
+    height: auto;
+    margin-bottom: 16px;
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(8px);
+    }
   }
 
   .stockists-list {
