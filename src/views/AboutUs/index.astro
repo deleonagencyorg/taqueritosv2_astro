@@ -5,7 +5,7 @@ import type { Locale } from '../../i18n/i18n';
 import type { HeaderColorConfig } from '../../config/headerColors';
 import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
 import { fade } from 'astro:transitions';
-import VideoHero from '../../components/common/VideoHero/VideoHero.astro';
+import VideoCarousel from '../../components/common/VideoCarousel/index.astro';
 import LazyImage from '../../components/common/LazyImage.astro';
 import InteractiveMap from '../../components/map/InteractiveMap.astro';
 
@@ -39,22 +39,37 @@ const experiencesSectionTitle = aboutUsContent.experiences_section_title;
 const experiencesSectionDescription = aboutUsContent.experiences_section_description;
 const experiencesCards = aboutUsContent.experiences_cards || [];
 
-// Video and image URLs for hero section
-const videoUrl = 'https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4';
-const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/loopvideo.png';
+// Cargar promos activas (slides) del common.json solo para español
+const commonAssets = currentLang === 'es' ? (t('assets.slider', { namespace: 'common', locale: currentLang }) || []) : [];
+const promosSlides = Array.isArray(commonAssets)
+  ? commonAssets
+    .filter(asset => asset && typeof asset === 'object' && asset.desktop && asset.mobile && asset.type === 'image')
+    .map(asset => ({
+      desktop: asset.desktop,
+      mobile: asset.mobile,
+      alt: asset.alt || "Promo Taqueritos",
+      title: asset.title || '',
+      subtitle: asset.description || '',
+      link: asset.url || asset.link || '',
+      type: 'image' as const
+    }))
+  : [];
 ---
 
 <Layout title={title} class="bg-brown" description={metaDescription}>
-  <section class="hero-section">
-    <VideoHero
-      videoUrl={videoUrl}
-      fallbackImageUrl={fallbackImageUrl}
-      height="100%"
-      overlayOpacity="0"
-      textColor="text-white"
-      showOverlay={false}
-    />
-  </section>
+  {currentLang === 'es' && promosSlides.length > 0 ? (
+    <section class="hero-section">
+      <VideoCarousel 
+        slides={promosSlides} 
+        height="100%" 
+        mobileHeight="100%" 
+        showOverlay={false} 
+      />
+    </section>
+  ) : (
+    <section class="hero-section" style="background: linear-gradient(135deg, #1c0505 0%, #2a0808 100%);">
+    </section>
+  )}
 
   <section class="bg-[#150404] py-16 md:py-20">
     <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10 md:gap-14 items-center">
@@ -219,18 +234,21 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/loopvi
 
 <style>
   .hero-section {
-    height: 400px;
+    min-height: 500px;
+    height: auto;
   }
 
   @media (min-width: 769px) and (max-width: 1024px) {
     .hero-section {
-      height: 600px;
+      min-height: 700px;
+      height: auto;
     }
   }
 
   @media (min-width: 1025px) {
     .hero-section {
-      height: 800px;
+      min-height: 85vh;
+      height: auto;
     }
   }
 
