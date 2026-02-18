@@ -11,6 +11,7 @@ interface Product {
   color_button?: string;
   boder_color?: string;
   second_color_button?: string;
+  isnew?: boolean;
 }
 
 export interface Props {
@@ -73,6 +74,19 @@ import LazyImage from "../LazyImage.astro";
                 class="product-card rounded-[22.02px] border"
                 style={`background-color: ${product.background_color || "#F08C00"}; border-color: ${product.boder_color || "#F08C00"}`}
               >
+                {product.isnew === true && (
+                  <div class="new-tag">
+                    <img 
+                      src={currentLang === 'es' 
+                        ? 'https://snack.yummiespromociones.com/SnacksyummiesAssets/NUEVO.webp'
+                        : 'https://snack.yummiespromociones.com/SnacksyummiesAssets/NEW.webp'
+                      }
+                      alt={currentLang === 'es' ? 'Nuevo' : 'New'}
+                      class="new-tag-image"
+                    />
+                  </div>
+                )}
+                
                 <div class="product-image-container">
                   <LazyImage
                     src={product.imageMobile || product.image}
@@ -179,6 +193,22 @@ import LazyImage from "../LazyImage.astro";
     justify-content: flex-end;
     flex-shrink: 0;
     box-sizing: border-box;
+  }
+
+  /* Tag NUEVO - esquina superior derecha */
+  .new-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .new-tag-image {
+    width: 80px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
   }
 
   .product-image-container {
@@ -355,6 +385,10 @@ import LazyImage from "../LazyImage.astro";
     .product-name {
       font-size: 20px;
     }
+
+    .new-tag-image {
+      width: 70px;
+    }
   }
 
   @media (max-width: 767px) {
@@ -418,6 +452,15 @@ import LazyImage from "../LazyImage.astro";
       height: 50px !important;
       font-size: 14px !important;
       padding: 16px 8px !important;
+    }
+
+    .new-tag {
+      top: 8px;
+      right: 8px;
+    }
+
+    .new-tag-image {
+      width: 85px;
     }
 
     .product-card .absolute.bottom-0 {
