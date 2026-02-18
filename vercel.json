@@ -45,14 +45,14 @@
       ]
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "^/us$",
-      "dest": "$US_PROJECT_URL"
+      "source": "/us",
+      "destination": "$US_PROJECT_URL"
     },
     {
-      "src": "^/us/(.*)$",
-      "dest": "$US_PROJECT_URL/$1"
+      "source": "/us/:path*",
+      "destination": "$US_PROJECT_URL/:path*"
     }
   ]
 }
