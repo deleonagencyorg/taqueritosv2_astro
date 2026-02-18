@@ -54,5 +54,14 @@
       "source": "/us/:path*",
       "destination": "$US_PROJECT_URL/:path*"
     }
+  ],
+  "routes": [
+    {
+      "src": "^/us/(.*)$",
+      "dest": "$US_PROJECT_URL/$1"
+    },
+    {
+      "handle": "filesystem"
+    }
   ]
 }
