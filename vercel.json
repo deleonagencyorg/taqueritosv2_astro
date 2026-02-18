@@ -57,6 +57,10 @@
   ],
   "routes": [
     {
+      "src": "^/us$",
+      "dest": "$US_PROJECT_URL"
+    },
+    {
       "src": "^/us/(.*)$",
       "dest": "$US_PROJECT_URL/$1"
     },
