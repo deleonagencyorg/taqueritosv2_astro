@@ -33,6 +33,7 @@
       "description": "",
       "available": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taquerito_bufalo_ranch.webp",
       "background_image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taquerito_bufalo_ranch.webp",
+      "isnew": true,
       "sizes": [
         {
           "value": "150",
@@ -85,6 +86,7 @@
       "description": "",
       "available":"https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
       "background_image": "https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
+      "isnew": false,
       "sizes": [
         {
           "value": "150",

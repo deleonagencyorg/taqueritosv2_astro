@@ -39,6 +39,7 @@
       "description": "",
       "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
       "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
+      "isnew": true,
       "sizes": [
         {
           "value": "150",
@@ -95,6 +96,7 @@
       "description": "",
       "available": "https://snack.yummiespromociones.com/taqueritos/banderas.webp",
       "background_image": "https://snack.yummiespromociones.com/snacksyummies/zibas-grande2.webp",
+      "isnew": false,
       "sizes": [
         {
           "value": "150",
