@@ -48,11 +48,11 @@
   "rewrites": [
     {
       "source": "/us",
-      "destination": "$US_PROJECT_URL"
+      "destination": "https://taqueritos-qa-us.vercel.app"
     },
     {
       "source": "/us/:path*",
-      "destination": "$US_PROJECT_URL/:path*"
+      "destination": "https://taqueritos-qa-us.vercel.app/:path*"
     }
   ]
 }
