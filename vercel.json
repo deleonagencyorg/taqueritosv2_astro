@@ -47,6 +47,10 @@
   ],
   "rewrites": [
     {
+      "source": "/us",
+      "destination": "$US_PROJECT_URL"
+    },
+    {
       "source": "/us/:path*",
       "destination": "$US_PROJECT_URL/:path*"
     }
