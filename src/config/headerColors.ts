@@ -66,10 +66,10 @@ export const headerColors: HeaderColors = {
   
   // Configuración para la página de productos
   products: {
-    textColor: 'text-black',
-    backgroundColor: 'bg-lemon',
+    textColor: 'text-white',
+    backgroundColor: 'bg-orange',
     hoverTextColor: 'hover:text-white',
-    hoverBackgroundColor: 'hover:bg-black',
+    hoverBackgroundColor: 'hover:bg-blue',
     showMessageCarousel: false,
   },
   
