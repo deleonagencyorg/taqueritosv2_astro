@@ -36,7 +36,8 @@
                     "slug": "taqueritos-dragon-de-hielo",
                     "title": "Taqueritos Dragon Ice",
                     "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-hielo-2.webp",
-                    "imageMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-hielo-2.webp"
+                    "imageMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-dragon-de-hielo-2.webp",
+                    "isnew": false
                 },
                 {
                     "id": "taqueritos-dragon-de-fuego",
