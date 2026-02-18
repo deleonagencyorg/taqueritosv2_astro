@@ -47,8 +47,8 @@
   ],
   "rewrites": [
     {
-      "source": "/us/:path*",
-      "destination": "https://taqueritos-qa-us.vercel.app/:path*"
+      "source": "/us(.*)",
+      "destination": "https://taqueritos-qa-us.vercel.app$1"
     }
   ]
 }
