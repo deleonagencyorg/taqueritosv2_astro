@@ -53,7 +53,7 @@
   "rewrites": [
     {
       "source": "/us/:path*",
-      "destination": "https://${US_DOMAIN}/:path*"
+      "destination": "https://taqueritos-qa-us.vercel.app/:path*"
     }
   ]
 }
