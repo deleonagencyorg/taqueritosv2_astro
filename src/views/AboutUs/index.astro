@@ -66,6 +66,18 @@ const promosSlides = Array.isArray(commonAssets)
         showOverlay={false} 
       />
     </section>
+  ) : currentLang === 'en' ? (
+    <section class="hero-section" style="background: linear-gradient(135deg, #1c0505 0%, #2a0808 100%); position: relative; overflow: hidden;">
+      <video
+        src="https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover"
+        style="width:100%;height:100%;object-fit:cover;"
+      />
+    </section>
   ) : (
     <section class="hero-section" style="background: linear-gradient(135deg, #1c0505 0%, #2a0808 100%);">
     </section>
