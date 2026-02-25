@@ -37,12 +37,12 @@ const experiencesSectionTitle = t('experiences_section_title', { namespace: 'abo
 const experiencesSectionDescription = t('experiences_section_description', { namespace: 'aboutus', locale: currentLang });
 const experiencesCards = (t('experiences_cards', { namespace: 'aboutus', locale: currentLang }) || []) as any[];
 
-// Cargar promos activas (slides) del common.json solo para español
-const commonAssets = currentLang === 'es' ? (t('assets.slider', { namespace: 'common', locale: currentLang }) || []) : [];
+// Cargar slides del common.json para ambos idiomas
+const commonAssets = t('assets.slider', { namespace: 'common', locale: currentLang }) || [];
 const promosSlides = Array.isArray(commonAssets)
   ? commonAssets
-    .filter(asset => asset && typeof asset === 'object' && asset.desktop && asset.mobile && asset.type === 'image')
-    .map(asset => ({
+    .filter((asset: any) => asset && typeof asset === 'object' && asset.desktop && asset.mobile && asset.type === 'image')
+    .map((asset: any) => ({
       desktop: asset.desktop,
       mobile: asset.mobile,
       alt: asset.alt || "Promo Taqueritos",
@@ -52,34 +52,30 @@ const promosSlides = Array.isArray(commonAssets)
       type: 'image' as const
     }))
   : [];
+
+// Slide de video como fallback para cuando no hay slides de imagen
+const videoSlide = [{
+  desktop: 'https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4',
+  mobile: 'https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4',
+  alt: 'Taqueritos',
+  title: '',
+  subtitle: '',
+  link: '',
+  type: 'video' as const
+}];
+
+const heroSlides = promosSlides.length > 0 ? promosSlides : videoSlide;
 ---
 
 <Layout title={title} class="bg-brown" description={metaDescription}>
-  {currentLang === 'es' && promosSlides.length > 0 ? (
-    <section class="hero-section">
-      <VideoCarousel 
-        slides={promosSlides} 
-        height="100%" 
-        mobileHeight="100%" 
-        showOverlay={false} 
-      />
-    </section>
-  ) : currentLang === 'en' ? (
-    <section class="hero-section" style="background: linear-gradient(135deg, #1c0505 0%, #2a0808 100%); position: relative; overflow: hidden;">
-      <video
-        src="https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4"
-        autoplay
-        loop
-        muted
-        playsinline
-        class="absolute inset-0 w-full h-full object-cover"
-        style="width:100%;height:100%;object-fit:cover;"
-      />
-    </section>
-  ) : (
-    <section class="hero-section" style="background: linear-gradient(135deg, #1c0505 0%, #2a0808 100%);">
-    </section>
-  )}
+  <section class="hero-section">
+    <VideoCarousel
+      slides={heroSlides}
+      height="100%"
+      mobileHeight="100%"
+      showOverlay={false}
+    />
+  </section>
 
   <section class="bg-[#150404] py-16 md:py-20">
     <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10 md:gap-14 items-center">
