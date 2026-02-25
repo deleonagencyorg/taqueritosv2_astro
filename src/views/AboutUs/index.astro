@@ -23,21 +23,19 @@ const { currentLang, headerColorConfig } = Astro.props;
 const title = t('meta.about_us.title', { namespace: 'common', locale: currentLang });
 const metaDescription = t('meta.about_us.description', { namespace: 'common', locale: currentLang });
 
-// Importar contenido específico de aboutus.json
-const aboutUsModule = await import(`../../locales/${currentLang}/aboutus.json`);
-const aboutUsContent: any = aboutUsModule.default || aboutUsModule;
-const historyTitle = aboutUsContent.title;
-const historySubtitle = aboutUsContent.subtitle;
-const historyIntro = aboutUsContent.intro;
-const historyItems = aboutUsContent.items;
-const historyConclusion = aboutUsContent.conclusion;
-const aboutSectionTitle = aboutUsContent.about_section_title;
-const aboutSectionParagraphs = aboutUsContent.about_section_paragraphs || [];
-const presenceSectionTitle = aboutUsContent.presence_section_title;
-const presenceSectionDescription = aboutUsContent.presence_section_description;
-const experiencesSectionTitle = aboutUsContent.experiences_section_title;
-const experiencesSectionDescription = aboutUsContent.experiences_section_description;
-const experiencesCards = aboutUsContent.experiences_cards || [];
+// Importar contenido específico de aboutus.json via t()
+const historyTitle = t('title', { namespace: 'aboutus', locale: currentLang });
+const historySubtitle = t('subtitle', { namespace: 'aboutus', locale: currentLang });
+const historyIntro = t('intro', { namespace: 'aboutus', locale: currentLang });
+const historyItems = t('items', { namespace: 'aboutus', locale: currentLang }) || [];
+const historyConclusion = t('conclusion', { namespace: 'aboutus', locale: currentLang });
+const aboutSectionTitle = t('about_section_title', { namespace: 'aboutus', locale: currentLang });
+const aboutSectionParagraphs = (t('about_section_paragraphs', { namespace: 'aboutus', locale: currentLang }) || []) as string[];
+const presenceSectionTitle = t('presence_section_title', { namespace: 'aboutus', locale: currentLang });
+const presenceSectionDescription = t('presence_section_description', { namespace: 'aboutus', locale: currentLang });
+const experiencesSectionTitle = t('experiences_section_title', { namespace: 'aboutus', locale: currentLang });
+const experiencesSectionDescription = t('experiences_section_description', { namespace: 'aboutus', locale: currentLang });
+const experiencesCards = (t('experiences_cards', { namespace: 'aboutus', locale: currentLang }) || []) as any[];
 
 // Cargar promos activas (slides) del common.json solo para español
 const commonAssets = currentLang === 'es' ? (t('assets.slider', { namespace: 'common', locale: currentLang }) || []) : [];
