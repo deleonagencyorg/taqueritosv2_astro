@@ -1,5 +1,6 @@
 ---
 import GoogleTagManager from '../components/common/GoogleTagManager.astro';
+import TikTokPixel from '../components/common/TikTokPixel.astro';
 import Favicon from '../components/Favicon.astro';
 // import GoogleTagManager from './i18n/GoogleTagManager.astro';
 // import GoogleTagManagerNoScript from './i18n/GoogleTagManagerNoScript.astro';
@@ -64,6 +65,7 @@ if (headerColors) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <GoogleTagManager />
+    <TikTokPixel />
     <Favicon />
     {title && <title>{withTaqueritosPrefix(title)}</title>}
     {description && <meta name="description" content={description} />}
@@ -89,7 +91,7 @@ if (headerColors) {
     <!-- Modal global de "Dónde comprar" -->
     <StockistModal products={products} stockists={stockists} locale={currentLang} />
 
-    <script>
+<script>
       function initGlobalStockistLinks() {
         document.addEventListener(
           'click',
@@ -110,13 +112,27 @@ if (headerColors) {
         );
       }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initGlobalStockistLinks);
-      } else {
-        initGlobalStockistLinks();
+      function trackTikTokPage() {
+        if (window.ttq) {
+          window.ttq.page();
+        }
       }
 
-      document.addEventListener('astro:page-load', initGlobalStockistLinks);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          initGlobalStockistLinks();
+          trackTikTokPage();
+        });
+      } else {
+        initGlobalStockistLinks();
+        trackTikTokPage();
+      }
+
+      document.addEventListener('astro:page-load', () => {
+        initGlobalStockistLinks();
+        trackTikTokPage();
+      });
+
       document.addEventListener('astro:after-swap', initGlobalStockistLinks);
     </script>
   </body>
