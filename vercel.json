@@ -44,5 +44,11 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/us/:path*",
+      "destination": "https://taqueritos-us.vercel.app/:path*"
+    }
   ]
 }
