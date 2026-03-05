@@ -14,11 +14,6 @@
       "source": "/en/gaming",
       "destination": "https://www.taqueritos.com/es/retos-torneos",
       "permanent": true
-    },
-    {
-      "source": "/us/",
-      "destination": "/us",
-      "permanent": true
     }
   ],
   "headers": [
