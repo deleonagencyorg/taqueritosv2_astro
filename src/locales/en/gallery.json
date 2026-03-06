@@ -9,19 +9,19 @@
   },
   "images": [
     {
-      "url": "/images/es/instagram/image1.png",
+      "url": "https://snack.yummiespromociones.com/SnacksyummiesAssets/1.jpg",
       "alt": "Taqueritos image 1"
     },
     {
-      "url": "/images/es/instagram/image2.png",
+      "url": "https://snack.yummiespromociones.com/SnacksyummiesAssets/2.jpg",
       "alt": "Taqueritos image 2"
     },
     {
-      "url": "/images/es/instagram/images3.jpg",
+      "url": "https://snack.yummiespromociones.com/SnacksyummiesAssets/3.jpg",
       "alt": "Taqueritos image 3"
     },
     {
-      "url": "/images/es/instagram/images4.jpg",
+      "url": "https://snack.yummiespromociones.com/SnacksyummiesAssets/4.jpg",
       "alt": "Taqueritos image 4"
     }
   ]
