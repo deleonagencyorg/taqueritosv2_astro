@@ -50,9 +50,33 @@
         "180gr",
         "75gr",
         "34gr"
-      ]
+      ],
+      "nutrition": {
+        "description": "Tototopos de Maíz Enrollados con sabor a Bufalo Ranch ",
+        "servingSize": "28g",
+        "servingsPerContainer": "1.21",
+        "calories": "600 KJ (140 Kcal)",
+        "fatEnergy": "300 KJ(70 Kcal)",
+        "cholesterol": "0mg - 0%",
+        "totalCarbs": "17g - 6%",
+        "dietaryFiber": "2g - 7%",
+        "sugars": "1g",
+        "protein": "2g",
+        "calorieDiet": "8.378 kJ (2000 cal)",
+        "caloriesPerServing": "28g",
+        "vitaminD": "0%",
+        "iron": "2%",
+        "calcium": "2%",
+        "potassium": "0%",
+        "sodium": "270 mg - 12%",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "7g - 9%",
+        "saturatedFat": "",
+        "transFat": ""
+      }
     },
-        {
+    {
       "id": "taqueritos-dragon-de-fuego",
       "name": "Taqueritos Dragón de Fuego",
       "name_description": "Taqueritos Dragón de Fuego",
@@ -76,9 +100,34 @@
       ],
       "weight": [
         "180gr",
-        "80gr",
+        "75gr",
+        "36gr",
         "34gr"
-      ]
+      ],
+      "nutrition": {
+        "description": "Tototopos de Maíz Enrollados con sabor a chile limon ",
+        "servingSize": "28g",
+        "servingsPerContainer": "1,21",
+        "calories": "600 cal (140 Kcal )",
+        "fatEnergy": "250KJ (60 Kcal)",
+        "cholesterol": "0mg - 0%",
+        "totalCarbs": "18g - 7%",
+        "dietaryFiber": "2g - 7%",
+        "sugars": "1g",
+        "protein": "2g",
+        "calorieDiet": "8.378 kJ (2000 cal)",
+        "caloriesPerServing": "28g",
+        "vitaminD": "0%",
+        "iron": "4%",
+        "calcium": "2%",
+        "potassium": "0%",
+        "sodium": "330 mg - 14%",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "7g - 9%",
+        "saturatedFat": "",
+        "transFat": ""
+      }
     },
     {
       "id": "taqueritos-dragon-de-hielo",
@@ -105,11 +154,36 @@
       ],
       "weight": [
         "180gr",
+        "75gr",
         "36gr",
         "34gr"
-      ]
+      ],
+      "nutrition": {
+        "description": "Tototopos de Maíz Enrollados con sabor a chile especies y  limon ",
+        "servingSize": "28g",
+        "servingsPerContainer": "1.21",
+        "calories": "600 cal (140 Kcal )",
+        "fatEnergy": "250KJ (60 Kcal)",
+        "cholesterol": "0mg - 0%",
+        "totalCarbs": "18g - 7%",
+        "dietaryFiber": "2g - 7%",
+        "sugars": "1g",
+        "protein": "2g",
+        "calorieDiet": "8.378 kJ (2000 cal)",
+        "caloriesPerServing": "28g",
+        "vitaminD": "0%",
+        "iron": "4%",
+        "calcium": "4%",
+        "potassium": "4%",
+        "sodium": "180 mg - 8%",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "7g - 9%",
+        "saturatedFat": "",
+        "transFat": ""
+      }
     },
-        {
+    {
       "id": "taqueritos-chile-toreado",
       "name": "Taqueritos Chile Toreado",
       "name_description": "Taqueritos Chile Toreado",
@@ -134,10 +208,35 @@
       "weight": [
         "600gr",
         "180gr",
+        "80gr",
         "34gr",
         "14g"
-      ]
-    } ,
+      ],
+      "nutrition": {
+        "description": "Tototopos de Maíz Enrollados con sabor a chile toreado ",
+        "servingSize": "28g",
+        "servingsPerContainer": "1.21",
+        "calories": "650 cal (150 Kcal )",
+        "fatEnergy": "300 KJ(70 Kcal)",
+        "cholesterol": "0mg - 0%",
+        "totalCarbs": "16g - 6%",
+        "dietaryFiber": "1g - 4%",
+        "sugars": "1g",
+        "protein": "2g",
+        "calorieDiet": "8.378 kJ (2000 cal)",
+        "caloriesPerServing": "28g",
+        "vitaminD": "0%",
+        "iron": "2%",
+        "calcium": "2%",
+        "potassium": "50mg - 1%",
+        "sodium": "190 mg - 13%",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "8g - 10%",
+        "saturatedFat": "",
+        "transFat": ""
+      }
+    },
     {
       "id": "taqueritos-queso-fusion",
       "name": "Taqueritos Queso Fusión",
@@ -162,11 +261,34 @@
       ],
       "weight": [
         "180gr",
+        "75gr",
         "36gr",
         "34gr"
-      ]
+      ],
+      "nutrition": {
+        "description": "Tototopos de Maíz Enrollados con sabor a queso",
+        "servingSize": "28g",
+        "servingsPerContainer": "1.21",
+        "calories": "650 cal (140 Kcal )",
+        "fatEnergy": "300 KJ(70 Kcal)",
+        "cholesterol": "0mg - 0%",
+        "totalCarbs": "17g - 6%",
+        "dietaryFiber": "1g - 4%",
+        "sugars": "1g",
+        "protein": "2g",
+        "calorieDiet": "8.378 kJ (2000 cal)",
+        "caloriesPerServing": "28g",
+        "vitaminD": "0%",
+        "iron": "2%",
+        "calcium": "2%",
+        "potassium": "1%",
+        "sodium": "135 mg - 6%%",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "8g - 10%",
+        "saturatedFat": "",
+        "transFat": ""
+      }
     }
-    
- 
   ]
 }

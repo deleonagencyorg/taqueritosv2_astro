@@ -1,12 +1,14 @@
 ---
-// src/pages/[lang]/productos/[productId].astro
+// src/pages/[lang]/products/[productId].astro
 import { t, setLocale, type Locale } from '../../../i18n/i18n';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import ProductDetail from '../../../views/Products/Detail/index.astro';
 
+export const prerender = true;
+
 export function getStaticPaths() {
   // Obtener todos los idiomas y productos disponibles
-  const locales: Locale[] = ['es', 'en'];
+  const locales: Locale[] = ['en'];
   const paths = [];
 
   for (const locale of locales) {

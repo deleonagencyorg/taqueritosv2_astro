@@ -1,0 +1,20 @@
+---
+// Detalle de retos en inglés: /en/challenges/:challengeId
+// Esta página no está disponible en inglés, redirigir al home
+import { type Locale } from '../../../i18n/i18n';
+
+export async function getStaticPaths() {
+  // No generar rutas para inglés
+  return [];
+}
+
+const { lang } = Astro.params as { lang: Locale };
+
+// Si alguien intenta acceder directamente, redirigir al home
+if (lang === 'en') {
+  return Astro.redirect('/en/');
+}
+
+// Si es español, redirigir a la ruta correcta
+return Astro.redirect('/es/retos');
+---
