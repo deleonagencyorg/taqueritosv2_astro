@@ -120,25 +120,3 @@ export const GET: APIRoute = async ({ request }) => {
     );
   }
 };
-
-    const data = contentType.includes('application/json')
-      ? JSON.parse(text)
-      : { data: [], raw: text };
-
-    return new Response(JSON.stringify({ ok: true, ...data, debug: { targetUrl, from: 'proxy' } }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-store',
-      },
-    });
-  } catch (err: any) {
-    if (LOG_LEVEL !== 'silent') {
-      console.error('[API/creators/participations] Error:', err?.message || err);
-    }
-    return new Response(
-      JSON.stringify({ ok: false, error: err?.message || 'Unknown error', debug: { from: 'proxy-catch' } }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
-  }
-};

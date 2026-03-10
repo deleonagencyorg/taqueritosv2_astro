@@ -1,9 +1,0 @@
-{
-  "name": "Taqueritos",
-  "short_name": "Taqueritos",
-  "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#230405",
-  "background_color": "#230405",
-  "icons": []
-}
