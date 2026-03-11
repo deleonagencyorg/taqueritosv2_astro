@@ -1,40 +1,44 @@
 ---
 // src/pages/[lang]/recetas/[recipeId].astro
-import { t, setLocale, type Locale } from '../../../i18n/i18n';
+import { setLocale, type Locale } from '../../../i18n/i18n';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import RecipeDetail from '../../../views/Recipes/Detail/index.astro';
 
-export async function getStaticPaths() {
-  const paths: any[] = [];
-  const locale = 'es';
-  // Cargar recetas desde archivos JSON con glob estático
-  const modules = import.meta.glob('../../../locales/es/recipes/*.json', { eager: true });
-  const files = Object.values(modules) as any[];
-  console.log(`Encontradas ${files.length} recetas para idioma ${locale}`);
-  for (const mod of files) {
-    const recipe = (mod as any).default;
-    if (!recipe?.id) continue;
-    paths.push({
-      params: { lang: locale, recipeId: recipe.id },
-      props: { recipe, currentLang: locale }
-    });
-  }
-  console.log(`Generadas ${paths.length} rutas de recetas en español`);
-  return paths;
-}
-
-const { recipe, currentLang } = Astro.props;
+// En modo SSR (output: 'server') getStaticPaths no se usa en tiempo de petición.
+// Los parámetros vienen directamente de la URL.
 const { lang, recipeId } = Astro.params;
 
-// Establecer el idioma para las traducciones
+if (!lang || !recipeId) {
+  return Astro.redirect('/es');
+}
+
 setLocale(lang as Locale);
 
-console.log(`Renderizando receta: ${recipeId} en idioma: ${lang}`);
+// Cargar la receta desde los archivos JSON en tiempo de petición (SSR)
+const modules = import.meta.glob('../../../locales/*/recipes/*.json', { eager: true });
+let recipe: any = null;
+
+for (const path in modules) {
+  // Extraer el idioma del path con regex (funciona con rutas relativas y absolutas)
+  const langMatch = path.match(/locales\/([^/]+)\//);
+  const pathLang = langMatch?.[1];
+  if (pathLang === lang) {
+    const mod = modules[path] as any;
+    const r = mod.default ?? mod;
+    if (r?.id === recipeId) {
+      recipe = r;
+      break;
+    }
+  }
+}
+
+if (!recipe) {
+  return Astro.redirect(`/${lang}`);
+}
 
 const description = `Receta con Taqueritos: ${recipe.title}. Descubre ingredientes y paso a paso para prepararla.`;
-
 ---
 
 <MainLayout title={recipe.title} description={description}>
-  <RecipeDetail currentLang={currentLang} recipeId={recipeId} />
+  <RecipeDetail currentLang={lang} recipeId={recipeId} />
 </MainLayout>

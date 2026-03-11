@@ -26,10 +26,14 @@ const allRecipes: Recipe[] = [];
 
 // Process each file
 for (const path in recipeModules) {
-  const lang = path.split('/')[3]; // Extract language from path
-  if (lang === currentLang) {
+  // Usar regex para extraer el idioma del path (funciona con rutas relativas y absolutas)
+  const langMatch = path.match(/locales\/([^/]+)\//);
+  const pathLang = langMatch?.[1];
+  if (pathLang === currentLang) {
     const module = await recipeModules[path]();
-    allRecipes.push(module.default);
+    const item = module.default ?? (module as any);
+    // Guardar solo entradas válidas con id y title
+    if (item?.id && item?.title) allRecipes.push(item);
   }
 }
 
