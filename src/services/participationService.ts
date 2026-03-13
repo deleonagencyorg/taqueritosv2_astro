@@ -1,8 +1,5 @@
 // src/services/participationService.ts
-
-// Asegúrate de que tus variables de entorno estén disponibles
-const API_HOST = import.meta.env.PUBLIC_API_HOST;
-const API_TOKEN = import.meta.env.PUBLIC_API_TOKEN;
+import { PUBLIC_API_HOST, PUBLIC_API_TOKEN } from '../config/env';
 
 interface Participation {
   id: number;
@@ -40,20 +37,20 @@ interface ApiResponse {
  * @returns Una promesa que se resuelve con los datos de las participaciones.
  */
 export async function getParticipations(promotionId: number, page: number = 1, pageSize: number = 10): Promise<ApiResponse> {
-  const url = `${API_HOST}/v1/auth/participations?promotionId=${promotionId}&page=${page}&pageSize=${pageSize}`;
-  
-  console.log('[ParticipationService] Fetching participations from:', url);
-
-  if (!API_HOST || !API_TOKEN) {
+  if (!PUBLIC_API_HOST || !PUBLIC_API_TOKEN) {
     console.error('[ParticipationService] Error: PUBLIC_API_HOST o PUBLIC_API_TOKEN no están definidas en las variables de entorno.');
     throw new Error('Variables de entorno no configuradas.');
   }
+
+  const url = `${PUBLIC_API_HOST}/v1/auth/participations?promotionId=${promotionId}&page=${page}&pageSize=${pageSize}`;
+  
+  console.log('[ParticipationService] Fetching participations from:', url);
 
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': API_TOKEN, // Enviando el token sin 'Bearer'
+        'Authorization': PUBLIC_API_TOKEN, // Enviando el token sin 'Bearer'
         'Content-Type': 'application/json',
       },
     });

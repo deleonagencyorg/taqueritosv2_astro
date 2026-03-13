@@ -3,11 +3,24 @@ import { CONTACT_API_HOST, API_TOKEN, LOG_LEVEL } from '../../../config/env';
 
 export const GET: APIRoute = async ({ request }) => {
   try {
-    if (!CONTACT_API_HOST || !API_TOKEN) {
+    // Validate required environment variables
+    if (!CONTACT_API_HOST) {
+      console.error('[API/creators/participations] CONTACT_API_HOST is not configured');
       return new Response(
         JSON.stringify({
           ok: false,
-          error: 'Missing CONTACT_API_HOST or API_TOKEN env variable',
+          error: 'Missing CONTACT_API_HOST environment variable',
+        }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!API_TOKEN) {
+      console.error('[API/creators/participations] API_TOKEN is not configured');
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: 'Missing API_TOKEN environment variable',
         }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
@@ -70,6 +83,11 @@ export const GET: APIRoute = async ({ request }) => {
     const contentType = res.headers.get('content-type') || '';
 
     if (!res.ok) {
+      console.error('[API/creators/participations] API returned error:', {
+        status: res.status,
+        error: text,
+        targetUrl,
+      });
       return new Response(
         JSON.stringify({ ok: false, status: res.status, error: text, debug: { targetUrl, from: 'proxy' } }),
         {
@@ -91,11 +109,13 @@ export const GET: APIRoute = async ({ request }) => {
       },
     });
   } catch (err: any) {
-    if (LOG_LEVEL !== 'silent') {
-      console.error('[API/creators/participations] Error:', err?.message || err);
-    }
+    console.error('[API/creators/participations] Error:', err?.message || err);
     return new Response(
-      JSON.stringify({ ok: false, error: err?.message || 'Unknown error', debug: { from: 'proxy-catch' } }),
+      JSON.stringify({ 
+        ok: false, 
+        error: err?.message || 'Unknown error',
+        debug: { from: 'proxy-catch', errorType: err?.constructor?.name }
+      }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }

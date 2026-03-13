@@ -1,6 +1,4 @@
-// 1. Definimos las variables de entorno UNA SOLA VEZ al inicio
-const API_HOST = import.meta.env.PUBLIC_API_HOST; //api-cms-yummies.onrender.com
-const API_TOKEN = import.meta.env.PUBLIC_API_TOKEN; //api-cms-yummies.onrender.com/v1/ping
+import { PUBLIC_API_HOST, PUBLIC_API_TOKEN } from '../config/env';
 
 // --- INTERFACES (El "Contrato" de los datos) ---
 
@@ -54,13 +52,17 @@ export interface SiteResponse {
  * Misión 6: Obtiene configuración global (GTM, Favicon, SEO base)
  */
 export async function getSiteConfig(): Promise<SiteResponse> {
-  const url = `${API_HOST}/api/site-setting?populate=*`;
+  if (!PUBLIC_API_HOST || !PUBLIC_API_TOKEN) {
+    throw new Error('[SiteConfig] PUBLIC_API_HOST or PUBLIC_API_TOKEN not configured');
+  }
+
+  const url = `${PUBLIC_API_HOST}/api/site-setting?populate=*`;
 
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${API_TOKEN}`, 
+        'Authorization': `Bearer ${PUBLIC_API_TOKEN}`, 
         'Content-Type': 'application/json',
       },
     });
@@ -77,17 +79,17 @@ export async function getSiteConfig(): Promise<SiteResponse> {
  * Misión 7: Obtiene las participaciones de forma dinámica
  */
 export async function getParticipations(promotionId: number, page: number = 1, pageSize: number = 10): Promise<ApiResponse> {
-  const url = `${API_HOST}/api/participations?filters[promotion][id]=${promotionId}&pagination[page]=${page}&pagination[pageSize]=${pageSize}&populate=*`;
-  
-  if (!API_HOST || !API_TOKEN) {
-    throw new Error('[ParticipationService] Variables de entorno no configuradas.');
+  if (!PUBLIC_API_HOST || !PUBLIC_API_TOKEN) {
+    throw new Error('[ParticipationService] PUBLIC_API_HOST or PUBLIC_API_TOKEN not configured.');
   }
+
+  const url = `${PUBLIC_API_HOST}/api/participations?filters[promotion][id]=${promotionId}&pagination[page]=${page}&pagination[pageSize]=${pageSize}&populate=*`;
 
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${API_TOKEN}`, 
+        'Authorization': `Bearer ${PUBLIC_API_TOKEN}`, 
         'Content-Type': 'application/json',
       },
     });

@@ -6,7 +6,6 @@ import RecipeCard from '../../../components/recipes/RecipeCard.astro';
 import RelatedRecipesCarousel from '../../../components/recipes/RelatedRecipesCarousel.astro';
 import Breadcrumb from '../../../components/common/Breadcrumb/Breadcrumb.astro';
 import LazyImage from '../../../components/common/LazyImage.astro';
-import { div } from 'framer-motion/m';
 import IngredientsCarousel from '../../../components/recipes/IngredientsCarousel.astro';
 import ShareButton from '../../../components/common/ShareButton.astro';
 
@@ -30,10 +29,13 @@ const { currentLang, recipeId } = Astro.props;
 const recipeModules = import.meta.glob<{ default: RecipeItem }>("../../../locales/*/recipes/*.json");
 const allRecipes: RecipeItem[] = [];
 for (const path in recipeModules) {
-  const lang = path.split('/') [4];
-  if (lang === currentLang) {
+  // Usar regex para extraer el idioma del path (funciona con rutas relativas y absolutas)
+  const langMatch = path.match(/locales\/([^/]+)\//);
+  const pathLang = langMatch?.[1];
+  if (pathLang === currentLang) {
     const mod = await recipeModules[path]();
-    allRecipes.push(mod.default);
+    const item = mod.default ?? (mod as any);
+    if (item?.id) allRecipes.push(item);
   }
 }
 

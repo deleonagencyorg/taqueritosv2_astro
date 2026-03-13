@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/",
+      "destination": "/es/",
+      "permanent": false
+    },
+    {
       "source": "/gaming",
       "destination": "https://www.taqueritos.com/es/retos-torneos",
       "permanent": true
