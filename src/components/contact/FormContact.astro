@@ -1,6 +1,5 @@
 ---
 // src/components/contact/FormContact.astro
-import { getLocale } from '../../i18n/i18n';
 import type { Locale } from '../../i18n/i18n';
 import SuccessModal from '../common/SuccessModal.astro';
 
@@ -14,8 +13,10 @@ interface Props {
 
 const { currentLang } = Astro.props;
 
-// Get current locale if not provided
-const locale = currentLang || getLocale(Astro.url);
+// Derive locale: prefer the explicit prop, then parse from URL (reliable in SSR), then default.
+const urlLang = Astro.url.pathname.split('/').filter(Boolean)[0];
+const validLocales: Locale[] = ['es', 'en'];
+const locale: Locale = currentLang || (validLocales.includes(urlLang as Locale) ? (urlLang as Locale) : 'es');
 
 // Get contact data from locale
 const contact = locale === 'es' ? contactEs : contactEn;
@@ -589,10 +590,9 @@ const options = dynamicOptions[locale];
     }
   }
 
-  // Initialize on DOMContentLoaded (initial page load)
-  document.addEventListener('DOMContentLoaded', initFormFunctionality);
-  
-  // Also initialize on astro:page-load (for client-side navigation)
+  // astro:page-load fires on both the initial page load and every client-side
+  // navigation (View Transitions). Using it as the SINGLE init point prevents
+  // duplicate onchange handlers from being registered on the form fields.
   document.addEventListener('astro:page-load', initFormFunctionality);
 
   // Function to update dynamic fields based on contact reason
