@@ -88,13 +88,21 @@ import LazyImage from "../LazyImage.astro";
                 )}
                 
                 <div class="product-image-container">
-                  <LazyImage
-                    src={product.imageMobile || product.image}
-                    alt={product.name}
-                    class="product-image  md:mt-[0px] -mt-[35px]"
-                    width={300}
-                    height={400}
-                  />
+                  <a
+                    href={`/${currentLang}/${currentLang === 'es' ? 'productos' : 'products'}/${product.id}`}
+                    class="product-image-link"
+                    data-no-swipe="true"
+                    data-no-animation="true"
+                    data-astro-reload="false"
+                  >
+                    <LazyImage
+                      src={product.imageMobile || product.image}
+                      alt={product.name}
+                      class="product-image  md:mt-[0px] -mt-[35px]"
+                      width={300}
+                      height={400}
+                    />
+                  </a>
                 </div>
 
                 <div class="absolute bottom-0 left-0">
@@ -268,6 +276,10 @@ import LazyImage from "../LazyImage.astro";
     text-transform: none;
     max-width: 100%;
     min-width: 200px;
+  }
+
+  .product-image-link {
+    display: block;
   }
   
   .product-card a:hover {
