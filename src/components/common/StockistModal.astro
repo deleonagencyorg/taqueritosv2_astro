@@ -74,19 +74,24 @@ const t = texts[locale as keyof typeof texts] || texts.es;
           <!-- Selector de Producto -->
           <div class="form-group">
             <label for="product-select">{t.product}</label>
-            <select id="product-select" class="form-select">
-              {products.map((product) => (
-                <option 
-                  value={product.id} 
-                  data-name={product.name}
-                  data-image={product.image}
-                  data-weights={product.weight ? product.weight.join('|') : ''}
-                  selected={initialProduct?.id === product.id}
-                >
-                  {product.name}
-                </option>
-              ))}
-            </select>
+            <div class="select-wrapper">
+              <select id="product-select" class="form-select">
+                {products.map((product) => (
+                  <option 
+                    value={product.id} 
+                    data-name={product.name}
+                    data-image={product.image}
+                    data-weights={product.weight ? product.weight.join('|') : ''}
+                    selected={initialProduct?.id === product.id}
+                  >
+                    {product.name}
+                  </option>
+                ))}
+              </select>
+              <button class="select-arrow-btn" aria-label="Abrir listado de productos" tabindex="-1">
+                <img src="https://snack.yummiespromociones.com/SnacksyummiesAssets/arrow-down-circle.png" alt="arrow down" class="select-arrow-img" />
+              </button>
+            </div>
           </div>
 
           <!-- Selector de Gramaje -->
@@ -109,11 +114,6 @@ const t = texts[locale as keyof typeof texts] || texts.es;
       <!-- Sección inferior: Stockists centrados -->
       <div class="stockists-section">
         <h3 class="section-title">{t.whereToFind}</h3>
-        <img 
-          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/arrow-down-circle.png" 
-          alt="arrow down" 
-          class="arrow-down-icon"
-        />
 
         <!-- Lista de Stockists -->
         <div class="stockists-list">
@@ -276,15 +276,47 @@ const t = texts[locale as keyof typeof texts] || texts.es;
     text-transform: uppercase;
   }
 
+  .select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .select-arrow-btn {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .select-arrow-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
   .form-select {
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-    padding: 12px 16px;
+    padding: 12px 44px 12px 16px;
     color: white;
     font-size: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 
   .form-select:hover,
@@ -325,22 +357,6 @@ const t = texts[locale as keyof typeof texts] || texts.es;
     text-transform: uppercase;
     margin: 0 0 8px 0;
     text-align: center;
-  }
-
-  .arrow-down-icon {
-    width: 80px;
-    height: auto;
-    margin-bottom: 16px;
-    animation: bounce 1.5s ease-in-out infinite;
-  }
-
-  @keyframes bounce {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(8px);
-    }
   }
 
   .stockists-list {
@@ -577,6 +593,15 @@ const t = texts[locale as keyof typeof texts] || texts.es;
         
         
       }
+    }
+
+    // Custom arrow button opens the select dropdown
+    const selectArrowBtn = document.querySelector('.select-arrow-btn') as HTMLButtonElement | null;
+    if (selectArrowBtn && productSelect) {
+      selectArrowBtn.addEventListener('click', () => {
+        productSelect.focus();
+        productSelect.click();
+      });
     }
 
     // Event listeners

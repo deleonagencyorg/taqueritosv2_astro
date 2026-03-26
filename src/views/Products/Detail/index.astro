@@ -160,7 +160,7 @@ const nutritionEntries = Object.entries(nutritionLabels)
       <!-- Cambiar a grid en lugar de flex -->
       <div class="container mx-auto px-6 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-2 gap-10 relative z-10">
         <!-- Contenido del lado izquierdo -->
-        <div class="flex flex-col gap-12 relative z-20 lg:mt-[100px] mt-[100px]">
+        <div class="flex flex-col gap-12 relative z-20 mt-4 lg:mt-[100px] order-2 lg:order-1">
           <!-- Título principal -->
           <h1 
               id="product-title"
@@ -197,7 +197,7 @@ const nutritionEntries = Object.entries(nutritionLabels)
               </div>
     
             <!-- Botón de comprar y navegación -->
-            <div class="flex items-center gap-5 pb-20 md:pb-0">
+            <div class="flex items-center gap-5 pb-15 md:pb-0">
               <button 
                 id="open-modal-btn"
                 class="w-full flex justify-center items-center border border-[#FF0048] rounded-[16px] bg-gradient-to-b from-[#FF0048] to-[#FF5255] shadow-[0_3px_0_0_rgba(88,0,29,0.9)] hover:shadow-[0_1px_0_0_rgba(88,0,29,0.9)] hover:translate-y-[2px] transition-all duration-150 text-white py-[10px] md:py-[16px] lg:py-[16px]"
@@ -249,7 +249,7 @@ const nutritionEntries = Object.entries(nutritionLabels)
         </div>
     
         <!-- Carousel de productos - SOLO lado derecho -->
-        <div class="relative flex items-center justify-center overflow-visible lg:mt-[100px]">
+        <div class="relative flex items-center justify-center overflow-visible mt-[70px] lg:mt-[100px] order-1 lg:order-2">
           {relatedProducts.length > 0 && (
             <div class="swiper products-swiper w-full h-full">
               <div class="swiper-wrapper">
@@ -291,7 +291,7 @@ const nutritionEntries = Object.entries(nutritionLabels)
 
 
       <!-- Nutrition facts for mobile: appears below carousel -->
-      <div class="collapsible md:hidden w-full px-6 mb-24 mt-8">
+      <div class="collapsible md:hidden w-full px-6 mb-24 mt-1">
         <div class="collapsible-header flex justify-between items-center cursor-pointer w-full">
           <h2 class="text-2xl font-semibold text-white">{sectionLabels.nutrition}</h2>
           <span class="toggle-icon">+</span>
