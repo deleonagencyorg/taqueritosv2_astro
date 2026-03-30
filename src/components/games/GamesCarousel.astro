@@ -44,7 +44,7 @@ const displayTitle = title || defaultTitle;
     <div class="flex items-center justify-between mb-6">
       <slot name="title" />
       {gameItems.length > 1 && (
-        <div class="flex gap-3">
+        <div class="flex gap-3 games-nav-buttons">
           <button
             type="button"
             class="games-carousel-btn-prev w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
@@ -290,5 +290,30 @@ const displayTitle = title || defaultTitle;
 
   .game-card-dim {
     opacity: 0.5;
+  }
+
+  @media (max-width: 767px) {
+    .games-carousel-container {
+      position: relative;
+    }
+
+    .games-nav-buttons {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      padding: 0 4px;
+      z-index: 20;
+      gap: 0;
+    }
+
+    .games-carousel-btn-prev,
+    .games-carousel-btn-next {
+      pointer-events: auto;
+    }
   }
 </style>

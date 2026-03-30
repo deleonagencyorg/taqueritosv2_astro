@@ -427,14 +427,21 @@ import LazyImage from "../LazyImage.astro";
     }
     .carousel-navigation {
       position: absolute;
-      top: -80px;
+      top: 50%;
+      left: 0;
       right: 0;
-      left: auto;
-      transform: none;
-      width: auto;
-      margin-top: 0;
-      justify-content: flex-end;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4px;
+      pointer-events: none;
       z-index: 20;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      pointer-events: auto;
     }
 
     .swiper-button-next,
@@ -553,8 +560,8 @@ class ProductsCarousel {
     this.swiper = new Swiper(swiperContainer, {
       modules: [Navigation, Autoplay],
       
-      // Loop infinito con slides duplicados
-      loop: this.total > 1,
+      // Loop infinito siempre activo
+      loop: true,
       slidesPerView: 3,
       spaceBetween: 50,
       speed: 600,
@@ -564,12 +571,10 @@ class ProductsCarousel {
       observeParents: true,
       observeSlideChildren: true,
       
-      // Prevenir overflow
-      watchOverflow: true,
-      
       navigation: { 
         prevEl,
         nextEl,
+        disabledClass: 'swiper-nav-hidden',
       },
       
       autoplay: this.options.autoplay
@@ -577,7 +582,6 @@ class ProductsCarousel {
             delay: this.options.speed || 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
-            reverseDirection: true,
           }
         : false,
 
@@ -585,7 +589,7 @@ class ProductsCarousel {
         320: { 
           slidesPerView: 1,
           spaceBetween: 20,
-          centeredSlides: true,
+          centeredSlides: false,
         },
         768: { 
           slidesPerView: 2,
