@@ -30,6 +30,8 @@ const { loading = false } = Astro.props;
 
 // Language and Data Setup
 const currentLang = getLocale();
+// Feature flag to temporarily hide the challenges section on Home
+const showChallengesSection = false;
 
 interface GameItem {
   id: number;
@@ -131,8 +133,8 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       />
     </div>
 
-    {currentLang === 'es' && (
-      <section id="challenges" class="w-full py-16 md:py-20 !bg-brown relative">
+    {currentLang === 'es' && showChallengesSection && (
+      <section id="challenges" class="w-full py-16 md:py-20 !bg-brown relative" style="display:none">
         <div class="container mx-auto px-4 relative">
           {challengesAssets.title && (
             <div class="title mb-12">
@@ -151,6 +153,7 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
             title={challengesAssets.title || 'PARTICIPA EN NUESTROS'}
             subtitle={challengesAssets.subtitle || 'RETOS Y GANA PREMIOS'}
             textButton={challengesAssets.view_more || 'Ver Todos'}
+            includeRuta={false}
           />
         </div>
       </section>
