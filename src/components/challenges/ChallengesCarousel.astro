@@ -34,11 +34,13 @@ export interface Props {
   subtitle_down?: string;
   textButton?: string;
   items?: any[];
+  includeRuta?: boolean;
 }
 
 const {
   textButton = currentLang === 'es' ? 'Ver Todas' : 'View All',
-  items
+  items,
+  includeRuta = true
 } = Astro.props;
 
 let challengeItems: Challenge[] = Array.isArray(items) ? (items as unknown as Challenge[]) : [];
@@ -94,7 +96,8 @@ const rutaTruckCard: Challenge = {
   category_en: 'other',
   openInNewTab: true
 };
-challengeItems.unshift(rutaTruckCard);
+ // Insertar la tarjeta sólo si la prop `includeRuta` está activada
+ if (includeRuta !== false) challengeItems.unshift(rutaTruckCard);
 
 function getCategoryKey(challenge: any): string {
   const raw = (
