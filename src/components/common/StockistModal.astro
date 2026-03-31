@@ -73,23 +73,27 @@ const t = texts[locale as keyof typeof texts] || texts.es;
 
           <!-- Selector de Producto -->
           <div class="form-group">
-            <label for="product-select">{t.product}</label>
-            <div class="select-wrapper">
-              <select id="product-select" class="form-select">
-                {products.map((product) => (
-                  <option 
-                    value={product.id} 
-                    data-name={product.name}
-                    data-image={product.image}
-                    data-weights={product.weight ? product.weight.join('|') : ''}
-                    selected={initialProduct?.id === product.id}
-                  >
-                    {product.name}
-                  </option>
-                ))}
-              </select>
-              <button class="select-arrow-btn" aria-label="Abrir listado de productos" tabindex="-1">
-                <img src="https://snack.yummiespromociones.com/SnacksyummiesAssets/arrow-down-circle.png" alt="arrow down" class="select-arrow-img" />
+            <label id="product-select-label">{t.product}</label>
+            <div class="custom-select-container" id="custom-select-container">
+              <button
+                class="custom-select-trigger"
+                id="custom-select-trigger"
+                type="button"
+                role="combobox"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-labelledby="product-select-label"
+                data-initial-id={initialProduct?.id || products[0]?.id || ''}
+              >
+                <span class="custom-select-text" id="custom-select-text">
+                  {initialProduct?.name || products[0]?.name || ''}
+                </span>
+                <img
+                  src="https://snack.yummiespromociones.com/SnacksyummiesAssets/arrow-down-circle.png"
+                  alt="arrow down"
+                  class="select-arrow-img"
+                  id="custom-select-arrow"
+                />
               </button>
             </div>
           </div>
@@ -276,59 +280,53 @@ const t = texts[locale as keyof typeof texts] || texts.es;
     text-transform: uppercase;
   }
 
-  .select-wrapper {
+  .custom-select-container {
     position: relative;
-    display: flex;
-    align-items: center;
+    width: 100%;
   }
 
-  .select-arrow-btn {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
+  .custom-select-trigger {
     display: flex;
     align-items: center;
-    justify-content: center;
-    pointer-events: auto;
-    z-index: 2;
+    justify-content: space-between;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background 0.3s ease;
+    text-align: left;
+    gap: 12px;
+    font-family: inherit;
+  }
+
+  .custom-select-trigger:hover,
+  .custom-select-trigger:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+    outline: none;
+  }
+
+  .custom-select-trigger[aria-expanded="true"] {
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .custom-select-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .select-arrow-img {
     width: 32px;
     height: 32px;
     object-fit: contain;
-  }
-
-  .form-select {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    padding: 12px 44px 12px 16px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-  }
-
-  .form-select:hover,
-  .form-select:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.5);
-    outline: none;
-  }
-
-  .form-select option {
-    background: #1a1a1a;
-    color: white;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
   }
 
   .weight-buttons {
@@ -492,136 +490,289 @@ const t = texts[locale as keyof typeof texts] || texts.es;
       width: 100%;
     }
   }
+
+  /* Dropdown */
+  :global(#stockist-dropdown-portal) {
+    position: fixed;
+    z-index: 999999;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85);
+  }
+
+  :global(.stockist-dropdown-list) {
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  :global(.stockist-dropdown-option) {
+    padding: 10px 16px;
+    cursor: pointer;
+    color: white;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  :global(.stockist-dropdown-option:hover),
+  :global(.stockist-dropdown-option:active) {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  :global(.stockist-dropdown-option.selected) {
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+  }
+
+  :global(.stockist-dropdown-check) {
+    display: inline-block;
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.9);
+  }
 </style>
 
 <script>
   function initStockistModal() {
-    
     const modal = document.getElementById('stockist-modal');
-    
-    if (!modal) {
-      return;
-    }
+    if (!modal) return;
 
     const overlay = modal.querySelector('.modal-overlay');
     const closeBtn = modal.querySelector('.modal-close');
-    const productSelect = document.getElementById('product-select') as HTMLSelectElement | null;
-    const weightButtons = document.getElementById('weight-buttons') as HTMLElement | null;
+    const weightButtonsEl = document.getElementById('weight-buttons') as HTMLElement | null;
     const productImage = document.getElementById('modal-product-image') as HTMLImageElement | null;
     const productTitle = document.getElementById('modal-product-title') as HTMLElement | null;
+    const customSelectTrigger = document.getElementById('custom-select-trigger') as HTMLButtonElement | null;
+    const customSelectText = document.getElementById('custom-select-text') as HTMLElement | null;
+    const selectArrowImg = document.getElementById('custom-select-arrow') as HTMLImageElement | null;
 
-    // Función para abrir el modal
+    // Load products from embedded JSON
+    const productsJsonEl = document.getElementById('stockist-products-json');
+    const productsData: any[] = productsJsonEl
+      ? (JSON.parse(productsJsonEl.textContent || '[]') as any[])
+      : [];
+
+    // Initial selected product from data attribute
+    const initialId = customSelectTrigger?.getAttribute('data-initial-id') || productsData[0]?.id || '';
+    let selectedProductId: string = initialId;
+
+    // Portal dropdown state
+    let dropdownPortal: HTMLElement | null = null;
+    let isDropdownOpen = false;
+
+    //Custom Portal Dropdown
+
+    function buildPortal() {
+      const existing = document.getElementById('stockist-dropdown-portal');
+      if (existing) existing.remove();
+
+      const portal = document.createElement('div');
+      portal.id = 'stockist-dropdown-portal';
+      portal.setAttribute('role', 'presentation');
+
+      const ul = document.createElement('ul');
+      ul.className = 'stockist-dropdown-list';
+      ul.setAttribute('role', 'listbox');
+
+      productsData.forEach((product: any) => {
+        const isSelected = product.id === selectedProductId;
+        const li = document.createElement('li');
+        li.className = 'stockist-dropdown-option' + (isSelected ? ' selected' : '');
+        li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        li.setAttribute('data-value', product.id);
+
+        const check = document.createElement('span');
+        check.className = 'stockist-dropdown-check';
+        check.textContent = isSelected ? '✓' : '';
+        li.appendChild(check);
+        li.appendChild(document.createTextNode(product.name));
+
+        // mousedown fires before blur, preventing close-before-select race
+        li.addEventListener('mousedown', (e: MouseEvent) => {
+          e.preventDefault();
+          selectProduct(product.id);
+          closeDropdown();
+        });
+
+        // Touch support (touchend avoids 300ms delay)
+        let touchMoved = false;
+        li.addEventListener('touchstart', () => { touchMoved = false; }, { passive: true });
+        li.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
+        li.addEventListener('touchend', (e: TouchEvent) => {
+          if (!touchMoved) {
+            e.preventDefault();
+            selectProduct(product.id);
+            closeDropdown();
+          }
+        }, { passive: false });
+
+        ul.appendChild(li);
+      });
+
+      portal.appendChild(ul);
+      document.body.appendChild(portal);
+      dropdownPortal = portal;
+    }
+
+    function positionPortal() {
+      if (!dropdownPortal || !customSelectTrigger) return;
+      const rect = customSelectTrigger.getBoundingClientRect();
+      const estimatedHeight = Math.min(232, productsData.length * 42 + 12);
+      const spaceBelow = window.innerHeight - rect.bottom - 8;
+      const spaceAbove = rect.top - 8;
+
+      dropdownPortal.style.left = rect.left + 'px';
+      dropdownPortal.style.width = rect.width + 'px';
+
+      if (spaceBelow >= estimatedHeight || spaceBelow >= spaceAbove) {
+        // Open downward
+        dropdownPortal.style.top = (rect.bottom + 4) + 'px';
+        dropdownPortal.style.maxHeight = Math.max(spaceBelow, 100) + 'px';
+      } else {
+        // Open upward
+        const avail = Math.min(estimatedHeight, spaceAbove);
+        dropdownPortal.style.top = (rect.top - avail - 4) + 'px';
+        dropdownPortal.style.maxHeight = avail + 'px';
+      }
+    }
+
+    function openDropdown() {
+      buildPortal();
+      positionPortal();
+      if (dropdownPortal) dropdownPortal.style.display = 'block';
+      isDropdownOpen = true;
+      if (customSelectTrigger) customSelectTrigger.setAttribute('aria-expanded', 'true');
+      if (selectArrowImg) selectArrowImg.style.transform = 'rotate(180deg)';
+    }
+
+    function closeDropdown() {
+      if (dropdownPortal) dropdownPortal.style.display = 'none';
+      isDropdownOpen = false;
+      if (customSelectTrigger) customSelectTrigger.setAttribute('aria-expanded', 'false');
+      if (selectArrowImg) selectArrowImg.style.transform = 'rotate(0deg)';
+    }
+
+    function selectProduct(productId: string) {
+      selectedProductId = productId;
+      const product = productsData.find((p: any) => p.id === productId);
+      if (!product) return;
+      if (customSelectText) customSelectText.textContent = product.name;
+      updateProductInfo(productId);
+    }
+
+    //Product Info Update
+
+    function updateProductInfo(productId?: string) {
+      const id = productId || selectedProductId;
+      const product = productsData.find((p: any) => p.id === id);
+      if (!product) return;
+
+      if (productTitle) productTitle.textContent = product.name;
+      if (productImage) {
+        productImage.src = product.image;
+        productImage.alt = product.name;
+      }
+
+      if (weightButtonsEl) {
+        weightButtonsEl.innerHTML = '';
+        const weights: string[] = product.weight || [];
+        weights.forEach((weight: string) => {
+          const weightDiv = document.createElement('div');
+          weightDiv.className = 'weight-btn';
+          weightDiv.dataset.weight = weight;
+          weightDiv.textContent = weight;
+          weightDiv.style.cssText =
+            'background:transparent;border:1.5px solid #FFFFFF;border-radius:30px;' +
+            'padding:10px 24px;color:#FFFFFF;font-size:16px;font-weight:600;display:inline-block;';
+          weightButtonsEl.appendChild(weightDiv);
+        });
+      }
+    }
+
+    //Modal Open / Close
+
     function openModal(productId?: string) {
       if (!modal) return;
-      
-      // Seleccionar el producto y actualizar siempre antes de abrir
-      if (productSelect && productId) {
-        const options = Array.from(productSelect.options);
-        const targetOption = options.find((opt) => opt.value === productId);
-        if (targetOption) {
-          productSelect.value = productId;
-        }
-        // Actualizar info (imagen, título y gramajes)
-        updateProductInfo();
+      if (productId) {
+        selectedProductId = productId;
+        const product = productsData.find((p: any) => p.id === productId);
+        if (product && customSelectText) customSelectText.textContent = product.name;
+        updateProductInfo(productId);
       }
-      
       modal.classList.remove('modal-hidden');
-      setTimeout(() => {
-        if (modal) modal.classList.add('show');
-      }, 10);
-      
-      // Bloquear scroll en body y html
+      setTimeout(() => { if (modal) modal.classList.add('show'); }, 10);
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
     }
 
-    // Función para cerrar el modal
     function closeModal() {
       if (!modal) return;
+      closeDropdown();
       modal.classList.remove('show');
       setTimeout(() => {
         if (modal) modal.classList.add('modal-hidden');
-        
-        // Restaurar scroll en body y html
         document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
       }, 300);
     }
 
-    // Función para actualizar la información del producto
-    function updateProductInfo() {
-      if (!productSelect) return;
-      
-      const selectedOption = productSelect.options[productSelect.selectedIndex];
-      const productName = selectedOption.dataset.name || '';
-      const productImageSrc = selectedOption.dataset.image || '';
-      
-      // Obtener pesos desde JSON embebido
-      const productsJsonEl = document.getElementById('stockist-products-json');
-      
-      
-      const productsData = productsJsonEl ? (JSON.parse(productsJsonEl.textContent || '[]') as any[]) : ([] as any[]);
-      
-      
-      const prod = productsData.find((p: any) => p.id === selectedOption.value) || ({} as any);
-      
-      const weights = prod.weight || [];
+    //Event Listeners
 
-      // Actualizar título e imagen
-      if (productTitle) productTitle.textContent = productName;
-      if (productImage) {
-        productImage.src = productImageSrc;
-        productImage.alt = productName;
-      }
-
-      // Actualizar gramajes
-      if (weightButtons) {
-        weightButtons.innerHTML = '';
-        
-        
-        
-        weights.forEach((weight: any, index: number) => {
-          const weightDiv = document.createElement('div');
-          weightDiv.className = 'weight-btn';
-          weightDiv.dataset.weight = weight;
-          weightDiv.textContent = weight;
-          weightDiv.style.cssText = 'background:transparent;border:1.5px solid #FFFFFF;border-radius:30px;padding:10px 24px;color:#FFFFFF;font-size:16px;font-weight:600;display:inline-block;';
-          
-          weightButtons.appendChild(weightDiv);
-          
-        });
-        
-        
-      }
-    }
-
-    // Custom arrow button opens the select dropdown
-    const selectArrowBtn = document.querySelector('.select-arrow-btn') as HTMLButtonElement | null;
-    if (selectArrowBtn && productSelect) {
-      selectArrowBtn.addEventListener('click', () => {
-        productSelect.focus();
-        productSelect.click();
+    if (customSelectTrigger) {
+      customSelectTrigger.addEventListener('click', (e: MouseEvent) => {
+        e.stopPropagation();
+        if (isDropdownOpen) closeDropdown();
+        else openDropdown();
       });
     }
 
-    // Event listeners
+    // Close when clicking outside
+    document.addEventListener('click', (e: MouseEvent) => {
+      if (!isDropdownOpen) return;
+      const target = e.target as Node;
+      const insideTrigger = customSelectTrigger?.contains(target) ?? false;
+      const insidePortal = dropdownPortal?.contains(target) ?? false;
+      if (!insideTrigger && !insidePortal) closeDropdown();
+    });
+
+    // Reposition on scroll / resize
+    const repositionHandler = () => { if (isDropdownOpen) positionPortal(); };
+    window.addEventListener('scroll', repositionHandler, true);
+    window.addEventListener('resize', repositionHandler);
+
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
     if (overlay) overlay.addEventListener('click', closeModal);
-    if (productSelect) productSelect.addEventListener('change', updateProductInfo);
 
-    // Exponer función global para abrir el modal
-    (window as any).openStockistModal = openModal;
-    
-
-    // Cerrar con ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('show')) {
-        closeModal();
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (isDropdownOpen) closeDropdown();
+        else if (modal.classList.contains('show')) closeModal();
       }
     });
+
+    // Clean up portal on Astro page transitions
+    document.addEventListener('astro:before-swap', () => {
+      const portal = document.getElementById('stockist-dropdown-portal');
+      if (portal) portal.remove();
+    }, { once: true });
+
+    // Expose global opener
+    (window as any).openStockistModal = openModal;
+
   }
 
-  // Inicializar en diferentes eventos de Astro
+  // Initialize
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initStockistModal);
   } else {
