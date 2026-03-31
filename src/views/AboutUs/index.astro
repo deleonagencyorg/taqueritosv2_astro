@@ -17,7 +17,12 @@ export interface Props {
   headerColorConfig: HeaderColorConfig;
 }
 
-const { currentLang, headerColorConfig } = Astro.props;
+let { currentLang, headerColorConfig } = Astro.props;
+if (!currentLang) {
+  const pathname = Astro.url && Astro.url.pathname ? Astro.url.pathname : '/';
+  const parts = pathname.split('/').filter(Boolean);
+  currentLang = parts.length > 0 ? parts[0] : 'es';
+}
 
 // Get translations from common.json
 const title = t('meta.about_us.title', { namespace: 'common', locale: currentLang });

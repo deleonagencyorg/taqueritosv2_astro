@@ -47,3 +47,15 @@
     line-height: 1.1;
   }
 }
+
+/* Re4duce el espacio en mobile, entre el carrusel de productos y el titulo */
+@media (max-width: 767px) {
+  #products .products-carousel {
+    padding-top: 40px !important;
+    padding-bottom: 8px !important;
+  }
+
+  #products .title p {
+    margin-bottom: 0 !important;
+  }
+}
