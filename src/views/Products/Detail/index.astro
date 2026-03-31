@@ -341,7 +341,8 @@ const nutritionEntries = Object.entries(nutritionLabels)
       document.addEventListener('astro:after-swap', initCollapsibles);
     </script>
     
-    {currentLang === 'es' && (
+    {/* Sección de retos en detalle de producto — temporalmente oculta */}
+    {false && currentLang === 'es' && (
       <section id="challenges" class="w-full py-6 md:py-8 bg-brown relative -mt-12 md:-mt-16 lg:-mt-20" transition:animate="slide">
         <div class="container mx-auto px-4 relative">
           <div class="container mx-auto px-4 mb-12">
