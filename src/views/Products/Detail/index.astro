@@ -200,7 +200,7 @@ const nutritionEntries = Object.entries(nutritionLabels)
             <div class="flex items-center gap-5 pb-15 md:pb-0">
               <button 
                 id="open-modal-btn"
-                class="w-full flex justify-center items-center border border-[#FF0048] rounded-[16px] bg-gradient-to-b from-[#FF0048] to-[#FF5255] shadow-[0_3px_0_0_rgba(88,0,29,0.9)] hover:shadow-[0_1px_0_0_rgba(88,0,29,0.9)] hover:translate-y-[2px] transition-all duration-150 text-white py-[10px] md:py-[16px] lg:py-[16px]"
+                class="button-buy w-full flex justify-center items-center border border-[#FF0048] rounded-[16px] bg-gradient-to-b from-[#FF0048] to-[#FF5255] shadow-[0_3px_0_0_rgba(88,0,29,0.9)] hover:shadow-[0_1px_0_0_rgba(88,0,29,0.9)] hover:translate-y-[2px] transition-all duration-150 text-white py-[10px] md:py-[16px] lg:py-[16px]"
                 data-product-id={safeProduct.id}
               >
                 <span class="text-[18px] md:text-[26.6px] lg:text-[26.6px] font-semibold">
@@ -210,7 +210,7 @@ const nutritionEntries = Object.entries(nutritionLabels)
     
               <!-- Controles de navegación -->
               <div class="flex gap-5">
-                <div class="carousel-navigation">
+                <div id="product-carousel-navigation" class="carousel-navigation">
                   <button class="swiper-button-prev">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -422,6 +422,29 @@ const nutritionEntries = Object.entries(nutritionLabels)
     gap: 12px;
   }
 
+  .carousel-navigation.mobile-over {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: block;
+    pointer-events: none;
+    z-index: 40;
+  }
+
+  .carousel-navigation.mobile-over .swiper-button-prev,
+  .carousel-navigation.mobile-over .swiper-button-next {
+    pointer-events: auto;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: rgba(0,0,0,0.35) !important;
+  }
+
+  .carousel-navigation.mobile-over .swiper-button-prev { left: 12px !important; }
+  .carousel-navigation.mobile-over .swiper-button-next { right: 12px !important; }
+
   /* Ocultar las flechas predeterminadas */
   .swiper-button-next::after,
   .swiper-button-prev::after {
@@ -511,6 +534,54 @@ const nutritionEntries = Object.entries(nutritionLabels)
     }
   }
 
+  /* recuadro tabla nutricional en mobile */
+  @media (max-width: 767px) {
+    .collapsible.md\:hidden,
+    .collapsible {
+      background: linear-gradient(180deg, rgba(58,10,15,0.95) 0%, rgba(44,6,9,0.95) 100%);
+      border: 1px solid rgba(139,14,30,0.6);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+      width: calc(100% - 48px);
+      margin-left: 24px;
+      margin-right: 24px;
+    }
+
+    .collapsible .collapsible-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0;
+    }
+
+    .collapsible .collapsible-header h2 {
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .collapsible .toggle-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #3a0a0f; /* corinto icon color */
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .collapsible .collapsible-content {
+      margin-top: 12px;
+      color: #ffffff;
+    }
+  }
+
   /* table row separator */
   .collapsible-content table tr {
     border-bottom: 1px solid rgba(255,255,255,0.2);
@@ -532,9 +603,24 @@ const nutritionEntries = Object.entries(nutritionLabels)
       height: 50px !important;
     }
 
+    /* Center the buy button with equal left/right spacing on mobile */
     .button-buy {
-      width: 100% !important;
+      width: calc(100% - 48px) !important;
+      max-width: 5200px !important;
       height: 70px !important;
+      margin-left: 24px !important;
+      margin-right: 20px !important;
+      display: block !important;
+    }
+
+    /* When the buy button is alone, use a centered narrower style */
+    .button-buy.solo-buy-centered {
+      width: auto !important;
+      max-width: 320px !important;
+      display: inline-flex !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      justify-content: center !important;
     }
   }
 </style>
@@ -746,4 +832,44 @@ const nutritionEntries = Object.entries(nutritionLabels)
   }
   document.addEventListener('astro:page-load', setupModalButton);
   document.addEventListener('astro:after-swap', setupModalButton);
+</script>
+
+<script>
+  function adaptProductMobileLayout() {
+    try {
+      const nav = document.getElementById('product-carousel-navigation');
+      const swiper = document.querySelector('.products-swiper');
+      const modalBtn = document.getElementById('open-modal-btn');
+
+      if (!nav || !modalBtn) return;
+
+      const isMobile = window.innerWidth <= 767;
+
+      if (isMobile && swiper) {
+        if (!nav.classList.contains('mobile-over')) nav.classList.add('mobile-over');
+        if (nav.parentElement !== swiper) {
+          swiper.appendChild(nav);
+        }
+      } else {
+        if (nav.classList.contains('mobile-over')) nav.classList.remove('mobile-over');
+        const leftControls = document.querySelector('.flex.items-center.gap-5');
+        if (leftControls && nav.parentElement !== leftControls) {
+          leftControls.appendChild(nav);
+        }
+      }
+
+      const slideCount = document.querySelectorAll('.products-swiper .swiper-slide').length;
+      if (isMobile && slideCount <= 1) {
+        modalBtn.classList.add('solo-buy-centered');
+      } else {
+        modalBtn.classList.remove('solo-buy-centered');
+      }
+    } catch (err) {
+    }
+  }
+
+  window.addEventListener('resize', adaptProductMobileLayout);
+  document.addEventListener('DOMContentLoaded', adaptProductMobileLayout);
+  document.addEventListener('astro:page-load', adaptProductMobileLayout);
+  document.addEventListener('astro:after-swap', adaptProductMobileLayout);
 </script>

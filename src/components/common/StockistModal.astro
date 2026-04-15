@@ -489,6 +489,30 @@ const t = texts[locale as keyof typeof texts] || texts.es;
     .stockist-button {
       width: 100%;
     }
+
+    /* ocultar flecha en donde comprar mobile */
+    .select-arrow-img {
+      display: none !important;
+    }
+
+    /* mobile, gramajes en vertical y centrados */
+    .weight-buttons {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 12px !important;
+      width: 100% !important;
+    }
+
+    .weight-btn {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: calc(100% - 64px) !important;
+      max-width: 360px !important;
+      padding: 12px 24px !important;
+      margin: 6px 0 !important;
+    }
   }
 
   /* Dropdown */
