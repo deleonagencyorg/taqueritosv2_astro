@@ -16,6 +16,7 @@ interface Recipe {
   type?: string;
   // Ahora `product` es un array de strings (puede haber más de un producto por receta)
   product?: string[];
+  video?: string;
 }
 
 const currentLang = getLocale();
@@ -194,6 +195,7 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
               id={recipe.id}
               textColor="text-white"
               iconColor="text-white"
+              video={(recipe as any).video}
             />
           </div>
         ))}

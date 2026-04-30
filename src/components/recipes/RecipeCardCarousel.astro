@@ -17,6 +17,7 @@ interface Props {
   servings?: number;
   rating?: number;
   isMainCard?: boolean;
+  video?: string;
 }
 
 const { 
@@ -33,16 +34,22 @@ const {
   difficulty = "---",
   servings = 0,
   rating = 0,
-  isMainCard = false
+  isMainCard = false,
+  video
 } = Astro.props;
 
 const currentLocale = getLocale();
 const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 'recipes'}/${id}`;
 ---
 
+<div 
+  class="recipe-card-wrapper block group relative transition-all duration-500 ease-in-out w-full"
+  data-has-video={video ? 'true' : 'false'}
+  data-video-url={video || ''}
+>
 <a 
   href={recipeLink} 
-  class="recipe-card block group relative transition-all duration-500 ease-in-out w-full"
+  class="block w-full"
   transition:animate="fade"
 >
   <!-- Container principal -->
@@ -59,6 +66,25 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
       />
       <!-- Overlay oscuro con gradiente -->
       <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+      
+      <!-- Icono de play si tiene video - estilo boton carousel redondo -->
+      {video && (
+        <div 
+          class="video-play-overlay absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+          data-has-video-indicator
+        >
+          <div class="w-16 h-16 rounded-full flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="h-8 w-8 text-white ml-0.5" 
+              viewBox="0 0 24 24" 
+              fill="currentColor"
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+      )}
     </div>
     
     <!-- Contenido de texto -->
@@ -85,13 +111,16 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
          style="box-shadow: inset 0 0 50px rgba(239, 68, 68, 0.3);"></div>
   </div>
 </a>
+</div>
+
+<!-- El video solo se abre desde el detalle de la receta, no desde las cards -->
 
 <style>
-  .recipe-card {
+  .recipe-card-wrapper {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
-  .recipe-card:hover {
+  .recipe-card-wrapper:hover {
     transform: translateY(-5px);
     box-shadow: 0 0 40px rgba(255, 45, 45, 0.7);
   }
@@ -104,5 +133,10 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
     .recipe-card-container {
       aspect-ratio: 2.8/1;
     }
+  }
+
+  .video-play-overlay {
+    pointer-events: auto;
+    z-index: 10;
   }
 </style>

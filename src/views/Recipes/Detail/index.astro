@@ -8,6 +8,7 @@ import Breadcrumb from '../../../components/common/Breadcrumb/Breadcrumb.astro';
 import LazyImage from '../../../components/common/LazyImage.astro';
 import IngredientsCarousel from '../../../components/recipes/IngredientsCarousel.astro';
 import ShareButton from '../../../components/common/ShareButton.astro';
+import VideoModal from '../../../components/recipes/VideoModal.astro';
 
 interface RecipeItem {
   id: string;
@@ -21,6 +22,7 @@ interface RecipeItem {
   tags?: string[];
   product_image?: string;
   difficulty?: string;
+  video?: string;
 }
 
 const { currentLang, recipeId } = Astro.props;
@@ -88,7 +90,12 @@ function formatTime(minutes: number): string {
       <!-- Columna 1: Imagen -->
       {recipe.image && (
         <div class="w-full md:w-1/2 flex justify-center md:justify-start">
-          <div class="relative rounded-2xl overflow-hidden w-full max-w-lg h-72 md:h-96 bg-black/30">
+          <div 
+            class={`relative rounded-2xl overflow-hidden w-full max-w-lg h-72 md:h-96 bg-black/30 ${recipe.video ? 'group cursor-pointer' : ''}`}
+            data-has-video={recipe.video ? 'true' : 'false'}
+            data-video-url={recipe.video || ''}
+            id="recipe-detail-image"
+          >
             <LazyImage
               src={recipe.image}
               alt={recipe.title}
@@ -96,6 +103,22 @@ function formatTime(minutes: number): string {
               onerror="this.onerror=null;this.src='/images/recipes/placeholder.jpg';"
               transition:name={`recipe-image-${recipe.id}`}
             />
+            
+            <!-- Icono de play si tiene video - estilo boton carousel redondo -->
+            {recipe.video && (
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-all duration-300 cursor-pointer">
+                <div class="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[rgba(255,45,48,0.25)] transition-colors duration-200">
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    class="h-10 w-10 md:h-12 md:w-12 text-white ml-1" 
+                    viewBox="0 0 24 24" 
+                    fill="currentColor"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -258,6 +281,9 @@ function formatTime(minutes: number): string {
 <!-- Close background wrapper -->
 </div>
 
+<!-- Video Modal -->
+{recipe.video && <VideoModal videoId={recipe.video} isOpen={false} />}
+
 <script>
   // Este script se ejecuta solo en el navegador
   document.addEventListener('DOMContentLoaded', () => {
@@ -270,5 +296,43 @@ function formatTime(minutes: number): string {
         });
       }
     });
+    
+    // Manejar clic en la imagen del detalle si tiene video
+    const detailImage = document.getElementById('recipe-detail-image');
+    if (detailImage && detailImage.dataset.hasVideo === 'true') {
+      detailImage.addEventListener('click', (e) => {
+        e.preventDefault();
+        const videoUrl = detailImage.dataset.videoUrl;
+        if (videoUrl) {
+          if ((window as any).openVideoModal) {
+            (window as any).openVideoModal(videoUrl);
+          } else {
+            document.dispatchEvent(new CustomEvent('open-video-modal', { 
+              detail: { videoUrl } 
+            }));
+          }
+        }
+      });
+    }
+  });
+  
+  // También para Astro page transitions
+  document.addEventListener('astro:page-load', () => {
+    const detailImage = document.getElementById('recipe-detail-image');
+    if (detailImage && detailImage.dataset.hasVideo === 'true') {
+      detailImage.addEventListener('click', (e) => {
+        e.preventDefault();
+        const videoUrl = detailImage.dataset.videoUrl;
+        if (videoUrl) {
+          if ((window as any).openVideoModal) {
+            (window as any).openVideoModal(videoUrl);
+          } else {
+            document.dispatchEvent(new CustomEvent('open-video-modal', { 
+              detail: { videoUrl } 
+            }));
+          }
+        }
+      });
+    }
   });
 </script>

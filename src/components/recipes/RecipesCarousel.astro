@@ -20,6 +20,7 @@ interface Recipe {
   difficulty?: string;
   servings?: number;
   rating?: number;
+  video?: string;
 }
 
 export interface Props {
@@ -109,6 +110,7 @@ function getCategoryKey(recipe: any): string {
                 servings={recipe.servings || 0}
                 rating={recipe.rating || 0}
                 isMainCard={false}
+                video={recipe.video}
               />
             </div>
           ))}

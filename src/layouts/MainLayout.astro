@@ -13,6 +13,7 @@ import { getHeaderColors } from '../config/headerColors';
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import StockistModal from '../components/common/StockistModal.astro';
+import VideoModal from '../components/recipes/VideoModal.astro';
 
 export interface Props {
   title?: string;
@@ -78,6 +79,7 @@ if (headerColors) {
     
     <MobileMenu currentLang={currentLang} headerColorConfig={customHeaderConfig} />
     <StockistModal products={products} stockists={stockists} locale={currentLang} />
+    <VideoModal videoId="" isOpen={false} />
 
     <script>
       function initGlobalStockistLinks() {
