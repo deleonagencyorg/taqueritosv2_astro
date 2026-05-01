@@ -17,6 +17,7 @@ interface Recipe {
   // Ahora `product` es un array de strings (puede haber más de un producto por receta)
   product?: string[];
   video?: string;
+  date?: string;
 }
 
 const currentLang = getLocale();
@@ -37,6 +38,21 @@ for (const path in recipeModules) {
     if (item?.id && item?.title) allRecipes.push(item);
   }
 }
+
+// Ordenar recetas por fecha descendente (más nuevas primero), sin fecha al final
+allRecipes.sort((a: Recipe, b: Recipe) => {
+  const dateA = (a as any).date;
+  const dateB = (b as any).date;
+  
+  // Si A no tiene fecha, va al final
+  if (!dateA && dateB) return 1;
+  // Si B no tiene fecha, va al final
+  if (dateA && !dateB) return -1;
+  // Si ninguno tiene fecha, mantener orden original
+  if (!dateA && !dateB) return 0;
+  // Orden descendente (más reciente primero)
+  return new Date(dateB).getTime() - new Date(dateA).getTime();
+});
 
 // Shared translations
 const noRecipesText = currentLang === 'es' 
