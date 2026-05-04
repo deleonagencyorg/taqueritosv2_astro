@@ -1,0 +1,185 @@
+---
+// Componente modal para reproducir videos de YouTube
+interface Props {
+  videoId: string;
+  isOpen: boolean;
+}
+
+const { videoId, isOpen } = Astro.props;
+---
+
+<div 
+  id="video-modal" 
+  class={`fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+  aria-hidden={!isOpen}
+  role="dialog"
+  aria-modal="true"
+>
+  <!-- Backdrop oscuro -->
+  <div 
+    class="absolute inset-0 bg-black/90 backdrop-blur-sm"
+    id="video-modal-backdrop"
+  ></div>
+  
+  <!-- Contenedor del modal -->
+  <div class="relative z-10 w-full max-w-5xl mx-4 md:mx-8">
+    <!-- Botón cerrar -->
+    <button 
+      id="video-modal-close"
+      class="absolute -top-12 right-0 md:-right-12 md:-top-12 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200"
+      aria-label="Cerrar video"
+    >
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-6 w-6 text-white" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor"
+      >
+        <path 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          stroke-width="2" 
+          d="M6 18L18 6M6 6l12 12" 
+        />
+      </svg>
+    </button>
+    
+    <!-- Contenedor del video responsive -->
+    <div class="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
+      <iframe
+        id="video-iframe"
+        class="absolute inset-0 w-full h-full"
+        src=""
+        title="Video de receta"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Función para extraer el ID de video de YouTube de diferentes formatos de URL
+  function extractYouTubeId(url: string): string | null {
+    if (!url) return null;
+
+    // Patrones comunes de URL de YouTube (incluyendo Shorts)
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+      /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
+      /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+      /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/, // YouTube Shorts
+      /^([a-zA-Z0-9_-]{11})$/ // Solo el ID
+    ];
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match) return match[1];
+    }
+
+    return null;
+  }
+
+  // Función para abrir el modal
+  function openVideoModal(videoUrl: string) {
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
+    
+    if (!modal || !iframe) return;
+    
+    const videoId = extractYouTubeId(videoUrl);
+    if (!videoId) {
+      console.error('Invalid YouTube URL:', videoUrl);
+      return;
+    }
+    
+    // Establecer la URL del iframe con autoplay
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+    
+    // Mostrar el modal
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    modal.classList.add('opacity-100', 'pointer-events-auto');
+    modal.setAttribute('aria-hidden', 'false');
+    
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Función para cerrar el modal
+  function closeVideoModal() {
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
+    
+    if (!modal || !iframe) return;
+    
+    // Ocultar el modal
+    modal.classList.remove('opacity-100', 'pointer-events-auto');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    modal.setAttribute('aria-hidden', 'true');
+    
+    // Limpiar el iframe para detener el video
+    iframe.src = '';
+    
+    // Restaurar scroll del body
+    document.body.style.overflow = '';
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    // Cerrar con botón
+    const closeBtn = document.getElementById('video-modal-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeVideoModal);
+    }
+    
+    // Cerrar con backdrop
+    const backdrop = document.getElementById('video-modal-backdrop');
+    if (backdrop) {
+      backdrop.addEventListener('click', closeVideoModal);
+    }
+    
+    // Cerrar con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeVideoModal();
+      }
+    });
+    
+    // Escuchar evento personalizado para abrir el modal
+    document.addEventListener('open-video-modal', ((e: CustomEvent) => {
+      if (e.detail && e.detail.videoUrl) {
+        openVideoModal(e.detail.videoUrl);
+      }
+    }) as EventListener);
+  });
+
+  // También para Astro page transitions
+  document.addEventListener('astro:page-load', () => {
+    const closeBtn = document.getElementById('video-modal-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeVideoModal);
+    }
+
+    const backdrop = document.getElementById('video-modal-backdrop');
+    if (backdrop) {
+      backdrop.addEventListener('click', closeVideoModal);
+    }
+
+    // Escuchar evento personalizado para abrir el modal (después de navegación)
+    document.addEventListener('open-video-modal', ((e: CustomEvent) => {
+      if (e.detail && e.detail.videoUrl) {
+        openVideoModal(e.detail.videoUrl);
+      }
+    }) as EventListener);
+
+    // Exponer la función globalmente para uso desde otros componentes
+    (window as any).openVideoModal = openVideoModal;
+    (window as any).closeVideoModal = closeVideoModal;
+  });
+
+  // Exponer la función globalmente para uso inmediato también
+  (window as any).openVideoModal = openVideoModal;
+  (window as any).closeVideoModal = closeVideoModal;
+</script>

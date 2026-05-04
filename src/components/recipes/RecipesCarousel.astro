@@ -20,6 +20,8 @@ interface Recipe {
   difficulty?: string;
   servings?: number;
   rating?: number;
+  video?: string;
+  date?: string;
 }
 
 export interface Props {
@@ -47,6 +49,17 @@ if (!recipeItems.length) {
     }
   }
 }
+
+// Ordenar recetas por fecha descendente (más nuevas primero), sin fecha al final
+recipeItems.sort((a: Recipe, b: Recipe) => {
+  const dateA = (a as any).date;
+  const dateB = (b as any).date;
+  
+  if (!dateA && dateB) return 1;
+  if (dateA && !dateB) return -1;
+  if (!dateA && !dateB) return 0;
+  return new Date(dateB).getTime() - new Date(dateA).getTime();
+});
 
 function getCategoryKey(recipe: any): string {
   const raw = (
@@ -109,6 +122,7 @@ function getCategoryKey(recipe: any): string {
                 servings={recipe.servings || 0}
                 rating={recipe.rating || 0}
                 isMainCard={false}
+                video={recipe.video}
               />
             </div>
           ))}
