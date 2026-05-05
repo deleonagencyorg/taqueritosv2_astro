@@ -12,6 +12,7 @@ interface Recipe {
   id: string;
   title: string;
   image?: string;
+  ['preview-image']?: string;
   preparation_time: number;
   type?: string;
   // Ahora `product` es un array de strings (puede haber más de un producto por receta)
@@ -106,6 +107,14 @@ function normalizeType(r: Recipe): string {
   if (['lunch', 'almuerzo'].includes(raw)) return 'lunch';
   if (['snack'].includes(raw)) return 'snack';
   return 'other';
+}
+
+function getRecipeGridImage(recipe: Recipe): string {
+  const previewImage = String((recipe as any)['preview-image'] || '').trim();
+  if (previewImage.length > 0) return previewImage;
+
+  const mainImage = String(recipe.image || '').trim();
+  return mainImage || '/images/recipes/placeholder.jpg';
 }
 
 // Unique product options for the product filter (extract from recipes)
@@ -205,7 +214,7 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
               : ((recipe as any).product ? String((recipe as any).product).toLowerCase() : '')}
           >
             <RecipeCard
-              image={recipe.image || '/images/recipes/placeholder.jpg'}
+              image={getRecipeGridImage(recipe)}
               title={recipe.title}
               time={`${recipe.preparation_time} MIN`}
               id={recipe.id}
