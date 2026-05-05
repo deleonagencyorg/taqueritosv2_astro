@@ -1,12 +1,13 @@
 {
-    "date": "30/04/2026",
+    
+    "date": "2026-04-30",
     "id": "mac-and-cheese-crunch",
     "slug": "mac-and-cheese-crunch",
     "title": "Mac and Cheese Crunch",
     "people": "4",
     "difficulty": "Medium",
     "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/mac-and-cheese.webp",
-    "video": "https://youtu.be/i6xS4fL2kRo?si=ouVyQVRBZFHaX1z9",
+      "video": "https://www.youtube.com/shorts/GrVNGapcMUc",
     "gallery": [
         "mac-and-cheese-crunch.webp"
     ],
