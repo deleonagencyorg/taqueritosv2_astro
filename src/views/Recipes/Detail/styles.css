@@ -65,3 +65,32 @@
   margin-bottom: 0.5rem;
 }
 
+/* Texto de las recetas justificado */
+.recipe-preparation .prep-text ul,
+.recipe-preparation .prep-text li {
+  text-align: justify;
+  text-justify: inter-word;
+  -moz-text-align-last: left;
+  text-align-last: left;
+  hyphens: auto;
+}
+
+.recipe-preparation .prep-text li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.recipe-preparation .prep-text ul {
+  margin-left: 0;
+  padding-left: 0rem;
+}
+
+@media (max-width: 480px) {
+  .recipe-preparation .prep-text li {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: justify;
+    text-align-last: left;
+  }
+}
+
