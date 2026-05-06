@@ -1,14 +1,15 @@
 {
     "date": "2026-04-30",
-    "id": "cheese-fondue-with-taqueritos-queso-fusion",
-    "slug": "cheese-fondue-with-taqueritos-queso-fusion",
-    "title": "Cheese fondue with Taqueritos Queso Fusión",
+    "id": "fondue-de-queso-con-taqueritos-queso-fusion",
+    "slug": "fondue-de-queso-con-taqueritos-queso-fusion",
+    "title": "Fondue de queso con Taqueritos Queso Fusión",
     "people": "4",
     "difficulty": "Easy",
-    "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/tabla-de-quesos-1920.jpg",
+    "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/07-taqueritos-queso-fusion-tabla-de-quesos800x800.webp",
+    "preview-image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/07-taqueritos-queso-fusion-tabla-de-quesos800x800.webp",
     "video": "https://www.youtube.com/shorts/9-Nee2IyMak",
     "gallery": [
-        "tabla-de-quesos-1920.jpg"
+        "tabla-de-quesos-800x800.jpg"
     ],
     "type": "image",
     "preparation_time": 18,

@@ -1,11 +1,12 @@
 {
     "date": "2026-04-30",
-    "id": "taqueritos-fiesta-con-carne-asada",
-    "slug": "taqueritos-fiesta-con-carne-asada",
-    "title": "Taqueritos Party with Carne Asada",
+    "id": "carne-asada-con-taqueritos-chile-toreado",
+    "slug": "carne-asada-con-taqueritos-chile-toreado",
+    "title": "Carne asada with Taqueritos Chile Toreado",
     "people": "4",
     "difficulty": "Medium",
-    "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/carne-asada-1920.jpg",
+    "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/06-taqueritos-fiesta-con-carne-asada800x800.webp",
+    "preview-image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/06-taqueritos-fiesta-con-carne-asada1920x840.webp",
     "video": "https://www.youtube.com/shorts/bhzTAfAodmk",
     "gallery": [
         "taqueritos-fiesta-con-carne-asada-1920.jpg"

@@ -6,8 +6,9 @@
     
     "people": "4",
     "difficulty": "Media",
-    "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/mac-y-cheese-1920.jpg",
-      "video": "https://www.youtube.com/shorts/GrVNGapcMUc",
+    "image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/08-taqueritos-queso-fusion-mac-cheese-crunch-800x800.webp",
+    "preview-image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/08-taqueritos-queso-fusion-mac-cheese-crunch-800x800.webp",
+    "video": "https://www.youtube.com/shorts/GrVNGapcMUc",
     "gallery": [
         "mac-and-cheese-crunch.webp"
     ],
@@ -29,7 +30,7 @@
         "Paso 2. En una cacerola derrite la mantequilla a fuego medio, agrega la harina y cocina por 1 minuto moviendo constantemente; incorpora la leche poco a poco sin dejar de mover hasta obtener una salsa espesa y suave.",
         "Paso 3. Añade el queso rallado y mezcla hasta que se derrita por completo y la salsa esté cremosa, sazona con sal y pimienta.",
         "Paso 4. Incorpora la pasta cocida y mezcla hasta que quede bien cubierta con la salsa.",
-        "Sirve caliente y termina espolvoreando Taqueritos Queso Fusión triturados por encima para aportar textura crujiente y sabor intenso."
+        "Paso 5. Sirve caliente y termina espolvoreando Taqueritos Queso Fusión triturados por encima para aportar textura crujiente y sabor intenso."
     ],
     "brand": [
         "Taqueritos"
