@@ -5,7 +5,7 @@ import type { Locale } from '../../i18n/i18n';
 import type { HeaderColorConfig } from '../../config/headerColors';
 import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
 import { fade } from 'astro:transitions';
-import VideoHero from '../../components/common/VideoHero/VideoHero.astro';
+import VideoCarousel from '../../components/common/VideoCarousel/index.astro';
 import LazyImage from '../../components/common/LazyImage.astro';
 import InteractiveMap from '../../components/map/InteractiveMap.astro';
 
@@ -17,41 +17,67 @@ export interface Props {
   headerColorConfig: HeaderColorConfig;
 }
 
-const { currentLang, headerColorConfig } = Astro.props;
+let { currentLang, headerColorConfig } = Astro.props;
+if (!currentLang) {
+  const pathname = Astro.url && Astro.url.pathname ? Astro.url.pathname : '/';
+  const parts = pathname.split('/').filter(Boolean);
+  currentLang = parts.length > 0 ? parts[0] : 'es';
+}
 
 // Get translations from common.json
 const title = t('meta.about_us.title', { namespace: 'common', locale: currentLang });
 const metaDescription = t('meta.about_us.description', { namespace: 'common', locale: currentLang });
 
-// Importar contenido específico de aboutus.json
-const aboutUsModule = await import(`../../locales/${currentLang}/aboutus.json`);
-const aboutUsContent: any = aboutUsModule.default || aboutUsModule;
-const historyTitle = aboutUsContent.title;
-const historySubtitle = aboutUsContent.subtitle;
-const historyIntro = aboutUsContent.intro;
-const historyItems = aboutUsContent.items;
-const historyConclusion = aboutUsContent.conclusion;
-const aboutSectionTitle = aboutUsContent.about_section_title;
-const aboutSectionParagraphs = aboutUsContent.about_section_paragraphs || [];
-const presenceSectionTitle = aboutUsContent.presence_section_title;
-const presenceSectionDescription = aboutUsContent.presence_section_description;
-const experiencesSectionTitle = aboutUsContent.experiences_section_title;
-const experiencesSectionDescription = aboutUsContent.experiences_section_description;
-const experiencesCards = aboutUsContent.experiences_cards || [];
+// Importar contenido específico de aboutus.json via t()
+const historyTitle = t('title', { namespace: 'aboutus', locale: currentLang });
+const historySubtitle = t('subtitle', { namespace: 'aboutus', locale: currentLang });
+const historyIntro = t('intro', { namespace: 'aboutus', locale: currentLang });
+const historyItems = t('items', { namespace: 'aboutus', locale: currentLang }) || [];
+const historyConclusion = t('conclusion', { namespace: 'aboutus', locale: currentLang });
+const aboutSectionTitle = t('about_section_title', { namespace: 'aboutus', locale: currentLang });
+const aboutSectionParagraphs = (t('about_section_paragraphs', { namespace: 'aboutus', locale: currentLang }) || []) as string[];
+const presenceSectionTitle = t('presence_section_title', { namespace: 'aboutus', locale: currentLang });
+const presenceSectionDescription = t('presence_section_description', { namespace: 'aboutus', locale: currentLang });
+const experiencesSectionTitle = t('experiences_section_title', { namespace: 'aboutus', locale: currentLang });
+const experiencesSectionDescription = t('experiences_section_description', { namespace: 'aboutus', locale: currentLang });
+const experiencesCards = (t('experiences_cards', { namespace: 'aboutus', locale: currentLang }) || []) as any[];
 
-// Video and image URLs for hero section
-const videoUrl = 'https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4';
-const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/loopvideo.png';
+// Cargar slides del common.json para ambos idiomas
+const commonAssets = t('assets.slider', { namespace: 'common', locale: currentLang }) || [];
+const promosSlides = Array.isArray(commonAssets)
+  ? commonAssets
+    .filter((asset: any) => asset && typeof asset === 'object' && asset.desktop && asset.mobile && asset.type === 'image')
+    .map((asset: any) => ({
+      desktop: asset.desktop,
+      mobile: asset.mobile,
+      alt: asset.alt || "Promo Taqueritos",
+      title: asset.title || '',
+      subtitle: asset.description || '',
+      link: asset.url || asset.link || '',
+      type: 'image' as const
+    }))
+  : [];
+
+// Slide de video como fallback para cuando no hay slides de imagen
+const videoSlide = [{
+  desktop: 'https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4',
+  mobile: 'https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4',
+  alt: 'Taqueritos',
+  title: '',
+  subtitle: '',
+  link: '',
+  type: 'video' as const
+}];
+
+const heroSlides = promosSlides.length > 0 ? promosSlides : videoSlide;
 ---
 
 <Layout title={title} class="bg-brown" description={metaDescription}>
   <section class="hero-section">
-    <VideoHero
-      videoUrl={videoUrl}
-      fallbackImageUrl={fallbackImageUrl}
+    <VideoCarousel
+      slides={heroSlides}
       height="100%"
-      overlayOpacity="0"
-      textColor="text-white"
+      mobileHeight="100%"
       showOverlay={false}
     />
   </section>
@@ -219,18 +245,21 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/loopvi
 
 <style>
   .hero-section {
-    height: 400px;
+    min-height: 500px;
+    height: auto;
   }
 
   @media (min-width: 769px) and (max-width: 1024px) {
     .hero-section {
-      height: 600px;
+      min-height: 700px;
+      height: auto;
     }
   }
 
   @media (min-width: 1025px) {
     .hero-section {
-      height: 800px;
+      min-height: 85vh;
+      height: auto;
     }
   }
 

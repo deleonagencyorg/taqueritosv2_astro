@@ -11,6 +11,7 @@ interface Product {
   color_button?: string;
   boder_color?: string;
   second_color_button?: string;
+  isnew?: boolean;
 }
 
 export interface Props {
@@ -73,14 +74,35 @@ import LazyImage from "../LazyImage.astro";
                 class="product-card rounded-[22.02px] border"
                 style={`background-color: ${product.background_color || "#F08C00"}; border-color: ${product.boder_color || "#F08C00"}`}
               >
+                {product.isnew === true && (
+                  <div class="new-tag">
+                    <img 
+                      src={currentLang === 'es' 
+                        ? 'https://snack.yummiespromociones.com/SnacksyummiesAssets/NUEVO.webp'
+                        : 'https://snack.yummiespromociones.com/SnacksyummiesAssets/NEW.webp'
+                      }
+                      alt={currentLang === 'es' ? 'Nuevo' : 'New'}
+                      class="new-tag-image"
+                    />
+                  </div>
+                )}
+                
                 <div class="product-image-container">
-                  <LazyImage
-                    src={product.imageMobile || product.image}
-                    alt={product.name}
-                    class="product-image  md:mt-[0px] -mt-[35px]"
-                    width={300}
-                    height={400}
-                  />
+                  <a
+                    href={`/${currentLang}/${currentLang === 'es' ? 'productos' : 'products'}/${product.id}`}
+                    class="product-image-link"
+                    data-no-swipe="true"
+                    data-no-animation="true"
+                    data-astro-reload="false"
+                  >
+                    <LazyImage
+                      src={product.imageMobile || product.image}
+                      alt={product.name}
+                      class="product-image  md:mt-[0px] -mt-[35px]"
+                      width={300}
+                      height={400}
+                    />
+                  </a>
                 </div>
 
                 <div class="absolute bottom-0 left-0">
@@ -181,6 +203,35 @@ import LazyImage from "../LazyImage.astro";
     box-sizing: border-box;
   }
 
+  /* Tag NUEVO - esquina superior derecha */
+  .new-tag {
+    position: absolute;
+    top: -5%;
+    right: 5%;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .new-tag-image {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    z-index: 10;
+    pointer-events: none;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+    animation: pulse-badge-3d 2s ease-in-out infinite;
+    transform: translateY(-30%) rotate(18deg);
+  }
+
+  @keyframes pulse-badge-3d {
+    0%, 100% {
+      transform: translateY(-30%) rotate(18deg) scale(1);
+    }
+    50% {
+      transform: translateY(-30%) rotate(18deg) scale(1.05);
+    }
+  }
+
   .product-image-container {
     position: absolute;
     top: 0;
@@ -225,6 +276,10 @@ import LazyImage from "../LazyImage.astro";
     text-transform: none;
     max-width: 100%;
     min-width: 200px;
+  }
+
+  .product-image-link {
+    display: block;
   }
   
   .product-card a:hover {
@@ -355,6 +410,10 @@ import LazyImage from "../LazyImage.astro";
     .product-name {
       font-size: 20px;
     }
+
+    .new-tag-image {
+      width: 70px;
+    }
   }
 
   @media (max-width: 767px) {
@@ -368,14 +427,21 @@ import LazyImage from "../LazyImage.astro";
     }
     .carousel-navigation {
       position: absolute;
-      top: -80px;
+      top: 50%;
+      left: 0;
       right: 0;
-      left: auto;
-      transform: none;
-      width: auto;
-      margin-top: 0;
-      justify-content: flex-end;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4px;
+      pointer-events: none;
       z-index: 20;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      pointer-events: auto;
     }
 
     .swiper-button-next,
@@ -418,6 +484,15 @@ import LazyImage from "../LazyImage.astro";
       height: 50px !important;
       font-size: 14px !important;
       padding: 16px 8px !important;
+    }
+
+    .new-tag {
+      top: 8px;
+      right: 8px;
+    }
+
+    .new-tag-image {
+      width: 85px;
     }
 
     .product-card .absolute.bottom-0 {
@@ -485,8 +560,8 @@ class ProductsCarousel {
     this.swiper = new Swiper(swiperContainer, {
       modules: [Navigation, Autoplay],
       
-      // Loop infinito con slides duplicados
-      loop: this.total > 1,
+      // Loop infinito siempre activo
+      loop: true,
       slidesPerView: 3,
       spaceBetween: 50,
       speed: 600,
@@ -496,12 +571,10 @@ class ProductsCarousel {
       observeParents: true,
       observeSlideChildren: true,
       
-      // Prevenir overflow
-      watchOverflow: true,
-      
       navigation: { 
         prevEl,
         nextEl,
+        disabledClass: 'swiper-nav-hidden',
       },
       
       autoplay: this.options.autoplay
@@ -509,7 +582,6 @@ class ProductsCarousel {
             delay: this.options.speed || 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
-            reverseDirection: true,
           }
         : false,
 
@@ -517,7 +589,7 @@ class ProductsCarousel {
         320: { 
           slidesPerView: 1,
           spaceBetween: 20,
-          centeredSlides: true,
+          centeredSlides: false,
         },
         768: { 
           slidesPerView: 2,

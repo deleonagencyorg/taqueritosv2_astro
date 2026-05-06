@@ -12,10 +12,13 @@ interface Recipe {
   id: string;
   title: string;
   image?: string;
+  ['preview-image']?: string;
   preparation_time: number;
   type?: string;
   // Ahora `product` es un array de strings (puede haber más de un producto por receta)
   product?: string[];
+  video?: string;
+  date?: string;
 }
 
 const currentLang = getLocale();
@@ -26,12 +29,31 @@ const allRecipes: Recipe[] = [];
 
 // Process each file
 for (const path in recipeModules) {
-  const lang = path.split('/')[3]; // Extract language from path
-  if (lang === currentLang) {
+  // Usar regex para extraer el idioma del path (funciona con rutas relativas y absolutas)
+  const langMatch = path.match(/locales\/([^/]+)\//);
+  const pathLang = langMatch?.[1];
+  if (pathLang === currentLang) {
     const module = await recipeModules[path]();
-    allRecipes.push(module.default);
+    const item = module.default ?? (module as any);
+    // Guardar solo entradas válidas con id y title
+    if (item?.id && item?.title) allRecipes.push(item);
   }
 }
+
+// Ordenar recetas por fecha descendente (más nuevas primero), sin fecha al final
+allRecipes.sort((a: Recipe, b: Recipe) => {
+  const dateA = (a as any).date;
+  const dateB = (b as any).date;
+  
+  // Si A no tiene fecha, va al final
+  if (!dateA && dateB) return 1;
+  // Si B no tiene fecha, va al final
+  if (dateA && !dateB) return -1;
+  // Si ninguno tiene fecha, mantener orden original
+  if (!dateA && !dateB) return 0;
+  // Orden descendente (más reciente primero)
+  return new Date(dateB).getTime() - new Date(dateA).getTime();
+});
 
 // Shared translations
 const noRecipesText = currentLang === 'es' 
@@ -85,6 +107,14 @@ function normalizeType(r: Recipe): string {
   if (['lunch', 'almuerzo'].includes(raw)) return 'lunch';
   if (['snack'].includes(raw)) return 'snack';
   return 'other';
+}
+
+function getRecipeGridImage(recipe: Recipe): string {
+  const previewImage = String((recipe as any)['preview-image'] || '').trim();
+  if (previewImage.length > 0) return previewImage;
+
+  const mainImage = String(recipe.image || '').trim();
+  return mainImage || '/images/recipes/placeholder.jpg';
 }
 
 // Unique product options for the product filter (extract from recipes)
@@ -184,12 +214,13 @@ const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videor
               : ((recipe as any).product ? String((recipe as any).product).toLowerCase() : '')}
           >
             <RecipeCard
-              image={recipe.image || '/images/recipes/placeholder.jpg'}
+              image={getRecipeGridImage(recipe)}
               title={recipe.title}
               time={`${recipe.preparation_time} MIN`}
               id={recipe.id}
               textColor="text-white"
               iconColor="text-white"
+              video={(recipe as any).video}
             />
           </div>
         ))}

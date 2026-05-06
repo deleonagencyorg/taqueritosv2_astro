@@ -15,9 +15,15 @@ export const GET: APIRoute = async ({ request }) => {
     });
   } catch (error) {
     console.error('Error detecting locale:', error);
+    
+    // Return safe fallback even on error
     return new Response(JSON.stringify({
-      error: 'Error detecting locale',
-      defaultLocale: 'es'
-    }), { status: 500 });
+      ip: null,
+      country: null,
+      defaultLocale: 'es',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }), { 
+      status: 200 // Return 200 even on error to not break client logic
+    });
   }
 };

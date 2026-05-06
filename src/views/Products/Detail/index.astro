@@ -5,6 +5,9 @@ import { t } from '../../../i18n/i18n';
 import type { Locale } from '../../../i18n/i18n';
 import './styles.css';
 
+// client-side helpers
+import './scripts.js';
+
 // Interfaces locales
 interface ProductSize {
   value: string;
@@ -16,6 +19,29 @@ interface Stockist {
   name: string;
   icon: string;
   link: string;
+}
+
+interface NutritionInfo {
+  description?: string;
+  servingSize?: string;
+  servingsPerContainer?: string;
+  calories?: string;
+  fatEnergy?: string;
+  totalFat?: string;
+  saturatedFat?: string;
+  transFat?: string;
+  cholesterol?: string;
+  sodium?: string;
+  totalCarbs?: string;
+  dietaryFiber?: string;
+  sugars?: string;
+  protein?: string;
+  calorieDiet?: string;
+  caloriesPerServing?: string;
+  vitaminD?: string;
+  iron?: string;
+  calcium?: string;
+  potassium?: string;
 }
 
 interface Product {
@@ -38,7 +64,8 @@ interface Product {
   }>;
   relatedProducts?: string[];
   weight?: string[];
-}
+  nutrition?: NutritionInfo;
+} 
 
 const { currentLang, productId } = Astro.props;
 
@@ -72,8 +99,9 @@ const safeProduct: Product = {
   color_button: product.color_button || '#520406',
   sizes: Array.isArray(product.sizes) ? product.sizes : [],
   available: product.available || '',
-  description: product.description || '',
+  description: product.description || (product.nutrition?.description) || '',
   weight: Array.isArray(product.weight) ? product.weight : [],
+  nutrition: (product.nutrition || {}) as NutritionInfo,
 };
 
 // Obtener todos los productos como un array
@@ -87,6 +115,39 @@ if (allProductsArray.length > 1) {
 }
 
 const carouselProducts = [safeProduct, ...relatedProducts];
+
+// Localized labels for collapsible sections
+const sectionLabels = {
+  description: currentLang === 'es' ? 'Descripción' : 'Description',
+  nutrition: currentLang === 'es' ? 'Datos nutricionales' : 'Nutrition Facts',
+};
+
+// Labels for each nutrition field - Only fields that should be displayed
+const nutritionLabels: Record<string, string> = {
+  servingSize: currentLang === 'es' ? 'Tamaño de ración' : 'Serving Size',
+  servingsPerContainer: currentLang === 'es' ? 'Raciones por envase' : 'Servings per container',
+  calories: currentLang === 'es' ? 'Kcal de energía' : 'Calories',
+  fatEnergy: currentLang === 'es' ? 'Energía de grasa' : 'Fat energy',
+  totalFat: currentLang === 'es' ? 'Grasa total' : 'Total fat',
+  saturatedFat: currentLang === 'es' ? 'Grasa saturada' : 'Saturated fat',
+  transFat: currentLang === 'es' ? 'Grasa trans' : 'Trans fat',
+  cholesterol: currentLang === 'es' ? 'Colesterol' : 'Cholesterol',
+  sodium: currentLang === 'es' ? 'Sodio' : 'Sodium',
+  totalCarbs: currentLang === 'es' ? 'Carbohidrato total' : 'Total carbohydrate',
+  dietaryFiber: currentLang === 'es' ? 'Fibra dietética' : 'Dietary fiber',
+  sugars: currentLang === 'es' ? 'Contiene menos de g de azúcar' : 'Contains less than g sugar',
+  protein: currentLang === 'es' ? 'Proteínas' : 'Protein',
+  calorieDiet: currentLang === 'es' ? 'Dieta de calorías' : 'Calorie diet',
+  caloriesPerServing: currentLang === 'es' ? 'Una porción aporta g calorías' : 'One serving provides g calories',
+  vitaminD: currentLang === 'es' ? 'Vitamina D' : 'Vitamin D',
+  iron: currentLang === 'es' ? 'Hierro' : 'Iron',
+  calcium: currentLang === 'es' ? 'Calcio' : 'Calcium',
+  potassium: currentLang === 'es' ? 'Potasio' : 'Potassium',
+};
+
+const nutritionEntries = Object.entries(nutritionLabels)
+  .filter(([key]) => safeProduct.nutrition && key in safeProduct.nutrition)
+  .filter(([key]) => (safeProduct.nutrition as any)[key] !== '' && (safeProduct.nutrition as any)[key] !== null) as [string, string][];
 ---
 <div>
   {safeProduct.background_color && (
@@ -99,7 +160,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
       <!-- Cambiar a grid en lugar de flex -->
       <div class="container mx-auto px-6 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-2 gap-10 relative z-10">
         <!-- Contenido del lado izquierdo -->
-        <div class="flex flex-col gap-12 relative z-20 lg:mt-[100px] mt-[100px]">
+        <div class="flex flex-col gap-12 relative z-20 mt-4 lg:mt-[100px] order-2 lg:order-1">
           <!-- Título principal -->
           <h1 
               id="product-title"
@@ -110,17 +171,17 @@ const carouselProducts = [safeProduct, ...relatedProducts];
           </h1>
     
           <div class="flex flex-col gap-12 max-w-[488px]">
-            <!-- Descripción -->
-            <p 
-              id="product-description"
-              class="text-2xl md:text-[26.6px] font-normal"
-              
-            >
-              {safeProduct.description }
-            </p>
-    
+            <!-- Description section (always visible) -->
+            <div class="mt-0 md:mt-4">
+              <h2 class="text-2xl font-semibold text-white mb-1 md:mb-2">{sectionLabels.description}</h2>
+              <div id="product-description" class="text-2xl md:text-[26.6px] font-normal text-white text-justify">
+                {safeProduct.description || ''}
+              </div>
+            </div>
+
+
             <!-- Botones de presentaciones -->
-              <div id="product-weights" class="flex gap-1 -mt-12" style={(!safeProduct.weight || safeProduct.weight.length === 0) ? 'display:none' : ''}>
+              <div id="product-weights" class="flex gap-1 mt-0 md:mt-8" style={(!safeProduct.weight || safeProduct.weight.length === 0) ? 'display:none' : ''}>
                 {safeProduct.weight && safeProduct.weight.map((weight) => (
                   <button 
                     class="flex-1 md:h-[78px] h-[40px] rounded-[30px] border-[1.16px] border-[#4A4A4A] transition-all duration-300 cursor-default"
@@ -136,10 +197,10 @@ const carouselProducts = [safeProduct, ...relatedProducts];
               </div>
     
             <!-- Botón de comprar y navegación -->
-            <div class="flex items-center gap-5 pb-20 md:pb-0">
+            <div class="flex items-center gap-5 pb-15 md:pb-0">
               <button 
                 id="open-modal-btn"
-                class="w-full flex justify-center items-center border border-[#FF0048] rounded-[16px] bg-gradient-to-b from-[#FF0048] to-[#FF5255] shadow-[0_3px_0_0_rgba(88,0,29,0.9)] hover:shadow-[0_1px_0_0_rgba(88,0,29,0.9)] hover:translate-y-[2px] transition-all duration-150 text-white py-[10px] md:py-[16px] lg:py-[16px]"
+                class="button-buy w-full flex justify-center items-center border border-[#FF0048] rounded-[16px] bg-gradient-to-b from-[#FF0048] to-[#FF5255] shadow-[0_3px_0_0_rgba(88,0,29,0.9)] hover:shadow-[0_1px_0_0_rgba(88,0,29,0.9)] hover:translate-y-[2px] transition-all duration-150 text-white py-[10px] md:py-[16px] lg:py-[16px]"
                 data-product-id={safeProduct.id}
               >
                 <span class="text-[18px] md:text-[26.6px] lg:text-[26.6px] font-semibold">
@@ -149,7 +210,7 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     
               <!-- Controles de navegación -->
               <div class="flex gap-5">
-                <div class="carousel-navigation">
+                <div id="product-carousel-navigation" class="carousel-navigation">
                   <button class="swiper-button-prev">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -165,11 +226,30 @@ const carouselProducts = [safeProduct, ...relatedProducts];
                 </div>
               </div>
             </div>
+            <!-- Nutrition facts - collapsible for desktop only -->
+            <div class="collapsible hidden md:block mb-24 lg:mb-24">
+              <div class="collapsible-header flex justify-between items-center cursor-pointer w-full">
+                <h2 class="text-2xl font-semibold text-white">{sectionLabels.nutrition}</h2>
+                <span class="toggle-icon">+</span>
+              </div>
+              <div class="collapsible-content hidden mt-4">
+                {safeProduct.nutrition && (
+                  <div class="nutrition-table grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-white text-sm md:text-base font-normal">
+                    {nutritionEntries.map(([key,label]) => (
+                      <div class="flex justify-between items-center">
+                        <span class="font-semibold">{label}</span>
+                        <span class="text-right ml-4">{(safeProduct.nutrition as any)[key] || '-'}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
     
         <!-- Carousel de productos - SOLO lado derecho -->
-        <div class="relative flex items-center justify-center overflow-visible lg:mt-[100px]">
+        <div class="relative flex items-center justify-center overflow-visible mt-[70px] lg:mt-[100px] order-1 lg:order-2">
           {relatedProducts.length > 0 && (
             <div class="swiper products-swiper w-full h-full">
               <div class="swiper-wrapper">
@@ -207,10 +287,62 @@ const carouselProducts = [safeProduct, ...relatedProducts];
           )}
         </div>
       </div>
+
+
+
+      <!-- Nutrition facts for mobile: appears below carousel -->
+      <div class="collapsible md:hidden w-full px-6 mb-24 mt-1">
+        <div class="collapsible-header flex justify-between items-center cursor-pointer w-full">
+          <h2 class="text-2xl font-semibold text-white">{sectionLabels.nutrition}</h2>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="collapsible-content hidden mt-4">
+          {safeProduct.nutrition && (
+            <div class="nutrition-table grid grid-cols-1 gap-x-6 gap-y-2 text-white text-sm md:text-base font-normal">
+              {nutritionEntries.map(([key,label]) => (
+                <div class="flex justify-between items-center">
+                  <span class="font-semibold">{label}</span>
+                  <span class="text-right ml-4">{(safeProduct.nutrition as any)[key] || '-'}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </article>
     )}
+
+    <!-- collapsible functionality script -->
+    <script>
+      function initCollapsibles() {
+        console.log('initCollapsibles triggered');
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+          // avoid attaching twice
+          if (header.dataset.collapsibleInit) return;
+          header.dataset.collapsibleInit = 'true';
+          header.style.cursor = 'pointer';
+          header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            if (!content) return;
+            if (content.classList.contains('hidden')) {
+              content.classList.remove('hidden');
+              if (icon) icon.textContent = '-';
+            } else {
+              content.classList.add('hidden');
+              if (icon) icon.textContent = '+';
+            }
+          });
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', initCollapsibles);
+      document.addEventListener('astro:page-load', initCollapsibles);
+      document.addEventListener('astro:after-swap', initCollapsibles);
+    </script>
     
-    {currentLang === 'es' && (
+    {/* Sección de retos en detalle de producto — temporalmente oculta */}
+    {false && currentLang === 'es' && (
       <section id="challenges" class="w-full py-6 md:py-8 bg-brown relative -mt-12 md:-mt-16 lg:-mt-20" transition:animate="slide">
         <div class="container mx-auto px-4 relative">
           <div class="container mx-auto px-4 mb-12">
@@ -290,6 +422,29 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     gap: 12px;
   }
 
+  .carousel-navigation.mobile-over {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: block;
+    pointer-events: none;
+    z-index: 40;
+  }
+
+  .carousel-navigation.mobile-over .swiper-button-prev,
+  .carousel-navigation.mobile-over .swiper-button-next {
+    pointer-events: auto;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: rgba(0,0,0,0.35) !important;
+  }
+
+  .carousel-navigation.mobile-over .swiper-button-prev { left: 12px !important; }
+  .carousel-navigation.mobile-over .swiper-button-next { right: 12px !important; }
+
   /* Ocultar las flechas predeterminadas */
   .swiper-button-next::after,
   .swiper-button-prev::after {
@@ -352,6 +507,89 @@ const carouselProducts = [safeProduct, ...relatedProducts];
     will-change: transform;
   }
 
+  /* collapsible styles */
+  .collapsible-header {
+    width: 100%;
+    padding: 0.5rem 0;
+  }
+  .collapsible-header h2 {
+    color: white;
+  }
+  .collapsible-header .toggle-icon {
+    color: white;
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: transform 0.3s ease;
+  }
+  .collapsible-content {
+    overflow: hidden;
+  }
+  @media (max-width: 768px) {
+    .collapsible-header h2 {
+      font-size: 1.25rem;
+    }
+    .collapsible-content table td {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  /* recuadro tabla nutricional en mobile */
+  @media (max-width: 767px) {
+    .collapsible.md\:hidden,
+    .collapsible {
+      background: linear-gradient(180deg, rgba(58,10,15,0.95) 0%, rgba(44,6,9,0.95) 100%);
+      border: 1px solid rgba(139,14,30,0.6);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+      width: calc(100% - 48px);
+      margin-left: 24px;
+      margin-right: 24px;
+    }
+
+    .collapsible .collapsible-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0;
+    }
+
+    .collapsible .collapsible-header h2 {
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .collapsible .toggle-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #3a0a0f; /* corinto icon color */
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .collapsible .collapsible-content {
+      margin-top: 12px;
+      color: #ffffff;
+    }
+  }
+
+  /* table row separator */
+  .collapsible-content table tr {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+  .collapsible-content table td {
+    padding: 4px 0;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .product-float {
       animation: none;
@@ -365,9 +603,24 @@ const carouselProducts = [safeProduct, ...relatedProducts];
       height: 50px !important;
     }
 
+    /* Center the buy button with equal left/right spacing on mobile */
     .button-buy {
-      width: 100% !important;
+      width: calc(100% - 48px) !important;
+      max-width: 5200px !important;
       height: 70px !important;
+      margin-left: 24px !important;
+      margin-right: 20px !important;
+      display: block !important;
+    }
+
+    /* When the buy button is alone, use a centered narrower style */
+    .button-buy.solo-buy-centered {
+      width: auto !important;
+      max-width: 320px !important;
+      display: inline-flex !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      justify-content: center !important;
     }
   }
 </style>
@@ -415,7 +668,9 @@ const carouselProducts = [safeProduct, ...relatedProducts];
       // Actualizar descripción
       const descEl = document.getElementById('product-description');
       if (descEl) {
-        descEl.textContent = product.description || '';
+        // Usar description principal, o description de nutrition si está vacío
+        const description = product.description || product.nutrition?.description || '';
+        descEl.textContent = description;
         descEl.style.color = product.text_color || '#FFFFFF';
       }
 
@@ -431,6 +686,53 @@ const carouselProducts = [safeProduct, ...relatedProducts];
         } else {
           weightsEl.style.display = 'none';
         }
+      }
+
+      // Actualizar tabla de nutrición
+      const nutritionTableEl = document.querySelector('.nutrition-table');
+      if (nutritionTableEl && product.nutrition) {
+        const nutrition = product.nutrition;
+        
+        // Determinar idioma para las etiquetas
+        const isSpanish = window.location.pathname.startsWith('/es');
+        
+        // Definir las etiquetas de nutrición
+        const nutritionLabelsMap: Record<string, string> = {
+          servingSize: isSpanish ? 'Tamaño de ración' : 'Serving Size',
+          servingsPerContainer: isSpanish ? 'Raciones por envase' : 'Servings per container',
+          calories: isSpanish ? 'Kcal de energía' : 'Calories',
+          fatEnergy: isSpanish ? 'Energía de grasa' : 'Fat energy',
+          totalFat: isSpanish ? 'Grasa total' : 'Total fat',
+          saturatedFat: isSpanish ? 'Grasa saturada' : 'Saturated fat',
+          transFat: isSpanish ? 'Grasa trans' : 'Trans fat',
+          cholesterol: isSpanish ? 'Colesterol' : 'Cholesterol',
+          sodium: isSpanish ? 'Sodio' : 'Sodium',
+          totalCarbs: isSpanish ? 'Carbohidrato total' : 'Total carbohydrate',
+          dietaryFiber: isSpanish ? 'Fibra dietética' : 'Dietary fiber',
+          sugars: isSpanish ? 'Contiene menos de g de azúcar' : 'Contains less than g sugar',
+          protein: isSpanish ? 'Proteínas' : 'Protein',
+          calorieDiet: isSpanish ? 'Dieta de calorías' : 'Calorie diet',
+          caloriesPerServing: isSpanish ? 'Una porción aporta g calorías' : 'One serving provides g calories',
+          vitaminD: isSpanish ? 'Vitamina D' : 'Vitamin D',
+          iron: isSpanish ? 'Hierro' : 'Iron',
+          calcium: isSpanish ? 'Calcio' : 'Calcium',
+          potassium: isSpanish ? 'Potasio' : 'Potassium'
+        };
+
+        // Filtrar entradas que existen y no están vacías
+        const nutritionEntries = Object.entries(nutritionLabelsMap)
+          .filter(([key]) => nutrition && key in nutrition)
+          .filter(([key]) => nutrition[key] !== '' && nutrition[key] !== null);
+
+        // Generar HTML de la tabla
+        const nutritionHtml = nutritionEntries.map(([key, label]) => 
+          `<div class="flex justify-between items-center">
+            <span class="font-semibold">${label}</span>
+            <span class="text-right ml-4">${nutrition[key] || '-'}</span>
+          </div>`
+        ).join('');
+
+        nutritionTableEl.innerHTML = nutritionHtml;
       }
 
       // Actualizar data-product-id del botón del modal
@@ -530,4 +832,44 @@ const carouselProducts = [safeProduct, ...relatedProducts];
   }
   document.addEventListener('astro:page-load', setupModalButton);
   document.addEventListener('astro:after-swap', setupModalButton);
+</script>
+
+<script>
+  function adaptProductMobileLayout() {
+    try {
+      const nav = document.getElementById('product-carousel-navigation');
+      const swiper = document.querySelector('.products-swiper');
+      const modalBtn = document.getElementById('open-modal-btn');
+
+      if (!nav || !modalBtn) return;
+
+      const isMobile = window.innerWidth <= 767;
+
+      if (isMobile && swiper) {
+        if (!nav.classList.contains('mobile-over')) nav.classList.add('mobile-over');
+        if (nav.parentElement !== swiper) {
+          swiper.appendChild(nav);
+        }
+      } else {
+        if (nav.classList.contains('mobile-over')) nav.classList.remove('mobile-over');
+        const leftControls = document.querySelector('.flex.items-center.gap-5');
+        if (leftControls && nav.parentElement !== leftControls) {
+          leftControls.appendChild(nav);
+        }
+      }
+
+      const slideCount = document.querySelectorAll('.products-swiper .swiper-slide').length;
+      if (isMobile && slideCount <= 1) {
+        modalBtn.classList.add('solo-buy-centered');
+      } else {
+        modalBtn.classList.remove('solo-buy-centered');
+      }
+    } catch (err) {
+    }
+  }
+
+  window.addEventListener('resize', adaptProductMobileLayout);
+  document.addEventListener('DOMContentLoaded', adaptProductMobileLayout);
+  document.addEventListener('astro:page-load', adaptProductMobileLayout);
+  document.addEventListener('astro:after-swap', adaptProductMobileLayout);
 </script>

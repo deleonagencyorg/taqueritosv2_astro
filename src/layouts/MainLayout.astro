@@ -1,8 +1,8 @@
 ---
 import GoogleTagManager from '../components/common/GoogleTagManager.astro';
+import MetaPixel from '../components/common/MetaPixel.astro';
+import TikTokPixel from '../components/common/TikTokPixel.astro';
 import Favicon from '../components/Favicon.astro';
-// import GoogleTagManager from './i18n/GoogleTagManager.astro';
-// import GoogleTagManagerNoScript from './i18n/GoogleTagManagerNoScript.astro';
 import { t, type Locale } from '../i18n/i18n';
 import Header from '../components/common/Header/index.astro';
 import Footer from '../components/common/Footer/index.astro';
@@ -12,8 +12,8 @@ import { routesConfig } from '../config/routes';
 import { getHeaderColors } from '../config/headerColors';
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
-import { head } from 'framer-motion/m';
 import StockistModal from '../components/common/StockistModal.astro';
+import VideoModal from '../components/recipes/VideoModal.astro';
 
 export interface Props {
   title?: string;
@@ -28,27 +28,22 @@ export interface Props {
 
 const { title, description, class: className, headerColors } = Astro.props;
 
-// Normalizar título con prefijo "Taqueritos - "
 function withTaqueritosPrefix(value?: string) {
   if (!value) return undefined;
   return value.startsWith('Taqueritos - ') ? value : `Taqueritos - ${value}`;
 }
 
-// Determine language for <html lang=...> and for key prop from the URL
 const pathSegments = Astro.url.pathname.split('/');
 const langFromUrl = pathSegments[1] as Locale;
 const validLocales: Locale[] = ['es', 'en'];
-const currentLang = validLocales.includes(langFromUrl) ? langFromUrl : 'es'; // Default to 'es'
-// Obtener configuración de colores basada en la ruta actual
+const currentLang = validLocales.includes(langFromUrl) ? langFromUrl : 'es';
+
 const { pathname } = Astro.url;
 const headerColorConfig = getHeaderColors(pathname);
 
-// Datos globales para el modal de "Dónde comprar"
 const products = t('items', { namespace: 'products', locale: currentLang }) || [];
 const stockists = t('stockist', { namespace: 'products', locale: currentLang }) || [];
 
-// Si se pasan colores de header específicos (por ejemplo, desde un producto), 
-// crear una configuración personalizada
 let customHeaderConfig = headerColorConfig;
 if (headerColors) {
   customHeaderConfig = {
@@ -61,19 +56,17 @@ if (headerColors) {
 ---
 <html lang={currentLang}>
   <head>
-    <GoogleTagManager />
-    <Favicon />
-    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <GoogleTagManager />
+    <MetaPixel /> <TikTokPixel />
+    <Favicon />
     {title && <title>{withTaqueritosPrefix(title)}</title>}
     {description && <meta name="description" content={description} />}
     <ClientRouter />
     <slot name="head" />
-    {/* <GoogleTagManager /> */}
   </head>
   <body class={`font-sans min-h-screen flex flex-col ${className || ''}`}>
-    {/* <GoogleTagManagerNoScript /> */}
     <I18nProvider>
       <slot name="header">
         <Header currentLang={currentLang} headerColors={headerColors} />
@@ -84,11 +77,9 @@ if (headerColors) {
       <Footer currentLang={currentLang} />
     </I18nProvider>
     
-    <!-- Menú móvil al final del body para máximo z-index -->
     <MobileMenu currentLang={currentLang} headerColorConfig={customHeaderConfig} />
-
-    <!-- Modal global de "Dónde comprar" -->
     <StockistModal products={products} stockists={stockists} locale={currentLang} />
+    <VideoModal videoId="" isOpen={false} />
 
     <script>
       function initGlobalStockistLinks() {
@@ -111,13 +102,31 @@ if (headerColors) {
         );
       }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initGlobalStockistLinks);
-      } else {
-        initGlobalStockistLinks();
+      // Función para rastrear PageViews en ambos píxeles
+      function trackPixelsPage() {
+        if (window.ttq) {
+          window.ttq.page();
+        }
+        if (window.fbq) {
+          window.fbq('track', 'PageView');
+        }
       }
 
-      document.addEventListener('astro:page-load', initGlobalStockistLinks);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          initGlobalStockistLinks();
+          trackPixelsPage();
+        });
+      } else {
+        initGlobalStockistLinks();
+        trackPixelsPage();
+      }
+
+      document.addEventListener('astro:page-load', () => {
+        initGlobalStockistLinks();
+        trackPixelsPage();
+      });
+
       document.addEventListener('astro:after-swap', initGlobalStockistLinks);
     </script>
   </body>

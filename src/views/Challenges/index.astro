@@ -4,6 +4,8 @@ import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
 import ChallengesCarousel from '../../components/challenges/ChallengesCarousel.astro';
 import GamesCarousel from '../../components/games/GamesCarousel.astro';
 import LazyImage from '../../components/common/LazyImage.astro';
+import VideoCarousel from '../../components/common/VideoCarousel/index.astro';
+import { t } from '../../i18n/i18n';
 
 interface SummaryChallenge {
   id?: string;
@@ -156,13 +158,37 @@ try {
 }
 
 const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Discover the games list';
+
+// Cargar promos activas (slides) del common.json solo para español
+const commonAssets = currentLang === 'es' ? (t('assets.slider', { namespace: 'common', locale: currentLang }) || []) : [];
+const promosSlides = Array.isArray(commonAssets)
+  ? commonAssets
+    .filter(asset => asset && typeof asset === 'object' && asset.desktop && asset.mobile && asset.type === 'image')
+    .map(asset => ({
+      desktop: asset.desktop,
+      mobile: asset.mobile,
+      alt: asset.alt || "Promo Taqueritos",
+      title: asset.title || '',
+      subtitle: asset.description || '',
+      link: asset.url || asset.link || '',
+      type: 'image' as const
+    }))
+  : [];
 ---
 <div class="-mt-px -mb-px bg-dark-spotlight" >
+  <!-- Carrusel de promos activas (solo español) - Full width -->
+  {currentLang === 'es' && promosSlides.length > 0 && (
+    <section class="w-full">
+      <VideoCarousel 
+        slides={promosSlides} 
+        height="70vh" 
+        mobileHeight="50vh" 
+        showOverlay={false} 
+      />
+    </section>
+  )}
+
   <div class="container mx-auto px-4 pt-24 pb-24 mt-0">
-   
-
-
-
     <!-- Banner introductorio -->
     <section class="mb-14 pt-24">
       <div

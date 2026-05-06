@@ -7,11 +7,13 @@ export async function getStaticPaths() {
   const locales = ['es'];
   return locales.map((locale) => ({
     params: { lang: locale },
-    props: { currentLang: locale as Locale }
   }));
 }
 
-const { currentLang } = Astro.props;
+// In output:'server' (SSR) mode, Astro.params is always populated from the URL.
+// Astro.props from getStaticPaths is NOT reliable in SSR mode.
+const { lang } = Astro.params;
+const currentLang = (lang as Locale) || 'es';
 
 // Set header color config for contact page
 const headerColorConfig = getHeaderColors('contact');

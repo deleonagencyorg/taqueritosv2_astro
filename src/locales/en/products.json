@@ -16,7 +16,7 @@
       "icon": "https://snack.yummiespromociones.com/taqueritos/Amazon-Logo-White-Transparent.png"
     }
   ],
-   "items": [
+  "items": [
     {
       "id": "taqueritos-buffalo-ranch",
       "name": "Taqueritos Buffalo Ranch",
@@ -33,6 +33,7 @@
       "description": "",
       "available": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taquerito_bufalo_ranch.webp",
       "background_image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taquerito_bufalo_ranch.webp",
+      "isnew": true,
       "sizes": [
         {
           "value": "150",
@@ -41,9 +42,33 @@
       ],
       "weight": [
         "8oz"
-      ]
-    } ,
-            {
+      ],
+      "nutrition": {
+        "description": "",
+        "servingSize": "",
+        "servingsPerContainer": "",
+        "calories": "",
+        "fatEnergy": "",
+        "cholesterol": "",
+        "totalCarbs": "",
+        "dietaryFiber": "",
+        "sugars": "",
+        "protein": "",
+        "calorieDiet": "",
+        "caloriesPerServing": "",
+        "vitaminD": "",
+        "iron": "",
+        "calcium": "",
+        "potassium": "",
+        "sodium": "",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "",
+        "saturatedFat": "",
+        "transFat": ""
+      }
+    },
+    {
       "id": "taqueritos-dragon-de-fuego",
       "name": "Taqueritos Dragon Fire",
       "name_description": "Taqueritos Dragon Fire",
@@ -66,8 +91,32 @@
         }
       ],
       "weight": [
-       "8oz"
-      ]
+        "8oz"
+      ],
+      "nutrition": {
+        "description": "",
+        "servingSize": "",
+        "servingsPerContainer": "",
+        "calories": "",
+        "fatEnergy": "",
+        "cholesterol": "",
+        "totalCarbs": "",
+        "dietaryFiber": "",
+        "sugars": "",
+        "protein": "",
+        "calorieDiet": "",
+        "caloriesPerServing": "",
+        "vitaminD": "",
+        "iron": "",
+        "calcium": "",
+        "potassium": "",
+        "sodium": "",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "",
+        "saturatedFat": "",
+        "transFat": ""
+      }
     },
     {
       "id": "taqueritos-dragon-de-hielo",
@@ -83,8 +132,9 @@
       "second_color_button": "#519CFF",
       "boder_color": "#92bffb",
       "description": "",
-      "available":"https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
+      "available": "https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
       "background_image": "https://snack.yummiespromociones.com/taqueritos/dragonhielousa.webp",
+      "isnew": false,
       "sizes": [
         {
           "value": "150",
@@ -93,9 +143,33 @@
       ],
       "weight": [
         "8oz"
-      ]
+      ],
+      "nutrition": {
+        "description": "",
+        "servingSize": "",
+        "servingsPerContainer": "",
+        "calories": "",
+        "fatEnergy": "",
+        "cholesterol": "",
+        "totalCarbs": "",
+        "dietaryFiber": "",
+        "sugars": "",
+        "protein": "",
+        "calorieDiet": "",
+        "caloriesPerServing": "",
+        "vitaminD": "",
+        "iron": "",
+        "calcium": "",
+        "potassium": "",
+        "sodium": "",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "",
+        "saturatedFat": "",
+        "transFat": ""
+      }
     },
-     {
+    {
       "id": "taqueritos-chile-toreado",
       "name": "Taqueritos Chile Toreado",
       "name_description": "Taqueritos Chile Toreado",
@@ -109,8 +183,8 @@
       "second_color_button": "#08B63E",
       "boder_color": "#7CD546",
       "description": "",
-      "available":  "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
-      "background_image":  "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
+      "available": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
+      "background_image": "https://snack.yummiespromociones.com/SnacksyummiesAssets/taqueritos-chile-toreado-2.webp",
       "sizes": [
         {
           "value": "150",
@@ -119,14 +193,38 @@
       ],
       "weight": [
         "8oz"
-      ]
-    } ,
-         {
+      ],
+      "nutrition": {
+        "description": "",
+        "servingSize": "",
+        "servingsPerContainer": "",
+        "calories": "",
+        "fatEnergy": "",
+        "cholesterol": "",
+        "totalCarbs": "",
+        "dietaryFiber": "",
+        "sugars": "",
+        "protein": "",
+        "calorieDiet": "",
+        "caloriesPerServing": "",
+        "vitaminD": "",
+        "iron": "",
+        "calcium": "",
+        "potassium": "",
+        "sodium": "",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "",
+        "saturatedFat": "",
+        "transFat": ""
+      }
+    },
+    {
       "id": "taqueritos-chili-pack",
       "name": "Taqueritos Chili Pack",
       "name_description": "Taqueritos Chili Pack",
       "image": "https://snack.yummiespromociones.com/taqueritos/taqueritos-chili-pack.webp",
-       "background_color": "#250909",
+      "background_color": "#250909",
       "header_color": "#FDE820",
       "text_color": "#FFF",
       "header_background": "#FDE820",
@@ -135,8 +233,8 @@
       "second_color_button": "#FF5255",
       "boder_color": "#ff585b",
       "description": "",
-      "available":  "https://snack.yummiespromociones.com/taqueritos/taqueritos-chili-pack.webp",
-      "background_image":  "https://snack.yummiespromociones.com/taqueritos/taqueritos-chili-pack.webp",
+      "available": "https://snack.yummiespromociones.com/taqueritos/taqueritos-chili-pack.webp",
+      "background_image": "https://snack.yummiespromociones.com/taqueritos/taqueritos-chili-pack.webp",
       "sizes": [
         {
           "value": "150",
@@ -145,8 +243,31 @@
       ],
       "weight": [
         "20oz, 1 oz per bag, 20 bags"
-      ]
+      ],
+      "nutrition": {
+        "description": "",
+        "servingSize": "",
+        "servingsPerContainer": "",
+        "calories": "",
+        "fatEnergy": "",
+        "cholesterol": "",
+        "totalCarbs": "",
+        "dietaryFiber": "",
+        "sugars": "",
+        "protein": "",
+        "calorieDiet": "",
+        "caloriesPerServing": "",
+        "vitaminD": "",
+        "iron": "",
+        "calcium": "",
+        "potassium": "",
+        "sodium": "",
+        "saturatedFatVD": "0g - 0%",
+        "transFatVD": "0g - 0%",
+        "totalFat": "",
+        "saturatedFat": "",
+        "transFat": ""
+      }
     }
-    
   ]
 }

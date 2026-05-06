@@ -21,6 +21,7 @@ export const GET: APIRoute = async ({ request }) => {
   } catch (error) {
     console.error('Error en geo-headers API:', error);
     
+    // Return safe fallback even on error
     return new Response(JSON.stringify({
       country: null,
       locale: 'es',
@@ -29,7 +30,7 @@ export const GET: APIRoute = async ({ request }) => {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error'
     }), {
-      status: 500,
+      status: 200, // Return 200 even on error to not break client logic
       headers: {
         'Content-Type': 'application/json'
       }
