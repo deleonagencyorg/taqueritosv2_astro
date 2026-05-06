@@ -217,7 +217,7 @@ function formatTime(minutes: number): string {
       </details>
 
       <!-- Preparación / Tutorial -->
-      <details class="group bg-black/40 border border-white/15 rounded-2xl overflow-hidden">
+      <details class="group bg-black/40 border border-white/15 rounded-2xl overflow-hidden recipe-preparation">
         <summary class="flex items-center justify-between cursor-pointer px-5 py-4 select-none">
           <span class="font-title text-xl text-white uppercase italic">
             {recipesAssets.preparationLabel}
@@ -227,7 +227,7 @@ function formatTime(minutes: number): string {
             <span class="hidden group-open:inline">-</span>
           </span>
         </summary>
-        <div class="px-5 pb-5 text-white">
+        <div class="px-5 pb-5 text-white prep-text">
           <ul class="list-disc list-inside space-y-2 text-white">
             {recipe.instructions.map((instruction: string) => (
               <li class="text-white text-base md:text-lg">
