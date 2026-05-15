@@ -14,6 +14,7 @@ interface SlideItem {
   type?: 'product' | 'image' | 'video';
 
   // Campos opcionales para slides de producto, leídos desde el JSON
+  color_theme?: string;
   product_hero?: string;
   product_left?: string;
   product_top?: string;
@@ -124,7 +125,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
               </div>
             ) : (
               /* ========== SLIDE DE PRODUCTO ========== */
-              <div class="product-slide-wrapper">
+              <div class="product-slide-wrapper" data-theme={slide.color_theme || 'red'}>
                 <div class="slide-content" style={`height: ${height};`}>
                   <div class="image-container relative w-full h-[680px] md:w-full md:h-full flex md:items-center md:justify-center">
                   <!-- Imagen principal (desktop) -->
@@ -143,22 +144,23 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                   />
 
                   <h1 class="dragon-text font-bold uppercase leading-[90%] tracking-[0] select-none">
-                    {currentLang === 'es' ? 'DRAGON FUEGO' : 'DRAGON FIRE'}
+                    {slide.product_hero || (currentLang === 'es' ? 'DRAGON FUEGO' : 'DRAGON FIRE')}
                   </h1>
                  
                 </div>
 
                 <!-- Bloque de texto lateral izquierdo -->
               <div class="left-text mt-18">
-                {currentLang === 'es' ? (
+                {slide.product_left ? (
                   <p>
-                    Sabor intenso,<br/>
-                    Diversión<span> <b> Máxima.</b></span>
+                    {slide.product_left.split('\n').map((line: string, i: number) =>
+                      i === 0 ? <>{line}<br/></> : <span> <b>{line}</b></span>
+                    )}
                   </p>
                 ) : (
                   <p>
-                    Intense flavor,<br/>
-                    Maximum<span> <b> Fun.</b></span>
+                    {currentLang === 'es' ? 'Sabor intenso,' : 'Intense flavor,'}<br/>
+                    <span><b>{currentLang === 'es' ? 'Diversión Máxima.' : 'Maximum Fun.'}</b></span>
                   </p>
                 )}
               </div>
@@ -167,9 +169,13 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
               <div class="right-text-top-div">
                   <div class="right-text-top">
                       <p class="text-extra">
-                        {currentLang === 'es' ? 'Extra picante que' : 'Extra spicy that'}
-                        <br />
-                        {currentLang === 'es' ? 'enamora' : 'you will love'}
+                        {slide.product_top ? (
+                          slide.product_top.split('\n').map((line: string, i: number) =>
+                            i === 0 ? <>{line}<br /></> : <>{line}</>
+                          )
+                        ) : (
+                          <>{currentLang === 'es' ? 'Extra picante que' : 'Extra spicy that'}<br />{currentLang === 'es' ? 'enamora' : 'you will love'}</>
+                        )}
                       </p>
                   <div class="pl-[50px]">
                       <svg width="30" height="18" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -178,21 +184,26 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                     </div>
                   </div>
                   <svg width="255" height="32" viewBox="0 0 255 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 31C0 31 151 31 159.5 31C168 31 182.5 1 191 1C199.5 1 254.5 1 254.5 1" stroke="#FF2D30"/>
+                    <path d="M0 31C0 31 151 31 159.5 31C168 31 182.5 1 191 1C199.5 1 254.5 1 254.5 1" stroke={slide.color_theme === 'purple' ? '#9333ea' : '#FF2D30'}/>
                   </svg>
               </div>
              
 
               <div class="right-text">
-                {currentLang === 'es' ? (
-                  <p class="text-leveleate ">Levéleate al máximo con Taqueritos.<br/>Dragón de Fuego ¿Listo para el reto?</p>
-                ) : (
-                  <p class="text-leveleate ">Level up to the max with Taqueritos.<br/>Dragon  Fire. Ready for the challenge?</p>
-                )}
-                
+                <p class="text-leveleate">
+                  {slide.product_right ? (
+                    slide.product_right.split('\n').map((line: string, i: number) =>
+                      i === 0 ? <>{line}<br/></> : <>{line}</>
+                    )
+                  ) : (
+                    <>{currentLang === 'es' ? 'Levéleate al máximo con Taqueritos.' : 'Level up to the max with Taqueritos.'}<br/>{currentLang === 'es' ? 'Dragón de Fuego ¿Listo para el reto?' : 'Dragon Fire. Ready for the challenge?'}</>
+                  )}
+                </p>
                 <div class="flex flex-row items-center">
                   <div class="cta">
-                    <a href={`/${currentLang}/#products`} class="cta-button">{currentLang === 'es' ? 'Descubre más' : 'Discover more'}</a>
+                    <a href={slide.product_cta_link || `/${currentLang}/#products`} class="cta-button">
+                      {slide.product_cta_label || (currentLang === 'es' ? 'Descubre más' : 'Discover more')}
+                    </a>
                   </div>
                   <a href={`/${currentLang}/#products`} class="button-play ml-[35px]" aria-label={currentLang === 'es' ? 'Ir a productos' : 'Go to products'}>
                     <div class="button-inner">
@@ -241,10 +252,21 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
       </div>
 
       <!-- Navigation controls -->
-      <!-- <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-pagination"></div> -->
-      {slides.length > 1 && <div class="swiper-pagination pills"></div>}
+      {slides.length > 1 && (
+        <>
+          <div class="swiper-button-prev vc-nav-btn vc-nav-prev" aria-label="Slide anterior">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="swiper-button-next vc-nav-btn vc-nav-next" aria-label="Slide siguiente">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="swiper-pagination pills"></div>
+        </>
+      )}
 
 
     </div>
@@ -761,6 +783,119 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
 
   }
 
+  /* TEMA MORADO (Taqueritos Lava) */
+  .product-slide-wrapper[data-theme="purple"] .slide-content {
+    background: radial-gradient(ellipse at center, #160820 0%, #160820 50%, #160820 100%);
+  }
+
+  .product-slide-wrapper[data-theme="purple"] .slide-content::before,
+  .product-slide-wrapper[data-theme="purple"] .slide-content::after {
+    background: radial-gradient(ellipse at center, rgba(130, 0, 210, 0.55) 0%, rgba(70, 0, 140, 0) 70%);
+  }
+
+  .product-slide-wrapper[data-theme="purple"] .dragon-text {
+    animation: colorCyclePurple 5s ease-in-out infinite;
+  }
+
+  /* IAnimacion de la imagen Lava*/
+  .product-slide-wrapper[data-theme="purple"] .image-container .slide-image {
+    transform: translateY(-60px) rotate(25deg) scale(0.38);
+    animation: floatUpDownPurple 2s ease-in-out infinite;
+    transform-origin: center center;
+  }
+
+  @keyframes floatUpDownPurple {
+    0%   { transform: translateY(-60px) rotate(25deg) scale(0.38); }
+    50%  { transform: translateY(calc(-60px + 60px)) rotate(25deg) scale(0.38); }
+    100% { transform: translateY(-60px) rotate(25deg) scale(0.38); }
+  }
+
+  @keyframes colorCyclePurple {
+    0%   { color: rgba(90, 30, 130, 0.5); }
+    25%  { color: rgba(120, 50, 160, 0.55); }
+    50%  { color: rgba(80, 20, 120, 0.5); }
+    75%  { color: rgba(100, 35, 145, 0.52); }
+    100% { color: rgba(90, 30, 130, 0.5); }
+  }
+
+  .product-slide-wrapper[data-theme="purple"] .left-text span {
+    color: #c084fc;
+  }
+
+  .product-slide-wrapper[data-theme="purple"] .cta-button {
+    background: linear-gradient(90deg, #7e22ce, #a855f7);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.45);
+  }
+
+  .product-slide-wrapper[data-theme="purple"] .cta-button:hover {
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.7);
+  }
+
+  .product-slide-wrapper[data-theme="purple"] .button-play {
+    background-color: rgba(168, 85, 247, 0.25);
+  }
+
+  .product-slide-wrapper[data-theme="purple"] .button-inner {
+    background-color: rgba(168, 85, 247, 0.25);
+    border-color: rgba(168, 85, 247, 1);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+  }
+
+  .product-slide-wrapper[data-theme="purple"] .button-play:hover .button-inner {
+    box-shadow: 0 0 35px rgba(168, 85, 247, 0.85);
+  }
+
+  /* Flechas de navegación de los banners del home */
+  :global(.swiper-button-next.vc-nav-btn),
+  :global(.swiper-button-prev.vc-nav-btn) {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  :global(.swiper-button-next.vc-nav-btn)::after,
+  :global(.swiper-button-prev.vc-nav-btn)::after {
+    display: none; /* Ocultar el contenido por defecto de Swiper */
+  }
+
+  :global(.swiper-button-prev.vc-nav-prev) {
+    left: 24px;
+  }
+
+  :global(.swiper-button-next.vc-nav-next) {
+    right: 24px;
+  }
+
+  :global(.swiper-button-next.vc-nav-btn:hover),
+  :global(.swiper-button-prev.vc-nav-btn:hover) {
+    background: rgba(255, 45, 48, 0.35);
+    border-color: rgba(255, 45, 48, 0.6);
+    box-shadow: 0 0 20px rgba(255, 45, 48, 0.4);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  @media (max-width: 767px) {
+    :global(.swiper-button-prev.vc-nav-prev) { left: 10px; }
+    :global(.swiper-button-next.vc-nav-next) { right: 10px; }
+    :global(.swiper-button-next.vc-nav-btn),
+    :global(.swiper-button-prev.vc-nav-btn) {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
   </style>
   
 
@@ -806,8 +941,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
           disableOnInteraction: false,
         },
         navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+          nextEl: el.querySelector('.swiper-button-next') as HTMLElement | null,
+          prevEl: el.querySelector('.swiper-button-prev') as HTMLElement | null,
         },
         pagination: {
           el: paginationEl || '.swiper-pagination',

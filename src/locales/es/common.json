@@ -80,6 +80,23 @@
     "slider": [
       {
         "id": "slide1",
+        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/TAQUERITOS_LAVAS.png",
+        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/TAQUERITOS_LAVAS.png",
+        "alt": "Taqueritos Lava",
+        "title": "",
+        "description": "",
+        "link": "#",
+        "type": "product",
+        "color_theme": "purple",
+        "product_hero": "TAQUERITOS LAVA",
+        "product_left": "Atrévete a subir a un\nNuevo Nivel de picante.",
+        "product_top": "Un nuevo nivel de\npicante que enamora",
+        "product_right": "Levéleate al máximo con Taqueritos.\nLava ¿Listo para el reto?",
+        "product_cta_label": "Descubre más",
+        "product_cta_link": "#"
+      },
+      {
+        "id": "slide2",
         "desktop": "/images/es/products/taquerito.png",
         "mobile": "/images/es/products/taquerito.png",
         "alt": "Taqueritos",
