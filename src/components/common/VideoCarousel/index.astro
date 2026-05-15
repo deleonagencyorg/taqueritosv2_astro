@@ -774,12 +774,20 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
       height: 100% !important;
       width: auto;
       object-fit: contain;
-      transform: scale(1.08);
+      /* Ajuste exclusivo para mobile: posicionar la imagen hacia arriba y mantener ligero scale */
+      object-position: 50% 10%;
+      transform: translateY(-10px) scale(1.08);
       transform-origin: center;
     }
 
     /* Mejorar envoltura de títulos en overlay */
     .text-content .slide-title { white-space: normal; word-break: normal; overflow-wrap: normal; }
+
+    /* Corregir posición vertical imagen Lava en mobile*/
+    .product-slide-wrapper[data-theme="purple"] .image-container .slide-image {
+      transform: translateY(-150px) rotate(0deg) scale(0.65);
+      animation: floatUpDownPurpleMobile 2s ease-in-out infinite !important;
+    }
 
   }
 
@@ -799,15 +807,22 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
 
   /* IAnimacion de la imagen Lava*/
   .product-slide-wrapper[data-theme="purple"] .image-container .slide-image {
-    transform: translateY(-60px) rotate(25deg) scale(0.38);
+    transform: translateY(-60px) rotate(0deg) scale(0.60);
     animation: floatUpDownPurple 2s ease-in-out infinite;
     transform-origin: center center;
   }
 
   @keyframes floatUpDownPurple {
-    0%   { transform: translateY(-60px) rotate(25deg) scale(0.38); }
-    50%  { transform: translateY(calc(-60px + 60px)) rotate(25deg) scale(0.38); }
-    100% { transform: translateY(-60px) rotate(25deg) scale(0.38); }
+    0%   { transform: translateY(-60px) rotate(0deg) scale(0.60); }
+    50%  { transform: translateY(calc(-60px + 60px)) rotate(0deg) scale(0.60); }
+    100% { transform: translateY(-60px) rotate(0deg) scale(0.60); }
+  }
+
+  /* Keyframe para mobile */
+  @keyframes floatUpDownPurpleMobile {
+    0%   { transform: translateY(-20px) rotate(0deg) scale(0.65); }
+    50%  { transform: translateY(35px) rotate(0deg) scale(0.65); }
+    100% { transform: translateY(-20px) rotate(0deg) scale(0.65); }
   }
 
   @keyframes colorCyclePurple {
