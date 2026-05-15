@@ -74,25 +74,8 @@
     "slidermask": "https://snack.yummiespromociones.com/snacksyummies/BGHeader_1_.webp",
     "slidermaskmobile": "https://snack.yummiespromociones.com/snacksyummies/bg-front-mobile_1_.webp",
     "slider": [
-            {
-        "id": "slide1",
-        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/TAQUERITOS_LAVAS.png",
-        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/TAQUERITOS_LAVAS.png",
-        "alt": "Taqueritos Lava",
-        "title": "",
-        "description": "",
-        "link": "#",
-        "type": "product",
-        "color_theme": "purple",
-        "product_hero": "TAQUERITOS LAVA",
-        "product_left": "Dare to take it to a\nNew Level of spiciness.",
-        "product_top": "A new level of spice that will\nmake you fall in love.",
-        "product_right": "Level up to the max with Taqueritos.\nLava Ready for the challenge?",
-        "product_cta_label": "Discover more",
-        "product_cta_link": "#"
-      },
       {
-        "id": "slide2",
+        "id": "slide1",
         "desktop": "/images/es/products/taquerito.png",
         "mobile": "/images/es/products/taquerito.png",
         "alt": "Taqueritos Lava",
@@ -108,7 +91,7 @@
         "product_cta_link": "#"
       },
         {
-        "id": "slide3",
+        "id": "slide2",
         "desktop": "https://snack.yummiespromociones.com/taqueritos/banner-home-en.webp",
         "mobile": "https://snack.yummiespromociones.com/taqueritos/homeen.webp",
         "alt": "Taqueritos",
@@ -118,7 +101,7 @@
         "type": "image" 
       },
         {
-        "id": "slide4",
+        "id": "slide3",
         "desktop": "https://snack.yummiespromociones.com/taqueritos/banner_chile_toreado_en.webp", 
         "mobile": "https://snack.yummiespromociones.com/taqueritos/banner_chile_toreado_en.webp",
         "alt": "Taqueritos",
