@@ -80,8 +80,8 @@
     "slider": [
       {
         "id": "slide1",
-        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/TAQUERITOS_LAVAS.webp",
-        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/TAQUERITOS_LAVAS.webp",
+        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/lavaslider.webp",
+        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/lavaslider.webp",
         "alt": "Taqueritos Lava",
         "title": "",
         "description": "",
@@ -93,12 +93,12 @@
         "product_top": "Un nuevo nivel de\npicante que enamora",
         "product_right": "Levéleate al máximo con Taqueritos.\nLava ¿Listo para el reto?",
         "product_cta_label": "Descubre más",
-        "product_cta_link": "#"
+        "product_cta_link": "/es/productos/taqueritos-lava"
       },
       {
         "id": "slide2",
-        "desktop": "/images/es/products/taquerito.png",
-        "mobile": "/images/es/products/taquerito.png",
+        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/fuegoslider.webp",
+        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/fuegoslider.webp",
         "alt": "Taqueritos",
         "title": "",
         "description": "",
@@ -109,7 +109,7 @@
         "product_top": "Extra picante que\nenamora",
         "product_right": "Levéleate al máximo con Taqueritos.\nDragón de Fuego ¿Listo para el reto?",
         "product_cta_label": "Descubre más",
-        "product_cta_link": "#"
+        "product_cta_link": "/es/productos/taqueritos-dragon-de-fuego"
       }
     ]
   },

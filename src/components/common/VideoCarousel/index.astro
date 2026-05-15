@@ -67,6 +67,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
           const isProduct = slideType === 'product';
           const isSimpleImage = slideType === 'image';
           const slideId = `slide-${index}`;
+          const dataTheme = slide.color_theme || 'red';
+          const dataSize = (slide.product_hero || '').toLowerCase().includes('dragon') ? 'purple' : undefined;
 
         return (
           <div class="swiper-slide" id={slideId} data-slide-type={slideType}>
@@ -125,7 +127,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
               </div>
             ) : (
               /* ========== SLIDE DE PRODUCTO ========== */
-              <div class="product-slide-wrapper" data-theme={slide.color_theme || 'red'}>
+              <div class="product-slide-wrapper" data-theme={dataTheme} data-size={dataSize}>
                 <div class="slide-content" style={`height: ${height};`}>
                   <div class="image-container relative w-full h-[680px] md:w-full md:h-full flex md:items-center md:justify-center">
                   <!-- Imagen principal (desktop) -->
@@ -485,7 +487,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     height: 54px;
     border-radius: 50%;
     background-color: rgba(255, 0, 4, 0.25); /* círculo externo */
-    display: flex;
+    display: none !important; /* ocultar visualmente */
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -783,8 +785,9 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     /* Mejorar envoltura de títulos en overlay */
     .text-content .slide-title { white-space: normal; word-break: normal; overflow-wrap: normal; }
 
-    /* Corregir posición vertical imagen Lava en mobile*/
-    .product-slide-wrapper[data-theme="purple"] .image-container .slide-image {
+    /* Corregir posición vertical imagen Lava en mobile (aplica también a slides marcados data-size="purple") */
+    .product-slide-wrapper[data-theme="purple"] .image-container .slide-image,
+    .product-slide-wrapper[data-size="purple"] .image-container .slide-image {
       transform: translateY(-150px) rotate(0deg) scale(0.65);
       animation: floatUpDownPurpleMobile 2s ease-in-out infinite !important;
     }
@@ -806,7 +809,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   }
 
   /* IAnimacion de la imagen Lava*/
-  .product-slide-wrapper[data-theme="purple"] .image-container .slide-image {
+  .product-slide-wrapper[data-theme="purple"] .image-container .slide-image,
+  .product-slide-wrapper[data-size="purple"] .image-container .slide-image {
     transform: translateY(-60px) rotate(0deg) scale(0.60);
     animation: floatUpDownPurple 2s ease-in-out infinite;
     transform-origin: center center;
@@ -886,11 +890,11 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   }
 
   :global(.swiper-button-prev.vc-nav-prev) {
-    left: 24px;
+    left: clamp(40px, 4vw, 80px);
   }
 
   :global(.swiper-button-next.vc-nav-next) {
-    right: 24px;
+    right: clamp(40px, 4vw, 80px);
   }
 
   :global(.swiper-button-next.vc-nav-btn:hover),
@@ -902,8 +906,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   }
 
   @media (max-width: 767px) {
-    :global(.swiper-button-prev.vc-nav-prev) { left: 10px; }
-    :global(.swiper-button-next.vc-nav-next) { right: 10px; }
+    :global(.swiper-button-prev.vc-nav-prev) { left: 16px; }
+    :global(.swiper-button-next.vc-nav-next) { right: 16px; }
     :global(.swiper-button-next.vc-nav-btn),
     :global(.swiper-button-prev.vc-nav-btn) {
       width: 36px;
