@@ -76,8 +76,8 @@
     "slider": [
       {
         "id": "slide1",
-        "desktop": "/images/es/products/taquerito.png",
-        "mobile": "/images/es/products/taquerito.png",
+        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/fuegoslider.webp",
+        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/fuegoslider.webp",
         "alt": "Taqueritos Lava",
         "title": "",
         "description": "",
@@ -88,7 +88,7 @@
         "product_top": "Extra spicy that\nyou will love",
         "product_right": "Level up to the max with Taqueritos.\nDragon Fire. Ready for the challenge?",
         "product_cta_label": "Discover more",
-        "product_cta_link": "#"
+        "product_cta_link": "/en/products/taqueritos-dragon-de-fuego"
       },
         {
         "id": "slide2",

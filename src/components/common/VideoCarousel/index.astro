@@ -67,6 +67,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
           const isProduct = slideType === 'product';
           const isSimpleImage = slideType === 'image';
           const slideId = `slide-${index}`;
+          const dataTheme = slide.color_theme || 'red';
+          const dataSize = (slide.product_hero || '').toLowerCase().includes('dragon') ? 'purple' : undefined;
 
         return (
           <div class="swiper-slide" id={slideId} data-slide-type={slideType}>
@@ -125,7 +127,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
               </div>
             ) : (
               /* ========== SLIDE DE PRODUCTO ========== */
-              <div class="product-slide-wrapper" data-theme={slide.color_theme || 'red'}>
+              <div class="product-slide-wrapper" data-theme={dataTheme} data-size={dataSize}>
                 <div class="slide-content" style={`height: ${height};`}>
                   <div class="image-container relative w-full h-[680px] md:w-full md:h-full flex md:items-center md:justify-center">
                   <!-- Imagen principal (desktop) -->
@@ -177,11 +179,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                           <>{currentLang === 'es' ? 'Extra picante que' : 'Extra spicy that'}<br />{currentLang === 'es' ? 'enamora' : 'you will love'}</>
                         )}
                       </p>
-                  <div class="pl-[50px]">
-                      <svg width="30" height="18" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M13.7175 4.85355C13.9127 4.65829 13.9127 4.34171 13.7175 4.14645L10.5355 0.964466C10.3402 0.769204 10.0236 0.769204 9.82837 0.964466C9.63311 1.15973 9.63311 1.47631 9.82837 1.67157L12.6568 4.5L9.82837 7.32843C9.63311 7.52369 9.63311 7.84027 9.82837 8.03553C10.0236 8.2308 10.3402 8.2308 10.5355 8.03553L13.7175 4.85355ZM0.635986 4.5V5L13.3639 5V4.5V4L0.635986 4V4.5Z" fill="white"/>
-                      </svg>
-                    </div>
+                  
                   </div>
                   <svg width="255" height="32" viewBox="0 0 255 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 31C0 31 151 31 159.5 31C168 31 182.5 1 191 1C199.5 1 254.5 1 254.5 1" stroke={slide.color_theme === 'purple' ? '#9333ea' : '#FF2D30'}/>
@@ -485,7 +483,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     height: 54px;
     border-radius: 50%;
     background-color: rgba(255, 0, 4, 0.25); /* círculo externo */
-    display: flex;
+    display: none !important; /* ocultar visualmente */
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -783,8 +781,9 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     /* Mejorar envoltura de títulos en overlay */
     .text-content .slide-title { white-space: normal; word-break: normal; overflow-wrap: normal; }
 
-    /* Corregir posición vertical imagen Lava en mobile*/
-    .product-slide-wrapper[data-theme="purple"] .image-container .slide-image {
+    /* Corregir posición vertical imagen Lava en mobile (aplica también a slides marcados data-size="purple") */
+    .product-slide-wrapper[data-theme="purple"] .image-container .slide-image,
+    .product-slide-wrapper[data-size="purple"] .image-container .slide-image {
       transform: translateY(-150px) rotate(0deg) scale(0.65);
       animation: floatUpDownPurpleMobile 2s ease-in-out infinite !important;
     }
@@ -806,7 +805,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   }
 
   /* IAnimacion de la imagen Lava*/
-  .product-slide-wrapper[data-theme="purple"] .image-container .slide-image {
+  .product-slide-wrapper[data-theme="purple"] .image-container .slide-image,
+  .product-slide-wrapper[data-size="purple"] .image-container .slide-image {
     transform: translateY(-60px) rotate(0deg) scale(0.60);
     animation: floatUpDownPurple 2s ease-in-out infinite;
     transform-origin: center center;
@@ -886,11 +886,11 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   }
 
   :global(.swiper-button-prev.vc-nav-prev) {
-    left: 24px;
+    left: clamp(40px, 4vw, 80px);
   }
 
   :global(.swiper-button-next.vc-nav-next) {
-    right: 24px;
+    right: clamp(40px, 4vw, 80px);
   }
 
   :global(.swiper-button-next.vc-nav-btn:hover),
@@ -902,8 +902,8 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   }
 
   @media (max-width: 767px) {
-    :global(.swiper-button-prev.vc-nav-prev) { left: 10px; }
-    :global(.swiper-button-next.vc-nav-next) { right: 10px; }
+    :global(.swiper-button-prev.vc-nav-prev) { left: 16px; }
+    :global(.swiper-button-next.vc-nav-next) { right: 16px; }
     :global(.swiper-button-next.vc-nav-btn),
     :global(.swiper-button-prev.vc-nav-btn) {
       width: 36px;
