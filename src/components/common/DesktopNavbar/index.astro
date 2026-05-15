@@ -24,6 +24,18 @@ const menuItems = rawMenuItems.filter((item) => item.id !== 'community' && item.
 // Filtrar juegos solo para español
 const menuItemsFiltered = menuItems.filter((item) => item.id !== 'games' || currentLang === 'es');
 
+// Reordenar juegos antes de productos
+let menuItemsOrdered = menuItemsFiltered.slice();
+if (currentLang === 'es') {
+  const idxGames = menuItemsOrdered.findIndex(i => i.id === 'games');
+  const idxProducts = menuItemsOrdered.findIndex(i => i.id === 'products');
+  if (idxGames > -1 && idxProducts > -1 && idxGames > idxProducts) {
+    const [gamesItem] = menuItemsOrdered.splice(idxGames, 1);
+    const insertPos = menuItemsOrdered.findIndex(i => i.id === 'products');
+    menuItemsOrdered.splice(insertPos, 0, gamesItem);
+  }
+}
+
 const contactHref = `/${currentLang}/${currentLang === 'es' ? 'contacto' : 'contact'}`;
 const contactMenuItem = {
   id: 'contact',
@@ -31,7 +43,7 @@ const contactMenuItem = {
   href: contactHref,
 };
 
-const menuItemsWithContact = [...menuItemsFiltered, contactMenuItem];
+const menuItemsWithContact = [...menuItemsOrdered, contactMenuItem];
 
 // Obtener productos para el menú desplegable
 const products = t('items', { namespace: 'products', locale: currentLang }) as any[];
