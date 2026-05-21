@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 
 interface Props {
   videoUrl: string;
+  mobileVideoUrl?: string;
   fallbackImageUrl: string;
   height?: string;
   width?: string;
@@ -15,6 +16,7 @@ interface Props {
 
 const {
   videoUrl,
+  mobileVideoUrl,
   fallbackImageUrl,
   height = "400px",
   width = "100%",
@@ -47,15 +49,14 @@ const {
       playsinline
       class="hero-video"
       id="heroVideo"
+      data-desktop-src={videoUrl}
+      data-mobile-src={mobileVideoUrl || videoUrl}
     >
       <source src={videoUrl} type="video/mp4">
       <!-- If the browser doesn't support video, the fallback image will remain visible -->
       Your browser does not support the video tag.
     </video>
   </div>
-  
-  <!-- Mobile overlay with bg-primary (always visible on mobile) -->
-  <div class="mobile-overlay"></div>
   
   <!-- Overlay with text (conditional) -->
   {showOverlay && (
@@ -121,25 +122,6 @@ const {
     object-fit: cover;
   }
   
-  .mobile-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(10, 61, 126, 0.6); /* primary color with 60% opacity - more visible */
-    z-index: 10; /* Higher z-index to ensure visibility */
-    pointer-events: none;
-    display: none; /* Hidden by default */
-  }
-  
-  /* Show overlay only on mobile */
-  @media (max-width: 768px) {
-    .mobile-overlay {
-      display: block !important;
-    }
-  }
-  
   .overlay {
     position: absolute;
     top: 0;
@@ -186,8 +168,27 @@ const {
   document.addEventListener('DOMContentLoaded', () => {
     const videoElement = document.getElementById('heroVideo') as HTMLVideoElement;
     const fallbackImage = document.querySelector('.fallback-image') as HTMLElement;
-    
+
+    function setVideoSrc(video: HTMLVideoElement) {
+      const isMobile = window.innerWidth <= 768;
+      const mobileSrc = video.dataset.mobileSrc || '';
+      const desktopSrc = video.dataset.desktopSrc || '';
+      const targetSrc = isMobile ? mobileSrc : desktopSrc;
+      const sourceEl = video.querySelector('source') as HTMLSourceElement;
+      if (targetSrc && sourceEl && sourceEl.getAttribute('src') !== targetSrc) {
+        sourceEl.setAttribute('src', targetSrc);
+        video.load();
+        video.play().catch(() => {});
+      }
+    }
+
     if (videoElement) {
+      // Set correct source on load
+      setVideoSrc(videoElement);
+
+      // React to viewport size changes (e.g. DevTools mobile toggle)
+      window.addEventListener('resize', () => setVideoSrc(videoElement));
+
       // Hide fallback image once video can play
       videoElement.addEventListener('canplay', () => {
         fallbackImage.style.opacity = '0';
