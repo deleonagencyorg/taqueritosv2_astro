@@ -47,7 +47,7 @@ const {
       muted 
       loop 
       playsinline
-      preload="none"
+      preload="metadata"
       class="hero-video"
       id="heroVideo"
       data-desktop-src={videoUrl}
@@ -98,6 +98,7 @@ const {
     width: 100%;
     height: 100%;
     z-index: 1;
+    transition: opacity 0.4s ease;
   }
   
   .fallback-image img {
@@ -163,53 +164,61 @@ const {
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var videoElement = document.getElementById('heroVideo');
-    var fallbackImage = document.querySelector('.fallback-image');
+  (function () {
+    function initVideoHero() {
+      var videoElement = document.getElementById('heroVideo');
+      var fallbackImage = document.querySelector('.fallback-image');
 
-    if (!videoElement) return;
+      if (!videoElement) return;
 
-    function isMobile() {
-      return window.matchMedia('(max-width: 768px)').matches;
-    }
-
-    function setVideoSrc() {
-      var mobileSrc = videoElement.getAttribute('data-mobile-src') || '';
-      var desktopSrc = videoElement.getAttribute('data-desktop-src') || '';
-      var targetSrc = isMobile() ? mobileSrc : desktopSrc;
-
-      if (!targetSrc) return;
-
-      if (videoElement.getAttribute('src') === targetSrc) return;
-
-      try {
-        videoElement.setAttribute('src', targetSrc);
-        videoElement.load();
-        videoElement.play().catch(function () {});
-      } catch (e) {
+      function isMobile() {
+        return window.matchMedia('(max-width: 768px)').matches;
       }
-    }
 
-    setVideoSrc();
+      function setVideoSrc() {
+        var mobileSrc = videoElement.getAttribute('data-mobile-src') || '';
+        var desktopSrc = videoElement.getAttribute('data-desktop-src') || '';
+        var targetSrc = isMobile() ? mobileSrc : desktopSrc;
 
-    var resizeTimer;
-    window.addEventListener('resize', function () {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(setVideoSrc, 200);
-    });
+        if (!targetSrc) return;
 
-    videoElement.addEventListener('canplay', function () {
-      if (fallbackImage) fallbackImage.style.opacity = '0';
-    });
+        if (videoElement.getAttribute('src') === targetSrc) return;
 
-    videoElement.addEventListener('error', function () {
-      if (fallbackImage) fallbackImage.style.opacity = '1';
-    });
+        try {
+          videoElement.setAttribute('src', targetSrc);
+          videoElement.load();
+          videoElement.play().catch(function () {});
+        } catch (e) {
+        }
+      }
 
-    setTimeout(function () {
-      if (videoElement.readyState < 3) {
+      setVideoSrc();
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(setVideoSrc, 200);
+      });
+
+      videoElement.addEventListener('canplay', function () {
+        if (fallbackImage) fallbackImage.style.opacity = '0';
+      });
+
+      videoElement.addEventListener('error', function () {
         if (fallbackImage) fallbackImage.style.opacity = '1';
-      }
-    }, 3000);
-  });
+      });
+
+      setTimeout(function () {
+        if (videoElement.readyState < 3) {
+          if (fallbackImage) fallbackImage.style.opacity = '1';
+        }
+      }, 3000);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initVideoHero);
+    } else {
+      initVideoHero();
+    }
+  })();
 </script>
