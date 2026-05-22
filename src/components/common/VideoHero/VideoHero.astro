@@ -47,13 +47,12 @@ const {
       muted 
       loop 
       playsinline
+      preload="none"
       class="hero-video"
       id="heroVideo"
       data-desktop-src={videoUrl}
       data-mobile-src={mobileVideoUrl || videoUrl}
     >
-      <source src={videoUrl} type="video/mp4">
-      <!-- If the browser doesn't support video, the fallback image will remain visible -->
       Your browser does not support the video tag.
     </video>
   </div>
@@ -164,48 +163,53 @@ const {
 </style>
 
 <script>
-  // Handle video loading and fallback
-  document.addEventListener('DOMContentLoaded', () => {
-    const videoElement = document.getElementById('heroVideo') as HTMLVideoElement;
-    const fallbackImage = document.querySelector('.fallback-image') as HTMLElement;
+  document.addEventListener('DOMContentLoaded', function () {
+    var videoElement = document.getElementById('heroVideo');
+    var fallbackImage = document.querySelector('.fallback-image');
 
-    function setVideoSrc(video: HTMLVideoElement) {
-      const isMobile = window.innerWidth <= 768;
-      const mobileSrc = video.dataset.mobileSrc || '';
-      const desktopSrc = video.dataset.desktopSrc || '';
-      const targetSrc = isMobile ? mobileSrc : desktopSrc;
-      const sourceEl = video.querySelector('source') as HTMLSourceElement;
-      if (targetSrc && sourceEl && sourceEl.getAttribute('src') !== targetSrc) {
-        sourceEl.setAttribute('src', targetSrc);
-        video.load();
-        video.play().catch(() => {});
+    if (!videoElement) return;
+
+    function isMobile() {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+
+    function setVideoSrc() {
+      var mobileSrc = videoElement.getAttribute('data-mobile-src') || '';
+      var desktopSrc = videoElement.getAttribute('data-desktop-src') || '';
+      var targetSrc = isMobile() ? mobileSrc : desktopSrc;
+
+      if (!targetSrc) return;
+
+      if (videoElement.getAttribute('src') === targetSrc) return;
+
+      try {
+        videoElement.setAttribute('src', targetSrc);
+        videoElement.load();
+        videoElement.play().catch(function () {});
+      } catch (e) {
       }
     }
 
-    if (videoElement) {
-      // Set correct source on load
-      setVideoSrc(videoElement);
+    setVideoSrc();
 
-      // React to viewport size changes (e.g. DevTools mobile toggle)
-      window.addEventListener('resize', () => setVideoSrc(videoElement));
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(setVideoSrc, 200);
+    });
 
-      // Hide fallback image once video can play
-      videoElement.addEventListener('canplay', () => {
-        fallbackImage.style.opacity = '0';
-      });
-      
-      // Show fallback image if video errors
-      videoElement.addEventListener('error', () => {
-        fallbackImage.style.opacity = '1';
-      });
-      
-      // Set a timeout to show video anyway if it takes too long
-      setTimeout(() => {
-        if (videoElement.readyState < 3) { // HAVE_FUTURE_DATA = 3
-          // Video is taking too long, keep fallback visible
-          fallbackImage.style.opacity = '1';
-        }
-      }, 3000);
-    }
+    videoElement.addEventListener('canplay', function () {
+      if (fallbackImage) fallbackImage.style.opacity = '0';
+    });
+
+    videoElement.addEventListener('error', function () {
+      if (fallbackImage) fallbackImage.style.opacity = '1';
+    });
+
+    setTimeout(function () {
+      if (videoElement.readyState < 3) {
+        if (fallbackImage) fallbackImage.style.opacity = '1';
+      }
+    }, 3000);
   });
 </script>
