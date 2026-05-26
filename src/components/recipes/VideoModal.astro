@@ -45,20 +45,60 @@ const { videoId, isOpen } = Astro.props;
       </svg>
     </button>
     
-    <!-- Contenedor del video responsive -->
-    <div class="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
+    <!-- Contenedor del video responsive. Para Shorts aplicamos la clase 'shorts-fullscreen' al modal y este CSS hará que ocupe toda la pantalla -->
+    <div id="video-container" class="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
       <iframe
         id="video-iframe"
         class="absolute inset-0 w-full h-full"
         src=""
         title="Video de receta"
         frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
         allowfullscreen
       ></iframe>
     </div>
   </div>
 </div>
+
+<style>
+  @media (max-width: 768px) {
+    #video-modal.shorts-fullscreen {
+      align-items: stretch;
+      justify-content: stretch;
+    }
+
+    #video-modal.shorts-fullscreen #video-container {
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      margin: 0;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: black;
+      z-index: 10000;
+    }
+
+    #video-modal.shorts-fullscreen #video-iframe {
+      position: relative;
+      width: 100% !important;
+      height: 100% !important;
+      border: 0;
+    }
+
+    #video-modal.shorts-fullscreen #video-modal-close {
+      position: fixed !important;
+      top: 1rem !important;
+      right: 1rem !important;
+      z-index: 10001;
+    }
+  }
+</style>
 
 <script>
   // Función para extraer el ID de video de YouTube de diferentes formatos de URL
@@ -94,9 +134,23 @@ const { videoId, isOpen } = Astro.props;
       console.error('Invalid YouTube URL:', videoUrl);
       return;
     }
-    
-    // Establecer la URL del iframe con autoplay
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+      const isShort = /\/shorts\//.test(videoUrl);
+
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+
+      const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+      const langFromHtml = document.documentElement && document.documentElement.lang ? document.documentElement.lang.toLowerCase() : '';
+      const pathLocale = (location.pathname || '').split('/')[1];
+      const locale = (langFromHtml || pathLocale || '').toLowerCase();
+      const isLocaleAllowed = locale === 'es' || locale === 'en' || /^\/(es|en)(\/|$)/.test(location.pathname || '');
+
+      const shouldFullscreen = isShort && isMobile && isLocaleAllowed;
+
+      if (shouldFullscreen) {
+        modal.classList.add('shorts-fullscreen');
+      } else {
+        modal.classList.remove('shorts-fullscreen');
+      }
     
     // Mostrar el modal
     modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -121,6 +175,8 @@ const { videoId, isOpen } = Astro.props;
     
     // Limpiar el iframe para detener el video
     iframe.src = '';
+
+    if (modal) modal.classList.remove('shorts-fullscreen');
     
     // Restaurar scroll del body
     document.body.style.overflow = '';
