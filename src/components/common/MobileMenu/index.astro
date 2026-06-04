@@ -16,8 +16,8 @@ const { currentLang, headerColorConfig } = Astro.props;
 // Obtener los datos de social media y menú desde las traducciones
 const socialMedia = t('social_media', { namespace: 'common', locale: currentLang }) as any;
 const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
-// Quitar el botón de comunidad y Taqueritos Gaming (temporal)
-const menuItems = rawMenuItems.filter((item) => item.id !== 'community' && item.id !== 'taqueritos-gaming');
+// Quitar el botón de comunidad
+const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
 // Filtrar juegos solo para español
 const menuItemsFiltered = menuItems.filter((item) => item.id !== 'games' || currentLang === 'es');
 
