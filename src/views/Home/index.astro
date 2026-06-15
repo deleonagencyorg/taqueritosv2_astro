@@ -30,8 +30,7 @@ const { loading = false } = Astro.props;
 
 // Language and Data Setup
 const currentLang = getLocale();
-// Feature flag to temporarily hide the challenges section on Home
-const showChallengesSection = false;
+const showChallengesSection = true;
 
 interface GameItem {
   id: number;
@@ -135,7 +134,7 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
     </div>
 
     {currentLang === 'es' && showChallengesSection && (
-      <section id="challenges" class="w-full py-16 md:py-20 !bg-brown relative" style="display:none">
+      <section id="challenges" class="w-full py-16 md:py-20 !bg-brown relative">
         <div class="container mx-auto px-4 relative">
           {challengesAssets.title && (
             <div class="title mb-12">
@@ -146,16 +145,141 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
             </div>
           )}
 
-          {/* Texto fijo solo en español encima del carrusel de retos */}
-          <div class="title mb-4">
-            <p>PARTICIPA EN NUESTROS RETOS</p>
+          {/* Calendario de torneos */}
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="font-title text-2xl md:text-3xl font-bold text-white uppercase m-0">
+              {currentLang === 'es' ? 'CALENDARIO DE TORNEOS' : 'TOURNAMENT CALENDAR'}
+            </h2>
+            <div class="flex gap-3 calendar-nav-buttons">
+              <button
+                type="button"
+                class="calendar-carousel-btn-prev w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
+                aria-label="Anterior"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="calendar-carousel-btn-next w-14 h-14 flex items-center justify-center bg-[rgba(255,45,48,0.16)] border-2 border-[#ff2c2f] backdrop-blur-sm hover:bg-[#150404] transition-all duration-300 rounded-[12px]"
+                aria-label="Siguiente"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.2002 7 15.2002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
           </div>
-          <ChallengesCarousel 
-            title={challengesAssets.title || 'PARTICIPA EN NUESTROS'}
-            subtitle={challengesAssets.subtitle || 'RETOS Y GANA PREMIOS'}
-            textButton={challengesAssets.view_more || 'Ver Todos'}
-            includeRuta={false}
-          />
+
+          <div class="calendar-carousel-container py-6" data-calendar-carousel>
+            <div class="calendar-carousel-viewport overflow-x-hidden py-2">
+              <div class="calendar-carousel-track flex transition-transform duration-300 ease-out" data-calendar-track>
+                  <div class="calendar-slide flex-shrink-0 px-2 flex items-center justify-center">
+                  <div class="rounded-sm overflow-hidden">
+                    <LazyImage src="https://snack.yummiespromociones.com/SnacksyummiesAssets/Calendario1.webp" alt="Calendario 1" class="w-full h-full object-cover" />
+                  </div>
+                </div>
+                  <div class="calendar-slide flex-shrink-0 px-2 flex items-center justify-center">
+                  <div class="rounded-sm overflow-hidden">
+                    <LazyImage src="https://snack.yummiespromociones.com/SnacksyummiesAssets/Calendario2.webp" alt="Calendario 2" class="w-full h-full object-cover" />
+                  </div>
+                </div>
+                  <div class="calendar-slide flex-shrink-0 px-2 flex items-center justify-center">
+                  <div class="rounded-sm overflow-hidden">
+                    <LazyImage src="https://snack.yummiespromociones.com/SnacksyummiesAssets/Calendario3.webp" alt="Calendario 3" class="w-full h-full object-cover" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            function initCalendarCarouselHome() {
+              const containers = document.querySelectorAll('[data-calendar-carousel]');
+              containers.forEach((container) => {
+                if ((container as any)._calendarInit) return;
+                (container as any)._calendarInit = true;
+                const track = container.querySelector('[data-calendar-track]') as HTMLElement | null;
+                let prevBtn = container.querySelector('.calendar-carousel-btn-prev') as HTMLButtonElement | null;
+                let nextBtn = container.querySelector('.calendar-carousel-btn-next') as HTMLButtonElement | null;
+                if (!prevBtn || !nextBtn) {
+                  const sectionEl = container.closest('section') || container.parentElement;
+                  if (sectionEl) {
+                    prevBtn = sectionEl.querySelector('.calendar-carousel-btn-prev') as HTMLButtonElement | null;
+                    nextBtn = sectionEl.querySelector('.calendar-carousel-btn-next') as HTMLButtonElement | null;
+                  }
+                }
+                const slides = Array.from(container.querySelectorAll('.calendar-slide')) as HTMLElement[];
+                if (!track || slides.length === 0) return;
+
+                let currentIndex = 0;
+                function getVisibleCount() {
+                  const w = window.innerWidth;
+                  if (w >= 1024) return 2;
+                  return 1;
+                }
+                function getMaxIndex() {
+                  const visible = getVisibleCount();
+                  return Math.max(0, slides.length - visible);
+                }
+                function updateCarousel() {
+                  const visible = getVisibleCount();
+                  const slideWidth = 100 / visible;
+                  slides.forEach((s) => { s.style.width = `${slideWidth}%`; });
+                  const offset = currentIndex * slideWidth;
+                  track.style.transform = `translateX(-${offset}%)`;
+                }
+                function goNext() {
+                  const max = getMaxIndex();
+                  if (currentIndex < max) currentIndex++; else currentIndex = 0;
+                  updateCarousel();
+                }
+                function goPrev() {
+                  const max = getMaxIndex();
+                  if (currentIndex > 0) currentIndex--; else currentIndex = max;
+                  updateCarousel();
+                }
+                if (prevBtn) prevBtn.addEventListener('click', goPrev);
+                if (nextBtn) nextBtn.addEventListener('click', goNext);
+                let resizeTimeout: any = null;
+                window.addEventListener('resize', () => {
+                  clearTimeout(resizeTimeout);
+                  resizeTimeout = setTimeout(() => {
+                    const max = getMaxIndex();
+                    if (currentIndex > max) currentIndex = max;
+                    updateCarousel();
+                  }, 120);
+                });
+                updateCarousel();
+              });
+            }
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', initCalendarCarouselHome);
+            } else {
+              initCalendarCarouselHome();
+            }
+            document.addEventListener('astro:page-load', initCalendarCarouselHome);
+          </script>
+
+          <style>
+            .calendar-carousel-container { width: 100%; }
+            .calendar-carousel-viewport { width: 100%; overflow-x: hidden; }
+            .calendar-carousel-track { display:flex; will-change: transform; align-items: stretch; }
+            .calendar-slide { flex-shrink:0; padding: 0 8px; box-sizing: border-box; display:flex; }
+            .calendar-slide img, .calendar-slide picture, .calendar-slide .lazy-image { width:100%; height:100%; }
+            @media (min-width: 768px) { .calendar-slide { padding: 0 10px; } }
+            @media (max-width: 767px) {
+              .calendar-nav-buttons { position: static; display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.75rem; pointer-events: auto; z-index: 20; }
+              .calendar-carousel-btn-prev, .calendar-carousel-btn-next { pointer-events: auto; }
+              .calendar-carousel-container { padding-top: 0.6rem !important; padding-bottom: 0.6rem !important; }
+              .calendar-nav-buttons { margin-top: 0.25rem; gap: 0.5rem; }
+              .calendar-carousel-btn-prev, .calendar-carousel-btn-next { width: 40px !important; height: 40px !important; min-width: 40px !important; min-height: 40px !important; padding: 0 !important; }
+              .calendar-carousel-btn-prev svg, .calendar-carousel-btn-next svg { width: 12px; height: 12px; }
+            }
+          </style>
         </div>
       </section>
     )}

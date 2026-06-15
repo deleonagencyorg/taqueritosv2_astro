@@ -130,6 +130,11 @@
       "href": "/es/recetas"
     },
     {
+      "id": "challenges",
+      "text": "Retos y Torneos",
+      "href": "/es/retos-torneos"
+    },
+    {
       "id": "community",
       "text": "Comunidad",
       "href": "/es/#players"
