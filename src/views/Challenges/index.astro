@@ -84,7 +84,7 @@ const featuredChallenge: SummaryChallenge | null =
   (activeChallenges.length > 0 ? activeChallenges[0] : orderedChallenges[0]) || null;
 
 const pageTitle = currentLang === 'es' ? 'Retos y torneos' : 'Challenges & Tournaments';
-const sectionTitle = currentLang === 'es' ? 'Participa en nuestros retos' : 'Join our challenges';
+const sectionTitle = currentLang === 'es' ? 'CALENDARIO DE TORNEOS' : 'TOURNAMENT CALENDAR';
 
 const introTitle = currentLang === 'es'
   ? '¡Descubre y disfruta nuestros retos y torneos!'
@@ -175,7 +175,7 @@ const promosSlides = Array.isArray(commonAssets)
     }))
   : [];
 ---
-<div class="-mt-px -mb-px bg-dark-spotlight" >
+<div class="-mt-px -mb-px bg-dark-spotlight">
   <!-- Carrusel de promos activas (solo español) - Full width -->
   {currentLang === 'es' && promosSlides.length > 0 && (
     <section class="w-full">
@@ -188,32 +188,22 @@ const promosSlides = Array.isArray(commonAssets)
     </section>
   )}
 
-  <div class="container mx-auto px-4 pt-24 pb-24 mt-0">
-    <!-- Banner introductorio -->
-    <section class="mb-14 pt-24">
-      <div
-        class="mx-auto max-w-5xl  border border-white/20 bg-cover bg-center bg-no-repeat px-6 md:px-12 py-10 md:py-14 text-center text-white relative overflow-hidden"
-        style="background-image: url('https://snack.yummiespromociones.com/taqueritos/bggames.png'); background-color: rgba(0,0,0,0.75);"
-      >
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none"></div>
-
-        <div class="relative z-10 max-w-3xl mx-auto">
-          <h2 class="font-title text-2xl md:text-4xl font-bold uppercase mb-4">
-            {introTitle}
-          </h2>
-          <p class="text-sm md:text-base text-white/85 mb-8">
-            {introDescription}
-          </p>
-
-          <a
-            href="https://www.snacksyummies.com/es/yummiesone"
-            class="inline-flex items-center justify-center px-8 py-3 rounded-md bg-red text-white font-semibold uppercase tracking-wide text-sm shadow-[0_10px_25px_rgba(0,0,0,0.7)] hover:bg-[#ff4b4e] transition-colors duration-200"
-          >
-            {currentLang === 'es' ? 'Regístrate ahora' : 'Register now'}
-          </a>
-        </div>
+  <!-- Banner -->
+  <section class={`w-full mb-6 ${promosSlides.length > 0 ? 'pt-6 md:pt-12' : 'pt-28 md:pt-36 lg:pt-40'}`}>
+    <a href="https://www.challengermode.com/s/taqueritos" target="_blank" rel="noopener noreferrer" class="block w-full">
+      <div class="w-full overflow-hidden">
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/Banner_ARENA.webp"
+          alt={currentLang === 'es' ? 'Retos y Torneos' : 'Challenges & Tournaments'}
+          class="w-full h-auto object-cover"
+          loading="lazy"
+          style="width:100%; display:block;"
+        />
       </div>
-    </section>
+    </a>
+  </section>
+
+  <div class="container mx-auto px-4 pb-24 mt-0">
 
     <!-- Cards de tipo de actividades (3 columnas / 1 columna en mobile) -->
     <section class="mb-12 px-4 py-10 md:p-24">
@@ -261,6 +251,36 @@ const promosSlides = Array.isArray(commonAssets)
             </div>
           </div>
         ))}
+      </div>
+    </section>
+
+    <!-- seccion texto e imagen -->
+    <section class="w-full py-12 md:py-16">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <!-- Texto -->
+          <div class="text-white">
+            <h3 class="font-title text-2xl md:text-3xl font-bold uppercase mb-4">
+              {currentLang === 'es' ? '¿QUÉ ES ARENA TAQUERITOS?' : '¿QUÉ ES ARENA TAQUERITOS?'}
+            </h3>
+            <p class="text-base md:text-lg text-white/90 mb-4">
+              {currentLang === 'es'
+                ? 'El espacio gamer donde puedes demostrar tu talento y competir gratis en los torneos de tus juegos favoritos. En esta Arena, tu talento tiene recompensa: regístrate, compite y podrás ganar premios en efectivo.​'
+                : 'The gaming space where you can showcase your talent and compete for free in tournaments for your favorite games. In this Arena, your talent pays off: sign up, compete, and you could win cash prizes.'}
+            </p>
+          </div>
+          <div class="w-full flex justify-center md:justify-end">
+            <div class="w-full rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.7)] md:w-[667px] md:h-[492px]">
+              <LazyImage
+                src="https://snack.yummiespromociones.com/SnacksyummiesAssets/ARENAS.webp"
+                alt={currentLang === 'es' ? '¿QUÉ ES ARENA TAQUERITOS?' : '¿QUÉ ES ARENA TAQUERITOS?'}
+                class="w-full h-auto md:h-[492px] object-cover"
+                loading="lazy"
+                style="width:100%;"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -354,8 +374,154 @@ const promosSlides = Array.isArray(commonAssets)
   document.addEventListener('astro:page-load', initGamesHover);
 </script>
 
+<script>
+  function initCalendarCarousel() {
+    const containers = document.querySelectorAll('[data-calendar-carousel]');
+    containers.forEach((container) => {
+      if ((container as any)._calendarInit) return;
+      (container as any)._calendarInit = true;
+
+      const track = container.querySelector('[data-calendar-track]') as HTMLElement | null;
+      let prevBtn = container.querySelector('.calendar-carousel-btn-prev') as HTMLButtonElement | null;
+      let nextBtn = container.querySelector('.calendar-carousel-btn-next') as HTMLButtonElement | null;
+      if (!prevBtn || !nextBtn) {
+        const sectionEl = container.closest('section') || container.parentElement;
+        if (sectionEl) {
+          prevBtn = sectionEl.querySelector('.calendar-carousel-btn-prev') as HTMLButtonElement | null;
+          nextBtn = sectionEl.querySelector('.calendar-carousel-btn-next') as HTMLButtonElement | null;
+        }
+      }
+      const slides = Array.from(container.querySelectorAll('.calendar-slide')) as HTMLElement[];
+      if (!track || slides.length === 0) return;
+
+      let currentIndex = 0;
+
+      function getVisibleCount() {
+        const w = window.innerWidth;
+        if (w >= 1024) return 2; // desktop: 2 per view
+        return 1; // mobile: 1
+      }
+
+      function getMaxIndex() {
+        const visible = getVisibleCount();
+        return Math.max(0, slides.length - visible);
+      }
+
+      function updateCarousel() {
+        const visible = getVisibleCount();
+        const slideWidth = 100 / visible;
+        slides.forEach((s) => { s.style.width = `${slideWidth}%`; });
+        const offset = currentIndex * slideWidth;
+        track.style.transform = `translateX(-${offset}%)`;
+      }
+
+      function goNext() {
+        const max = getMaxIndex();
+        if (currentIndex < max) currentIndex++; else currentIndex = 0;
+        updateCarousel();
+      }
+      function goPrev() {
+        const max = getMaxIndex();
+        if (currentIndex > 0) currentIndex--; else currentIndex = max;
+        updateCarousel();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', goPrev);
+      if (nextBtn) nextBtn.addEventListener('click', goNext);
+
+      let resizeTimeout: any = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const max = getMaxIndex();
+          if (currentIndex > max) currentIndex = max;
+          updateCarousel();
+        }, 120);
+      });
+
+      updateCarousel();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCalendarCarousel);
+  } else {
+    initCalendarCarousel();
+  }
+
+  document.addEventListener('astro:page-load', initCalendarCarousel);
+</script>
+
 <style>
-  /* Forzar transparencia para que use el fondo de la página de retos-torneos */
+  .calendar-carousel-container { width: 100%; }
+  .calendar-carousel-viewport { width: 100%; overflow-x: hidden; }
+  .calendar-carousel-track { display:flex; will-change: transform; align-items: stretch; }
+  .calendar-slide { flex-shrink:0; padding: 0 8px; box-sizing: border-box; display:flex; }
+  .calendar-slide img, .calendar-slide picture, .calendar-slide .lazy-image { width:100%; height:100%; }
+  @media (min-width: 768px) {
+    .calendar-slide { padding: 0 10px; }
+  }
+  @media (max-width: 767px) {
+    .calendar-nav-buttons {
+      position: static;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      pointer-events: auto;
+      z-index: 20;
+    }
+
+    .calendar-carousel-btn-prev,
+    .calendar-carousel-btn-next {
+      pointer-events: auto;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .calendar-carousel-container {
+      padding-top: 0.6rem !important;
+      padding-bottom: 0.6rem !important;
+    }
+
+    .calendar-nav-buttons {
+      margin-top: 0.25rem;
+      gap: 0.5rem;
+    }
+
+    .calendar-carousel-btn-prev,
+    .calendar-carousel-btn-next {
+      width: 40px !important;
+      height: 40px !important;
+      min-width: 40px !important;
+      min-height: 40px !important;
+      padding: 0 !important;
+    }
+
+    .calendar-carousel-btn-prev svg,
+    .calendar-carousel-btn-next svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+</style>
+
+<style>
+  @media (max-width: 767px) {
+    .banner-full-mobile {
+      margin-left: -1rem;
+      margin-right: -1rem;
+      width: calc(100% + 2rem);
+    }
+
+    .banner-full-mobile .rounded-lg {
+      border-radius: 0;
+      overflow: hidden;
+    }
+  }
+</style>
+
+<style>
   .games-carousel-wrapper,
   .games-carousel-track {
     background: transparent !important;
@@ -370,13 +536,10 @@ const promosSlides = Array.isArray(commonAssets)
   .game-card .p-4 {
     background: transparent !important;
   }
-
-  /* Asegurar que el contenedor de la imagen no pinte fondo */
   .game-card .h-32 {
     background: transparent !important;
   }
 
-  /* Ajustes menores de scroll-snap y padding */
   .games-carousel-track {
     scroll-padding-left: 0;
   }
@@ -411,53 +574,61 @@ const promosSlides = Array.isArray(commonAssets)
   }
 </style>
 
-    {featuredChallenge && (
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start mb-16">
-        <!-- Texto del evento -->
-        <div class="space-y-4 text-white">
-          <h2 class="font-title text-3xl md:text-4xl font-bold uppercase">
-            {featuredChallenge.title}
-          </h2>
-          {featuredChallenge.description && (
-            <p class="text-base md:text-lg leading-relaxed text-white/90">
-              {featuredChallenge.description}
-            </p>
-          )}
-          {featuredChallengeLink && featuredChallengeLink !== '#' && (
-            <a
-              href={featuredChallengeLink}
-              class="inline-flex items-center mt-4 px-6 py-3 rounded-md bg-red text-white font-semibold uppercase tracking-wide text-sm shadow-[0_8px_20px_rgba(0,0,0,0.6)] hover:bg-[#ff4b4e] transition-colors duration-200"
-            >
-              {currentLang === 'es' ? 'Ver detalles del reto' : 'View challenge details'}
-            </a>
-          )}
-        </div>
-
-        <!-- Imagen del evento (CTA clickable en todos los dispositivos) -->
-        <div class="w-full flex justify-center md:justify-end">
-          <a
-            href={featuredChallengeLink}
-            class="relative w-full max-w-xl rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.7)] block cursor-pointer"
-          >
-            <LazyImage
-              src={featuredChallenge.image}
-              alt={featuredChallenge.title}
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </a>
-        </div>
-      </section>
-    )}
-
-    <section class="mt-10 pt-6 pb-4 " >
-      <h2 class="font-title text-2xl md:text-3xl font-bold text-white uppercase mb-6">
-        {sectionTitle}
-      </h2>
-      <ChallengesCarousel items={orderedChallenges} />
+    <!-- Sección Calendario  -->
+    <section class="mt-10 pt-6 w-full">
+      <div class="-mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full overflow-hidden rounded-none md:rounded-xl">
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/calendario_taqueritos.webp"
+          alt={currentLang === 'es' ? 'Calendario de Torneos' : 'Tournament Calendar'}
+          class="w-full h-auto object-cover"
+          loading="lazy"
+          style="width:100%; display:block;"
+        />
+      </div>
     </section>
+
+    <!-- Sección Torneos -->
+    <section class="mt-12 md:mt-16 w-full">
+      <div class="-mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full overflow-hidden rounded-none md:rounded-xl">
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/torneos_taqueritos.webp"
+          alt={currentLang === 'es' ? 'Torneos Taqueritos' : 'Taqueritos Tournaments'}
+          class="w-full h-auto object-cover"
+          loading="lazy"
+          style="width:100%; display:block;"
+        />
+      </div>
+    </section>
+
+    <!-- Botón Ganadores -->
+    <section class="mt-12 md:mt-16 mb-0 flex justify-center items-center w-full">
+      <a
+        href="#"
+        class="inline-block transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer max-w-[320px] sm:max-w-[400px] md:max-w-[480px] w-full mx-auto"
+        aria-label={currentLang === 'es' ? 'Ganadores Taqueritos' : 'Taqueritos Winners'}
+      >
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/winners_taqueritos.png"
+          alt={currentLang === 'es' ? 'Ganadores Taqueritos' : 'Taqueritos Winners'}
+          class="w-full h-auto object-contain mx-auto"
+          loading="lazy"
+        />
+      </a>
+    </section>
+
+    <style>
+      @media (max-width: 767px) {
+        .calendar-section {
+          padding-top: 24px !important;
+          padding-bottom: 16px !important;
+        }
+        #games {
+          padding-bottom: 0px !important;
+        }
+      }
+    </style>
         {games.length > 0 && (
-      <section class="w-full py-8 bg-brown" id="games">
+      <section class="w-full pt-12 md:pt-16 pb-8 bg-brown" id="games">
         <div class="container mx-auto px-4">
           <GamesCarousel items={games}>
             <div slot="title" class="title">

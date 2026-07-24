@@ -30,8 +30,7 @@ const { loading = false } = Astro.props;
 
 // Language and Data Setup
 const currentLang = getLocale();
-// Feature flag to temporarily hide the challenges section on Home
-const showChallengesSection = false;
+const showChallengesSection = true;
 
 interface GameItem {
   id: number;
@@ -135,27 +134,19 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
     </div>
 
     {currentLang === 'es' && showChallengesSection && (
-      <section id="challenges" class="w-full py-16 md:py-20 !bg-brown relative" style="display:none">
+      <section id="challenges" class="w-full py-12 md:py-16 !bg-brown relative">
         <div class="container mx-auto px-4 relative">
-          {challengesAssets.title && (
-            <div class="title mb-12">
-              <p>{challengesAssets.title}</p>
-              {challengesAssets.subtitle && (
-                <p>{challengesAssets.subtitle}</p>
-              )}
+          <a href={`/${currentLang}/retos-torneos`} class="block w-full transition-transform duration-300 hover:scale-[1.01]">
+            <div class="-mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full overflow-hidden rounded-none md:rounded-xl">
+              <LazyImage
+                src="https://snack.yummiespromociones.com/SnacksyummiesAssets/calendario_taqueritos.webp"
+                alt={currentLang === 'es' ? 'Calendario de Torneos - Taqueritos' : 'Tournament Calendar'}
+                class="w-full h-auto object-cover"
+                loading="lazy"
+                style="width:100%; display:block;"
+              />
             </div>
-          )}
-
-          {/* Texto fijo solo en español encima del carrusel de retos */}
-          <div class="title mb-4">
-            <p>PARTICIPA EN NUESTROS RETOS</p>
-          </div>
-          <ChallengesCarousel 
-            title={challengesAssets.title || 'PARTICIPA EN NUESTROS'}
-            subtitle={challengesAssets.subtitle || 'RETOS Y GANA PREMIOS'}
-            textButton={challengesAssets.view_more || 'Ver Todos'}
-            includeRuta={false}
-          />
+          </a>
         </div>
       </section>
     )}

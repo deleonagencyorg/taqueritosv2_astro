@@ -5,7 +5,7 @@
       "description": "When it comes to intensity, the popular Taqueritos have the ideal flavor mix to make your senses explode."
     },
     "contact": {
-      "title": "Contact", 
+      "title": "Contact",
       "description": "Contact us for more information about our products and promotions."
     },
     "recipes": {
@@ -42,7 +42,7 @@
     }
   },
   "social_media": {
-   "facebook": {
+    "facebook": {
       "name": "Facebook",
       "url": "https://www.facebook.com/taqueritosusa",
       "alt": "Facebook de Taqueritos",
@@ -90,7 +90,7 @@
         "product_cta_label": "Discover more",
         "product_cta_link": "/en/products/taqueritos-dragon-de-fuego"
       },
-        {
+      {
         "id": "slide2",
         "desktop": "https://snack.yummiespromociones.com/taqueritos/banner-home-en.webp",
         "mobile": "https://snack.yummiespromociones.com/taqueritos/homeen.webp",
@@ -98,17 +98,17 @@
         "title": "",
         "description": "",
         "link": "https://www.amazon.com/stores/page/7964A27A-5177-44C3-AAEC-6DA181502081?ingress=3",
-        "type": "image" 
+        "type": "image"
       },
-        {
+      {
         "id": "slide3",
-        "desktop": "https://snack.yummiespromociones.com/taqueritos/banner_chile_toreado_en.webp", 
+        "desktop": "https://snack.yummiespromociones.com/taqueritos/banner_chile_toreado_en.webp",
         "mobile": "https://snack.yummiespromociones.com/taqueritos/banner_chile_toreado_en.webp",
         "alt": "Taqueritos",
         "title": "",
         "description": "",
         "link": "https://www.amazon.com/Taqueritos-tortilla-enrollados-toreado-paquete/dp/B09LHQXPSH?ref_=ast_sto_dp",
-        "type": "image" 
+        "type": "image"
       }
     ]
   },
@@ -198,27 +198,27 @@
       "title": "Taqueritos - Enjoy your Taqueritos at any moment",
       "description": "When it comes to intensity, the popular Taqueritos have the ideal flavor mix to make your senses explode."
     },
-    "newsletter":{
-      "placeholder":"email@email.com",
-      "buttonText":"Subscribe"
+    "newsletter": {
+      "placeholder": "email@email.com",
+      "buttonText": "Subscribe"
     },
-    "socialmedia":{
-      "title":"Follow us",
-      "tagtitle":"on social media",
-      "description":"Follow us on our social media - Snacks Yummies",
-      "newsletter":"Stay up to date with all our news and promotions",
-      "instagramLinks":[
+    "socialmedia": {
+      "title": "Follow us",
+      "tagtitle": "on social media",
+      "description": "Follow us on our social media - Snacks Yummies",
+      "newsletter": "Stay up to date with all our news and promotions",
+      "instagramLinks": [
         {
-          "url":"https://www.instagram.com/reel/DLYiMsKtKon/?igsh=MXRza3ByZmlxbmtndw=="
+          "url": "https://www.instagram.com/reel/DLYiMsKtKon/?igsh=MXRza3ByZmlxbmtndw=="
         },
         {
-          "url":"https://www.instagram.com/reel/DLTEEQXvxkG/?igsh=MTQ4MzVkMnQxNWRrZA=="
+          "url": "https://www.instagram.com/reel/DLTEEQXvxkG/?igsh=MTQ4MzVkMnQxNWRrZA=="
         },
         {
-          "url":"https://www.instagram.com/reel/DKiDRYgtggB/?igsh=Ym9yNHdtbzJhczdi"
+          "url": "https://www.instagram.com/reel/DKiDRYgtggB/?igsh=Ym9yNHdtbzJhczdi"
         },
         {
-          "url":"https://www.instagram.com/p/DKaTrbKRfmO/?igsh=bTIyMGd5Y3kxYzY0"
+          "url": "https://www.instagram.com/p/DKaTrbKRfmO/?igsh=bTIyMGd5Y3kxYzY0"
         }
       ]
     }
@@ -236,11 +236,11 @@
     "privacy_policy_text": "Privacy Policy",
     "privacy_policy_url": "/en/privacy-policy"
   },
-  "messagetop":[
+  "messagetop": [
     {
-      "id":"1",
-      "title":"😎 Welcome to Taqueritos! If you're craving a snack, you're in the right place 🎉",
-      "link":""
+      "id": "1",
+      "title": "😎 Welcome to Taqueritos! If you're craving a snack, you're in the right place 🎉",
+      "link": ""
     }
   ],
   "form_validation": {
