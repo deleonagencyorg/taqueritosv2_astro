@@ -94,47 +94,6 @@ const introDescription = currentLang === 'es'
   ? 'Somos jugadores, soñadores y apasionados que disfrutan competir y superar desafíos. Aquí encontrarás un espacio donde la diversión y la emoción se viven al máximo.'
   : 'We are players, dreamers and enthusiasts who love to compete and overcome challenges. Here you will find a space where fun and excitement are always at their peak.';
 
-const activityCards = currentLang === 'es'
-  ? [
-      {
-        id: 'online',
-        title: 'Actividades online',
-        description:
-          'Compite y diviértete desde cualquier lugar, conectado al instante con la comunidad Taqueritos.',
-      },
-      {
-        id: 'offline',
-        title: 'Actividades offline',
-        description:
-          'Vive la experiencia en persona, con dinámicas que te pondrán a prueba cara a cara.',
-      },
-      {
-        id: 'games',
-        title: 'Nuestros juegos',
-        description:
-          'Explora lo mejor de ambos mundos con dinámicas únicas, creativas y llenas de sabor Taqueritos.', 
-      },
-    ]
-  : [
-      {
-        id: 'online',
-        title: 'Online activities',
-        description:
-          'Compete and have fun from anywhere, instantly connected with the Taqueritos community.',
-      },
-      {
-        id: 'offline',
-        title: 'Offline activities',
-        description:
-          'Live the experience in person with dynamics that will challenge you face to face.',
-      },
-      {
-        id: 'games',
-        title: 'Our games',
-        description:
-          'Explore the best of both worlds with unique, creative and crunchy Taqueritos experiences.',
-      },
-    ];
 
 // Link del reto destacado: misma lógica que las cards del carrusel
 const featuredChallengeLink = featuredChallenge
@@ -205,54 +164,6 @@ const promosSlides = Array.isArray(commonAssets)
 
   <div class="container mx-auto px-4 pb-24 mt-0">
 
-    <!-- Cards de tipo de actividades (3 columnas / 1 columna en mobile) -->
-    <section class="mb-12 px-4 py-10 md:p-24">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {activityCards.map((card) => (
-          <div
-            class="relative group border border-red rounded-none bg-black/20 px-6 py-6 md:py-8 text-white transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.02] flex flex-row md:flex-col items-center md:items-stretch gap-4 w-[95%] md:w-full mx-auto"
-          >
-            <!-- Icono simple por tipo -->
-            <div class="flex justify-center text-white mb-0 md:mb-5 flex-shrink-0 w-1/3 md:w-full">
-              {card.id === 'online' && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
-<path d="M30 46.25H30.0295" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M20.625 38.75C25.625 33.75 34.375 33.75 39.375 38.75" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M46.25 31.25C36.831 22.9167 23.75 22.9167 13.75 31.25" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M5 23.75C20.7895 10.4167 39.2105 10.4167 55 23.7497" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-              )}
-              {card.id === 'offline' && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
-<path d="M30 30V50" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M28.75 17.6575C29.1495 17.5547 29.5685 17.5 30 17.5C32.7615 17.5 35 19.7386 35 22.5C35 22.9316 34.9453 23.3505 34.8425 23.75" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M5 5L55 55" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M42.397 15C44.0465 17.174 45 19.745 45 22.5C45 25.255 44.0465 27.826 42.397 30M17.6029 30C15.9536 27.826 15 25.255 15 22.5C15 20.7397 15.3893 19.0545 16.1007 17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M50.7898 10C53.449 13.5752 55 17.8746 55 22.5C55 27.1255 53.449 31.4248 50.7898 35M9.21022 10C6.5509 13.5752 5 17.8746 5 22.5C5 27.1255 6.5509 31.4248 9.21022 35" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-              )}
-              {card.id === 'games' && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
-<path d="M23.3121 30C22.8945 30.2022 22.4519 30.4188 21.9799 30.6498L18.1711 32.5132C14.3904 34.363 12.5 35.288 12.5 36.4375C12.5 37.5867 14.3904 38.5117 18.1711 40.3615L21.9799 42.2253C25.7605 44.075 27.651 45 30 45C32.349 45 34.2395 44.075 38.0203 42.2253L41.829 40.3615C45.6097 38.5117 47.5 37.5867 47.5 36.4375C47.5 35.288 45.6097 34.363 41.829 32.5132L38.0203 30.6498C37.548 30.4188 37.1055 30.2022 36.6878 30" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M47.5 36.25V45.6668C47.5 46.9195 45.6097 47.9278 41.829 49.944L38.0203 51.9755C34.2395 53.9917 32.349 55 30 55C27.651 55 25.7605 53.9917 21.9799 51.9755L18.1711 49.944C14.3904 47.9278 12.5 46.9195 12.5 45.6668V36.25" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M38.75 13.75C38.75 18.5825 34.8325 22.5 30 22.5C25.1675 22.5 21.25 18.5825 21.25 13.75C21.25 8.9175 25.1675 5 30 5C34.8325 5 38.75 8.9175 38.75 13.75Z" stroke="white" stroke-width="4"/>
-<path d="M30 22.5V36.25" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-              )}
-            </div>
-
-            <div class="flex-1 w-2/3 md:w-full">
-            <h3 class="font-title text-base md:text-xl font-bold uppercase mb-1 md:mb-2 text-left md:text-center">
-              {card.title}
-            </h3>
-            <p class="text-xs md:text-sm text-white/80 text-left md:text-center leading-relaxed">
-              {card.description}
-            </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
 
     <!-- seccion texto e imagen -->
     <section class="w-full py-12 md:py-16">
@@ -270,7 +181,12 @@ const promosSlides = Array.isArray(commonAssets)
             </p>
           </div>
           <div class="w-full flex justify-center md:justify-end">
-            <div class="w-full rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.7)] md:w-[667px] md:h-[492px]">
+            <a
+              href="https://www.challengermode.com/s/taqueritos"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block w-full rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.7)] md:w-[667px] md:h-[492px] transition-transform duration-300 hover:scale-[1.02]"
+            >
               <LazyImage
                 src="https://snack.yummiespromociones.com/SnacksyummiesAssets/ARENAS.webp"
                 alt={currentLang === 'es' ? '¿QUÉ ES ARENA TAQUERITOS?' : '¿QUÉ ES ARENA TAQUERITOS?'}
@@ -278,7 +194,7 @@ const promosSlides = Array.isArray(commonAssets)
                 loading="lazy"
                 style="width:100%;"
               />
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -589,32 +505,69 @@ const promosSlides = Array.isArray(commonAssets)
 
     <!-- Sección Torneos -->
     <section class="mt-12 md:mt-16 w-full">
-      <div class="-mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full overflow-hidden rounded-none md:rounded-xl">
+      <div class="relative -mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full aspect-[1920/1080] overflow-hidden rounded-none md:rounded-xl">
         <LazyImage
-          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/torneos_taqueritos.webp"
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/fondo_torneos.webp"
           alt={currentLang === 'es' ? 'Torneos Taqueritos' : 'Taqueritos Tournaments'}
-          class="w-full h-auto object-cover"
+          class="w-full h-full object-cover"
           loading="lazy"
           style="width:100%; display:block;"
         />
+
+        <!-- Botón 1 (Free Fire) -->
+        <a
+          href="https://www.challengermode.com/s/taqueritos/pages/ffire"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="absolute block transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99]"
+          style="top: 35.74%; left: 7.66%; width: 84.95%; height: 16.02%;"
+          aria-label={currentLang === 'es' ? 'Torneo Free Fire' : 'Free Fire Tournament'}
+        >
+          <LazyImage
+            src="https://snack.yummiespromociones.com/SnacksyummiesAssets/torneo_1.webp"
+            alt="Torneo Free Fire"
+            class="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </a>
+
+        <!-- Botón 2 (Clash Royale) -->
+        <a
+          href="https://www.challengermode.com/s/taqueritos/pages/croyale"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="absolute block transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99]"
+          style="top: 54.44%; left: 7.66%; width: 84.95%; height: 16.11%;"
+          aria-label={currentLang === 'es' ? 'Torneo Clash Royale' : 'Clash Royale Tournament'}
+        >
+          <LazyImage
+            src="https://snack.yummiespromociones.com/SnacksyummiesAssets/torneo_2.webp"
+            alt="Torneo Clash Royale"
+            class="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </a>
+
+        <!-- Botón 3 (League of Legends) -->
+        <a
+          href="https://www.challengermode.com/s/taqueritos/pages/lolegends"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="absolute block transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99]"
+          style="top: 73.15%; left: 7.66%; width: 84.95%; height: 16.11%;"
+          aria-label={currentLang === 'es' ? 'Torneo League of Legends' : 'League of Legends Tournament'}
+        >
+          <LazyImage
+            src="https://snack.yummiespromociones.com/SnacksyummiesAssets/torneo_3.webp"
+            alt="Torneo League of Legends"
+            class="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </a>
       </div>
     </section>
 
-    <!-- Botón Ganadores -->
-    <section class="mt-12 md:mt-16 mb-0 flex justify-center items-center w-full">
-      <a
-        href="#"
-        class="inline-block transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer max-w-[320px] sm:max-w-[400px] md:max-w-[480px] w-full mx-auto"
-        aria-label={currentLang === 'es' ? 'Ganadores Taqueritos' : 'Taqueritos Winners'}
-      >
-        <LazyImage
-          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/winners_taqueritos.png"
-          alt={currentLang === 'es' ? 'Ganadores Taqueritos' : 'Taqueritos Winners'}
-          class="w-full h-auto object-contain mx-auto"
-          loading="lazy"
-        />
-      </a>
-    </section>
+
 
     <style>
       @media (max-width: 767px) {

@@ -133,24 +133,6 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       />
     </div>
 
-    {currentLang === 'es' && showChallengesSection && (
-      <section id="challenges" class="w-full py-12 md:py-16 !bg-brown relative">
-        <div class="container mx-auto px-4 relative">
-          <a href={`/${currentLang}/retos-torneos`} class="block w-full transition-transform duration-300 hover:scale-[1.01]">
-            <div class="-mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full overflow-hidden rounded-none md:rounded-xl">
-              <LazyImage
-                src="https://snack.yummiespromociones.com/SnacksyummiesAssets/calendario_taqueritos.webp"
-                alt={currentLang === 'es' ? 'Calendario de Torneos - Taqueritos' : 'Tournament Calendar'}
-                class="w-full h-auto object-cover"
-                loading="lazy"
-                style="width:100%; display:block;"
-              />
-            </div>
-          </a>
-        </div>
-      </section>
-    )}
-    
     {/* Sección Carrusel de juegos*/}
     {currentLang === 'es' && games.length > 0 && (
       <section class="w-full py-8 bg-brown" id="games">
@@ -161,6 +143,22 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
             </div>
           </GamesCarousel>
         </div>
+      </section>
+    )}
+
+    {currentLang === 'es' && showChallengesSection && (
+      <section id="challenges" class="w-full py-6 md:py-12 !bg-brown relative">
+        <a href={`/${currentLang}/retos-torneos`} class="block w-full">
+          <div class="w-full overflow-hidden">
+            <LazyImage
+              src="https://snack.yummiespromociones.com/SnacksyummiesAssets/Banner_ARENA.webp"
+              alt={currentLang === 'es' ? 'Calendario de Torneos - Taqueritos' : 'Tournament Calendar'}
+              class="w-full h-auto object-cover"
+              loading="lazy"
+              style="width:100%; display:block;"
+            />
+          </div>
+        </a>
       </section>
     )}
 
