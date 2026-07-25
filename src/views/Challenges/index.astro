@@ -149,17 +149,32 @@ const promosSlides = Array.isArray(commonAssets)
 
   <!-- Banner -->
   <section class={`w-full mb-6 ${promosSlides.length > 0 ? 'pt-6 md:pt-12' : 'pt-28 md:pt-36 lg:pt-40'}`}>
-    <a href="https://www.challengermode.com/s/taqueritos" target="_blank" rel="noopener noreferrer" class="block w-full">
-      <div class="w-full overflow-hidden">
+    <div class="relative w-full overflow-hidden">
+      <a href="https://www.challengermode.com/s/taqueritos" target="_blank" rel="noopener noreferrer" class="block w-full">
         <LazyImage
-          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/Banner_ARENA.webp"
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_arenas.webp"
           alt={currentLang === 'es' ? 'Retos y Torneos' : 'Challenges & Tournaments'}
           class="w-full h-auto object-cover"
           loading="lazy"
           style="width:100%; display:block;"
         />
+      </a>
+      <div class="absolute bottom-3 sm:bottom-5 md:bottom-8 lg:bottom-10 left-1/2 -translate-x-1/2 z-10">
+        <a 
+          href="https://www.challengermode.com/s/taqueritos" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="block transition-transform duration-300 hover:scale-105"
+        >
+          <LazyImage
+            src="https://snack.yummiespromociones.com/SnacksyummiesAssets/boton_leveleate.webp"
+            alt="Leveleáte"
+            class="h-8 sm:h-12 md:h-16 lg:h-20 w-auto object-contain"
+            loading="lazy"
+          />
+        </a>
       </div>
-    </a>
+    </div>
   </section>
 
   <div class="container mx-auto px-4 pb-24 mt-0">
