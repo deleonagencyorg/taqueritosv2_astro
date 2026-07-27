@@ -84,7 +84,7 @@ const featuredChallenge: SummaryChallenge | null =
   (activeChallenges.length > 0 ? activeChallenges[0] : orderedChallenges[0]) || null;
 
 const pageTitle = currentLang === 'es' ? 'Retos y torneos' : 'Challenges & Tournaments';
-const sectionTitle = currentLang === 'es' ? 'Participa en nuestros retos' : 'Join our challenges';
+const sectionTitle = currentLang === 'es' ? 'CALENDARIO DE TORNEOS' : 'TOURNAMENT CALENDAR';
 
 const introTitle = currentLang === 'es'
   ? '¡Descubre y disfruta nuestros retos y torneos!'
@@ -94,47 +94,6 @@ const introDescription = currentLang === 'es'
   ? 'Somos jugadores, soñadores y apasionados que disfrutan competir y superar desafíos. Aquí encontrarás un espacio donde la diversión y la emoción se viven al máximo.'
   : 'We are players, dreamers and enthusiasts who love to compete and overcome challenges. Here you will find a space where fun and excitement are always at their peak.';
 
-const activityCards = currentLang === 'es'
-  ? [
-      {
-        id: 'online',
-        title: 'Actividades online',
-        description:
-          'Compite y diviértete desde cualquier lugar, conectado al instante con la comunidad Taqueritos.',
-      },
-      {
-        id: 'offline',
-        title: 'Actividades offline',
-        description:
-          'Vive la experiencia en persona, con dinámicas que te pondrán a prueba cara a cara.',
-      },
-      {
-        id: 'games',
-        title: 'Nuestros juegos',
-        description:
-          'Explora lo mejor de ambos mundos con dinámicas únicas, creativas y llenas de sabor Taqueritos.', 
-      },
-    ]
-  : [
-      {
-        id: 'online',
-        title: 'Online activities',
-        description:
-          'Compete and have fun from anywhere, instantly connected with the Taqueritos community.',
-      },
-      {
-        id: 'offline',
-        title: 'Offline activities',
-        description:
-          'Live the experience in person with dynamics that will challenge you face to face.',
-      },
-      {
-        id: 'games',
-        title: 'Our games',
-        description:
-          'Explore the best of both worlds with unique, creative and crunchy Taqueritos experiences.',
-      },
-    ];
 
 // Link del reto destacado: misma lógica que las cards del carrusel
 const featuredChallengeLink = featuredChallenge
@@ -175,7 +134,7 @@ const promosSlides = Array.isArray(commonAssets)
     }))
   : [];
 ---
-<div class="-mt-px -mb-px bg-dark-spotlight" >
+<div class="-mt-px -mb-px bg-dark-spotlight">
   <!-- Carrusel de promos activas (solo español) - Full width -->
   {currentLang === 'es' && promosSlides.length > 0 && (
     <section class="w-full">
@@ -188,79 +147,70 @@ const promosSlides = Array.isArray(commonAssets)
     </section>
   )}
 
-  <div class="container mx-auto px-4 pt-24 pb-24 mt-0">
-    <!-- Banner introductorio -->
-    <section class="mb-14 pt-24">
-      <div
-        class="mx-auto max-w-5xl  border border-white/20 bg-cover bg-center bg-no-repeat px-6 md:px-12 py-10 md:py-14 text-center text-white relative overflow-hidden"
-        style="background-image: url('https://snack.yummiespromociones.com/taqueritos/bggames.png'); background-color: rgba(0,0,0,0.75);"
-      >
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none"></div>
-
-        <div class="relative z-10 max-w-3xl mx-auto">
-          <h2 class="font-title text-2xl md:text-4xl font-bold uppercase mb-4">
-            {introTitle}
-          </h2>
-          <p class="text-sm md:text-base text-white/85 mb-8">
-            {introDescription}
-          </p>
-
-          <a
-            href="https://www.snacksyummies.com/es/yummiesone"
-            class="inline-flex items-center justify-center px-8 py-3 rounded-md bg-red text-white font-semibold uppercase tracking-wide text-sm shadow-[0_10px_25px_rgba(0,0,0,0.7)] hover:bg-[#ff4b4e] transition-colors duration-200"
-          >
-            {currentLang === 'es' ? 'Regístrate ahora' : 'Register now'}
-          </a>
-        </div>
+  <!-- Banner -->
+  <section class={`w-full mb-6 ${promosSlides.length > 0 ? 'pt-6 md:pt-12' : 'pt-28 md:pt-36 lg:pt-40'}`}>
+    <div class="relative w-full overflow-hidden">
+      <div class="block w-full" role="img" aria-label={currentLang === 'es' ? 'Retos y Torneos' : 'Challenges & Tournaments'}>
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_arenas.webp"
+          alt={currentLang === 'es' ? 'Retos y Torneos' : 'Challenges & Tournaments'}
+          class="w-full h-auto object-cover"
+          loading="lazy"
+          style="width:100%; display:block;"
+        />
       </div>
-    </section>
+      <div class="absolute bottom-3 sm:bottom-5 md:bottom-8 lg:bottom-10 left-1/2 -translate-x-1/2 z-10">
+        <a 
+          href="https://www.challengermode.com/s/taqueritos" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="block transition-transform duration-300 hover:scale-105"
+        >
+          <LazyImage
+            src="https://snack.yummiespromociones.com/SnacksyummiesAssets/boton_leveleate2.webp"
+            alt="Leveleáte"
+            class="h-8 sm:h-12 md:h-16 lg:h-20 w-auto object-contain"
+            loading="lazy"
+          />
+        </a>
+      </div>
+    </div>
+  </section>
 
-    <!-- Cards de tipo de actividades (3 columnas / 1 columna en mobile) -->
-    <section class="mb-12 px-4 py-10 md:p-24">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {activityCards.map((card) => (
-          <div
-            class="relative group border border-red rounded-none bg-black/20 px-6 py-6 md:py-8 text-white transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.02] flex flex-row md:flex-col items-center md:items-stretch gap-4 w-[95%] md:w-full mx-auto"
-          >
-            <!-- Icono simple por tipo -->
-            <div class="flex justify-center text-white mb-0 md:mb-5 flex-shrink-0 w-1/3 md:w-full">
-              {card.id === 'online' && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
-<path d="M30 46.25H30.0295" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M20.625 38.75C25.625 33.75 34.375 33.75 39.375 38.75" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M46.25 31.25C36.831 22.9167 23.75 22.9167 13.75 31.25" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M5 23.75C20.7895 10.4167 39.2105 10.4167 55 23.7497" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-              )}
-              {card.id === 'offline' && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
-<path d="M30 30V50" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M28.75 17.6575C29.1495 17.5547 29.5685 17.5 30 17.5C32.7615 17.5 35 19.7386 35 22.5C35 22.9316 34.9453 23.3505 34.8425 23.75" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M5 5L55 55" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M42.397 15C44.0465 17.174 45 19.745 45 22.5C45 25.255 44.0465 27.826 42.397 30M17.6029 30C15.9536 27.826 15 25.255 15 22.5C15 20.7397 15.3893 19.0545 16.1007 17.5" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M50.7898 10C53.449 13.5752 55 17.8746 55 22.5C55 27.1255 53.449 31.4248 50.7898 35M9.21022 10C6.5509 13.5752 5 17.8746 5 22.5C5 27.1255 6.5509 31.4248 9.21022 35" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-              )}
-              {card.id === 'games' && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
-<path d="M23.3121 30C22.8945 30.2022 22.4519 30.4188 21.9799 30.6498L18.1711 32.5132C14.3904 34.363 12.5 35.288 12.5 36.4375C12.5 37.5867 14.3904 38.5117 18.1711 40.3615L21.9799 42.2253C25.7605 44.075 27.651 45 30 45C32.349 45 34.2395 44.075 38.0203 42.2253L41.829 40.3615C45.6097 38.5117 47.5 37.5867 47.5 36.4375C47.5 35.288 45.6097 34.363 41.829 32.5132L38.0203 30.6498C37.548 30.4188 37.1055 30.2022 36.6878 30" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M47.5 36.25V45.6668C47.5 46.9195 45.6097 47.9278 41.829 49.944L38.0203 51.9755C34.2395 53.9917 32.349 55 30 55C27.651 55 25.7605 53.9917 21.9799 51.9755L18.1711 49.944C14.3904 47.9278 12.5 46.9195 12.5 45.6668V36.25" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M38.75 13.75C38.75 18.5825 34.8325 22.5 30 22.5C25.1675 22.5 21.25 18.5825 21.25 13.75C21.25 8.9175 25.1675 5 30 5C34.8325 5 38.75 8.9175 38.75 13.75Z" stroke="white" stroke-width="4"/>
-<path d="M30 22.5V36.25" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-              )}
-            </div>
+  <div class="container mx-auto px-4 pb-24 mt-0">
 
-            <div class="flex-1 w-2/3 md:w-full">
-            <h3 class="font-title text-base md:text-xl font-bold uppercase mb-1 md:mb-2 text-left md:text-center">
-              {card.title}
+
+    <!-- seccion texto e imagen -->
+    <section class="w-full py-12 md:py-16">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <!-- Texto -->
+          <div class="text-white">
+            <h3 class="font-title text-2xl md:text-3xl font-bold uppercase mb-4">
+              {currentLang === 'es' ? '¿QUÉ ES ARENA TAQUERITOS?' : '¿QUÉ ES ARENA TAQUERITOS?'}
             </h3>
-            <p class="text-xs md:text-sm text-white/80 text-left md:text-center leading-relaxed">
-              {card.description}
+            <p class="text-base md:text-lg text-white/90 mb-4">
+              {currentLang === 'es'
+                ? 'El espacio gamer donde puedes demostrar tu talento y competir gratis en los torneos de tus juegos favoritos. En esta Arena, tu talento tiene recompensa: regístrate, compite y podrás ganar premios en efectivo.​'
+                : 'The gaming space where you can showcase your talent and compete for free in tournaments for your favorite games. In this Arena, your talent pays off: sign up, compete, and you could win cash prizes.'}
             </p>
+          </div>
+          <div class="w-full flex justify-center md:justify-end">
+            <div
+              class="block w-full rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.7)] md:w-[667px] md:h-[492px] transition-transform duration-300 hover:scale-[1.02]"
+              role="img"
+              aria-label={currentLang === 'es' ? '¿QUÉ ES ARENA TAQUERITOS?' : '¿QUÉ ES ARENA TAQUERITOS?'}
+            >
+              <LazyImage
+                src="https://snack.yummiespromociones.com/SnacksyummiesAssets/ARENAS.webp"
+                alt={currentLang === 'es' ? '¿QUÉ ES ARENA TAQUERITOS?' : '¿QUÉ ES ARENA TAQUERITOS?'}
+                class="w-full h-auto md:h-[492px] object-cover"
+                loading="lazy"
+                style="width:100%;"
+              />
             </div>
           </div>
-        ))}
+        </div>
       </div>
     </section>
 
@@ -354,8 +304,154 @@ const promosSlides = Array.isArray(commonAssets)
   document.addEventListener('astro:page-load', initGamesHover);
 </script>
 
+<script>
+  function initCalendarCarousel() {
+    const containers = document.querySelectorAll('[data-calendar-carousel]');
+    containers.forEach((container) => {
+      if ((container as any)._calendarInit) return;
+      (container as any)._calendarInit = true;
+
+      const track = container.querySelector('[data-calendar-track]') as HTMLElement | null;
+      let prevBtn = container.querySelector('.calendar-carousel-btn-prev') as HTMLButtonElement | null;
+      let nextBtn = container.querySelector('.calendar-carousel-btn-next') as HTMLButtonElement | null;
+      if (!prevBtn || !nextBtn) {
+        const sectionEl = container.closest('section') || container.parentElement;
+        if (sectionEl) {
+          prevBtn = sectionEl.querySelector('.calendar-carousel-btn-prev') as HTMLButtonElement | null;
+          nextBtn = sectionEl.querySelector('.calendar-carousel-btn-next') as HTMLButtonElement | null;
+        }
+      }
+      const slides = Array.from(container.querySelectorAll('.calendar-slide')) as HTMLElement[];
+      if (!track || slides.length === 0) return;
+
+      let currentIndex = 0;
+
+      function getVisibleCount() {
+        const w = window.innerWidth;
+        if (w >= 1024) return 2; // desktop: 2 per view
+        return 1; // mobile: 1
+      }
+
+      function getMaxIndex() {
+        const visible = getVisibleCount();
+        return Math.max(0, slides.length - visible);
+      }
+
+      function updateCarousel() {
+        const visible = getVisibleCount();
+        const slideWidth = 100 / visible;
+        slides.forEach((s) => { s.style.width = `${slideWidth}%`; });
+        const offset = currentIndex * slideWidth;
+        track.style.transform = `translateX(-${offset}%)`;
+      }
+
+      function goNext() {
+        const max = getMaxIndex();
+        if (currentIndex < max) currentIndex++; else currentIndex = 0;
+        updateCarousel();
+      }
+      function goPrev() {
+        const max = getMaxIndex();
+        if (currentIndex > 0) currentIndex--; else currentIndex = max;
+        updateCarousel();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', goPrev);
+      if (nextBtn) nextBtn.addEventListener('click', goNext);
+
+      let resizeTimeout: any = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const max = getMaxIndex();
+          if (currentIndex > max) currentIndex = max;
+          updateCarousel();
+        }, 120);
+      });
+
+      updateCarousel();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCalendarCarousel);
+  } else {
+    initCalendarCarousel();
+  }
+
+  document.addEventListener('astro:page-load', initCalendarCarousel);
+</script>
+
 <style>
-  /* Forzar transparencia para que use el fondo de la página de retos-torneos */
+  .calendar-carousel-container { width: 100%; }
+  .calendar-carousel-viewport { width: 100%; overflow-x: hidden; }
+  .calendar-carousel-track { display:flex; will-change: transform; align-items: stretch; }
+  .calendar-slide { flex-shrink:0; padding: 0 8px; box-sizing: border-box; display:flex; }
+  .calendar-slide img, .calendar-slide picture, .calendar-slide .lazy-image { width:100%; height:100%; }
+  @media (min-width: 768px) {
+    .calendar-slide { padding: 0 10px; }
+  }
+  @media (max-width: 767px) {
+    .calendar-nav-buttons {
+      position: static;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      pointer-events: auto;
+      z-index: 20;
+    }
+
+    .calendar-carousel-btn-prev,
+    .calendar-carousel-btn-next {
+      pointer-events: auto;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .calendar-carousel-container {
+      padding-top: 0.6rem !important;
+      padding-bottom: 0.6rem !important;
+    }
+
+    .calendar-nav-buttons {
+      margin-top: 0.25rem;
+      gap: 0.5rem;
+    }
+
+    .calendar-carousel-btn-prev,
+    .calendar-carousel-btn-next {
+      width: 40px !important;
+      height: 40px !important;
+      min-width: 40px !important;
+      min-height: 40px !important;
+      padding: 0 !important;
+    }
+
+    .calendar-carousel-btn-prev svg,
+    .calendar-carousel-btn-next svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+</style>
+
+<style>
+  @media (max-width: 767px) {
+    .banner-full-mobile {
+      margin-left: -1rem;
+      margin-right: -1rem;
+      width: calc(100% + 2rem);
+    }
+
+    .banner-full-mobile .rounded-lg {
+      border-radius: 0;
+      overflow: hidden;
+    }
+  }
+</style>
+
+<style>
   .games-carousel-wrapper,
   .games-carousel-track {
     background: transparent !important;
@@ -370,13 +466,10 @@ const promosSlides = Array.isArray(commonAssets)
   .game-card .p-4 {
     background: transparent !important;
   }
-
-  /* Asegurar que el contenedor de la imagen no pinte fondo */
   .game-card .h-32 {
     background: transparent !important;
   }
 
-  /* Ajustes menores de scroll-snap y padding */
   .games-carousel-track {
     scroll-padding-left: 0;
   }
@@ -411,53 +504,98 @@ const promosSlides = Array.isArray(commonAssets)
   }
 </style>
 
-    {featuredChallenge && (
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start mb-16">
-        <!-- Texto del evento -->
-        <div class="space-y-4 text-white">
-          <h2 class="font-title text-3xl md:text-4xl font-bold uppercase">
-            {featuredChallenge.title}
-          </h2>
-          {featuredChallenge.description && (
-            <p class="text-base md:text-lg leading-relaxed text-white/90">
-              {featuredChallenge.description}
-            </p>
-          )}
-          {featuredChallengeLink && featuredChallengeLink !== '#' && (
-            <a
-              href={featuredChallengeLink}
-              class="inline-flex items-center mt-4 px-6 py-3 rounded-md bg-red text-white font-semibold uppercase tracking-wide text-sm shadow-[0_8px_20px_rgba(0,0,0,0.6)] hover:bg-[#ff4b4e] transition-colors duration-200"
-            >
-              {currentLang === 'es' ? 'Ver detalles del reto' : 'View challenge details'}
-            </a>
-          )}
-        </div>
-
-        <!-- Imagen del evento (CTA clickable en todos los dispositivos) -->
-        <div class="w-full flex justify-center md:justify-end">
-          <a
-            href={featuredChallengeLink}
-            class="relative w-full max-w-xl rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.7)] block cursor-pointer"
-          >
-            <LazyImage
-              src={featuredChallenge.image}
-              alt={featuredChallenge.title}
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </a>
-        </div>
-      </section>
-    )}
-
-    <section class="mt-10 pt-6 pb-4 " >
-      <h2 class="font-title text-2xl md:text-3xl font-bold text-white uppercase mb-6">
-        {sectionTitle}
-      </h2>
-      <ChallengesCarousel items={orderedChallenges} />
+    <!-- Sección Calendario  -->
+    <section class="mt-10 pt-6 w-full">
+      <div class="-mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full overflow-hidden rounded-none md:rounded-xl">
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/calendario_taqueritos.webp"
+          alt={currentLang === 'es' ? 'Calendario de Torneos' : 'Tournament Calendar'}
+          class="w-full h-auto object-cover"
+          loading="lazy"
+          style="width:100%; display:block;"
+        />
+      </div>
     </section>
+
+    <!-- Sección Torneos -->
+    <section class="mt-12 md:mt-16 w-full">
+      <div class="relative -mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full aspect-[1920/1080] overflow-hidden rounded-none md:rounded-xl">
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/fondo_torneos.webp"
+          alt={currentLang === 'es' ? 'Torneos Taqueritos' : 'Taqueritos Tournaments'}
+          class="w-full h-full object-cover"
+          loading="lazy"
+          style="width:100%; display:block;"
+        />
+
+        <!-- Botón 1 (Free Fire) -->
+        <a
+          href="https://www.challengermode.com/s/taqueritos/pages/ffire"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="absolute block transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99]"
+          style="top: 35.74%; left: 7.66%; width: 84.95%; height: 16.02%;"
+          aria-label={currentLang === 'es' ? 'Torneo Free Fire' : 'Free Fire Tournament'}
+        >
+          <LazyImage
+            src="https://snack.yummiespromociones.com/SnacksyummiesAssets/torneo_1.webp"
+            alt="Torneo Free Fire"
+            class="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </a>
+
+        <!-- Botón 2 (Clash Royale) -->
+        <a
+          href="https://www.challengermode.com/s/taqueritos/pages/croyale"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="absolute block transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99]"
+          style="top: 54.44%; left: 7.66%; width: 84.95%; height: 16.11%;"
+          aria-label={currentLang === 'es' ? 'Torneo Clash Royale' : 'Clash Royale Tournament'}
+        >
+          <LazyImage
+            src="https://snack.yummiespromociones.com/SnacksyummiesAssets/torneo_2.webp"
+            alt="Torneo Clash Royale"
+            class="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </a>
+
+        <!-- Botón 3 (League of Legends) -->
+        <a
+          href="https://www.challengermode.com/s/taqueritos/pages/lolegends"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="absolute block transition-transform duration-300 hover:scale-[1.015] active:scale-[0.99]"
+          style="top: 73.15%; left: 7.66%; width: 84.95%; height: 16.11%;"
+          aria-label={currentLang === 'es' ? 'Torneo League of Legends' : 'League of Legends Tournament'}
+        >
+          <LazyImage
+            src="https://snack.yummiespromociones.com/SnacksyummiesAssets/torneo_3.webp"
+            alt="Torneo League of Legends"
+            class="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </a>
+      </div>
+    </section>
+
+
+
+    <style>
+      @media (max-width: 767px) {
+        .calendar-section {
+          padding-top: 24px !important;
+          padding-bottom: 16px !important;
+        }
+        #games {
+          padding-bottom: 0px !important;
+        }
+      }
+    </style>
         {games.length > 0 && (
-      <section class="w-full py-8 bg-brown" id="games">
+      <section class="w-full pt-12 md:pt-16 pb-8 bg-brown" id="games">
         <div class="container mx-auto px-4">
           <GamesCarousel items={games}>
             <div slot="title" class="title">
