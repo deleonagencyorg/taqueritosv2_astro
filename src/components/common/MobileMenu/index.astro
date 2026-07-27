@@ -116,7 +116,7 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
             {/* Ítems sin submenú */}
             {!item.submenu && item.id !== 'products' && item.id !== 'games' && (
               <a
-                href={item.href}
+                href={item.id === 'taqueritos-gaming' ? 'https://www.challengermode.com/s/taqueritos' : item.href}
                 data-open-stockist={item.id === 'where-buy' ? 'true' : undefined}
                 target={item.id === 'taqueritos-gaming' ? '_blank' : undefined}
                 rel={item.id === 'taqueritos-gaming' ? 'noopener noreferrer' : undefined}
