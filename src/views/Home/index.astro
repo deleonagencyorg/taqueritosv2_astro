@@ -149,7 +149,7 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
     {currentLang === 'es' && showChallengesSection && (
       <section id="challenges" class="w-full py-6 md:py-12 !bg-brown relative">
         <div class="relative w-full overflow-hidden">
-          <a href="https://www.challengermode.com/s/taqueritos" target="_blank" rel="noopener noreferrer" class="block w-full">
+          <div class="block w-full" role="img" aria-label={currentLang === 'es' ? 'Calendario de Torneos - Taqueritos' : 'Tournament Calendar'}>
             <LazyImage
               src="https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_arenas.webp"
               alt={currentLang === 'es' ? 'Calendario de Torneos - Taqueritos' : 'Tournament Calendar'}
@@ -157,7 +157,7 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
               loading="lazy"
               style="width:100%; display:block;"
             />
-          </a>
+          </div>
           <div class="absolute bottom-3 sm:bottom-5 md:bottom-8 lg:bottom-10 left-1/2 -translate-x-1/2 z-10">
             <a 
               href="https://www.challengermode.com/s/taqueritos" 
