@@ -8,7 +8,6 @@ import Breadcrumb from '../../../components/common/Breadcrumb/Breadcrumb.astro';
 import LazyImage from '../../../components/common/LazyImage.astro';
 import IngredientsCarousel from '../../../components/recipes/IngredientsCarousel.astro';
 import ShareButton from '../../../components/common/ShareButton.astro';
-import VideoModal from '../../../components/recipes/VideoModal.astro';
 
 interface RecipeItem {
   id: string;
@@ -289,9 +288,6 @@ function formatTime(minutes: number): string {
 
 <!-- Close background wrapper -->
 </div>
-
-<!-- Video Modal -->
-{recipe.video && <VideoModal videoId={recipe.video} isOpen={false} />}
 
 <script>
   // Este script se ejecuta solo en el navegador
