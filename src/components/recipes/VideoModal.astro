@@ -1,116 +1,91 @@
 ---
-// Componente modal para reproducir videos de YouTube y AWS
 interface Props {
   videoId: string;
   isOpen: boolean;
 }
 
-const { videoId, isOpen } = Astro.props;
+const { isOpen } = Astro.props;
 ---
 
-<div 
-  id="video-modal" 
+<div
+  id="video-modal"
   class={`fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
   aria-hidden={!isOpen}
   role="dialog"
   aria-modal="true"
 >
-  <!-- Backdrop oscuro -->
-  <div 
+  <div
     class="absolute inset-0 bg-black/90 backdrop-blur-sm"
     id="video-modal-backdrop"
   ></div>
-  
-  <!-- Contenedor del modal -->
-  <div class="relative z-10 w-full max-w-5xl mx-4 md:mx-8">
-    <!-- Botón cerrar -->
-    <button 
-      id="video-modal-close"
-      class="absolute -top-12 right-0 md:-right-12 md:-top-12 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200"
-      aria-label="Cerrar video"
-    >
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        class="h-6 w-6 text-white" 
-        fill="none" 
-        viewBox="0 0 24 24" 
-        stroke="currentColor"
+
+  <div class="relative z-10 flex items-center justify-center w-full h-full p-4 md:p-8">
+    <div id="video-modal-wrapper" class="relative w-full max-w-[min(90vw,1280px)]">
+      <div
+        id="video-container"
+        class="relative w-full bg-black rounded-lg overflow-hidden shadow-2xl"
       >
-        <path 
-          stroke-linecap="round" 
-          stroke-linejoin="round" 
-          stroke-width="2" 
-          d="M6 18L18 6M6 6l12 12" 
-        />
-      </svg>
-    </button>
-    
-    <!-- Contenedor del video responsive -->
-    <div id="video-container" class="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl flex items-center justify-center">
-      <iframe
-        id="video-iframe"
-        class="absolute inset-0 w-full h-full hidden"
-        src=""
-        title="Video de receta"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-        allowfullscreen
-      ></iframe>
-      <video
-        id="video-player"
-        class="w-full h-full object-contain hidden"
-        controls
-        playsinline
-        preload="metadata"
-      ></video>
+        <iframe
+          id="video-iframe"
+          class="absolute inset-0 z-0 w-full h-full hidden"
+          src=""
+          title="Video de receta"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+          allowfullscreen
+        ></iframe>
+
+        <video
+          id="video-player"
+          class="absolute inset-0 z-0 w-full h-full object-contain hidden"
+          controls
+          playsinline
+          preload="metadata"
+        ></video>
+
+        <button
+          id="video-modal-close"
+          type="button"
+          class="absolute top-2 right-2 z-30 w-9 h-9 flex items-center justify-center rounded-full bg-black/60 hover:bg-black/80 border border-white/30 transition-colors duration-200 pointer-events-auto"
+          aria-label="Cerrar video"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-white pointer-events-none"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
-  #video-modal.direct-video #video-container {
-    max-height: 85vh;
-    aspect-ratio: auto;
-    height: 80vh;
+  #video-modal-wrapper {
+    max-height: 90vh;
   }
 
-  @media (max-width: 768px) {
-    #video-modal.shorts-fullscreen {
-      align-items: stretch;
-      justify-content: stretch;
-    }
+  #video-container {
+    max-height: 90vh;
+  }
 
-    #video-modal.shorts-fullscreen #video-container {
-      position: fixed !important;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      max-width: none;
-      margin: 0;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: black;
-      z-index: 10000;
-    }
+  #video-container.is-vertical {
+    width: auto;
+    max-width: min(90vw, 480px);
+    margin-inline: auto;
+  }
 
-    #video-modal.shorts-fullscreen #video-iframe,
-    #video-modal.shorts-fullscreen #video-player {
-      position: relative;
-      width: 100% !important;
-      height: 100% !important;
-      border: 0;
-    }
-
-    #video-modal.shorts-fullscreen #video-modal-close {
-      position: fixed !important;
-      top: 1rem !important;
-      right: 1rem !important;
-      z-index: 10001;
-    }
+  #video-container.is-horizontal {
+    width: 100%;
   }
 </style>
 
@@ -139,94 +114,44 @@ const { videoId, isOpen } = Astro.props;
     return null;
   }
 
-  // Función para abrir el modal
-  function openVideoModal(videoUrl: string) {
-    const modal = document.getElementById('video-modal');
-    const iframe = document.getElementById('video-iframe') as HTMLIFrameElement | null;
-    const videoPlayer = document.getElementById('video-player') as HTMLVideoElement | null;
-    
-    if (!modal) return;
+  function applyAspectRatio(width: number, height: number) {
+    const container = document.getElementById('video-container');
+    const wrapper = document.getElementById('video-modal-wrapper');
+    if (!container || !wrapper || width <= 0 || height <= 0) return;
 
-    const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+    const ratio = width / height;
+    const isVertical = ratio < 1;
 
-    if (isYouTube(videoUrl)) {
-      const videoId = extractYouTubeId(videoUrl);
-      if (!videoId) return;
+    container.style.aspectRatio = `${width} / ${height}`;
+    container.classList.toggle('is-vertical', isVertical);
+    container.classList.toggle('is-horizontal', !isVertical);
 
-      if (videoPlayer) {
-        videoPlayer.pause();
-        videoPlayer.src = '';
-        videoPlayer.removeAttribute('src');
-        videoPlayer.load();
-        videoPlayer.classList.add('hidden');
-      }
-
-      const isShort = /\/shorts\//.test(videoUrl);
-      if (iframe) {
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
-        iframe.classList.remove('hidden');
-      }
-
-      const langFromHtml = document.documentElement && document.documentElement.lang ? document.documentElement.lang.toLowerCase() : '';
-      const pathLocale = (location.pathname || '').split('/')[1];
-      const locale = (langFromHtml || pathLocale || '').toLowerCase();
-      const isLocaleAllowed = locale === 'es' || locale === 'en' || /^\/(es|en)(\/|$)/.test(location.pathname || '');
-
-      const shouldFullscreen = isShort && isMobile && isLocaleAllowed;
-
-      if (shouldFullscreen) {
-        modal.classList.add('shorts-fullscreen');
-        modal.classList.remove('direct-video');
-      } else {
-        modal.classList.remove('shorts-fullscreen');
-        modal.classList.remove('direct-video');
-      }
+    if (isVertical) {
+      const maxHeight = Math.min(window.innerHeight * 0.9, 900);
+      const computedWidth = Math.min(maxHeight * ratio, window.innerWidth * 0.9);
+      wrapper.style.width = `${computedWidth}px`;
+      wrapper.style.maxWidth = '90vw';
     } else {
-      if (iframe) {
-        iframe.src = '';
-        iframe.classList.add('hidden');
-      }
-
-      if (isMobile) {
-        modal.classList.add('shorts-fullscreen');
-        modal.classList.remove('direct-video');
-      } else {
-        modal.classList.add('direct-video');
-        modal.classList.remove('shorts-fullscreen');
-      }
-
-      if (videoPlayer) {
-        videoPlayer.src = videoUrl;
-        videoPlayer.classList.remove('hidden');
-        videoPlayer.play().catch((err) => {
-          console.warn('Autoplay prevented by browser:', err);
-        });
-      }
+      wrapper.style.width = '';
+      wrapper.style.maxWidth = 'min(90vw, 1280px)';
     }
-
-    // Mostrar el modal
-    modal.classList.remove('opacity-0', 'pointer-events-none');
-    modal.classList.add('opacity-100', 'pointer-events-auto');
-    modal.setAttribute('aria-hidden', 'false');
-    
-    // Prevenir scroll del body
-    document.body.style.overflow = 'hidden';
   }
 
-  // Función para cerrar el modal
-  function closeVideoModal() {
-    const modal = document.getElementById('video-modal');
+  function resetContainerSizing() {
+    const container = document.getElementById('video-container');
+    const wrapper = document.getElementById('video-modal-wrapper');
+    if (!container || !wrapper) return;
+
+    container.style.aspectRatio = '';
+    container.classList.remove('is-vertical', 'is-horizontal');
+    wrapper.style.width = '';
+    wrapper.style.maxWidth = '';
+  }
+
+  function hideAllPlayers() {
     const iframe = document.getElementById('video-iframe') as HTMLIFrameElement | null;
     const videoPlayer = document.getElementById('video-player') as HTMLVideoElement | null;
-    
-    if (!modal) return;
-    
-    // Ocultar el modal
-    modal.classList.remove('opacity-100', 'pointer-events-auto');
-    modal.classList.add('opacity-0', 'pointer-events-none');
-    modal.setAttribute('aria-hidden', 'true');
-    
-    // Limpiar iframe
+
     if (iframe) {
       iframe.src = '';
       iframe.classList.add('hidden');
@@ -234,55 +159,113 @@ const { videoId, isOpen } = Astro.props;
 
     if (videoPlayer) {
       videoPlayer.pause();
-      videoPlayer.src = '';
       videoPlayer.removeAttribute('src');
       videoPlayer.load();
       videoPlayer.classList.add('hidden');
     }
+  }
 
-    modal.classList.remove('shorts-fullscreen', 'direct-video');
-    
-    // Restaurar scroll del body
+  function openVideoModal(videoUrl: string) {
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-iframe') as HTMLIFrameElement | null;
+    const videoPlayer = document.getElementById('video-player') as HTMLVideoElement | null;
+
+    if (!modal) return;
+
+    hideAllPlayers();
+    resetContainerSizing();
+
+    if (isYouTube(videoUrl)) {
+      const videoId = extractYouTubeId(videoUrl);
+      if (!videoId || !iframe) return;
+
+      const isShort = /\/shorts\//.test(videoUrl);
+      applyAspectRatio(isShort ? 9 : 16, isShort ? 16 : 9);
+
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      iframe.classList.remove('hidden');
+    } else {
+      if (!videoPlayer) return;
+
+      applyAspectRatio(16, 9);
+
+      const onMetadata = () => {
+        const width = videoPlayer.videoWidth;
+        const height = videoPlayer.videoHeight;
+        if (width > 0 && height > 0) {
+          applyAspectRatio(width, height);
+        }
+        videoPlayer.removeEventListener('loadedmetadata', onMetadata);
+      };
+
+      videoPlayer.addEventListener('loadedmetadata', onMetadata);
+      videoPlayer.src = videoUrl;
+      videoPlayer.classList.remove('hidden');
+      videoPlayer.play().catch((err) => {
+        console.warn('Autoplay prevented by browser:', err);
+      });
+    }
+
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    modal.classList.add('opacity-100', 'pointer-events-auto');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideoModal() {
+    const modal = document.getElementById('video-modal');
+    if (!modal) return;
+
+    hideAllPlayers();
+    resetContainerSizing();
+
+    modal.classList.remove('opacity-100', 'pointer-events-auto');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
 
+  let globalEventsBound = false;
+
   function setupModalEvents() {
-    const closeBtn = document.getElementById('video-modal-close');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeVideoModal);
-    }
+    if (globalEventsBound) return;
+    globalEventsBound = true;
 
-    const backdrop = document.getElementById('video-modal-backdrop');
-    if (backdrop) {
-      backdrop.addEventListener('click', closeVideoModal);
-    }
-  }
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
 
-  document.addEventListener('DOMContentLoaded', () => {
-    setupModalEvents();
+      if (target.closest('#video-modal-close')) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeVideoModal();
+        return;
+      }
+
+      if (target.id === 'video-modal-backdrop') {
+        closeVideoModal();
+      }
+    });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
+      if (e.key !== 'Escape') return;
+      const modal = document.getElementById('video-modal');
+      if (modal?.getAttribute('aria-hidden') === 'false') {
         closeVideoModal();
       }
     });
 
     document.addEventListener('open-video-modal', ((e: CustomEvent) => {
-      if (e.detail && e.detail.videoUrl) {
+      if (e.detail?.videoUrl) {
         openVideoModal(e.detail.videoUrl);
       }
     }) as EventListener);
-  });
+  }
+
+  setupModalEvents();
 
   document.addEventListener('astro:page-load', () => {
     setupModalEvents();
-
-    document.addEventListener('open-video-modal', ((e: CustomEvent) => {
-      if (e.detail && e.detail.videoUrl) {
-        openVideoModal(e.detail.videoUrl);
-      }
-    }) as EventListener);
-
     (window as any).openVideoModal = openVideoModal;
     (window as any).closeVideoModal = closeVideoModal;
   });
@@ -290,4 +273,3 @@ const { videoId, isOpen } = Astro.props;
   (window as any).openVideoModal = openVideoModal;
   (window as any).closeVideoModal = closeVideoModal;
 </script>
-
