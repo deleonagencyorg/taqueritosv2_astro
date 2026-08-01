@@ -29,6 +29,14 @@ const copyrightText = t('footer.copyright', { namespace: 'common', locale: curre
 const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
 const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
 
+// asegurar la tilde en leveleate del footer
+const menuItemsUpdated = menuItems.map((item: any) => {
+  if (item.id === 'taqueritos-gaming' && currentLang === 'es') {
+    return { ...item, text: 'Leveléate' };
+  }
+  return item;
+});
+
 // Obtener el logo específico de Zibas desde brands.json
 const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taqueritos-2019-300x100.webp';
 ---
@@ -59,7 +67,7 @@ const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taquerit
               {currentLang === 'es' ? 'Navegación' : 'Navigation'}
             </h3>
             <nav class="grid grid-cols-2 gap-x-6 md:gap-x-12 gap-y-2 text-left w-full">
-              {menuItems && menuItems.map((item: any) => (
+              {menuItemsUpdated && menuItemsUpdated.map((item: any) => (
                 <a
                   href={item.href}
                   data-open-stockist={item.id === 'where-buy' ? 'true' : undefined}
