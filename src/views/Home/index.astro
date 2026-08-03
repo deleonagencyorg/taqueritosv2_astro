@@ -133,21 +133,8 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
       />
     </div>
 
-    {/* Sección Carrusel de juegos*/}
-    {currentLang === 'es' && games.length > 0 && (
-      <section class="w-full py-8 bg-brown" id="games">
-        <div class="container mx-auto px-4">
-          <GamesCarousel items={games}>
-            <div slot="title" class="title">
-              <p>{gamesTitle}</p>
-            </div>
-          </GamesCarousel>
-        </div>
-      </section>
-    )}
-
     {currentLang === 'es' && showChallengesSection && (
-      <section id="challenges" class="w-full py-0 md:py-12 !bg-brown relative">
+      <section id="challenges" class="w-full pt-6 md:pt-12 lg:pt-20 py-0 md:py-12 !bg-brown relative">
         <div class="relative w-full overflow-hidden">
           <div class="block w-full" role="img" aria-label={currentLang === 'es' ? 'Calendario de Torneos - Taqueritos' : 'Tournament Calendar'}>
             <LazyImage
@@ -180,6 +167,19 @@ const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';
               />
             </a>
           </div>
+        </div>
+      </section>
+    )}
+
+    {/* Sección Carrusel de juegos*/}
+    {currentLang === 'es' && games.length > 0 && (
+      <section class="w-full py-8 bg-brown" id="games">
+        <div class="container mx-auto px-4">
+          <GamesCarousel items={games}>
+            <div slot="title" class="title">
+              <p>{gamesTitle}</p>
+            </div>
+          </GamesCarousel>
         </div>
       </section>
     )}
