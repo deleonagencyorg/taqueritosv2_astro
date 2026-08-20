@@ -159,9 +159,9 @@ const promosSlides = Array.isArray(commonAssets)
           style="width:100%;"
         />
         <LazyImage
-          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_retos_torneos_mob.webp"
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_retos_mobile.webp"
           alt={currentLang === 'es' ? 'Retos y Torneos' : 'Challenges & Tournaments'}
-          class="block md:hidden w-full h-auto object-cover"
+          class="block md:hidden w-full h-auto aspect-square object-cover"
           loading="lazy"
           style="width:100%;"
         />
@@ -514,12 +514,19 @@ const promosSlides = Array.isArray(commonAssets)
 </style>
 
     <!-- Sección Calendario  -->
-    <section class="mt-10 pt-6 w-full">
+    <section class="mt-10 pt-6 w-full calendar-section">
       <div class="-mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full overflow-hidden rounded-none md:rounded-xl">
         <LazyImage
           src="https://snack.yummiespromociones.com/SnacksyummiesAssets/calendario_taqueritos.webp"
           alt={currentLang === 'es' ? 'Calendario de Torneos' : 'Tournament Calendar'}
-          class="w-full h-auto object-cover"
+          class="hidden md:block w-full h-auto object-cover"
+          loading="lazy"
+          style="width:100%; display:block;"
+        />
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/calendario_taqueritos_mob.webp"
+          alt={currentLang === 'es' ? 'Calendario de Torneos' : 'Tournament Calendar'}
+          class="block md:hidden w-full h-auto object-contain mx-auto"
           loading="lazy"
           style="width:100%; display:block;"
         />
