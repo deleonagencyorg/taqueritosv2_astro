@@ -154,9 +154,16 @@ const promosSlides = Array.isArray(commonAssets)
         <LazyImage
           src="https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_retos_torneos.webp"
           alt={currentLang === 'es' ? 'Retos y Torneos' : 'Challenges & Tournaments'}
-          class="w-full h-auto object-cover"
+          class="hidden md:block w-full h-auto object-cover"
           loading="lazy"
-          style="width:100%; display:block;"
+          style="width:100%;"
+        />
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_retos_mobile.webp"
+          alt={currentLang === 'es' ? 'Retos y Torneos' : 'Challenges & Tournaments'}
+          class="block md:hidden w-full h-auto aspect-square object-cover"
+          loading="lazy"
+          style="width:100%;"
         />
       </div>
       <div class="absolute bottom-3 sm:bottom-5 md:bottom-8 lg:bottom-10 left-1/2 -translate-x-1/2 z-10">
@@ -177,7 +184,7 @@ const promosSlides = Array.isArray(commonAssets)
     </div>
   </section>
 
-  <div class="container mx-auto px-4 pb-24 mt-0">
+  <div class="container mx-auto px-4 pb-12 md:pb-24 mt-0">
 
 
     <!-- seccion texto e imagen -->
@@ -507,12 +514,19 @@ const promosSlides = Array.isArray(commonAssets)
 </style>
 
     <!-- Sección Calendario  -->
-    <section class="mt-10 pt-6 w-full">
+    <section class="mt-10 pt-6 w-full calendar-section">
       <div class="-mx-4 md:mx-0 w-[calc(100%+2rem)] md:w-full overflow-hidden rounded-none md:rounded-xl">
         <LazyImage
           src="https://snack.yummiespromociones.com/SnacksyummiesAssets/calendario_taqueritos.webp"
           alt={currentLang === 'es' ? 'Calendario de Torneos' : 'Tournament Calendar'}
-          class="w-full h-auto object-cover"
+          class="hidden md:block w-full h-auto object-cover"
+          loading="lazy"
+          style="width:100%; display:block;"
+        />
+        <LazyImage
+          src="https://snack.yummiespromociones.com/SnacksyummiesAssets/calendario_taqueritos_mob.webp"
+          alt={currentLang === 'es' ? 'Calendario de Torneos' : 'Tournament Calendar'}
+          class="block md:hidden w-full h-auto object-contain mx-auto"
           loading="lazy"
           style="width:100%; display:block;"
         />
@@ -592,7 +606,12 @@ const promosSlides = Array.isArray(commonAssets)
           padding-bottom: 16px !important;
         }
         #games {
+          padding-top: 24px !important;
           padding-bottom: 0px !important;
+        }
+        #games .games-carousel-container {
+          padding-top: 16px !important;
+          padding-bottom: 20px !important;
         }
       }
     </style>

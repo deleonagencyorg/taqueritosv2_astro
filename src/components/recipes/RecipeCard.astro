@@ -36,9 +36,13 @@ const currentLocale = getLocale();
 const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 'recipes'}/${id}`;
 ---
 
-<div class="recipe-card-wrapper block h-full group overflow-hidden rounded-2xl border border-[#FF6A2A] bg-[#1A0505] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(255,106,42,0.9)] hover:border-[#FF2C2F]" data-has-video={video ? 'true' : 'false'} data-video-url={video || ''}>
-  <!-- Imagen superior - Click para abrir video -->
-  <div class="recipe-card-image relative w-full overflow-hidden cursor-pointer" data-video-trigger={video ? 'true' : 'false'}>
+<div class="recipe-card-wrapper block h-full group overflow-hidden rounded-2xl border border-[#FF6A2A] bg-[#1A0505] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(255,106,42,0.9)] hover:border-[#FF2C2F]" data-has-video={video ? 'true' : 'false'}>
+  <!-- Imagen superior -->
+  <div 
+    class="recipe-card-image relative w-full overflow-hidden cursor-pointer" 
+    data-video-trigger={video ? 'true' : 'false'} 
+    data-video-url={video || ''}
+  >
     <LazyImage
       src={image}
       alt={title}
@@ -47,8 +51,8 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
     />
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-    <!-- Icono de play si tiene video - estilo boton carousel redondo -->
-    {video && (
+    {video ? (
+      <!-- Icono de play si tiene video -->
       <div
         class="video-play-overlay absolute inset-0 flex items-center justify-center"
         data-has-video-indicator
@@ -64,6 +68,9 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
           </svg>
         </div>
       </div>
+    ) : (
+      <!-- si no tiene video que reridija a detalles -->
+      <a href={recipeLink} class="absolute inset-0 z-10" aria-label={title}></a>
     )}
   </div>
 
@@ -108,8 +115,7 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
       img.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const wrapper = img.closest('.recipe-card-wrapper');
-        const videoUrl = wrapper?.getAttribute('data-video-url');
+        const videoUrl = img.getAttribute('data-video-url');
         if (videoUrl) {
           if ((window as any).openVideoModal) {
             (window as any).openVideoModal(videoUrl);
@@ -129,8 +135,7 @@ const recipeLink = `/${currentLocale}/${currentLocale === 'es' ? 'recetas' : 're
       img.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const wrapper = img.closest('.recipe-card-wrapper');
-        const videoUrl = wrapper?.getAttribute('data-video-url');
+        const videoUrl = img.getAttribute('data-video-url');
         if (videoUrl) {
           if ((window as any).openVideoModal) {
             (window as any).openVideoModal(videoUrl);
