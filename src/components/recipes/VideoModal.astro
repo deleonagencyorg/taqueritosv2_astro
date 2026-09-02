@@ -278,14 +278,24 @@ const { id = 'videoModal' } = Astro.props;
     if (!window.__videoClickBound) {
       window.__videoClickBound = true;
       document.addEventListener('click', function(e) {
-        const trigger = e.target.closest('[data-video-url], [data-youtube-url], [data-video]');
+        const target = e.target;
+        if (!target || !target.closest) return;
+
+        const anchor = target.closest('a');
+        if (anchor && !anchor.hasAttribute('data-video-url') && !anchor.hasAttribute('data-youtube-url') && !anchor.hasAttribute('data-video')) {
+          return;
+        }
+
+        const trigger = target.closest('[data-video-url], [data-youtube-url], [data-video]');
         if (trigger) {
-          e.preventDefault();
-          e.stopPropagation();
           const url = trigger.getAttribute('data-video-url') || trigger.getAttribute('data-youtube-url') || trigger.getAttribute('data-video');
-          const host = trigger.getAttribute('data-host') || trigger.getAttribute('data-video-host');
-          if (url && window.openVideoModal) {
-            window.openVideoModal(url, host);
+          if (url) {
+            e.preventDefault();
+            e.stopPropagation();
+            const host = trigger.getAttribute('data-host') || trigger.getAttribute('data-video-host');
+            if (window.openVideoModal) {
+              window.openVideoModal(url, host);
+            }
           }
         }
       }, true);
