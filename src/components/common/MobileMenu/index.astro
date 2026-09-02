@@ -5,6 +5,7 @@ import { t, type Locale } from '../../../i18n/i18n';
 import { socialMediaIconUrls, logos } from '../../../config/assets';
 import type { HeaderColorConfig } from '../../../config/headerColors';
 import SocialMediaIcons from '../SocialMediaIcons/index.astro';
+import { getAllProducts } from '../../../services/api/products';
 
 export interface Props {
   currentLang: Locale;
@@ -42,8 +43,10 @@ const contactMenuItem = {
 
 const menuItemsWithContact = [...menuItemsOrdered, contactMenuItem];
 
-// Obtener productos para el submenú de "Productos"
-const products = t('items', { namespace: 'products', locale: currentLang }) as any[];
+// Obtener productos para el submenú de "Productos" (desde el CMS con fallback local)
+const cmsProducts = await getAllProducts(currentLang);
+const localProducts = (t('items', { namespace: 'products', locale: currentLang }) as any[]) || [];
+const products = cmsProducts.length > 0 ? cmsProducts : localProducts;
 // Obtener juegos para el submenú de "Juegos"
 const games = t('games', { namespace: 'common', locale: currentLang }) as any[];
 

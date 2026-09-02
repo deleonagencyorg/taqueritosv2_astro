@@ -14,6 +14,7 @@ import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import StockistModal from '../components/common/StockistModal.astro';
 import VideoModal from '../components/recipes/VideoModal.astro';
+import { getAllProducts } from '../services/api/products';
 
 export interface Props {
   title?: string;
@@ -41,7 +42,9 @@ const currentLang = validLocales.includes(langFromUrl) ? langFromUrl : 'es';
 const { pathname } = Astro.url;
 const headerColorConfig = getHeaderColors(pathname);
 
-const products = t('items', { namespace: 'products', locale: currentLang }) || [];
+const cmsProducts = await getAllProducts(currentLang);
+const localProducts = t('items', { namespace: 'products', locale: currentLang }) || [];
+const products = cmsProducts.length > 0 ? cmsProducts : localProducts;
 const stockists = t('stockist', { namespace: 'products', locale: currentLang }) || [];
 
 let customHeaderConfig = headerColorConfig;

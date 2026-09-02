@@ -3,28 +3,33 @@
 import { t, setLocale, type Locale } from '../../../i18n/i18n';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import ProductDetail from '../../../views/Products/Detail/index.astro';
+import { getAllProducts } from '../../../services/api/products';
 
 export const prerender = true;
 
-export function getStaticPaths() {
-  // Obtener todos los idiomas y productos disponibles
+export async function getStaticPaths() {
   const locales: Locale[] = ['en'];
   const paths = [];
 
   for (const locale of locales) {
-    // Obtener productos para este idioma
-    const products = t('items', { namespace: 'products', locale: locale }) || [];
+    const cmsProducts = await getAllProducts(locale);
+    const localProducts = t('items', { namespace: 'products', locale: locale }) || [];
+    const products = cmsProducts.length > 0 ? cmsProducts : localProducts;
     
-    // Para cada producto, crear una ruta
     for (const product of products) {
       paths.push({
         params: { lang: locale, productId: product.id },
         props: { product, currentLang: locale }
       });
+      if (product.slug && product.slug !== product.id) {
+        paths.push({
+          params: { lang: locale, productId: product.slug },
+          props: { product, currentLang: locale }
+        });
+      }
     }
   }
 
-  console.log(`Generadas ${paths.length} rutas de productos`);
   return paths;
 }
 

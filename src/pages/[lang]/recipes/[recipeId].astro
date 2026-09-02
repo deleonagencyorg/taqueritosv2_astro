@@ -3,6 +3,7 @@
 import { setLocale, type Locale } from '../../../i18n/i18n';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import RecipeDetail from '../../../views/Recipes/Detail/index.astro';
+import { getRecipeBySlug } from '../../../services/api/recipes';
 
 // En modo SSR (output: 'server') getStaticPaths no se usa en tiempo de petición.
 // Los parámetros vienen directamente de la URL.
@@ -14,20 +15,21 @@ if (!lang || !recipeId) {
 
 setLocale(lang as Locale);
 
-// Cargar la receta desde los archivos JSON en tiempo de petición (SSR)
-const modules = import.meta.glob('../../../locales/*/recipes/*.json', { eager: true });
-let recipe: any = null;
+// Intentar obtener la receta desde el CMS
+let recipe = await getRecipeBySlug(recipeId, lang);
 
-for (const path in modules) {
-  // Extraer el idioma del path con regex (funciona con rutas relativas y absolutas)
-  const langMatch = path.match(/locales\/([^/]+)\//);
-  const pathLang = langMatch?.[1];
-  if (pathLang === lang) {
-    const mod = modules[path] as any;
-    const r = mod.default ?? mod;
-    if (r?.id === recipeId) {
-      recipe = r;
-      break;
+if (!recipe) {
+  const modules = import.meta.glob('../../../locales/*/recipes/*.json', { eager: true });
+  for (const path in modules) {
+    const langMatch = path.match(/locales\/([^/]+)\//);
+    const pathLang = langMatch?.[1];
+    if (pathLang === lang) {
+      const mod = modules[path] as any;
+      const r = mod.default ?? mod;
+      if (r?.id === recipeId || r?.slug === recipeId) {
+        recipe = r;
+        break;
+      }
     }
   }
 }

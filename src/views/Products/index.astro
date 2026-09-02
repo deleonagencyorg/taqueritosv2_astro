@@ -1,9 +1,12 @@
 ---
 import { t, getLocale } from '../../i18n/i18n';
 import ProductsCarousel from '../../components/common/ProductsCarousel/index.astro';
+import { getAllProducts } from '../../services/api/products';
 
 const currentLang = getLocale();
-const products = t('items', { namespace: 'products', locale: currentLang }) || [];
+const cmsProducts = await getAllProducts(currentLang);
+const localProducts = t('items', { namespace: 'products', locale: currentLang }) || [];
+const products = cmsProducts.length > 0 ? cmsProducts : localProducts;
 const homeAssets = t('home', { namespace: 'products', locale: currentLang }) || {};
 ---
 

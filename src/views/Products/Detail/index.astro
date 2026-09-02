@@ -3,6 +3,7 @@
 import ChallengesCarousel from '../../../components/challenges/ChallengesCarousel.astro';
 import { t } from '../../../i18n/i18n';
 import type { Locale } from '../../../i18n/i18n';
+import { getAllProducts, getProductBySlug } from '../../../services/api/products';
 import './styles.css';
 
 // client-side helpers
@@ -47,15 +48,15 @@ interface NutritionInfo {
 interface Product {
   id: string;
   name: string;
-  name_description: string;
+  name_description?: string;
   image: string;
   available?: string;
-  background_image: string;
-  background_color: string;
-  text_color: string;
-  header_text_color: string;
-  color_button: string;
-  sizes: ProductSize[];
+  background_image?: string;
+  background_color?: string;
+  text_color?: string;
+  header_text_color?: string;
+  color_button?: string;
+  sizes?: ProductSize[];
   description?: string;
   short_description?: string;
   presentaciones?: Array<{
@@ -69,16 +70,20 @@ interface Product {
 
 const { currentLang, productId } = Astro.props;
 
-// Obtener datos desde traducciones
+// Obtener productos desde el CMS (con fallback local)
+const cmsProducts = await getAllProducts(currentLang as Locale);
+const localProducts = t('items', { namespace: 'products', locale: currentLang as Locale }) || [];
+const allProductsArray = cmsProducts.length > 0 ? cmsProducts : localProducts;
+
+let product = await getProductBySlug(productId, currentLang as Locale);
+if (!product) {
+  product = allProductsArray.find((item: any) => item.id === productId || item.slug === productId) || null;
+}
+
 const productsAssets = t('home', { namespace: 'products', locale: currentLang }) || {};
-const products = t('items', { namespace: 'products', locale: currentLang as Locale }) || [];
 const stockists = t('stockist', { namespace: 'products', locale: currentLang as Locale }) || [];
-const product = products.find((item: Product) => item.id === productId);
 const brandsAssets = t('', { namespace: 'brands', locale: currentLang }) || {};
 const newsAssets =  t('', { namespace: 'news', locale: currentLang }) || {};
-const brandsList = brandsAssets.brands || [];
-const zibasBrand = brandsList.find((brand: any) => brand.id === 'zibas');
-const taqueritosProducts = (zibasBrand?.products || []).filter((product: any) => product.id !== productId);
 const challengesAssets = t('', { namespace: 'challenges', locale: currentLang }) || {};
 
 // Si el producto no existe, lanzar error
@@ -87,31 +92,27 @@ if (!product || Object.keys(product).length === 0) {
 }
 
 // Asegurar que todas las propiedades necesarias existan
-const safeProduct: Product = {
+const safeProduct: any = {
   id: product.id || '',
   name: product.name || '',
-  text_color: product.text_color || '#FFFFFF',
-  name_description: product.name_description || product.name || '',
+  text_color: product.text_color || product.textColor || '#FFFFFF',
+  name_description: (product as any).name_description || product.name || '',
   image: product.image || '',
-  background_image: product.background_color || '',
-  background_color: product.background_color || '#150404',
-  header_text_color: product.header_text_color || '#FFFFFF',
-  color_button: product.color_button || '#520406',
+  background_image: product.background_color || product.backgroundColor || '#150404',
+  background_color: product.background_color || product.backgroundColor || '#150404',
+  header_text_color: product.header_text_color || product.headerTextColor || '#FFFFFF',
+  color_button: product.color_button || product.colorButton || '#520406',
   sizes: Array.isArray(product.sizes) ? product.sizes : [],
-  available: product.available || '',
+  available: (product as any).available || '',
   description: product.description || (product.nutrition?.description) || '',
   weight: Array.isArray(product.weight) ? product.weight : [],
   nutrition: (product.nutrition || {}) as NutritionInfo,
 };
 
-// Obtener todos los productos como un array
-const productsData = t('items', { locale: currentLang, namespace: 'products' }) || [];
-const allProductsArray = Array.isArray(productsData) ? productsData : [];
-
 // Filtrar productos relacionados
 let relatedProducts: any[] = [];
 if (allProductsArray.length > 1) {
-  relatedProducts = allProductsArray.filter((p: any) => p.id !== productId);
+  relatedProducts = allProductsArray.filter((p: any) => p.id !== product?.id && p.slug !== product?.slug);
 }
 
 const carouselProducts = [safeProduct, ...relatedProducts];
@@ -122,32 +123,44 @@ const sectionLabels = {
   nutrition: currentLang === 'es' ? 'Datos nutricionales' : 'Nutrition Facts',
 };
 
-// Labels for each nutrition field - Only fields that should be displayed
-const nutritionLabels: Record<string, string> = {
-  servingSize: currentLang === 'es' ? 'Tamaño de ración' : 'Serving Size',
-  servingsPerContainer: currentLang === 'es' ? 'Raciones por envase' : 'Servings per container',
-  calories: currentLang === 'es' ? 'Kcal de energía' : 'Calories',
-  fatEnergy: currentLang === 'es' ? 'Energía de grasa' : 'Fat energy',
-  totalFat: currentLang === 'es' ? 'Grasa total' : 'Total fat',
-  saturatedFat: currentLang === 'es' ? 'Grasa saturada' : 'Saturated fat',
-  transFat: currentLang === 'es' ? 'Grasa trans' : 'Trans fat',
-  cholesterol: currentLang === 'es' ? 'Colesterol' : 'Cholesterol',
-  sodium: currentLang === 'es' ? 'Sodio' : 'Sodium',
-  totalCarbs: currentLang === 'es' ? 'Carbohidrato total' : 'Total carbohydrate',
-  dietaryFiber: currentLang === 'es' ? 'Fibra dietética' : 'Dietary fiber',
-  sugars: currentLang === 'es' ? 'Contiene menos de g de azúcar' : 'Contains less than g sugar',
-  protein: currentLang === 'es' ? 'Proteínas' : 'Protein',
-  calorieDiet: currentLang === 'es' ? 'Dieta de calorías' : 'Calorie diet',
-  caloriesPerServing: currentLang === 'es' ? 'Una porción aporta g calorías' : 'One serving provides g calories',
-  vitaminD: currentLang === 'es' ? 'Vitamina D' : 'Vitamin D',
-  iron: currentLang === 'es' ? 'Hierro' : 'Iron',
-  calcium: currentLang === 'es' ? 'Calcio' : 'Calcium',
-  potassium: currentLang === 'es' ? 'Potasio' : 'Potassium',
-};
+// Extraer filas nutricionales tanto de la estructura del CMS (nutrition.rows) como del formato plano heredado
+function getNutritionRows(nutrition: any, isSpanish: boolean = true): { label: string; value: string }[] {
+  if (!nutrition) return [];
 
-const nutritionEntries = Object.entries(nutritionLabels)
-  .filter(([key]) => safeProduct.nutrition && key in safeProduct.nutrition)
-  .filter(([key]) => (safeProduct.nutrition as any)[key] !== '' && (safeProduct.nutrition as any)[key] !== null) as [string, string][];
+  if (Array.isArray(nutrition.rows) && nutrition.rows.length > 0) {
+    return nutrition.rows
+      .filter((r: any) => r && r.label && r.value !== '' && r.value !== null)
+      .map((r: any) => ({ label: r.label, value: r.value }));
+  }
+
+  const nutritionLabelsMap: Record<string, string> = {
+    servingSize: isSpanish ? 'Tamaño de ración' : 'Serving Size',
+    servingsPerContainer: isSpanish ? 'Raciones por envase' : 'Servings per container',
+    calories: isSpanish ? 'Kcal de energía' : 'Calories',
+    fatEnergy: isSpanish ? 'Energía de grasa' : 'Fat energy',
+    totalFat: isSpanish ? 'Grasa total' : 'Total fat',
+    saturatedFat: isSpanish ? 'Grasa saturada' : 'Saturated fat',
+    transFat: isSpanish ? 'Grasa trans' : 'Trans fat',
+    cholesterol: isSpanish ? 'Colesterol' : 'Cholesterol',
+    sodium: isSpanish ? 'Sodio' : 'Sodium',
+    totalCarbs: isSpanish ? 'Carbohidrato total' : 'Total carbohydrate',
+    dietaryFiber: isSpanish ? 'Fibra dietética' : 'Dietary fiber',
+    sugars: isSpanish ? 'Contiene menos de g de azúcar' : 'Contains less than g sugar',
+    protein: isSpanish ? 'Proteínas' : 'Protein',
+    calorieDiet: isSpanish ? 'Dieta de calorías' : 'Calorie diet',
+    caloriesPerServing: isSpanish ? 'Una porción aporta g calorías' : 'One serving provides g calories',
+    vitaminD: isSpanish ? 'Vitamina D' : 'Vitamin D',
+    iron: isSpanish ? 'Hierro' : 'Iron',
+    calcium: isSpanish ? 'Calcio' : 'Calcium',
+    potassium: isSpanish ? 'Potasio' : 'Potassium'
+  };
+
+  return Object.entries(nutritionLabelsMap)
+    .filter(([key]) => key in nutrition && nutrition[key] !== '' && nutrition[key] !== null)
+    .map(([key, label]) => ({ label, value: String(nutrition[key]) }));
+}
+
+const nutritionEntries = getNutritionRows(safeProduct.nutrition, currentLang === 'es');
 ---
 <div>
   {safeProduct.background_color && (
@@ -235,10 +248,10 @@ const nutritionEntries = Object.entries(nutritionLabels)
               <div class="collapsible-content hidden mt-4">
                 {safeProduct.nutrition && (
                   <div class="nutrition-table grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-white text-sm md:text-base font-normal">
-                    {nutritionEntries.map(([key,label]) => (
+                    {nutritionEntries.map(({ label, value }) => (
                       <div class="flex justify-between items-center">
                         <span class="font-semibold">{label}</span>
-                        <span class="text-right ml-4">{(safeProduct.nutrition as any)[key] || '-'}</span>
+                        <span class="text-right ml-4">{value || '-'}</span>
                       </div>
                     ))}
                   </div>
@@ -299,10 +312,10 @@ const nutritionEntries = Object.entries(nutritionLabels)
         <div class="collapsible-content hidden mt-4">
           {safeProduct.nutrition && (
             <div class="nutrition-table grid grid-cols-1 gap-x-6 gap-y-2 text-white text-sm md:text-base font-normal">
-              {nutritionEntries.map(([key,label]) => (
+              {nutritionEntries.map(({ label, value }) => (
                 <div class="flex justify-between items-center">
                   <span class="font-semibold">{label}</span>
-                  <span class="text-right ml-4">{(safeProduct.nutrition as any)[key] || '-'}</span>
+                  <span class="text-right ml-4">{value || '-'}</span>
                 </div>
               ))}
             </div>
@@ -688,51 +701,55 @@ const nutritionEntries = Object.entries(nutritionLabels)
         }
       }
 
-      // Actualizar tabla de nutrición
-      const nutritionTableEl = document.querySelector('.nutrition-table');
-      if (nutritionTableEl && product.nutrition) {
+      // Actualizar tabla de nutrición (tanto en desktop como en mobile)
+      const nutritionTableEls = document.querySelectorAll('.nutrition-table');
+      if (nutritionTableEls.length > 0 && product.nutrition) {
         const nutrition = product.nutrition;
-        
-        // Determinar idioma para las etiquetas
         const isSpanish = window.location.pathname.startsWith('/es');
-        
-        // Definir las etiquetas de nutrición
-        const nutritionLabelsMap: Record<string, string> = {
-          servingSize: isSpanish ? 'Tamaño de ración' : 'Serving Size',
-          servingsPerContainer: isSpanish ? 'Raciones por envase' : 'Servings per container',
-          calories: isSpanish ? 'Kcal de energía' : 'Calories',
-          fatEnergy: isSpanish ? 'Energía de grasa' : 'Fat energy',
-          totalFat: isSpanish ? 'Grasa total' : 'Total fat',
-          saturatedFat: isSpanish ? 'Grasa saturada' : 'Saturated fat',
-          transFat: isSpanish ? 'Grasa trans' : 'Trans fat',
-          cholesterol: isSpanish ? 'Colesterol' : 'Cholesterol',
-          sodium: isSpanish ? 'Sodio' : 'Sodium',
-          totalCarbs: isSpanish ? 'Carbohidrato total' : 'Total carbohydrate',
-          dietaryFiber: isSpanish ? 'Fibra dietética' : 'Dietary fiber',
-          sugars: isSpanish ? 'Contiene menos de g de azúcar' : 'Contains less than g sugar',
-          protein: isSpanish ? 'Proteínas' : 'Protein',
-          calorieDiet: isSpanish ? 'Dieta de calorías' : 'Calorie diet',
-          caloriesPerServing: isSpanish ? 'Una porción aporta g calorías' : 'One serving provides g calories',
-          vitaminD: isSpanish ? 'Vitamina D' : 'Vitamin D',
-          iron: isSpanish ? 'Hierro' : 'Iron',
-          calcium: isSpanish ? 'Calcio' : 'Calcium',
-          potassium: isSpanish ? 'Potasio' : 'Potassium'
-        };
+        let entries: { label: string; value: string }[] = [];
 
-        // Filtrar entradas que existen y no están vacías
-        const nutritionEntries = Object.entries(nutritionLabelsMap)
-          .filter(([key]) => nutrition && key in nutrition)
-          .filter(([key]) => nutrition[key] !== '' && nutrition[key] !== null);
+        if (Array.isArray(nutrition.rows) && nutrition.rows.length > 0) {
+          entries = nutrition.rows
+            .filter((r: any) => r && r.label && r.value !== '' && r.value !== null)
+            .map((r: any) => ({ label: r.label, value: r.value }));
+        } else {
+          const nutritionLabelsMap: Record<string, string> = {
+            servingSize: isSpanish ? 'Tamaño de ración' : 'Serving Size',
+            servingsPerContainer: isSpanish ? 'Raciones por envase' : 'Servings per container',
+            calories: isSpanish ? 'Kcal de energía' : 'Calories',
+            fatEnergy: isSpanish ? 'Energía de grasa' : 'Fat energy',
+            totalFat: isSpanish ? 'Grasa total' : 'Total fat',
+            saturatedFat: isSpanish ? 'Grasa saturada' : 'Saturated fat',
+            transFat: isSpanish ? 'Grasa trans' : 'Trans fat',
+            cholesterol: isSpanish ? 'Colesterol' : 'Cholesterol',
+            sodium: isSpanish ? 'Sodio' : 'Sodium',
+            totalCarbs: isSpanish ? 'Carbohidrato total' : 'Total carbohydrate',
+            dietaryFiber: isSpanish ? 'Fibra dietética' : 'Dietary fiber',
+            sugars: isSpanish ? 'Contiene menos de g de azúcar' : 'Contains less than g sugar',
+            protein: isSpanish ? 'Proteínas' : 'Protein',
+            calorieDiet: isSpanish ? 'Dieta de calorías' : 'Calorie diet',
+            caloriesPerServing: isSpanish ? 'Una porción aporta g calorías' : 'One serving provides g calories',
+            vitaminD: isSpanish ? 'Vitamina D' : 'Vitamin D',
+            iron: isSpanish ? 'Hierro' : 'Iron',
+            calcium: isSpanish ? 'Calcio' : 'Calcium',
+            potassium: isSpanish ? 'Potasio' : 'Potassium'
+          };
 
-        // Generar HTML de la tabla
-        const nutritionHtml = nutritionEntries.map(([key, label]) => 
+          entries = Object.entries(nutritionLabelsMap)
+            .filter(([key]) => key in nutrition && nutrition[key] !== '' && nutrition[key] !== null)
+            .map(([key, label]) => ({ label, value: String(nutrition[key]) }));
+        }
+
+        const nutritionHtml = entries.map(({ label, value }) => 
           `<div class="flex justify-between items-center">
             <span class="font-semibold">${label}</span>
-            <span class="text-right ml-4">${nutrition[key] || '-'}</span>
+            <span class="text-right ml-4">${value || '-'}</span>
           </div>`
         ).join('');
 
-        nutritionTableEl.innerHTML = nutritionHtml;
+        nutritionTableEls.forEach((el) => {
+          el.innerHTML = nutritionHtml;
+        });
       }
 
       // Actualizar data-product-id del botón del modal

@@ -9,15 +9,18 @@ import LazyImage from '../../../components/common/LazyImage.astro';
 import IngredientsCarousel from '../../../components/recipes/IngredientsCarousel.astro';
 import ShareButton from '../../../components/common/ShareButton.astro';
 import VideoModal from '../../../components/recipes/VideoModal.astro';
+import { getAllRecipes, getRecipeBySlug } from '../../../services/api/recipes';
 
 interface RecipeItem {
   id: string;
+  slug?: string;
   title: string;
-  description: string;
-  ingredients: string[];
-  instructions: string[];
-  preparation_time: number;
-  servings: number;
+  description?: string;
+  ingredients?: string[];
+  instructions?: string[];
+  preparation_time?: number;
+  servings?: number;
+  people?: string | number;
   image?: string;
   tags?: string[];
   product_image?: string;
@@ -28,29 +31,33 @@ interface RecipeItem {
 
 const { currentLang, recipeId } = Astro.props;
 
-// Import all recipe files with static glob and filter by language
-const recipeModules = import.meta.glob<{ default: RecipeItem }>("../../../locales/*/recipes/*.json");
-const allRecipes: RecipeItem[] = [];
+// Obtener recetas desde el CMS (con fallback local)
+const cmsRecipes = await getAllRecipes(currentLang);
+
+const recipeModules = import.meta.glob<{ default: any }>("../../../locales/*/recipes/*.json");
+const localRecipes: any[] = [];
 for (const path in recipeModules) {
-  // Usar regex para extraer el idioma del path (funciona con rutas relativas y absolutas)
   const langMatch = path.match(/locales\/([^/]+)\//);
   const pathLang = langMatch?.[1];
   if (pathLang === currentLang) {
     const mod = await recipeModules[path]();
     const item = mod.default ?? (mod as any);
-    if (item?.id) allRecipes.push(item);
+    if (item?.id) localRecipes.push(item);
   }
 }
 
-// Find current recipe
-const recipe = allRecipes.find((item: RecipeItem) => item.id === recipeId);
+const allRecipes: any[] = cmsRecipes.length > 0 ? cmsRecipes : localRecipes;
 
-// Get related recipes (filter current, sort by date desc, limit to 5)
+let recipe = await getRecipeBySlug(recipeId, currentLang);
+if (!recipe) {
+  recipe = allRecipes.find((item: any) => item.id === recipeId || item.slug === recipeId) || null;
+}
+
 const relatedRecipes = allRecipes
-  .filter((item: RecipeItem) => item.id !== recipeId)
-  .sort((a: RecipeItem, b: RecipeItem) => {
-    const dateA = (a as any).date;
-    const dateB = (b as any).date;
+  .filter((item: any) => item.id !== recipe?.id && item.slug !== recipe?.slug)
+  .sort((a: any, b: any) => {
+    const dateA = a.date;
+    const dateB = b.date;
     if (!dateA && dateB) return 1;
     if (dateA && !dateB) return -1;
     if (!dateA && !dateB) return 0;
