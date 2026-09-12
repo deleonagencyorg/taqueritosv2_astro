@@ -12,6 +12,7 @@ interface SlideItem {
   description?: string;
   link?: string;
   type?: 'product' | 'image' | 'video';
+  geo?: string;
 
   // Campos opcionales para slides de producto, leídos desde el JSON
   color_theme?: string;
@@ -71,7 +72,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
           const dataSize = (slide.product_hero || '').toLowerCase().includes('dragon') ? 'purple' : undefined;
 
         return (
-          <div class="swiper-slide" id={slideId} data-slide-type={slideType}>
+          <div class="swiper-slide" id={slideId} data-slide-type={slideType} data-geo={slide.geo}>
             {isVideo || isSimpleImage ? (
               /* ========== SLIDES DE IMAGEN/VIDEO (FULLSCREEN) ========== */
               <div class="media-slide-wrapper">
@@ -92,7 +93,13 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                 ) : (
                   <div class="media-container">
                     {slide.link ? (
-                      <a href={slide.link} class="media-link" aria-label={slide.alt || "Slide link"}>
+                      <a
+                        href={slide.link}
+                        class="media-link"
+                        aria-label={slide.alt || "Slide link"}
+                        target={slide.link.startsWith('http') ? "_blank" : undefined}
+                        rel={slide.link.startsWith('http') ? "noopener noreferrer" : undefined}
+                      >
                         <LazyImage
                           src={slide.desktop}
                           alt={slide.alt || "Slide background"}
@@ -230,7 +237,12 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                         {slide.title && <h1 class={`slide-title ${textColor}`}>{slide.title}</h1>}
                         {slide.subtitle && <p class={`slide-subtitle ${textColor}`}>{slide.subtitle}</p>}
                         {slide.link && (
-                          <a href={slide.link} class="slide-link">
+                          <a
+                            href={slide.link}
+                            class="slide-link"
+                            target={slide.link.startsWith('http') ? "_blank" : undefined}
+                            rel={slide.link.startsWith('http') ? "noopener noreferrer" : undefined}
+                          >
                             <span>{currentLang === 'es' ? 'Ver más' : 'View more'}</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                               <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -920,10 +932,30 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
   import 'swiper/css';
   import 'swiper/css/navigation';
   import 'swiper/css/pagination';
+  import { detectUserCountry } from '../../../services/clientGeoService';
 
   const swiperMap = new WeakMap<Element, Swiper>();
 
-  function initVideoCarousel() {
+  async function initVideoCarousel() {
+    // Primero, si existen slides con geolocalización (data-geo), verificar el país del usuario
+    const geoSlides = document.querySelectorAll('.video-carousel .swiper-slide[data-geo]');
+    if (geoSlides.length > 0) {
+      try {
+        const geoResult = await detectUserCountry();
+        const countryCode = geoResult?.countryCode ? geoResult.countryCode.toUpperCase() : null;
+        
+        geoSlides.forEach((slideEl) => {
+          const requiredGeo = slideEl.getAttribute('data-geo')?.toUpperCase();
+          if (requiredGeo && countryCode !== requiredGeo) {
+            // Eliminar el slide si no corresponde al país del usuario
+            slideEl.remove();
+          }
+        });
+      } catch (err) {
+        console.error('Error al detectar geolocalización en VideoCarousel:', err);
+      }
+    }
+
     document.querySelectorAll('.video-carousel').forEach((el) => {
       const slidesCount = el.querySelectorAll('.swiper-slide').length;
       const paginationEl = el.querySelector('.swiper-pagination') as HTMLElement | null;
