@@ -79,6 +79,15 @@
     "slidermaskmobile": "https://snack.yummiespromociones.com/snacksyummies/bg-front-mobile_1_.webp",
     "slider": [
       {
+        "id": "slide-gt",
+        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_desktop_gt.jpeg",
+        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_mobile_gt.jpeg",
+        "alt": "Promoción Taqueritos Guatemala",
+        "link": "https://www.instagram.com/p/DcoGj2kAU1S/",
+        "type": "image",
+        "geo": "GT"
+      },
+      {
         "id": "slide1",
         "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/lavaslider.webp",
         "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/lavaslider.webp",
