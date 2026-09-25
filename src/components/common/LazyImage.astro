@@ -152,14 +152,6 @@ if (isExternal && src.includes('assets.doguiygatibienestar.com')) {
       `${src}?w=1024 1024w`,
       `${src}?w=1280 1280w`
     ].join(', ');
-} else if (isWebP && !isExternal) {
-    const baseUrl = src.substring(0, src.lastIndexOf('.webp'));
-    srcset = [
-      `${baseUrl}-640w.webp 640w`,
-      `${baseUrl}-768w.webp 768w`,
-      `${baseUrl}-1024w.webp 1024w`,
-      `${baseUrl}-1280w.webp 1280w`
-    ].join(', ');
 } else if (isExternal) { 
     srcset = [
       `${src}?w=640&q=80 640w`,
