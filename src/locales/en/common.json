@@ -184,6 +184,21 @@
       "id": "super-taquerito-bros",
       "name": "Super Taquerito Bros",
       "href": "/games/taqueritobros/index.html"
+    },
+    {
+      "id": "candy-paradise",
+      "name": "Candy Paradise",
+      "href": "/games/Candy/index.html"
+    },
+    {
+      "id": "out-of-lava",
+      "name": "Out of Lava",
+      "href": "/games/Lava/index.html"
+    },
+    {
+      "id": "surfing-unicorn",
+      "name": "Surfing Unicorn",
+      "href": "/games/Surf/index.html"
     }
   ],
   "about_us": {
