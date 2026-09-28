@@ -18,7 +18,7 @@
       "id": 3,
       "titulo": "Pac Taquerito",
       "enlace": "/games/PacTaquerito/index.html",
-      "descripcion": "Un juego de laberinto clásico donde controlas a Pac-Taquerito para evitar obstáculos y derroat a los fantasmas",
+      "descripcion": "Un juego de laberinto clásico donde controlas a Pac-Taquerito para evitar obstáculos y derrotar a los fantasmas",
       "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/pacman-prev.webp"
     },
     {
@@ -55,6 +55,27 @@
       "enlace": "/games/taqueritobros/index.html",
       "descripcion": "Un juego de aventura y plataformas donde deberas esquivar o derrotar a los enemigos hasta llegar a la meta",
       "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/coins-prev.webp"
+    },
+    {
+      "id": 9,
+      "titulo": "Candy Paradise",
+      "enlace": "/games/Candy/index.html",
+      "descripcion": "Un divertido y colorido juego de rompecabezas donde combinas dulces y caramelos para superar deliciosos niveles.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/candy-prev.webp"
+    },
+    {
+      "id": 10,
+      "titulo": "Out of Lava",
+      "enlace": "/games/Lava/index.html",
+      "descripcion": "Un emocionante juego donde deberás saltar entre plataformas y evitar la lava ardiente para llegar a salvo a la meta.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/lava-prev.webp"
+    },
+    {
+      "id": 11,
+      "titulo": "Surfing Unicorn",
+      "enlace": "/games/Surf/index.html",
+      "descripcion": "Surfea sobre las olas con un unicornio esquivando obstáculos y recolectando recompensas en el océano.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/surf-prev.webp"
     }
   ]
 }

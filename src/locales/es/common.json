@@ -84,8 +84,7 @@
         "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/banner_mobile_gt.jpeg",
         "alt": "Promoción Taqueritos Guatemala",
         "link": "https://www.instagram.com/p/DcoGj2kAU1S/",
-        "type": "image",
-        "geo": "GT"
+        "type": "image"
       },
       {
         "id": "slide1",
@@ -209,6 +208,21 @@
       "id": "super-taquerito-bros",
       "name": "Super Taquerito Bros",
       "href": "/games/taqueritobros/index.html"
+    },
+    {
+      "id": "candy-paradise",
+      "name": "Candy Paradise",
+      "href": "/games/Candy/index.html"
+    },
+    {
+      "id": "out-of-lava",
+      "name": "Out of Lava",
+      "href": "/games/Lava/index.html"
+    },
+    {
+      "id": "surfing-unicorn",
+      "name": "Surfing Unicorn",
+      "href": "/games/Surf/index.html"
     }
   ],
   "about_us": {
