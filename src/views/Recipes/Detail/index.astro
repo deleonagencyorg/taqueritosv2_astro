@@ -63,7 +63,7 @@ if (!recipe) {
 
 // Shared labels
 const recipesAssets = {
-  ingredientsLabel: currentLang === 'es' ? 'Inventario' : 'Inventory',
+  ingredientsLabel: currentLang === 'es' ? 'Ingredientes' : 'Ingredients',
   preparationLabel: currentLang === 'es' ? 'Tutorial' : 'Tutorial',
   timeLabel: currentLang === 'es' ? 'Tiempo' : 'Time',
   difficultyLabel: currentLang === 'es' ? 'Dificultad' : 'Difficulty',
@@ -239,6 +239,17 @@ function formatTime(minutes: number): string {
     </div>
   </section>
 
+  <script is:inline>
+    (function() {
+      if (window.innerWidth < 768) {
+        var accordions = document.querySelectorAll('#recipe-details details');
+        accordions.forEach(function(el) {
+          el.setAttribute('open', '');
+        });
+      }
+    })();
+  </script>
+
   <div id="suggestions_related" class="mt-[-2rem] flex flex-col justify-center items-center pt-12 pb-16 " transition:animate="fade">
     <div class="w-full max-w-6xl px-4">
       <div class="flex items-start justify-between gap-4 mb-10">
@@ -321,8 +332,25 @@ function formatTime(minutes: number): string {
     }
   });
   
+  // Auto-desplegar acordeones de recetas únicamente en mobile
+  function autoExpandMobileRecipeAccordions() {
+    if (window.innerWidth < 768) {
+      document.querySelectorAll('#recipe-details details').forEach((el) => {
+        el.setAttribute('open', '');
+      });
+    }
+  }
+
+  // Ejecutar al cargar la página
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoExpandMobileRecipeAccordions);
+  } else {
+    autoExpandMobileRecipeAccordions();
+  }
+
   // También para Astro page transitions
   document.addEventListener('astro:page-load', () => {
+    autoExpandMobileRecipeAccordions();
     const detailImage = document.getElementById('recipe-detail-image');
     if (detailImage && detailImage.dataset.hasVideo === 'true') {
       detailImage.addEventListener('click', (e) => {
@@ -340,4 +368,5 @@ function formatTime(minutes: number): string {
       });
     }
   });
+  document.addEventListener('astro:after-swap', autoExpandMobileRecipeAccordions);
 </script>
