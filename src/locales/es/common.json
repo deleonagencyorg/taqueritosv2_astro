@@ -200,9 +200,9 @@
       "href": "/games/submarino/index.html"
     },
     {
-      "id": "3d-crypto-man",
-      "name": "3D Crypto Man",
-      "href": "/games/super/dist/index.html"
+      "id": "super-dragon",
+      "name": "Super Dragón",
+      "href": "/games/super/index.html"
     },
     {
       "id": "super-taquerito-bros",
@@ -223,6 +223,16 @@
       "id": "surfing-unicorn",
       "name": "Surfing Unicorn",
       "href": "/games/Surf/index.html"
+    },
+    {
+      "id": "soccer-arena-x",
+      "name": "Soccer Arena X",
+      "href": "/games/soccer2026/index.html"
+    },
+    {
+      "id": "goal-grid",
+      "name": "Goal Grid",
+      "href": "/games/soccergrid/index.html"
     }
   ],
   "about_us": {

@@ -46,7 +46,7 @@
       "id": 7,
       "titulo": "Super Dragon",
       "enlace": "/games/super/index.html",
-      "descripcion": "Ayuda a Super Dragon a recolectar el mayor numero de monedas evitando las pidras",
+      "descripcion": "Ayuda a Super Dragon a recolectar el mayor numero de monedas evitando las piedras",
       "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/juego-superdragon2.png"
     },
     {
@@ -76,6 +76,20 @@
       "enlace": "/games/Surf/index.html",
       "descripcion": "Surfea sobre las olas con un unicornio esquivando obstáculos y recolectando recompensas en el océano.",
       "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/surf-prev.webp"
+    },
+    {
+      "id": 12,
+      "titulo": "Soccer Arena X",
+      "enlace": "/games/soccer2026/index.html",
+      "descripcion": "Demuestra tus habilidades futbolísticas en la cancha, domina el balón y anota goles épicos para coronarte campeón.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/soccer2026-prev.webp"
+    },
+    {
+      "id": 13,
+      "titulo": "Goal Grid",
+      "enlace": "/games/soccergrid/index.html",
+      "descripcion": "Pon a prueba tu puntería y estrategia futbolística disparando al arco para completar la cuadrícula de goles.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/soccergrid-prev.webp"
     }
   ]
 }
