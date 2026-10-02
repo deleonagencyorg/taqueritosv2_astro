@@ -10,6 +10,7 @@ interface Game {
   enlace: string;
   descripcion: string;
   imagen: string;
+  isnew?: boolean | string;
 }
 
 export interface Props {
@@ -70,7 +71,7 @@ const displayTitle = title || defaultTitle;
     </div>
 
     <!-- Carousel con overflow hidden y translateX -->
-    <div class="games-carousel-viewport overflow-x-hidden overflow-y-visible py-2">
+    <div class="games-carousel-viewport overflow-x-hidden overflow-y-visible pt-5 pb-3">
       <div class="games-carousel-track flex transition-transform duration-300 ease-out" data-games-track>
         {gameItems.map((game) => (
           <div class="game-slide flex-shrink-0 px-2">
@@ -80,6 +81,18 @@ const displayTitle = title || defaultTitle;
               rel="noopener noreferrer"
               class="game-card flex flex-col w-full h-full bg-[#1a0808] border-2 border-[#ff2d2d] transition-all duration-300 rounded-sm"
             >
+              {(game.isnew === true || game.isnew === 'true') && (
+                <div class="new-tag">
+                  <img 
+                    src={currentLang === 'es' 
+                      ? 'https://snack.yummiespromociones.com/SnacksyummiesAssets/NUEVO.webp'
+                      : 'https://snack.yummiespromociones.com/SnacksyummiesAssets/NEW.webp'
+                    }
+                    alt={currentLang === 'es' ? 'Nuevo' : 'New'}
+                    class="new-tag-image"
+                  />
+                </div>
+              )}
               <div class="game-card-image w-full flex-shrink-0 overflow-hidden bg-black/50">
                 <LazyImage
                   src={game.imagen}
@@ -272,9 +285,39 @@ const displayTitle = title || defaultTitle;
   }
 
   .game-card {
+    position: relative;
     opacity: 1;
     transform: translateY(0) scale(1);
     box-shadow: none;
+  }
+
+  /* Tag NUEVO - esquina superior derecha */
+  .new-tag {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .new-tag-image {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    z-index: 10;
+    pointer-events: none;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+    animation: pulse-badge-3d 2s ease-in-out infinite;
+    transform: translateY(-20%) rotate(18deg);
+  }
+
+  @keyframes pulse-badge-3d {
+    0%, 100% {
+      transform: translateY(-20%) rotate(18deg) scale(1);
+    }
+    50% {
+      transform: translateY(-20%) rotate(18deg) scale(1.05);
+    }
   }
 
   .game-card:hover {
@@ -293,6 +336,16 @@ const displayTitle = title || defaultTitle;
   }
 
   @media (max-width: 767px) {
+    .new-tag {
+      top: -2px;
+      right: -2px;
+    }
+
+    .new-tag-image {
+      width: 55px;
+      height: 55px;
+    }
+
     .games-carousel-container {
       position: relative;
     }
