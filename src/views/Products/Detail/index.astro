@@ -294,9 +294,9 @@ const nutritionEntries = Object.entries(nutritionLabels)
       <div class="collapsible md:hidden w-full px-6 mb-24 mt-1">
         <div class="collapsible-header flex justify-between items-center cursor-pointer w-full">
           <h2 class="text-2xl font-semibold text-white">{sectionLabels.nutrition}</h2>
-          <span class="toggle-icon">+</span>
+          <span class="toggle-icon">-</span>
         </div>
-        <div class="collapsible-content hidden mt-4">
+        <div class="collapsible-content mt-4">
           {safeProduct.nutrition && (
             <div class="nutrition-table grid grid-cols-1 gap-x-6 gap-y-2 text-white text-sm md:text-base font-normal">
               {nutritionEntries.map(([key,label]) => (

@@ -106,6 +106,7 @@ interface GameItem {
   enlace: string;
   descripcion: string;
   imagen: string;
+  isnew?: boolean | string;
 }
 
 let games: GameItem[] = [];
@@ -196,11 +197,27 @@ const promosSlides = Array.isArray(commonAssets)
             <h3 class="font-title text-2xl md:text-3xl font-bold uppercase mb-4">
               {currentLang === 'es' ? '¿QUÉ ES ARENA TAQUERITOS?' : '¿QUÉ ES ARENA TAQUERITOS?'}
             </h3>
-            <p class="text-base md:text-lg text-white/90 mb-4">
-              {currentLang === 'es'
-                ? 'El espacio gamer donde puedes demostrar tu talento y competir gratis en los torneos de tus juegos favoritos. En esta Arena, tu talento tiene recompensa: regístrate, compite y podrás ganar premios en efectivo.​'
-                : 'The gaming space where you can showcase your talent and compete for free in tournaments for your favorite games. In this Arena, your talent pays off: sign up, compete, and you could win cash prizes.'}
-            </p>
+            <div class="text-base md:text-lg text-white/90 mb-4 leading-relaxed md:leading-normal space-y-4 md:space-y-0">
+              {currentLang === 'es' ? (
+                <>
+                  <p class="md:inline">
+                    El espacio gamer donde puedes demostrar tu talento y competir en los torneos de tus juegos favoritos. En esta Arena.
+                  </p>{' '}
+                  <p class="md:inline">
+                    Tu talento tiene recompensa: regístrate, compite y podrás ganar premios en efectivo.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p class="md:inline">
+                    The gaming space where you can showcase your talent and compete in tournaments for your favorite games. In this Arena.
+                  </p>{' '}
+                  <p class="md:inline">
+                    Your talent pays off: sign up, compete, and you could win cash prizes.
+                  </p>
+                </>
+              )}
+            </div>
           </div>
           <div class="w-full flex justify-center md:justify-end">
               <a
