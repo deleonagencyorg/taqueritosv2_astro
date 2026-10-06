@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 interface Props {
   videoUrl: string;
   mobileVideoUrl?: string;
-  fallbackImageUrl: string;
+  fallbackImageUrl?: string;
   height?: string;
   width?: string;
   title?: string;
@@ -30,15 +30,17 @@ const {
 
 <div class="video-hero-container" style={`height: ${height}; width: ${width};`}>
   <!-- Fallback image that shows while video loads or if video fails -->
-  <div class="fallback-image">
-    <img 
-      src={fallbackImageUrl} 
-      alt={title || "Hero background"} 
-      width="1920" 
-      height="1080"
-      loading="eager"
-    />
-  </div>
+  {fallbackImageUrl && (
+    <div class="fallback-image">
+      <img
+        src={fallbackImageUrl}
+        alt={title || "Hero background"}
+        width="1920"
+        height="1080"
+        loading="eager"
+      />
+    </div>
+  )}
   
   <!-- Video background -->
   <div class="video-container">

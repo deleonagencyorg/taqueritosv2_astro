@@ -17,7 +17,12 @@ import GamesCarousel from '../../components/games/GamesCarousel.astro';
 import './styles.css';
 
 // i18n and Data Imports
-import { t, getLocale } from '../../i18n/i18n';
+import { getLocale } from '../../i18n/i18n';
+import { getSiteTexts, text } from '../../services/api/site-texts';
+import { getAllProducts } from '../../services/api/products';
+import { getGalleryImages } from '../../services/api/gallery';
+import { getStockists } from '../../services/api/sections';
+import { getHomePage, getPageBanners } from '../../services/api/pages';
 import { InstagramEmbed } from 'react-social-media-embed';
 
 
@@ -50,73 +55,44 @@ try {
 
 const gamesTitle = currentLang === 'es' ? 'Descubre la lista de juegos' : 'Discover the games list';
 
-const homeAssets = t('home', { namespace: 'common', locale: currentLang }) || {};
-const challengesAssets = t('', { namespace: 'challenges', locale: currentLang }) || {};
-const galleryAssets = t('', { namespace: 'gallery', locale: currentLang }) || {};
-const aboutAssets = t('', { namespace: 'aboutus', locale: currentLang }) || {};
-const brandsAssets = t('', { namespace: 'brands', locale: currentLang }) || {};
-const newsAssets =  t('', { namespace: 'news', locale: currentLang }) || {};
-const products = t('items', { namespace: 'products', locale: currentLang }) || [];
-const playersNews = t('players', { namespace: 'players', locale: currentLang }) || [];
-const playersHome = t('home', { namespace: 'players', locale: currentLang }) || {};
-const players = Array.isArray(playersNews) ? playersNews : [];
-const brandsList = brandsAssets.brands || [];
-// Where to buy: take stockist from products locales and adapt to BrandsCarousel shape
-const stockistItems = t('stockist', { namespace: 'products', locale: currentLang }) || [];
-const whereToBuyBrands = Array.isArray(stockistItems)
-  ? stockistItems.map((s: any) => ({ id: String(s.id || ''), name: String(s.name || ''), logo: String(s.icon || ''), url: String(s.link || '') }))
-  : [];
-const taqueritosBrand = brandsList.find((brand: any) => brand.id === 'hugo');
-const taqueritosProducts = taqueritosBrand?.products || [];
+const [siteTexts, products, galleryImages, stockists, homePage] = await Promise.all([
+  getSiteTexts(currentLang),
+  getAllProducts(currentLang),
+  getGalleryImages(currentLang),
+  getStockists(currentLang),
+  getHomePage(currentLang),
+]);
 
-const commonAssets = t('assets.slider', { namespace: 'common', locale: currentLang }) || [];
-const slides = Array.isArray(commonAssets)
-  ? commonAssets
-    .filter(asset => asset && typeof asset === 'object' && asset.desktop && asset.mobile)
-    .map(asset => ({
-      desktop: asset.desktop,
-      mobile: asset.mobile,
-      alt: asset.alt || "Taqueritos",
-      title: asset.title || '',
-      subtitle: asset.description || '',
-      link: asset.url || asset.link || '',
-      type: asset.type || undefined,
-      geo: asset.geo || undefined,
-      color_theme: asset.color_theme || undefined,
-      product_hero: asset.product_hero || undefined,
-      product_left: asset.product_left || undefined,
-      product_top: asset.product_top || undefined,
-      product_right: asset.product_right || undefined,
-      product_cta_label: asset.product_cta_label || undefined,
-      product_cta_link: asset.product_cta_link || asset.link || asset.url || ''
-    }))
-  : [];
+const galleryAssets = {
+  title: text(siteTexts, 'home.gallery.title'),
+  subtitle: text(siteTexts, 'home.gallery.subtitle'),
+  images: galleryImages,
+};
+const brandsAssets = {
+  home: {
+    title: text(siteTexts, 'home.products.title'),
+    subtitle: text(siteTexts, 'home.products.subtitle'),
+  },
+};
+const whereToBuyBrands = stockists.map((stockist) => ({ id: stockist.id, name: stockist.name, logo: stockist.icon, url: stockist.link }));
+const taqueritosProducts = products;
 
-// Load latest blog posts by current language from markdown
-const blogModules = import.meta.glob('../../locales/*/blog/*.md');
-let latestBlogPosts: Array<{ id: string; slug: string; title: string; image?: string; published_date?: string; }>= [];
-for (const path in blogModules) {
-  const lang = path.split('/')[3];
-  if (lang === currentLang) {
-    const mod: any = await blogModules[path]();
-    const fm = mod.frontmatter || {};
-    if (fm && fm.id && fm.slug && fm.title) {
-      latestBlogPosts.push({
-        id: String(fm.id),
-        slug: String(fm.slug),
-        title: String(fm.title),
-        image: fm.image ? String(fm.image) : '/images/blog/placeholder.jpg',
-        published_date: fm.published_date ? String(fm.published_date) : ''
-      });
-    }
-  }
-}
-function toDate(s?: string){
-  if(!s) return 0; 
-  if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)){ const [d,m,y]=s.split('/').map(Number); return new Date(y,(m||1)-1,d||1).getTime(); }
-  const t=Date.parse(s); return isNaN(t)?0:t;
-}
-latestBlogPosts = latestBlogPosts.sort((a,b)=> toDate(b.published_date)-toDate(a.published_date)).slice(0,5);
+const slides = getPageBanners(homePage).map((banner) => ({
+  desktop: banner.desktop,
+  mobile: banner.mobile,
+  alt: banner.alt || 'Taqueritos',
+  title: banner.title,
+  subtitle: banner.description || banner.subtitle,
+  link: banner.link,
+  type: banner.type,
+  color_theme: banner.product?.colorTheme || undefined,
+  product_hero: banner.product?.hero || undefined,
+  product_left: banner.product?.leftText || undefined,
+  product_top: banner.product?.topText || undefined,
+  product_right: banner.product?.rightText || undefined,
+  product_cta_label: banner.product?.buttonText || undefined,
+  product_cta_link: banner.product?.buttonUrl || banner.link,
+}));
 const noNewsText = currentLang==='es' ? 'No se encuentra novedades aún para mostrar' : 'There are no updates to show yet';
 const topNewsLabel = currentLang==='es' ? 'NOTICIAS MÁS IMPORTANTES' : 'TOP NEWS';
 const featuredLabel = currentLang==='es' ? 'DESTACADOS' : 'FEATURED';

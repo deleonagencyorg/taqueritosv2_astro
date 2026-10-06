@@ -1,6 +1,8 @@
 ---
 // src/components/common/Footer/index.astro
-import { t, type Locale } from '../../../i18n/i18n';
+import { type Locale } from '../../../i18n/i18n';
+import { getLegacyMenu } from '../../../services/api/navigation';
+import { getFooterLabels } from '../../../services/api/footer';
 import { logos } from '../../../config/assets';
 import './styles.css';
 import Skeleton from './Skeleton.astro';
@@ -14,28 +16,11 @@ export interface Props {
 
 const { currentLang, loading = false } = Astro.props;
 
-// Obtener textos del footer desde los archivos de traducción
-const mainText = t('footer.main_text', { namespace: 'common', locale: currentLang });
-const description = t('footer.description', { namespace: 'common', locale: currentLang });
-const followUs = t('footer.follow_us', { namespace: 'common', locale: currentLang });
-const contactUs = t('footer.contact_us', { namespace: 'common', locale: currentLang });
-const choose = t('footer.choose', { namespace: 'common', locale: currentLang });
-const instagramText = t('footer.instagram_text', { namespace: 'common', locale: currentLang });
-const facebookText = t('footer.facebook_text', { namespace: 'common', locale: currentLang });
-const email = t('footer.email', { namespace: 'common', locale: currentLang });
-const copyrightText = t('footer.copyright', { namespace: 'common', locale: currentLang });
+const [footer, menu] = await Promise.all([getFooterLabels(currentLang), getLegacyMenu(currentLang)]);
+const followUs = footer?.followUs ?? '';
+const contactUs = footer?.contactUs ?? '';
 
-// Navegación: reutilizar los mismos items que el header, sin comunidad
-const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
-const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
-
-// asegurar la tilde en leveleate del footer
-const menuItemsUpdated = menuItems.map((item: any) => {
-  if (item.id === 'taqueritos-gaming' && currentLang === 'es') {
-    return { ...item, text: 'Leveléate' };
-  }
-  return item;
-});
+const menuItemsUpdated = menu.items.filter((item) => item.id !== 'community');
 
 // Obtener el logo específico de Zibas desde brands.json
 const zibasLogo = 'https://snack.yummiespromociones.com/taqueritos/Logo-Taqueritos-2019-300x100.webp';

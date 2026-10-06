@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
 import config from '../i18n/config';
-import enProducts from '../locales/en/products.json';
+import { getAllProducts } from '../services/api/products';
+import { getAllRecipes } from '../services/api/recipes';
+import { getBlogPosts } from '../services/api/news';
 
 const staticPages = ['/', '/nosotros', '/about-us', '/contacto', '/contact', '/blog'];
 
@@ -17,7 +18,14 @@ const menuUrls = [
 ];
 
 export const GET: APIRoute = async () => {
-  const posts = await getCollection('blog');
+  const [productsEs, productsEn, recipesEs, recipesEn, postsEs, postsEn] = await Promise.all([
+    getAllProducts('es'),
+    getAllProducts('en'),
+    getAllRecipes('es'),
+    getAllRecipes('en'),
+    getBlogPosts('es'),
+    getBlogPosts('en'),
+  ]);
   
   // Generate language versions of static pages
   const staticPagesWithLang = staticPages.flatMap((page) =>
@@ -34,10 +42,10 @@ export const GET: APIRoute = async () => {
     return config.supportedLocales.map((lng) => `/${lng}${url}`);
   });
 
-  // Blog posts with language prefixes (colección "blog")
-  const blogPosts = posts.map((post) =>
-    `/${post.slug.split('/')[0]}/blog/${post.slug.split('/')[1]}`
-  );
+  const blogPosts = [
+    ...postsEs.map((post) => `/es/blog/${post.slug}`),
+    ...postsEn.map((post) => `/en/blog/${post.slug}`),
+  ];
 
   // ==== URLs dinámicas de retos (solo ES) ====
   const challengesModules = import.meta.glob('../locales/es/challenges/*.json', { eager: true }) as Record<string, any>;
@@ -46,25 +54,12 @@ export const GET: APIRoute = async () => {
     .filter((challenge: any) => challenge && challenge.id)
     .map((challenge: any) => `/es/retos-torneos/${challenge.id}`);
 
-  // ==== URLs dinámicas de recetas (ES y EN) ====
-  const recipesEnModules = import.meta.glob('../locales/en/recipes/*.json', { eager: true }) as Record<string, any>;
-  const recipesEsModules = import.meta.glob('../locales/es/recipes/*.json', { eager: true }) as Record<string, any>;
-
-  const recipeUrlsEn = Object.values(recipesEnModules)
-    .map((mod: any) => mod.default)
-    .filter((recipe: any) => recipe && recipe.id)
-    .map((recipe: any) => `/en/recipes/${recipe.id}`);
-
-  const recipeUrlsEs = Object.values(recipesEsModules)
-    .map((mod: any) => mod.default)
-    .filter((recipe: any) => recipe && recipe.id)
-    .map((recipe: any) => `/es/recipes/${recipe.id}`);
-
-  // ==== URLs dinámicas de productos (actualmente EN) ====
-  const enItems = (enProducts as any)?.items || (enProducts as any) || [];
-  const productUrlsEn = (Array.isArray(enItems) ? enItems : [])
-    .filter((p: any) => p && p.id)
-    .map((p: any) => `/en/products/${p.id}`);
+  const recipeUrlsEn = recipesEn.map((recipe) => `/en/recipes/${recipe.slug}`);
+  const recipeUrlsEs = recipesEs.map((recipe) => `/es/recetas/${recipe.slug}`);
+  const productUrlsEn = [
+    ...productsEs.map((product) => `/es/productos/${product.id}`),
+    ...productsEn.map((product) => `/en/products/${product.id}`),
+  ];
 
   const allUrls = [
     ...staticPagesWithLang,

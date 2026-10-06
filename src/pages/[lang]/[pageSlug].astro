@@ -1,7 +1,9 @@
 ---
 // src/pages/[lang]/[pageSlug].astro
 import { routesConfig, findRouteBySlug } from '../../config/routes';
-import { setLocale, t, type Locale } from '../../i18n/i18n';
+import { setLocale, type Locale } from '../../i18n/i18n';
+import { getPageBySlug } from '../../services/api/pages';
+import { getSiteInfo } from '../../services/api/site';
 import MainLayout from '../../layouts/MainLayout.astro';
 
 // Define the expected structure of the dynamically imported modules
@@ -77,15 +79,10 @@ if (!ContentComponent) {
   return Astro.redirect(`/${lang}/404`);
 }
 
-if (currentRoute.metaTitleKey) {
-  pageTitle = t(currentRoute.metaTitleKey);
-} else if (currentRoute.id === 'challenges') {
-  pageTitle = lang === 'es' ? 'Retos y torneos' : 'Challenges & Tournaments';
-} else {
-  pageTitle = 'Page';
-}
-
-pageDescription = currentRoute.metaDescriptionKey ? t(currentRoute.metaDescriptionKey) : '';
+const [cmsPage, site] = await Promise.all([getPageBySlug(pageSlug, lang), getSiteInfo()]);
+const routeTitle = currentRoute.id === 'challenges' ? (lang === 'es' ? 'Retos y torneos' : 'Challenges & Tournaments') : '';
+pageTitle = cmsPage?.metaTitle || cmsPage?.title || routeTitle || site.defaultMetaTitle;
+pageDescription = cmsPage?.metaDescription || site.defaultMetaDescription;
 ---
 
 <MainLayout title={pageTitle} description={pageDescription}>

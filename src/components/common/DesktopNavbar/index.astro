@@ -1,6 +1,9 @@
 ---
 import LanguageSwitcher from '../../i18n/LanguageSwitcher.astro';
 import { t, type Locale } from '../../../i18n/i18n';
+import { getLegacyMenu } from '../../../services/api/navigation';
+import { getSiteTexts, text } from '../../../services/api/site-texts';
+import { getAllProducts } from '../../../services/api/products';
 import { logos } from '../../../config/assets';
 import type { HeaderColorConfig } from '../../../config/headerColors';
 import SocialMediaIcons from '../SocialMediaIcons/index.astro';
@@ -16,9 +19,12 @@ const { currentLang, headerColorConfig } = Astro.props;
 const { pathname } = Astro.url;
 const currentPath = pathname;
 
-// Obtener los datos de social media y menú desde las traducciones
-const socialMedia = t('social_media', { namespace: 'common', locale: currentLang }) as any;
-const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
+const [menu, siteTexts, cmsProducts] = await Promise.all([
+  getLegacyMenu(currentLang),
+  getSiteTexts(currentLang),
+  getAllProducts(currentLang),
+]);
+const rawMenuItems = menu.items;
 // Quitar el botón de taqueritos gaming (solo para desktop)
 const menuItems = rawMenuItems.filter((item) => item.id !== 'community' && item.id !== 'taqueritos-gaming');
 // Filtrar juegos solo para español
@@ -39,14 +45,20 @@ if (currentLang === 'es') {
 const contactHref = `/${currentLang}/${currentLang === 'es' ? 'contacto' : 'contact'}`;
 const contactMenuItem = {
   id: 'contact',
-  text: t('contact_us', { namespace: 'common', locale: currentLang }),
+  text: text(siteTexts, 'navigation.contact_button'),
   href: contactHref,
 };
 
 const menuItemsWithContact = [...menuItemsOrdered, contactMenuItem];
 
-// Obtener productos para el menú desplegable
-const products = t('items', { namespace: 'products', locale: currentLang }) as any[];
+const trimSlash = (path: string) => path.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => {
+  if (!href.startsWith('/') || href.includes('#')) return false;
+  const localized = /^\/(es|en)(\/|$)/.test(href) ? href : `/${currentLang}${href}`;
+  return trimSlash(localized) === trimSlash(currentPath);
+};
+
+const products = cmsProducts;
 // Obtener juegos para el menú desplegable
 const games = t('games', { namespace: 'common', locale: currentLang }) as any[];
 ---
@@ -78,8 +90,8 @@ const games = t('games', { namespace: 'common', locale: currentLang }) as any[];
             <a 
               href={item.href}
               data-open-stockist={item.id === 'where-buy' ? 'true' : undefined}
-              class={`${headerColorConfig.textColor} font-title text-[10px] lg:text-[14px] xl:text-[16px] uppercase font-medium transition-colors py-1.5 md:py-2 px-1 md:px-1.5 lg:px-2.5 xl:px-3 rounded-md flex items-center justify-center whitespace-nowrap ${!item.href.startsWith('#') && currentPath === item.href ? 'bg-primary text-white' : ''}`}
-              style={`color: ${!item.href.startsWith('#') && currentPath === item.href ? '#FFFFFF' : headerColorConfig.textColor};`}
+              class={`${headerColorConfig.textColor} font-title text-[10px] lg:text-[14px] xl:text-[16px] uppercase font-medium transition-colors py-1.5 md:py-2 px-1 md:px-1.5 lg:px-2.5 xl:px-3 rounded-md flex items-center justify-center whitespace-nowrap ${isActive(item.href) ? 'bg-primary text-white' : ''}`}
+              style={`color: ${isActive(item.href) ? '#FFFFFF' : headerColorConfig.textColor};`}
               onclick={(item.submenu || item.id === 'games') ? "toggleSubmenu(this)" : undefined}
             >
               <span class="flex items-center justify-center text-center leading-tight">{item.text}</span>

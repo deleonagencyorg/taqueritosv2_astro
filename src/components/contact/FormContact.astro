@@ -3,9 +3,7 @@
 import type { Locale } from '../../i18n/i18n';
 import SuccessModal from '../common/SuccessModal.astro';
 
-// Import locale files statically
-import contactEs from '../../locales/es/contact.json';
-import contactEn from '../../locales/en/contact.json';
+import { getLegacyContact } from '../../services/api/contact';
 
 interface Props {
   currentLang?: Locale;
@@ -18,8 +16,10 @@ const urlLang = Astro.url.pathname.split('/').filter(Boolean)[0];
 const validLocales: Locale[] = ['es', 'en'];
 const locale: Locale = currentLang || (validLocales.includes(urlLang as Locale) ? (urlLang as Locale) : 'es');
 
-// Get contact data from locale
-const contact = locale === 'es' ? contactEs : contactEn;
+const contact = await getLegacyContact(locale);
+if (!contact) {
+  throw new Error(`[CMS] Falta el contenido de Contacto para el idioma ${locale}`);
+}
 
 // Get localized labels for fields not in contact.json
 const countryLabel = locale === 'es' ? 'País' : 'Country';

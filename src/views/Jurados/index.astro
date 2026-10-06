@@ -1,5 +1,6 @@
 ---
 import { t, type Locale } from '../../i18n/i18n';
+import { getSocialMediaLinks, socialMediaByPlatform } from '../../services/api/social-media';
 import MainLayout from '../../layouts/MainLayout.astro';
 import juradosData from '../../locales/es/jurados.json';
 import PixelGrid from '../../components/atoms/PixelGrid.astro';
@@ -28,7 +29,7 @@ const allJurors = countries.flatMap(country =>
 );
 
 // Social media icons and urls from i18n common namespace
-const socialMedia = t('social_media', { namespace: 'common', locale: lang as Locale }) as any;
+const socialMedia = socialMediaByPlatform(await getSocialMediaLinks(lang as Locale));
 ---
 
 <MainLayout title={juradosData.meta.title} description={juradosData.meta.description} headerColors={headerColor}>

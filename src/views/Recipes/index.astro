@@ -1,6 +1,8 @@
 ---
 // src/views/Recipes/index.astro
 import { getLocale } from '../../i18n/i18n';
+import { getAllRecipes } from '../../services/api/recipes';
+import { getPageBySlug, getPageBanners } from '../../services/api/pages';
 import './styles.css';
 import RecipeCard from '../../components/recipes/RecipeCard.astro';
 import LazyImage from '../../components/common/LazyImage.astro';
@@ -23,22 +25,7 @@ interface Recipe {
 
 const currentLang = getLocale();
 
-// Get all recipe files with correct Vite glob typing
-const recipeModules = import.meta.glob<{default: Recipe}>('../../locales/*/recipes/*.json');
-const allRecipes: Recipe[] = [];
-
-// Process each file
-for (const path in recipeModules) {
-  // Usar regex para extraer el idioma del path (funciona con rutas relativas y absolutas)
-  const langMatch = path.match(/locales\/([^/]+)\//);
-  const pathLang = langMatch?.[1];
-  if (pathLang === currentLang) {
-    const module = await recipeModules[path]();
-    const item = module.default ?? (module as any);
-    // Guardar solo entradas válidas con id y title
-    if (item?.id && item?.title) allRecipes.push(item);
-  }
-}
+const allRecipes: Recipe[] = (await getAllRecipes(currentLang)) as unknown as Recipe[];
 
 // Ordenar recetas por fecha descendente (más nuevas primero), sin fecha al final
 allRecipes.sort((a: Recipe, b: Recipe) => {
@@ -132,21 +119,21 @@ const productOptions = Array.from(
 );
 
 
-// Video hero config for Recipes page
-const videoUrl = 'https://snack.yummiespromociones.com/taqueritos/videotaqueritos.mp4';
-const fallbackImageUrl = 'https://snack.yummiespromociones.com/taqueritos/videorecetas.png';
+const recipesPage = await getPageBySlug(currentLang === 'es' ? 'recetas' : 'recipes', currentLang);
+const heroBanner = getPageBanners(recipesPage).find((banner) => banner.type === 'video');
 ---
 <div class="-mt-px -mb-px overflow-hidden" style="background: radial-gradient(circle at 50% 50%, #2c0b0b 0%, #150404 80%);">
-  <div id="herovideo" class="pt-0">
-    <VideoHero
-      videoUrl={videoUrl}
-      mobileVideoUrl="https://snack.yummiespromociones.com/taqueritos/tabla-quesos.mp4"
-      fallbackImageUrl={fallbackImageUrl}
-      height="520px"
-      width="100%"
-      showOverlay={false}
-    />
-  </div>
+  {heroBanner && (
+    <div id="herovideo" class="pt-0">
+      <VideoHero
+        videoUrl={heroBanner.desktop}
+        mobileVideoUrl={heroBanner.mobile}
+        height="520px"
+        width="100%"
+        showOverlay={false}
+      />
+    </div>
+  )}
 
   <div class="container mx-auto px-4 py-18 mt-0">
 

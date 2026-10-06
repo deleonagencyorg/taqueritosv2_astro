@@ -2,6 +2,10 @@
 import LanguageSwitcher from '../../i18n/LanguageSwitcher.astro';
 import LocalizedImage from '../LazyImage.astro';
 import { t, type Locale } from '../../../i18n/i18n';
+import { getLegacyMenu } from '../../../services/api/navigation';
+import { getSiteTexts, text } from '../../../services/api/site-texts';
+import { getAllProducts } from '../../../services/api/products';
+import { getSocialMediaLinks, socialMediaByPlatform } from '../../../services/api/social-media';
 import { socialMediaIconUrls, logos } from '../../../config/assets';
 import type { HeaderColorConfig } from '../../../config/headerColors';
 import SocialMediaIcons from '../SocialMediaIcons/index.astro';
@@ -13,9 +17,14 @@ export interface Props {
 
 const { currentLang, headerColorConfig } = Astro.props;
 
-// Obtener los datos de social media y menú desde las traducciones
-const socialMedia = t('social_media', { namespace: 'common', locale: currentLang }) as any;
-const rawMenuItems = t('menu_items', { namespace: 'common', locale: currentLang }) as any[];
+const [menu, siteTexts, cmsProducts, socialLinks] = await Promise.all([
+  getLegacyMenu(currentLang),
+  getSiteTexts(currentLang),
+  getAllProducts(currentLang),
+  getSocialMediaLinks(currentLang),
+]);
+const socialMedia = socialMediaByPlatform(socialLinks);
+const rawMenuItems = menu.items;
 // Quitar el botón de comunidad
 const menuItems = rawMenuItems.filter((item) => item.id !== 'community');
 // Filtrar juegos solo para español
@@ -36,20 +45,18 @@ if (currentLang === 'es') {
 const contactHref = `/${currentLang}/${currentLang === 'es' ? 'contacto' : 'contact'}`;
 const contactMenuItem = {
   id: 'contact',
-  text: t('contact_us', { namespace: 'common', locale: currentLang }),
+  text: text(siteTexts, 'navigation.contact_button'),
   href: contactHref,
 };
 
 const menuItemsWithContact = [...menuItemsOrdered, contactMenuItem];
 
-// Obtener productos para el submenú de "Productos"
-const products = t('items', { namespace: 'products', locale: currentLang }) as any[];
+const products = cmsProducts;
 // Obtener juegos para el submenú de "Juegos"
 const games = t('games', { namespace: 'common', locale: currentLang }) as any[];
 
-// Traducciones
-const openMenuLabel = t('menu_labels.open_main_menu', { namespace: 'common', locale: currentLang }) || 'Open main menu';
-const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', locale: currentLang }) || 'Close main menu';
+const openMenuLabel = menu.navigation?.openMenuLabel || 'Open main menu';
+const closeMenuLabel = menu.navigation?.closeMenuLabel || 'Close main menu';
 
 ---
 
@@ -116,10 +123,10 @@ const closeMenuLabel = t('menu_labels.close_main_menu', { namespace: 'common', l
             {/* Ítems sin submenú */}
             {!item.submenu && item.id !== 'products' && item.id !== 'games' && (
               <a
-                href={item.id === 'taqueritos-gaming' ? 'https://www.challengermode.com/s/taqueritos' : item.href}
+                href={item.href}
                 data-open-stockist={item.id === 'where-buy' ? 'true' : undefined}
-                target={item.id === 'taqueritos-gaming' ? '_blank' : undefined}
-                rel={item.id === 'taqueritos-gaming' ? 'noopener noreferrer' : undefined}
+                target={item.isExternal ? '_blank' : undefined}
+                rel={item.isExternal ? 'noopener noreferrer' : undefined}
                 class="block text-xl font-title font-medium hover:text-gray-300 transition-colors py-2"
               >
                 {item.text}

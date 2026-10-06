@@ -1,10 +1,15 @@
 ---
-import { t, getLocale } from '../../i18n/i18n';
+import { getLocale } from '../../i18n/i18n';
+import { getAllProducts } from '../../services/api/products';
+import { getSiteTexts, text } from '../../services/api/site-texts';
 import ProductsCarousel from '../../components/common/ProductsCarousel/index.astro';
 
 const currentLang = getLocale();
-const products = t('items', { namespace: 'products', locale: currentLang }) || [];
-const homeAssets = t('home', { namespace: 'products', locale: currentLang }) || {};
+const [products, siteTexts] = await Promise.all([getAllProducts(currentLang), getSiteTexts(currentLang)]);
+const homeAssets = {
+  title: text(siteTexts, 'home.products.title'),
+  subtitle: text(siteTexts, 'home.products.subtitle'),
+};
 ---
 
 <section class="w-full min-h-screen bg-brown py-16">

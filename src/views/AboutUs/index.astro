@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/MainLayout.astro';
-import { t } from '../../i18n/i18n';
+import { getSiteTexts, text } from '../../services/api/site-texts';
+import { getPageBySlug, getPageBanners } from '../../services/api/pages';
 import type { Locale } from '../../i18n/i18n';
 import type { HeaderColorConfig } from '../../config/headerColors';
 import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
@@ -24,39 +25,43 @@ if (!currentLang) {
   currentLang = parts.length > 0 ? parts[0] : 'es';
 }
 
-// Get translations from common.json
-const title = t('meta.about_us.title', { namespace: 'common', locale: currentLang });
-const metaDescription = t('meta.about_us.description', { namespace: 'common', locale: currentLang });
+const [siteTexts, aboutPage] = await Promise.all([
+  getSiteTexts(currentLang),
+  getPageBySlug(currentLang === 'es' ? 'nosotros' : 'about-us', currentLang),
+]);
 
-// Importar contenido específico de aboutus.json via t()
-const historyTitle = t('title', { namespace: 'aboutus', locale: currentLang });
-const historySubtitle = t('subtitle', { namespace: 'aboutus', locale: currentLang });
-const historyIntro = t('intro', { namespace: 'aboutus', locale: currentLang });
-const historyItems = t('items', { namespace: 'aboutus', locale: currentLang }) || [];
-const historyConclusion = t('conclusion', { namespace: 'aboutus', locale: currentLang });
-const aboutSectionTitle = t('about_section_title', { namespace: 'aboutus', locale: currentLang });
-const aboutSectionParagraphs = (t('about_section_paragraphs', { namespace: 'aboutus', locale: currentLang }) || []) as string[];
-const presenceSectionTitle = t('presence_section_title', { namespace: 'aboutus', locale: currentLang });
-const presenceSectionDescription = t('presence_section_description', { namespace: 'aboutus', locale: currentLang });
-const experiencesSectionTitle = t('experiences_section_title', { namespace: 'aboutus', locale: currentLang });
-const experiencesSectionDescription = t('experiences_section_description', { namespace: 'aboutus', locale: currentLang });
-const experiencesCards = (t('experiences_cards', { namespace: 'aboutus', locale: currentLang }) || []) as any[];
+const title = aboutPage?.metaTitle || aboutPage?.title || '';
+const metaDescription = aboutPage?.metaDescription || '';
+const aboutSectionTitle = text(siteTexts, 'about_us.section_title');
+const aboutSectionParagraphs = text(siteTexts, 'about_us.section_paragraphs')
+  .split(/\n+/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+const presenceSectionTitle = text(siteTexts, 'about_us.presence_title');
+const presenceSectionDescription = text(siteTexts, 'about_us.presence_description');
+const experiencesSectionTitle = text(siteTexts, 'about_us.experiences_title');
+const experiencesSectionDescription = text(siteTexts, 'about_us.experiences_description');
+const experiencesCards = ['products', 'challenges', 'community'].map((id) => {
+  const key = id === 'community' ? 'recipes' : id;
+  return {
+    id,
+    title: text(siteTexts, `about_us.cards.${key}.title`),
+    description: text(siteTexts, `about_us.cards.${key}.description`),
+    cta: text(siteTexts, `about_us.cards.${key}.cta`),
+  };
+});
 
-// Cargar slides del common.json para ambos idiomas
-const commonAssets = t('assets.slider', { namespace: 'common', locale: currentLang }) || [];
-const promosSlides = Array.isArray(commonAssets)
-  ? commonAssets
-    .filter((asset: any) => asset && typeof asset === 'object' && asset.desktop && asset.mobile && asset.type === 'image')
-    .map((asset: any) => ({
-      desktop: asset.desktop,
-      mobile: asset.mobile,
-      alt: asset.alt || "Promo Taqueritos",
-      title: asset.title || '',
-      subtitle: asset.description || '',
-      link: asset.url || asset.link || '',
-      type: 'image' as const
-    }))
-  : [];
+const promosSlides = getPageBanners(aboutPage)
+  .filter((banner) => banner.type === 'image')
+  .map((banner) => ({
+    desktop: banner.desktop,
+    mobile: banner.mobile,
+    alt: banner.alt || 'Promo Taqueritos',
+    title: banner.title,
+    subtitle: banner.description || banner.subtitle,
+    link: banner.link,
+    type: 'image' as const,
+  }));
 
 // Slide de video como fallback para cuando no hay slides de imagen
 const videoSlide = [{
@@ -162,11 +167,9 @@ const heroSlides = promosSlides.length > 0 ? promosSlides : videoSlide;
             }
 
             const isRecipesCard = card.id === 'community';
-            const recipesTitle = currentLang === 'es' ? 'Recetas gamer' : 'Gamer recipes';
-            const recipesDescription = currentLang === 'es'
-              ? 'Combina tus Taqueritos como un pro: recetas rápidas para subir de nivel cada snack y romper la rutina.'
-              : 'Mix your Taqueritos like a pro: quick recipes to level up every snack and break the routine.';
-            const recipesCta = currentLang === 'es' ? 'Ver recetas' : 'See recipes';
+            const recipesTitle = card.title;
+            const recipesDescription = card.description;
+            const recipesCta = card.cta;
 
             return (
               <article class="experience-card flex flex-col bg-[#1c0505] border border-white/10 rounded-md overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.7)] group">

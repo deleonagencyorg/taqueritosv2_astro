@@ -1,6 +1,6 @@
 ---
 // src/views/Contact/index.astro
-import { t } from '../../i18n/i18n';
+import { getLegacyContact } from '../../services/api/contact';
 import type { Locale } from '../../i18n/i18n';
 import MainLayout from '../../layouts/MainLayout.astro';
 import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
@@ -8,9 +8,6 @@ import LazyImage from '../../components/common/LazyImage.astro';
 import FormContact from '../../components/contact/FormContact.astro';
 import { fade } from 'astro:transitions';
 
-// Import locale files statically
-import contactEs from '../../locales/es/contact.json';
-import contactEn from '../../locales/en/contact.json';
 
 // Importar estilos separados
 import './styles.css';
@@ -30,8 +27,11 @@ const urlLang = Astro.url.pathname.split('/').filter(Boolean)[0];
 const validLocales: Locale[] = ['es', 'en'];
 const locale: Locale = currentLang || (validLocales.includes(urlLang as Locale) ? (urlLang as Locale) : 'es');
 
-// Get contact data from locale
-const contact = locale === 'es' ? contactEs : contactEn;
+const contact = await getLegacyContact(locale);
+if (!contact) {
+  throw new Error(`[CMS] Falta el contenido de Contacto para el idioma ${locale}`);
+}
+const defaultOffice = contact.offices.locations['+504'] ?? Object.values(contact.offices.locations)[0];
 
 // Meta information
 const title = contact.title;
@@ -127,16 +127,16 @@ const headerColors = {
             <div class="flex flex-col lg:flex-row justify-between items-center">
               <div class="space-y-4">
                 <h3 id="officeName" class="text-white font-sans text-4xl md:text-6xl lg:text-7xl uppercase font-extrabold mb-4">
-                  {contact.offices.locations["+504"].name}
+                  {defaultOffice.name}
                 </h3>
                 
                 <div class="flex items-start space-x-3">
-                  <p id="officeAddress" class="text-white leading-relaxed font-semibold ">  {`+ ${contact.offices.locations["+504"].address}`}</p>
+                  <p id="officeAddress" class="text-white leading-relaxed font-semibold ">  {`+ ${defaultOffice.address}`}</p>
                 </div>
                 
                 <div class="flex items-center space-x-3">
                   <div id="officePhones" class="flex flex-col text-white">
-                    {contact.offices.locations["+504"].phones.map((phone: string) => (
+                    {defaultOffice.phones.map((phone: string) => (
                      <div> <a href={`tel:${phone}`} class="text-white hover:text-primary transition-colors">
                         {phone}
                       </a></div>
@@ -144,14 +144,6 @@ const headerColors = {
                   </div>
                 </div>
                 
-                <!-- <div class="flex items-center space-x-3">
-                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                  </svg>
-                  <a id="officeEmail" href={`mailto:${contact.offices.locations["+504"].email}`} class="text-primary hover:text-secondary transition-colors">
-                    {contact.offices.locations["+504"].email}
-                  </a>
-                </div> -->
               </div>
               <div class="mt-6 lg:mt-0">
                 <LazyImage 

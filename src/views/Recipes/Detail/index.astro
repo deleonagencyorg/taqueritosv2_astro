@@ -4,6 +4,7 @@ import { getLocale } from '../../../i18n/i18n';
 import './styles.css';
 import RecipeCard from '../../../components/recipes/RecipeCard.astro';
 import RelatedRecipesCarousel from '../../../components/recipes/RelatedRecipesCarousel.astro';
+import { getAllRecipes } from '../../../services/api/recipes';
 import Breadcrumb from '../../../components/common/Breadcrumb/Breadcrumb.astro';
 import LazyImage from '../../../components/common/LazyImage.astro';
 import IngredientsCarousel from '../../../components/recipes/IngredientsCarousel.astro';
@@ -27,19 +28,7 @@ interface RecipeItem {
 
 const { currentLang, recipeId } = Astro.props;
 
-// Import all recipe files with static glob and filter by language
-const recipeModules = import.meta.glob<{ default: RecipeItem }>("../../../locales/*/recipes/*.json");
-const allRecipes: RecipeItem[] = [];
-for (const path in recipeModules) {
-  // Usar regex para extraer el idioma del path (funciona con rutas relativas y absolutas)
-  const langMatch = path.match(/locales\/([^/]+)\//);
-  const pathLang = langMatch?.[1];
-  if (pathLang === currentLang) {
-    const mod = await recipeModules[path]();
-    const item = mod.default ?? (mod as any);
-    if (item?.id) allRecipes.push(item);
-  }
-}
+const allRecipes: RecipeItem[] = (await getAllRecipes(currentLang)) as unknown as RecipeItem[];
 
 // Find current recipe
 const recipe = allRecipes.find((item: RecipeItem) => item.id === recipeId);
