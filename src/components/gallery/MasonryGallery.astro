@@ -370,29 +370,35 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   import 'swiper/css/navigation';
 
   const selector = '[data-gallery-swiper]';
-  const swiperMap = new WeakMap();
+  let activeSwiper: any = null;
 
   function initSwiper() {
-    const el = document.querySelector(selector);
+    const el = document.querySelector(selector) as HTMLElement | null;
     if (!el) return;
-    if (el.classList.contains('swiper-initialized')) return;
-    if (swiperMap.has(el)) { try { const s = swiperMap.get(el); s && s.update && s.update(); } catch {} return; }
-    
-    // Scope nav buttons to this gallery's viewport to avoid clashing with other Swipers
-    const viewport = el.closest('.gallery-viewport');
-    const nextBtn = viewport ? viewport.querySelector('.swiper-button-next') : document.querySelector('.swiper-button-next');
-    const prevBtn = viewport ? viewport.querySelector('.swiper-button-prev') : document.querySelector('.swiper-button-prev');
 
-    const s = new Swiper(selector as string, {
+    if (activeSwiper && activeSwiper.destroy) {
+      try { activeSwiper.destroy(true, true); } catch {}
+      activeSwiper = null;
+    }
+    el.classList.remove('swiper-initialized');
+
+    const viewport = el.closest('.gallery-viewport') || document;
+    const nextBtn = viewport.querySelector('.swiper-button-next') as HTMLElement | null;
+    const prevBtn = viewport.querySelector('.swiper-button-prev') as HTMLElement | null;
+
+    const s = new Swiper(el, {
       modules: [Navigation, Autoplay],
-      slidesPerView: 5,
-      spaceBetween: 20,
+      slidesPerView: 1,
+      spaceBetween: 16,
       loop: true,
       speed: 600,
+      watchOverflow: false,
+      observer: true,
+      observeParents: true,
       navigation: {
-        nextEl: nextBtn as HTMLElement,
-        prevEl: prevBtn as HTMLElement,
-        disabledClass: 'swiper-nav-hidden',
+        nextEl: nextBtn,
+        prevEl: prevBtn,
+        disabledClass: 'swiper-nav-disabled-never',
       },
       breakpoints: {
         320:  { slidesPerView: 1, spaceBetween: 16 },
@@ -403,25 +409,63 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
         1920: { slidesPerView: 4, spaceBetween: 24 },
       },
     });
-    swiperMap.set(el, s);
+
+    activeSwiper = s;
+
+    // Asegurar que los botones prev y next respondan al click siempre
+    if (nextBtn) {
+      nextBtn.removeAttribute('disabled');
+      nextBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        s.slideNext();
+      };
+    }
+    if (prevBtn) {
+      prevBtn.removeAttribute('disabled');
+      prevBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        s.slidePrev();
+      };
+    }
+
+    const unlockButtons = () => {
+      if (nextBtn) {
+        nextBtn.removeAttribute('disabled');
+        nextBtn.classList.remove('swiper-button-disabled', 'swiper-nav-disabled-never');
+      }
+      if (prevBtn) {
+        prevBtn.removeAttribute('disabled');
+        prevBtn.classList.remove('swiper-button-disabled', 'swiper-nav-disabled-never');
+      }
+    };
+
+    s.on('slideChange', unlockButtons);
+    s.on('transitionEnd', unlockButtons);
+    s.on('touchEnd', unlockButtons);
   }
 
   function destroySwiper() {
-    const el = document.querySelector(selector);
-    if (!el) return;
-    const s = swiperMap.get(el);
-    if (s && s.destroy) { try { s.destroy(true, true); } catch {} }
-    swiperMap.delete(el);
+    if (activeSwiper && activeSwiper.destroy) {
+      try { activeSwiper.destroy(true, true); } catch {}
+      activeSwiper = null;
+    }
   }
 
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initSwiper); } else { initSwiper(); }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSwiper);
+  } else {
+    initSwiper();
+  }
+
   document.addEventListener('astro:page-load', initSwiper);
   document.addEventListener('astro:after-swap', initSwiper);
   document.addEventListener('astro:before-swap', destroySwiper);
 
   document.addEventListener('click', (e) => {
     const target = e.target;
-    const btn = target && target.closest ? target.closest('.action-btn') : null;
+    const btn = target && (target as HTMLElement).closest ? (target as HTMLElement).closest('.action-btn') : null;
     if (!btn) return;
     const action = btn.getAttribute('data-action');
     if (action === 'like') btn.classList.toggle('liked');

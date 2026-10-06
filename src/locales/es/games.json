@@ -2,80 +2,107 @@
   "games": [
     {
       "id": 1,
-      "titulo": "Galaxian",
-      "enlace": "/games/Galaxian/index.html",
-      "descripcion": "Galaxian es un juego de disparos en el espacio con gráficos retro y una jugabilidad adictiva.",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/galaxian-prev.webp"
-    },
-    {
-      "id": 2,
-      "titulo": "Christmas Santa Run",
-      "enlace": "/games/navidad/index.html",
-      "descripcion": "Un juego de plataformas navideño donde ayudas a Santa a recoletar regalos evitando obstáculos.",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/santa-prev.webp"
-    },
-    {
-      "id": 3,
-      "titulo": "Pac Taquerito",
-      "enlace": "/games/PacTaquerito/index.html",
-      "descripcion": "Un juego de laberinto clásico donde controlas a Pac-Taquerito para evitar obstáculos y derrotar a los fantasmas",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/pacman-prev.webp"
-    },
-    {
-      "id": 4,
-      "titulo": "Taqueritos Racer",
-      "enlace": "/games/Racer/index.html",
-      "descripcion": "Un juego de carreras en donde evitas colisionar con otros vehículos",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/racer-prev.webp"
-    },
-    {
-      "id": 5,
-      "titulo": "Soccer",
-      "enlace": "/games/SOCCER/index.html",
-      "descripcion": "Un juego en donde deberás anotar la mayor cantidad de goles posibles con una cantidad de rebotes determinada",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/soccer-prev.webp"
-    },
-    {
-      "id": 6,
-      "titulo": "Treasure Hunt",
-      "enlace": "/games/submarino/index.html",
-      "descripcion": "Eres un submarino que debe evitar obstaculos y recolectar monedas, puedes lanzar torpedos para destruir los obstaculos",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/submarino-prev.webp"
-    },
-    {
-      "id": 7,
-      "titulo": "Super Dragon",
-      "enlace": "/games/super/index.html",
-      "descripcion": "Ayuda a Super Dragon a recolectar el mayor numero de monedas evitando las pidras",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/juego-superdragon2.png"
-    },
-    {
-      "id": 8,
-      "titulo": "Super Taquerito Coins",
-      "enlace": "/games/taqueritobros/index.html",
-      "descripcion": "Un juego de aventura y plataformas donde deberas esquivar o derrotar a los enemigos hasta llegar a la meta",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/coins-prev.webp"
-    },
-    {
-      "id": 9,
       "titulo": "Candy Paradise",
       "enlace": "/games/Candy/index.html",
       "descripcion": "Un divertido y colorido juego de rompecabezas donde combinas dulces y caramelos para superar deliciosos niveles.",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/candy-prev.webp"
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/candy-prev.webp",
+      "isnew": true
     },
     {
-      "id": 10,
+      "id": 2,
       "titulo": "Out of Lava",
       "enlace": "/games/Lava/index.html",
       "descripcion": "Un emocionante juego donde deberás saltar entre plataformas y evitar la lava ardiente para llegar a salvo a la meta.",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/lava-prev.webp"
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/lava-prev.webp",
+      "isnew": true
     },
     {
-      "id": 11,
+      "id": 3,
       "titulo": "Surfing Unicorn",
       "enlace": "/games/Surf/index.html",
       "descripcion": "Surfea sobre las olas con un unicornio esquivando obstáculos y recolectando recompensas en el océano.",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/surf-prev.webp"
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/surf-prev.webp",
+      "isnew": true
+    },
+    {
+      "id": 4,
+      "titulo": "Soccer Arena X",
+      "enlace": "/games/soccer2026/index.html",
+      "descripcion": "Demuestra tus habilidades futbolísticas en la cancha, domina el balón y anota goles épicos para coronarte campeón.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/soccer2026-prev.webp",
+      "isnew": true
+    },
+    {
+      "id": 5,
+      "titulo": "Goal Grid",
+      "enlace": "/games/soccergrid/index.html",
+      "descripcion": "Pon a prueba tu puntería y estrategia futbolística disparando al arco para completar la cuadrícula de goles.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/soccergrid-prev.webp",
+      "isnew": true
+    },
+    {
+      "id": 6,
+      "titulo": "Galaxian",
+      "enlace": "/games/Galaxian/index.html",
+      "descripcion": "Galaxian es un juego de disparos en el espacio con gráficos retro y una jugabilidad adictiva.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/galaxian-prev.webp",
+      "isnew": false
+    },
+    {
+      "id": 7,
+      "titulo": "Christmas Santa Run",
+      "enlace": "/games/navidad/index.html",
+      "descripcion": "Un juego de plataformas navideño donde ayudas a Santa a recoletar regalos evitando obstáculos.",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/santa-prev.webp",
+      "isnew": false
+    },
+    {
+      "id": 8,
+      "titulo": "Pac Taquerito",
+      "enlace": "/games/PacTaquerito/index.html",
+      "descripcion": "Un juego de laberinto clásico donde controlas a Pac-Taquerito para evitar obstáculos y derrotar a los fantasmas",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/pacman-prev.webp",
+      "isnew": false
+    },
+    {
+      "id": 9,
+      "titulo": "Taqueritos Racer",
+      "enlace": "/games/Racer/index.html",
+      "descripcion": "Un juego de carreras en donde evitas colisionar con otros vehículos",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/racer-prev.webp",
+      "isnew": false
+    },
+    {
+      "id": 10,
+      "titulo": "Soccer",
+      "enlace": "/games/SOCCER/index.html",
+      "descripcion": "Un juego en donde deberás anotar la mayor cantidad de goles posibles con una cantidad de rebotes determinada",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/soccer-prev.webp",
+      "isnew": false
+    },
+    {
+      "id": 11,
+      "titulo": "Treasure Hunt",
+      "enlace": "/games/submarino/index.html",
+      "descripcion": "Eres un submarino que debe evitar obstaculos y recolectar monedas, puedes lanzar torpedos para destruir los obstaculos",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/submarino-prev.webp",
+      "isnew": false
+    },
+    {
+      "id": 12,
+      "titulo": "Super Dragon",
+      "enlace": "/games/super/index.html",
+      "descripcion": "Ayuda a Super Dragon a recolectar el mayor numero de monedas evitando las piedras",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/juego-superdragon2.png",
+      "isnew": false
+    },
+    {
+      "id": 13,
+      "titulo": "Super Taquerito Coins",
+      "enlace": "/games/taqueritobros/index.html",
+      "descripcion": "Un juego de aventura y plataformas donde deberas esquivar o derrotar a los enemigos hasta llegar a la meta",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/coins-prev.webp",
+      "isnew": false
     }
   ]
 }

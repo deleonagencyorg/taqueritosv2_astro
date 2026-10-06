@@ -1,0 +1,28 @@
+{
+  "general":{
+    "defaultCategory":0,
+    "useHelpPanel":true,
+    "useCreditPanel":true
+  },
+  "strings":{
+    "APP_TITLE":"Super Dragón",
+    "APP_INFO":"Taquerito's Games",
+    "NEW_GAME":"JUEGO NUEVO",
+    "HELP":"AYUDA",
+    "HELP_TEXT":"Help text",
+    "SETTING":"SETTING",
+    "CREDITS":"CREDITOS",
+    "CREDIT_TEXT":"Taqueritos Junio 2,025"
+  },
+  "data":{
+    "coins":[
+      "BTC","ETH", "BCH", "DASH", 
+      "XMR", "EOS", "LSK", "ZEC", 
+      "BCC", "USDT", "WAVES",
+      "START", "HSR", "MONA",
+      "BNB", "DGD", "BTCD",
+      "ARDR", "PPT", "ARK", "NXT"],
+    "levels":[
+    ]
+  }
+}
