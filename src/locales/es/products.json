@@ -23,7 +23,7 @@
     }
   ],
   "items": [
-        {
+    {
       "id": "taqueritos-lava",
       "name": "Taqueritos Lava",
       "name_description": "Taqueritos Lava",
@@ -52,7 +52,7 @@
         "180gr"
       ],
       "nutrition": {
-        "description": "Tototopos de Maíz Enrollados con extra picante",
+        "description": "Totopos de Maíz Enrollados con extra picante",
         "servingSize": "28g",
         "servingsPerContainer": "1.21",
         "calories": "600 KJ (140 Kcal)",
@@ -105,7 +105,7 @@
         "34gr"
       ],
       "nutrition": {
-        "description": "Tototopos de Maíz Enrollados con sabor a Bufalo Ranch ",
+        "description": "Totopos de Maíz Enrollados con sabor a Bufalo Ranch ",
         "servingSize": "28g",
         "servingsPerContainer": "1.21",
         "calories": "600 KJ (140 Kcal)",
@@ -158,7 +158,7 @@
         "34gr"
       ],
       "nutrition": {
-        "description": "Tototopos de Maíz Enrollados con sabor a chile limon ",
+        "description": "Totopos de Maíz Enrollados con sabor a chile limón ",
         "servingSize": "28g",
         "servingsPerContainer": "1,21",
         "calories": "600 cal (140 Kcal )",
@@ -212,7 +212,7 @@
         "34gr"
       ],
       "nutrition": {
-        "description": "Tototopos de Maíz Enrollados con sabor a chile especies y  limon ",
+        "description": "Totopos de Maíz Enrollados con sabor a chile especies y limón ",
         "servingSize": "28g",
         "servingsPerContainer": "1.21",
         "calories": "600 cal (140 Kcal )",
@@ -266,7 +266,7 @@
         "14gr"
       ],
       "nutrition": {
-        "description": "Tototopos de Maíz Enrollados con sabor a chile toreado ",
+        "description": "Totopos de Maíz Enrollados con sabor a chile toreado ",
         "servingSize": "28g",
         "servingsPerContainer": "1.21",
         "calories": "650 cal (150 Kcal )",
@@ -319,7 +319,7 @@
         "34gr"
       ],
       "nutrition": {
-        "description": "Tototopos de Maíz Enrollados con sabor a queso",
+        "description": "Totopos de Maíz Enrollados con sabor a queso",
         "servingSize": "28g",
         "servingsPerContainer": "1.21",
         "calories": "650 cal (140 Kcal )",
