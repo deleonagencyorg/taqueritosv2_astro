@@ -146,6 +146,11 @@
   ],
   "games": [
     {
+      "id": "neon-bricks",
+      "name": "Neon Bricks",
+      "href": "/games/neonbricks/index.html"
+    },
+    {
       "id": "candy-paradise",
       "name": "Candy Paradise",
       "href": "/games/Candy/index.html"
