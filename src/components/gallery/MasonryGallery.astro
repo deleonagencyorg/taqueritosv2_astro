@@ -12,22 +12,25 @@ export interface Props {
 }
 
 const { items = [], columns = 3, title = '', subtitle = '', className = '' } = Astro.props as Props;
+
+const galleryItems = Array.isArray(items) ? items : [];
+const itemsToRender = galleryItems;
 ---
 
 <section class={className}>
-  <div class="gallery-viewport relative">
+  <div class="gallery-viewport relative w-full overflow-hidden">
     
-    <!-- Botones de Navegación (título se renderiza en Home) -->
-    <div class="container mx-auto px-4 flex justify-end mb-4 gallery-nav-header">
+    <!-- Controles de navegación (Posición dinámica Desktop/Mobile) -->
+    <div class="gallery-controls-container container mx-auto px-4">
       <div class="carousel-navigation-masonry">
-        <button class="swiper-button-prev" aria-label="Anterior">
+        <button class="swiper-button-prev gallery-btn" aria-label="Anterior">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3.99976 11.9998H19.9997" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M8.99973 17C8.99973 17 3.99978 13.3176 3.99976 12C3.99975 10.6824 8.99976 7 8.99976 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         
-        <button class="swiper-button-next" aria-label="Siguiente">
+        <button class="swiper-button-next gallery-btn" aria-label="Siguiente">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20.0002 11.9998H4.00026" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M15.0003 17C15.0003 17 20.0002 13.3176 20.0002 12C20.0003 10.6824 15.0002 7 15.0002 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -37,10 +40,10 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     </div>
 
     <!-- Swiper -->
-    <div class="swiper-container" data-count={items.length} data-gallery-swiper>
+    <div class="swiper-container gallery-swiper">
       <div class="swiper-wrapper">
-        {items.map((item, idx) => (
-          <div class="swiper-slide" data-slide-index={idx}>
+        {itemsToRender.map((item, idx) => (
+          <div class="swiper-slide">
             <div class="taqueritos-card">
               
               <!-- Imagen -->
@@ -60,19 +63,19 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
               <div class="actions-bar">
                 <div class="flex items-center gap-4">
                   <button class="action-btn" aria-label="Me gusta" data-action="like">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-[22px] h-[22px] md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                     </svg>
                   </button>
                   <button class="action-btn" aria-label="Comentar" data-action="comment">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-[22px] h-[22px] md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                     </svg>
                   </button>
                   <button class="action-btn" aria-label="Compartir" data-action="share">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-[22px] h-[22px] md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                     </svg>
@@ -80,7 +83,7 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
                 </div>
 
                 <button class="action-btn" aria-label="Guardar" data-action="bookmark">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-[22px] h-[22px] md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
                   </svg>
@@ -100,78 +103,26 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   .gallery-viewport { 
     position: relative; 
     width: 100%; 
-    background: transparent; /* Usa el mismo fondo que la sección padre */
-    overflow: hidden;
+    overflow: hidden; 
   }
 
-  
-  .title {
-    font-family: 'Avory I PE', sans-serif;
-    font-size: 50px;
-    font-weight: 800;
-    letter-spacing: 2%;
-    line-height: 45px;
-    color: white;
-    text-transform: uppercase;
-    position: relative;
-    z-index: 10;
-  }
-
-  /* Se desactivan los blobs azules para que el fondo se vea uniforme */
-  .gallery-viewport::before,
-  .gallery-viewport::after {
-    content: none;
-  }
-
-  /* ✅ CLAVE: Padding reducido para que quepan 4 cards */
-  .swiper-container {
-    padding: 60px 50px 100px 50px;
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    overflow: visible;
-  }
-
-  .action-btn {
-    color: white;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    padding: 0;
+  .gallery-controls-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-  }
-
-  .action-btn:hover {
-    color: #2DA0FF;
-    transform: scale(1.1);
+    justify-content: flex-end;
+    margin-bottom: 16px;
   }
 
   .carousel-navigation-masonry {
-    position: absolute;
-    right: 50px;
     display: flex;
     gap: 12px;
-    z-index: 10;
+    z-index: 30;
   }
 
-  .swiper-button-next::after,
-  .swiper-button-prev::after {
-    content: '' !important;
-    display: none !important;
-  }
-
-  .swiper-button-next,
-  .swiper-button-prev {
+  .gallery-btn {
     position: relative !important;
     width: 56px !important;
     height: 56px !important;
     margin: 0 !important;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
     background: rgba(45, 160, 255, 0.16) !important;
     border: 2px solid #2DA0FF !important;
     border-radius: 10px !important;
@@ -183,27 +134,29 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     cursor: pointer !important;
     padding: 0 !important;
     pointer-events: auto !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
   }
-
-  .swiper-button-next svg,
-  .swiper-button-prev svg {
-    width: 24px !important;
-    height: 24px !important;
-    pointer-events: none;
-  }
-
-  .swiper-button-next:hover,
-  .swiper-button-prev:hover {
+  .gallery-btn::after { display: none !important; }
+  .gallery-btn svg { width: 24px !important; height: 24px !important; pointer-events: none; }
+  .gallery-btn:hover {
     background: rgba(45, 160, 255, 0.3) !important;
     border-color: #4DB5FF !important;
-    /* transform: translateY(-2px) !important; */
     box-shadow: 0 8px 20px rgba(45, 160, 255, 0.4) !important;
   }
+  .gallery-btn:active { transform: scale(0.95) !important; }
+  .gallery-btn.swiper-button-lock { display: flex !important; }
 
-  .swiper-button-next:active,
-  .swiper-button-prev:active {
-    transform: translateY(0) !important;
+
+  /* --- SWIPER CONTAINER --- */
+  .gallery-swiper {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    overflow: visible;
   }
+
 
   .taqueritos-card {
     position: relative;
@@ -212,14 +165,8 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     border: 1px solid #2DA0FF;
     border-radius: 5px;
     box-shadow: 0px 23px 43px -48px rgba(0, 132, 255, 0.33);
-    padding: 17px 19px 20px 19px;
+    padding: 18px;
     transition: all 0.3s ease;
-  }
-
-  .taqueritos-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0px 30px 60px -40px rgba(0, 132, 255, 0.5);
-    border-color: #4DB5FF;
   }
 
   .image-container {
@@ -228,138 +175,92 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
     overflow: hidden;
     border-radius: 10px;
     background: #000;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
 
   .image-button {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: transparent;
-    padding: 0;
-    cursor: pointer;
-    display: block;
-    outline: none;
-    transition: opacity 0.2s ease;
+    width: 100%; height: 100%; border: none; background: transparent; padding: 0; cursor: pointer; display: block; transition: opacity 0.2s ease;
   }
-
   .image-button:hover { opacity: 0.9; }
-
-  .image-button:focus {
-    outline: 2px solid #2DA0FF;
-    outline-offset: 2px;
-  }
-
-  .card-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+  .image-button:focus { outline: 2px solid #2DA0FF; outline-offset: 2px; }
+  .card-image { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .actions-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
   }
-
-  .action-icon {
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    color: white;
-    width: 25px;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .action-btn {
+    background: transparent; border: none; padding: 0; cursor: pointer; color: white;
+    display: flex; align-items: center; justify-content: center;
     transition: all 0.2s ease;
   }
+  .action-btn:hover { color: #2DA0FF; transform: scale(1.15); }
+  .action-btn:active { transform: scale(0.95); }
+  .action-btn.liked { color: #FF4757; }
+  .action-btn.liked svg { fill: #FF4757; }
+  .action-btn.bookmarked { color: #2DA0FF; }
+  .action-btn.bookmarked svg { fill: #2DA0FF; }
 
-  /* Efecto alternado */
-  .swiper-slide:nth-child(even) .taqueritos-card {
-    transform: translateY(40px);
-  }
-  
-  .swiper-slide:nth-child(odd) .taqueritos-card {
-    transform: translateY(-40px);
-  }
 
-  .swiper-slide:nth-child(even) .taqueritos-card:hover {
-    transform: translateY(36px);
-  }
-  
-  .swiper-slide:nth-child(odd) .taqueritos-card:hover {
-    transform: translateY(-44px);
-  }
-
-  .action-icon:hover {
-    color: #2DA0FF;
-    transform: scale(1.15);
-  }
-
-  .action-icon:active {
-    transform: scale(0.95);
-  }
-
-  .action-icon.liked { color: #FF4757; }
-  .action-icon.liked svg { fill: #FF4757; }
-  .action-icon.bookmarked { color: #2DA0FF; }
-  .action-icon.bookmarked svg { fill: #2DA0FF; }
-
-  @media (max-width: 767px) {
-
-    .title {
-      font-size: 32px;
-      line-height: 1.1;
-      margin-bottom: 8px;
+  /* --- para desktop --- */
+  @media (min-width: 768px) {
+    .gallery-swiper {
+      padding: 60px 50px 100px 50px;
+    }
+    
+    .taqueritos-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0px 30px 60px -40px rgba(0, 132, 255, 0.5);
+      border-color: #4DB5FF;
     }
 
-    /* En mobile los botones van a los laterales del carrusel */
-    .gallery-nav-header {
+    /* MASONRY EFFECT EN ZIG ZAG */
+    .swiper-slide:nth-child(even) .taqueritos-card { transform: translateY(40px); }
+    .swiper-slide:nth-child(odd) .taqueritos-card { transform: translateY(-40px); }
+    .swiper-slide:nth-child(even) .taqueritos-card:hover { transform: translateY(36px); }
+    .swiper-slide:nth-child(odd) .taqueritos-card:hover { transform: translateY(-44px); }
+  }
+
+
+  /* --- para mobile --- */
+  @media (max-width: 767px) {
+    .gallery-controls-container {
       margin-bottom: 0;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      transform: translateY(-50%);
+      padding: 0 8px; /* Separación de los bordes laterales */
+      z-index: 20;
+      pointer-events: none; /* Para que no bloquee el click al carrusel */
     }
 
     .carousel-navigation-masonry {
-      position: absolute;
-      top: 50%;
-      left: 8px;
-      right: 8px;
-      transform: translateY(-50%);
-      display: flex;
+      width: 100%;
       justify-content: space-between;
-      pointer-events: none;
-      z-index: 20;
-      margin-top: 0;
       gap: 0;
+      pointer-events: none;
     }
 
-    .swiper-button-next,
-    .swiper-button-prev {
+    .gallery-btn {
       width: 48px !important;
       height: 48px !important;
-      pointer-events: auto;
+      pointer-events: auto !important; /* Reactivar clicks en los botones móviles */
+      touch-action: manipulation !important;
     }
 
-    .taqueritos-card { padding: 12px 14px 14px 14px; }
-    .action-icon { width: 22px; height: 22px; }
-
-    .swiper-container {
+    .gallery-swiper {
       padding: 40px 16px 48px 16px;
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      overflow: visible;
     }
 
-    /* Hacer las tarjetas un poco más pequeñas y alinear verticalmente */
-    .image-container { aspect-ratio: 4 / 4; }
-    .swiper-slide:nth-child(even) .taqueritos-card,
-    .swiper-slide:nth-child(odd) .taqueritos-card { transform: none; }
-    .swiper-slide:nth-child(even) .taqueritos-card:hover,
-    .swiper-slide:nth-child(odd) .taqueritos-card:hover { transform: none; }
+    .taqueritos-card {
+      padding: 14px;
+    }
+
+    .image-container {
+      aspect-ratio: 4 / 4;
+      margin-bottom: 14px;
+    }
   }
 </style>
 
@@ -369,108 +270,74 @@ const { items = [], columns = 3, title = '', subtitle = '', className = '' } = A
   import 'swiper/css';
   import 'swiper/css/navigation';
 
-  const selector = '[data-gallery-swiper]';
-  let activeSwiper: any = null;
+  function initGalleries() {
+    const viewports = document.querySelectorAll('.gallery-viewport');
+    
+    viewports.forEach(viewport => {
+      const container = viewport.querySelector('.gallery-swiper') as HTMLElement | null;
+      if (!container) return;
 
-  function initSwiper() {
-    const el = document.querySelector(selector) as HTMLElement | null;
-    if (!el) return;
+      const existingSwiper = (container as any).swiper;
+      if (existingSwiper && typeof existingSwiper.destroy === 'function') {
+        existingSwiper.destroy(true, true);
+      }
 
-    if (activeSwiper && activeSwiper.destroy) {
-      try { activeSwiper.destroy(true, true); } catch {}
-      activeSwiper = null;
-    }
-    el.classList.remove('swiper-initialized');
+      const nextEl = viewport.querySelector('.swiper-button-next') as HTMLElement | null;
+      const prevEl = viewport.querySelector('.swiper-button-prev') as HTMLElement | null;
+      const slideCount = container.querySelectorAll('.swiper-slide').length;
+      const isMobile = window.innerWidth < 768;
 
-    const viewport = el.closest('.gallery-viewport') || document;
-    const nextBtn = viewport.querySelector('.swiper-button-next') as HTMLElement | null;
-    const prevBtn = viewport.querySelector('.swiper-button-prev') as HTMLElement | null;
+      const shouldLoop = isMobile ? slideCount > 1 : slideCount > 4;
 
-    const s = new Swiper(el, {
-      modules: [Navigation, Autoplay],
-      slidesPerView: 1,
-      spaceBetween: 16,
-      loop: true,
-      speed: 600,
-      watchOverflow: false,
-      observer: true,
-      observeParents: true,
-      navigation: {
-        nextEl: nextBtn,
-        prevEl: prevBtn,
-        disabledClass: 'swiper-nav-disabled-never',
-      },
-      breakpoints: {
-        320:  { slidesPerView: 1, spaceBetween: 16 },
-        640:  { slidesPerView: 2, spaceBetween: 18 },
-        1024: { slidesPerView: 3, spaceBetween: 20 },
-        1440: { slidesPerView: 4, spaceBetween: 20 },
-        1600: { slidesPerView: 4, spaceBetween: 22 },
-        1920: { slidesPerView: 4, spaceBetween: 24 },
-      },
+      new Swiper(container, {
+        modules: [Navigation, Autoplay],
+        loop: shouldLoop,
+        watchOverflow: true,
+        speed: 600,
+        spaceBetween: 20,
+        observer: true,
+        observeParents: true,
+        navigation: {
+          nextEl,
+          prevEl,
+          disabledClass: 'swiper-button-disabled'
+        },
+        breakpoints: {
+          320: { slidesPerView: 1, spaceBetween: 16, allowTouchMove: true },
+          640: { slidesPerView: 2, spaceBetween: 18, allowTouchMove: true },
+          1024: { slidesPerView: 3, spaceBetween: 20, allowTouchMove: slideCount > 3 },
+          1440: { slidesPerView: 4, spaceBetween: 20, allowTouchMove: slideCount > 4 },
+          1600: { slidesPerView: 4, spaceBetween: 22, allowTouchMove: slideCount > 4 },
+        }
+      });
     });
-
-    activeSwiper = s;
-
-    // Asegurar que los botones prev y next respondan al click siempre
-    if (nextBtn) {
-      nextBtn.removeAttribute('disabled');
-      nextBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        s.slideNext();
-      };
-    }
-    if (prevBtn) {
-      prevBtn.removeAttribute('disabled');
-      prevBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        s.slidePrev();
-      };
-    }
-
-    const unlockButtons = () => {
-      if (nextBtn) {
-        nextBtn.removeAttribute('disabled');
-        nextBtn.classList.remove('swiper-button-disabled', 'swiper-nav-disabled-never');
-      }
-      if (prevBtn) {
-        prevBtn.removeAttribute('disabled');
-        prevBtn.classList.remove('swiper-button-disabled', 'swiper-nav-disabled-never');
-      }
-    };
-
-    s.on('slideChange', unlockButtons);
-    s.on('transitionEnd', unlockButtons);
-    s.on('touchEnd', unlockButtons);
-  }
-
-  function destroySwiper() {
-    if (activeSwiper && activeSwiper.destroy) {
-      try { activeSwiper.destroy(true, true); } catch {}
-      activeSwiper = null;
-    }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSwiper);
+    document.addEventListener('DOMContentLoaded', initGalleries);
   } else {
-    initSwiper();
+    initGalleries();
   }
 
-  document.addEventListener('astro:page-load', initSwiper);
-  document.addEventListener('astro:after-swap', initSwiper);
-  document.addEventListener('astro:before-swap', destroySwiper);
+  const mql = window.matchMedia('(min-width: 768px)');
+  mql.addEventListener('change', () => {
+    initGalleries();
+  });
 
+  document.addEventListener('astro:page-load', initGalleries);
+  document.addEventListener('astro:after-swap', () => {
+    setTimeout(initGalleries, 50);
+  });
+  
   document.addEventListener('click', (e) => {
-    const target = e.target;
-    const btn = target && (target as HTMLElement).closest ? (target as HTMLElement).closest('.action-btn') : null;
+    const target = e.target as HTMLElement | null;
+    if (!target) return;
+    
+    const btn = target.closest('.action-btn');
     if (!btn) return;
+    
     const action = btn.getAttribute('data-action');
     if (action === 'like') btn.classList.toggle('liked');
     if (action === 'bookmark') btn.classList.toggle('bookmarked');
   });
 </script>
-
-
