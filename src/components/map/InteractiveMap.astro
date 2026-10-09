@@ -78,7 +78,7 @@ const paises = [
   }
 
   :global(.leaflet-tile-pane) {
-    opacity: 0.6;
+    opacity: 0.85;
   }
 
   :global(.logo-popup) {
@@ -103,6 +103,7 @@ const paises = [
   function initMap() {
     const mapElement = document.getElementById('interactive-map');
     if (!mapElement || typeof L === 'undefined') return;
+    if (mapElement._leaflet_id) return;
 
     const map = L.map('interactive-map', {
       center: [14, -84],
@@ -114,11 +115,10 @@ const paises = [
       maxZoom: 8
     });
 
-    // Mapa oscuro con estilo personalizado
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '',
-      subdomains: 'abcd',
-      maxZoom: 19
+    // Mapa de Esri
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; Esri',
+      maxZoom: 16
     }).addTo(map);
 
     // Agregar marcadores para cada país
