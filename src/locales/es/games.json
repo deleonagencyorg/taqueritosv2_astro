@@ -13,7 +13,8 @@
       "titulo": "Candy Paradise",
       "enlace": "/games/Candy/index.html",
       "descripcion": "Un divertido y colorido juego de rompecabezas donde combinas dulces y caramelos para superar deliciosos niveles.",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/candy-prev.webp",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/CANDY-PARADISE_DESKTOP.webp",
+      "imagenMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/CANDY-PARADISE_MOBILE.webp",
       "isnew": true
     },
     {
@@ -21,7 +22,8 @@
       "titulo": "Out of Lava",
       "enlace": "/games/Lava/index.html",
       "descripcion": "Un emocionante juego donde deberás saltar entre plataformas y evitar la lava ardiente para llegar a salvo a la meta.",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/lava-prev.webp",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/OUT-LAVA_DESKTOP.webp",
+      "imagenMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/OUT-LAVA_MOBILE.webp",
       "isnew": true
     },
     {
@@ -29,7 +31,8 @@
       "titulo": "Surfing Unicorn",
       "enlace": "/games/Surf/index.html",
       "descripcion": "Surfea sobre las olas con un unicornio esquivando obstáculos y recolectando recompensas en el océano.",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/surf-prev.webp",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/UNICORN-SURF_DESKTOP.webp",
+      "imagenMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/UNICORN-SURF_MOBILE.webp",
       "isnew": true
     },
     {
@@ -93,7 +96,8 @@
       "titulo": "Treasure Hunt",
       "enlace": "/games/submarino/index.html",
       "descripcion": "Eres un submarino que debe evitar obstaculos y recolectar monedas, puedes lanzar torpedos para destruir los obstaculos",
-      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/submarino-prev.webp",
+      "imagen": "https://snack.yummiespromociones.com/SnacksyummiesAssets/TREASURE-HUNT_DESKTOP.webp",
+      "imagenMobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/TREASURE-HUNT_MOBILE.webp",
       "isnew": false
     },
     {

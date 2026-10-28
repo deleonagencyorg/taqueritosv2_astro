@@ -10,6 +10,7 @@ interface Game {
   enlace: string;
   descripcion: string;
   imagen: string;
+  imagenMobile?: string;
   isnew?: boolean | string;
 }
 
@@ -94,12 +95,18 @@ const displayTitle = title || defaultTitle;
                 </div>
               )}
               <div class="game-card-image w-full flex-shrink-0 overflow-hidden bg-black/50">
-                <LazyImage
-                  src={game.imagen}
-                  alt={game.titulo}
-                  class="w-full h-full object-cover object-center"
-                  loading="lazy"
-                />
+                <picture>
+                  {game.imagenMobile && (
+                    <source srcset={game.imagenMobile} media="(max-width: 767px)" />
+                  )}
+                  <img
+                    src={game.imagen}
+                    alt={game.titulo}
+                    class="w-full h-full object-cover object-center"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
               </div>
               <div class="game-card-content flex flex-col flex-grow p-4 md:p-5">
                 <h3 class="font-title text-sm md:text-base font-bold text-white uppercase mb-2 leading-tight line-clamp-2">
