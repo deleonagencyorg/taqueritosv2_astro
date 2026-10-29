@@ -793,9 +793,9 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     /* Mejorar envoltura de títulos en overlay */
     .text-content .slide-title { white-space: normal; word-break: normal; overflow-wrap: normal; }
 
-    /* Corregir posición vertical imagen Lava en mobile (aplica también a slides marcados data-size="purple") */
     .product-slide-wrapper[data-theme="purple"] .image-container .slide-image,
-    .product-slide-wrapper[data-size="purple"] .image-container .slide-image {
+    .product-slide-wrapper[data-size="purple"] .image-container .slide-image,
+    .product-slide-wrapper[data-theme="buffalo"] .image-container .slide-image {
       transform: translateY(-150px) rotate(0deg) scale(0.65);
       animation: floatUpDownPurpleMobile 2s ease-in-out infinite !important;
     }
