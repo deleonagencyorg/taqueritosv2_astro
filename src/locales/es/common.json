@@ -97,19 +97,20 @@
       },
       {
         "id": "slide2",
-        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/fuegoslider.webp",
-        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/fuegoslider.webp",
+        "desktop": "https://snack.yummiespromociones.com/SnacksyummiesAssets/Bufalo_Ranch_HOME.webp",
+        "mobile": "https://snack.yummiespromociones.com/SnacksyummiesAssets/Bufalo_Ranch_HOME.webp",
         "alt": "Taqueritos",
         "title": "",
         "description": "",
         "link": "#",
         "type": "product",
-        "product_hero": "DRAGON FUEGO",
+        "color_theme": "buffalo",
+        "product_hero": "DRAGON BUFFALO RANCH",
         "product_left": "Sabor intenso,\nDiversión Máxima.",
-        "product_top": "Extra picante que\nenamora",
-        "product_right": "Levéleate al máximo con Taqueritos.\nDragón de Fuego ¿Listo para el reto?",
+        "product_top": "Toque intenso de la salsa Buffalo que\nenamora",
+        "product_right": "Levéleate al máximo con Taqueritos.\nBuffalo Ranch ¿Listo para el reto?",
         "product_cta_label": "Descubre más",
-        "product_cta_link": "/es/productos/taqueritos-dragon-de-fuego"
+        "product_cta_link": "/es/productos/taqueritos-buffalo-ranch"
       }
     ]
   },
