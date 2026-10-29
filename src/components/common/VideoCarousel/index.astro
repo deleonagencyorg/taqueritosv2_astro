@@ -886,6 +886,15 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
     animation: colorCycleBuffalo 5s ease-in-out infinite;
   }
 
+  /* Misma escala en desktop*/
+  @media (min-width: 768px) {
+    .product-slide-wrapper[data-theme="buffalo"] .image-container .slide-image {
+      transform: translateY(-60px) scale(0.6);
+      animation: floatUpDownPurple 2s ease-in-out infinite;
+      transform-origin: center center;
+    }
+  }
+
   @keyframes colorCycleBuffalo {
     0%   { color: rgba(0, 120, 180, 0.45); }
     25%  { color: rgba(64, 170, 220, 0.55); }

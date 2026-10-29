@@ -245,21 +245,19 @@ const heroSlides = promosSlides.length > 0 ? promosSlides : videoSlide;
 
 <style>
   .hero-section {
-    min-height: 500px;
     height: auto;
+    min-height: 0;
   }
 
-  @media (min-width: 769px) and (max-width: 1024px) {
-    .hero-section {
-      min-height: 700px;
-      height: auto;
-    }
+  section.hero-section :global(.video-carousel-container) {
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
 
-  @media (min-width: 1025px) {
+  @media (max-width: 767px) {
     .hero-section {
-      min-height: 85vh;
-      height: auto;
+      /* El menú fijo tapa el banner si arranca en y=0 */
+      padding-top: 6.75rem;
     }
   }
 
