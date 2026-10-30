@@ -60,13 +60,13 @@ const promosSlides = Array.isArray(commonAssets)
 
 // Slide de video como fallback para cuando no hay slides de imagen
 const videoSlide = [{
-  desktop: 'https://snack.yummiespromociones.com/SnacksyummiesAssets/1250x600.webp',
-  mobile: 'https://snack.yummiespromociones.com/SnacksyummiesAssets/TAQUERITOS_BODEGON_SECCION_NUESTROS_PRODUCTOS.webp',
+  desktop: 'https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4',
+  mobile: 'https://snack.yummiespromociones.com/taqueritos/Looptaqueritos.mp4',
   alt: 'Taqueritos',
   title: '',
   subtitle: '',
   link: '',
-  type: 'image' as const
+  type: 'video' as const
 }];
 
 const heroSlides = promosSlides.length > 0 ? promosSlides : videoSlide;
@@ -195,7 +195,7 @@ const heroSlides = promosSlides.length > 0 ? promosSlides : videoSlide;
                   </div>
                   <LazyImage
                     src={card.id === 'products'
-                      ? 'https://snack.yummiespromociones.com/taqueritos/nuestracomunidad.png'
+                      ? 'https://snack.yummiespromociones.com/SnacksyummiesAssets/paquetes.webp'
                       : card.id === 'challenges'
                       ? 'https://snack.yummiespromociones.com/SnacksyummiesAssets/ARENAS.webp'
                       : 'https://snack.yummiespromociones.com/taqueritos/recetataqueritos.png'}
@@ -245,25 +245,21 @@ const heroSlides = promosSlides.length > 0 ? promosSlides : videoSlide;
 
 <style>
   .hero-section {
+    min-height: 500px;
     height: auto;
-    min-height: 0;
   }
 
-  section.hero-section :global(.video-carousel-container) {
-    height: auto;
-    aspect-ratio: 16 / 9;
-  }
-
-  @media (min-width: 768px) {
-    section.hero-section :global(.video-carousel-container) {
-      aspect-ratio: 1250 / 550;
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hero-section {
+      min-height: 700px;
+      height: auto;
     }
   }
 
-  @media (max-width: 767px) {
+  @media (min-width: 1025px) {
     .hero-section {
-      /* El menú fijo tapa el banner si arranca en y=0 */
-      padding-top: 6.75rem;
+      min-height: 85vh;
+      height: auto;
     }
   }
 
