@@ -3,7 +3,6 @@
 import DesktopNavbar from '../DesktopNavbar/index.astro';
 import MobileMenuButton from '../MobileMenuButton/index.astro';
 import LocalizedImage from '../LazyImage.astro';
-import MessageCarousel from '../MessageCarousel/index.astro';
 import { t, type Locale } from '../../../i18n/i18n';
 import { logos } from '../../../config/assets';
 import { getHeaderColors } from '../../../config/headerColors';
@@ -57,11 +56,6 @@ if (headerColors) {
   style={'background-color: ' + (customStyles.backgroundColor || 'transparent') + '; color: ' + (customStyles.color || 'inherit')}
   data-header-config={JSON.stringify(customHeaderConfig)}
 >
-{headerColorConfig.showMessageCarousel && <MessageCarousel currentLang={currentLang} />}
-  
-  <!-- Banner superior azul claro con mensaje -->
-  <!--{customHeaderConfig.showMessageCarousel && <MessageCarousel currentLang={currentLang} />}
-  
   <!-- Navbar principal - ocupa el 100% del ancho -->
   <div 
     class={`w-full `}

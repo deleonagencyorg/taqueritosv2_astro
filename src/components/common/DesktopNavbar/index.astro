@@ -1,6 +1,6 @@
 ---
 import LanguageSwitcher from '../../i18n/LanguageSwitcher.astro';
-import { t, type Locale } from '../../../i18n/i18n';
+import type { Locale } from '../../../i18n/i18n';
 import { getLegacyMenu } from '../../../services/api/navigation';
 import { getSiteTexts, text } from '../../../services/api/site-texts';
 import { getAllProducts } from '../../../services/api/products';
@@ -60,7 +60,7 @@ const isActive = (href: string) => {
 
 const products = cmsProducts;
 // Obtener juegos para el menú desplegable
-const games = t('games', { namespace: 'common', locale: currentLang }) as any[];
+const games = (rawMenuItems.find((item) => item.id === 'games')?.submenu ?? []).map((game) => ({ name: game.text, href: game.href }));
 ---
 
 <!-- Desktop Navigation -->

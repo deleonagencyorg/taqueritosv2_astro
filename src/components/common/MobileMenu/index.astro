@@ -1,7 +1,7 @@
 ---
 import LanguageSwitcher from '../../i18n/LanguageSwitcher.astro';
 import LocalizedImage from '../LazyImage.astro';
-import { t, type Locale } from '../../../i18n/i18n';
+import type { Locale } from '../../../i18n/i18n';
 import { getLegacyMenu } from '../../../services/api/navigation';
 import { getSiteTexts, text } from '../../../services/api/site-texts';
 import { getAllProducts } from '../../../services/api/products';
@@ -53,7 +53,7 @@ const menuItemsWithContact = [...menuItemsOrdered, contactMenuItem];
 
 const products = cmsProducts;
 // Obtener juegos para el submenú de "Juegos"
-const games = t('games', { namespace: 'common', locale: currentLang }) as any[];
+const games = (rawMenuItems.find((item) => item.id === 'games')?.submenu ?? []).map((game) => ({ name: game.text, href: game.href }));
 
 const openMenuLabel = menu.navigation?.openMenuLabel || 'Open main menu';
 const closeMenuLabel = menu.navigation?.closeMenuLabel || 'Close main menu';

@@ -3,7 +3,6 @@
 import ChallengesCarousel from '../../../components/challenges/ChallengesCarousel.astro';
 import { t } from '../../../i18n/i18n';
 import { getAllProducts } from '../../../services/api/products';
-import { getSiteTexts, text } from '../../../services/api/site-texts';
 import type { Locale } from '../../../i18n/i18n';
 import './styles.css';
 
@@ -73,13 +72,13 @@ interface Product {
 const { currentLang, productId } = Astro.props;
 
 // Obtener datos desde traducciones
-const [products, siteTexts] = await Promise.all([getAllProducts(currentLang), getSiteTexts(currentLang)]);
+const products = await getAllProducts(currentLang);
 const product = products.find((item) => item.id === productId);
 const challengesAssets = t('', { namespace: 'challenges', locale: currentLang }) || {};
 
 // Si el producto no existe, lanzar error
 if (!product || Object.keys(product).length === 0) {
-  throw new Error(text(siteTexts, 'errors.product_not_found') || `Product not found: ${productId}`);
+  throw new Error(`Product '${productId}' was not found for locale '${currentLang}'`);
 }
 
 // Asegurar que todas las propiedades necesarias existan

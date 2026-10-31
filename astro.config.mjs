@@ -8,6 +8,10 @@ const SITE_URL = process.env.SITE_URL || 'https://taqueritos.com';
 
 export default defineConfig({
   adapter: vercel({
+    isr: {
+      expiration: 60,
+      exclude: [/^\/api\//, /^\/((es|en)\/)?gaming\/?$/],
+    },
     webAnalytics: {
       enabled: true,
     },

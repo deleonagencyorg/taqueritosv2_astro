@@ -1,5 +1,7 @@
 // src/middleware.ts
 import { defineMiddleware } from 'astro:middleware';
+import { requestLocale } from './i18n/requestContext';
+import { getSiteTexts } from './services/api/site-texts';
 import { routesConfig, findRouteBySlug } from './config/routes';
 
 // Mapeo de rutas que necesitan redirección
@@ -10,7 +12,7 @@ const routeMappings = {
   'yummiesone': { es: 'yummiesone', en: 'yummiesone' }
 };
 
-export const onRequest = defineMiddleware(async ({ request, redirect }, next) => {
+const handleRequest = defineMiddleware(async ({ request, redirect }, next) => {
   try {
     const url = new URL(request.url);
     const pathSegments = url.pathname.split('/').filter(Boolean);
@@ -92,8 +94,18 @@ export const onRequest = defineMiddleware(async ({ request, redirect }, next) =>
 
     return next();
   } catch (error) {
-    // Si hay cualquier error en el middleware, continuar sin bloquear
     console.error('[Middleware] Error processing request:', error);
-    return next();
+    throw error;
   }
+});
+
+export const onRequest = defineMiddleware((context, next) => {
+  const [firstSegment] = context.url.pathname.split('/').filter(Boolean);
+  const locale = firstSegment === 'en' ? 'en' : 'es';
+  const requestContext = { locale };
+  return requestLocale.run(requestContext, () => handleRequest(context, async () => {
+    if (firstSegment === 'api' || firstSegment?.includes('.')) return next();
+    requestContext.commonTexts = await getSiteTexts(locale);
+    return next();
+  }));
 });

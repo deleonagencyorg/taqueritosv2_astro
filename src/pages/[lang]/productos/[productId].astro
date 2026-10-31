@@ -5,7 +5,6 @@ import { getAllProducts } from '../../../services/api/products';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import ProductDetail from '../../../views/Products/Detail/index.astro';
 
-export const prerender = true;
 
 export async function getStaticPaths() {
   // Obtener todos los idiomas y productos disponibles

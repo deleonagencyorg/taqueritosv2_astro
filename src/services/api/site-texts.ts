@@ -1,5 +1,5 @@
 import { cmsClient } from './client';
-import { withSiteFilter } from './config';
+import { cmsConfig, withSiteFilter } from './config';
 import { TtlCache } from './runtime';
 
 interface CmsSiteText {
@@ -17,37 +17,37 @@ export type SiteTextMap = Record<string, string>;
 const siteTextsByLocale = new TtlCache<string, Promise<SiteTextMap>>();
 
 export function getSiteTexts(locale: string = 'es'): Promise<SiteTextMap> {
+  if (!cmsConfig.siteId) throw new Error('PUBLIC_CMS_SITE_ID must be configured to load CMS common texts');
   const cached = siteTextsByLocale.get(locale);
   if (cached) return cached;
-  const request = loadSiteTexts(locale);
+  const request = loadSiteTexts(locale).catch((error: unknown) => {
+    siteTextsByLocale.delete(locale);
+    throw error;
+  });
   siteTextsByLocale.set(locale, request);
   return request;
 }
 
 async function loadSiteTexts(locale: string): Promise<SiteTextMap> {
-  try {
+  const items: CmsSiteText[] = [];
+  for (let page = 1; page <= 50; page++) {
     const response = await cmsClient.get<SiteTextListResponse>(
       'v1/site-texts',
-      withSiteFilter({
-        page: 1,
-        pageSize: 500,
-        languageCode: locale,
-      })
+      withSiteFilter({ page, pageSize: 100, languageCode: locale })
     );
-
-    const items = response.data ?? [];
-    const map: SiteTextMap = {};
-    for (const item of items) {
-      if (item.key) map[item.key] = item.value ?? '';
+    if (!Array.isArray(response.data)) {
+      throw new Error(`CMS returned an invalid site-texts response for locale '${locale}'`);
     }
-
-    console.log(`[CMS] Site texts recibidos: ${items.length} (${locale})`);
-    return map;
-  } catch (error) {
-    siteTextsByLocale.delete(locale);
-    console.error('[CMS] Error al obtener site texts:', error);
-    return {};
+    items.push(...response.data);
+    if (!response.data.length || items.length >= (response.pagination?.total ?? items.length)) break;
   }
+
+  if (items.length === 5000) {
+    throw new Error(`CMS returned more than 5000 site texts for locale '${locale}'`);
+  }
+
+  console.log(`[CMS] Site texts recibidos: ${items.length} (${locale})`);
+  return Object.fromEntries(items.filter((item) => item.key).map((item) => [item.key, item.value ?? '']));
 }
 
 export function text(map: SiteTextMap, key: string, fallback: string = ''): string {
