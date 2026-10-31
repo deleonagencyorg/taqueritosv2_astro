@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { cmsClient } from './client';
 import { withSiteFilter } from './config';
 import { mediaUrl, videoPlaybackUrl, type CmsMultimedia } from './multimedia';
@@ -46,6 +47,12 @@ interface CmsMediaRef {
   originalUrl?: string;
   seoUrl?: string;
 }
+=======
+// src/services/api/pages.ts
+import { cmsClient } from './client';
+
+const SITE_ID = import.meta.env.PUBLIC_CMS_SITE_ID;
+>>>>>>> d95dae1ded566cb10222b00ea7e31fdcd229d8c7
 
 export interface CMSPage {
   id: string;
@@ -54,21 +61,36 @@ export interface CMSPage {
   excerpt?: string;
   content?: string;
   languageCode?: string;
+<<<<<<< HEAD
   isHomepage?: boolean;
   featuredImage?: CmsMediaRef;
+=======
+  featuredImage?: {
+    originalUrl?: string;
+    seoUrl?: string;
+  };
+>>>>>>> d95dae1ded566cb10222b00ea7e31fdcd229d8c7
   metaTitle?: string;
   metaDescription?: string;
   metaKeywords?: string;
   ogTitle?: string;
   ogDescription?: string;
+<<<<<<< HEAD
   ogImage?: CmsMediaRef;
   banners?: CmsPageBanner[];
+=======
+  ogImage?: {
+    originalUrl?: string;
+    seoUrl?: string;
+  };
+>>>>>>> d95dae1ded566cb10222b00ea7e31fdcd229d8c7
 }
 
 interface CMSPagesResponse {
   data: CMSPage[];
 }
 
+<<<<<<< HEAD
 function mapBanner(banner: CmsPageBanner): BannerSlide | null {
   if (banner.type === 'video') {
     const desktopVideo = videoPlaybackUrl(banner.desktop);
@@ -166,3 +188,21 @@ export function getPageBanners(page: CMSPage | null): BannerSlide[] {
     .map(mapBanner)
     .filter((banner): banner is BannerSlide => banner !== null);
 }
+=======
+export async function getPageBySlug(slug: string, locale: string = 'es'): Promise<CMSPage | null> {
+  try {
+    const response = await cmsClient.get<CMSPagesResponse>('v1/pages', {
+      page: 1,
+      pageSize: 50,
+      siteId: SITE_ID,
+      languageCode: locale,
+    });
+    const page = response.data.find(p => p.slug === slug) ?? null;
+    console.log(`[CMS] Página encontrada para slug "${slug}":`, page ? 'sí' : 'no');
+    return page;
+  } catch (error) {
+    console.error(`[CMS] Error al obtener páginas:`, error);
+    return null;
+  }
+}
+>>>>>>> d95dae1ded566cb10222b00ea7e31fdcd229d8c7

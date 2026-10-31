@@ -9,15 +9,18 @@ import Breadcrumb from '../../../components/common/Breadcrumb/Breadcrumb.astro';
 import LazyImage from '../../../components/common/LazyImage.astro';
 import IngredientsCarousel from '../../../components/recipes/IngredientsCarousel.astro';
 import ShareButton from '../../../components/common/ShareButton.astro';
+import { getAllRecipes, getRecipeBySlug } from '../../../services/api/recipes';
 
 interface RecipeItem {
   id: string;
+  slug?: string;
   title: string;
-  description: string;
-  ingredients: string[];
-  instructions: string[];
-  preparation_time: number;
-  servings: number;
+  description?: string;
+  ingredients?: string[];
+  instructions?: string[];
+  preparation_time?: number;
+  servings?: number;
+  people?: string | number;
   image?: string;
   tags?: string[];
   product_image?: string;
@@ -35,10 +38,10 @@ const recipe = allRecipes.find((item: RecipeItem) => item.id === recipeId);
 
 // Get related recipes (filter current, sort by date desc, limit to 5)
 const relatedRecipes = allRecipes
-  .filter((item: RecipeItem) => item.id !== recipeId)
-  .sort((a: RecipeItem, b: RecipeItem) => {
-    const dateA = (a as any).date;
-    const dateB = (b as any).date;
+  .filter((item: any) => item.id !== recipe?.id && item.slug !== recipe?.slug)
+  .sort((a: any, b: any) => {
+    const dateA = a.date;
+    const dateB = b.date;
     if (!dateA && dateB) return 1;
     if (dateA && !dateB) return -1;
     if (!dateA && !dateB) return 0;

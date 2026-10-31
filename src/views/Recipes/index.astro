@@ -9,19 +9,7 @@ import LazyImage from '../../components/common/LazyImage.astro';
 import PixelGrid from '../../components/atoms/PixelGrid.astro';
 import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
 import VideoHero from '../../components/common/VideoHero/VideoHero.astro';
-
-interface Recipe {
-  id: string;
-  title: string;
-  image?: string;
-  ['preview-image']?: string;
-  preparation_time: number;
-  type?: string;
-  // Ahora `product` es un array de strings (puede haber más de un producto por receta)
-  product?: string[];
-  video?: string;
-  date?: string;
-}
+import { getAllRecipes } from '../../services/api/recipes';
 
 const currentLang = getLocale();
 
@@ -34,11 +22,8 @@ allRecipes.sort((a: Recipe, b: Recipe) => {
   
   // Si A no tiene fecha, va al final
   if (!dateA && dateB) return 1;
-  // Si B no tiene fecha, va al final
   if (dateA && !dateB) return -1;
-  // Si ninguno tiene fecha, mantener orden original
   if (!dateA && !dateB) return 0;
-  // Orden descendente (más reciente primero)
   return new Date(dateB).getTime() - new Date(dateA).getTime();
 });
 

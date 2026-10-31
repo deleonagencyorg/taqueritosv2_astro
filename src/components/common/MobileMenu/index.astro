@@ -9,6 +9,7 @@ import { getSocialMediaLinks, socialMediaByPlatform } from '../../../services/ap
 import { socialMediaIconUrls, logos } from '../../../config/assets';
 import type { HeaderColorConfig } from '../../../config/headerColors';
 import SocialMediaIcons from '../SocialMediaIcons/index.astro';
+import { getAllProducts } from '../../../services/api/products';
 
 export interface Props {
   currentLang: Locale;

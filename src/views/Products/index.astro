@@ -3,6 +3,7 @@ import { getLocale } from '../../i18n/i18n';
 import { getAllProducts } from '../../services/api/products';
 import { getSiteTexts, text } from '../../services/api/site-texts';
 import ProductsCarousel from '../../components/common/ProductsCarousel/index.astro';
+import { getAllProducts } from '../../services/api/products';
 
 const currentLang = getLocale();
 const [products, siteTexts] = await Promise.all([getAllProducts(currentLang), getSiteTexts(currentLang)]);
