@@ -1,10 +1,21 @@
 // Centralized environment access with safe fallbacks
 // This file prevents undefined environment variables from breaking the app
 
+const GTM_CONTAINER_FALLBACK = 'GTM-P5NQNXN';
+const GTM_PLACEHOLDERS = new Set(['GTM-XXXXXX', 'GTM-EXAMPLE-ID']);
+
+function resolvePublicGtmId(value: unknown): string {
+  const id = typeof value === 'string' ? value.trim() : '';
+  if (!GTM_PLACEHOLDERS.has(id) && /^GTM-[A-Z0-9]+$/.test(id)) {
+    return id;
+  }
+  return GTM_CONTAINER_FALLBACK;
+}
+
 // Client-exposed (must start with PUBLIC_)
 export const PUBLIC_PROMOTION_ID: number = Number((((import.meta as any).env.PUBLIC_PROMOTION_ID) ?? '').toString()) || 0;
 export const PUBLIC_DEBUG_CREATORS = ((import.meta as any).env.PUBLIC_DEBUG_CREATORS || 'false') === 'true';
-export const PUBLIC_GTM_ID = (import.meta as any).env.PUBLIC_GTM_ID || 'GTM-XXXXXX';
+export const PUBLIC_GTM_ID = resolvePublicGtmId((import.meta as any).env.PUBLIC_GTM_ID);
 export const PUBLIC_API_HOST = (import.meta as any).env.PUBLIC_API_HOST || '';
 export const PUBLIC_API_TOKEN = (import.meta as any).env.PUBLIC_API_TOKEN || '';
 export const PUBLIC_CONTACT_API_HOST = (import.meta as any).env.PUBLIC_CONTACT_API_HOST || '';
