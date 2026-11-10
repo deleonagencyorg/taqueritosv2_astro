@@ -1,36 +1,63 @@
 ---
-// Replace with your actual GTM ID
-const gtmId = import.meta.env.PUBLIC_GTM_ID || 'GTM-XXXXXX';
+import { PUBLIC_GTM_ID } from '../../config/env';
 
-// Validar que el GTM ID esté configurado
-if (!gtmId || gtmId === 'GTM-XXXXXX') {
-  console.warn('GTM ID no está configurado correctamente. Verifica tu archivo .env');
-}
+const gtmId = PUBLIC_GTM_ID;
 ---
 
 <!-- Google Tag Manager (noscript) -->
 <noscript>
-  <iframe 
+  <iframe
     src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
-    height="0" 
-    width="0" 
+    height="0"
+    width="0"
     style="display:none;visibility:hidden">
   </iframe>
 </noscript>
 
 <!-- Google Tag Manager -->
-<script is:inline define:vars={{ gtmId }}>
-  if (gtmId && gtmId !== 'GTM-XXXXXX') {
-    (function(w,d,s,l,i){
-      w[l]=w[l]||[];
-      w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true;
-      j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-      f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer',gtmId);
-  } else {
-    console.warn('GTM no inicializado: ID no válido');
-  }
+<script is:inline define:vars={{ gtmId }} data-astro-rerun>
+  (function (id) {
+    var w = window;
+    w.dataLayer = w.dataLayer || [];
+
+    function containerReady() {
+      return Boolean(w.google_tag_manager && w.google_tag_manager[id]);
+    }
+
+    function ensureGtm() {
+      if (!id || containerReady()) return;
+      if (document.querySelector('script[data-gtm-loader="' + id + '"]')) return;
+
+      w.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(id);
+      script.setAttribute('data-gtm-loader', id);
+
+      var parent = document.head || document.documentElement;
+      if (!parent) return;
+      parent.appendChild(script);
+    }
+
+    function trackPage() {
+      w.dataLayer.push({
+        event: 'page_view',
+        page_location: w.location.href,
+        page_path: w.location.pathname + w.location.search,
+        page_title: document.title,
+      });
+    }
+
+    ensureGtm();
+
+    if (!w.__taqueritosGtmBound) {
+      w.__taqueritosGtmBound = true;
+      document.addEventListener('astro:page-load', function () {
+        ensureGtm();
+        if (w.__taqueritosGtmSeenLoad) trackPage();
+        w.__taqueritosGtmSeenLoad = true;
+      });
+    }
+  })(gtmId);
 </script>

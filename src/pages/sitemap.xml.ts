@@ -1,97 +1,66 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
-import config from '../i18n/config';
+import esProducts from '../locales/es/products.json';
 import enProducts from '../locales/en/products.json';
 
-const staticPages = ['/', '/nosotros', '/about-us', '/contacto', '/contact', '/blog'];
+const SITE = 'https://www.taqueritos.com';
 
-// Menu URLs from both languages (landing pages)
-const menuUrls = [
-  '/marcas', '/brands',
-  '/productos', '/products',
-  '/recetas', '/recipes',
-  '/retos-torneos', '/challenges-tournaments',
-  '/blog',
-  '/contacto', '/contact',
-  '/encontranos', '/find-us'
+type IdRecord = { id?: string };
+
+const staticUrls = [
+  '/es/',
+  '/en/',
+  '/es/nosotros/',
+  '/en/about-us/',
+  '/es/contacto/',
+  '/en/contact/',
+  '/es/productos/',
+  '/en/products/',
+  '/es/recetas/',
+  '/en/recipes/',
+  '/es/retos-torneos/',
+  '/en/challenges-tournaments/',
+  '/es/marcas/',
+  '/en/brands/',
+  '/es/blog/',
+  '/en/blog/',
+  '/es/participacion/',
+  '/es/jurados/',
 ];
 
+function idsFrom(items: IdRecord[] | undefined, prefix: string): string[] {
+  return (items || [])
+    .map((item) => item.id)
+    .filter((id): id is string => Boolean(id))
+    .map((id) => `${prefix}${id}/`);
+}
+
+function idsFromModules(modules: Record<string, { default?: IdRecord }>, prefix: string): string[] {
+  return Object.values(modules)
+    .map((mod) => mod.default?.id)
+    .filter((id): id is string => Boolean(id))
+    .map((id) => `${prefix}${id}/`);
+}
+
 export const GET: APIRoute = async () => {
-  const posts = await getCollection('blog');
-  
-  // Generate language versions of static pages
-  const staticPagesWithLang = staticPages.flatMap((page) =>
-    config.supportedLocales.map((lang) => `/${lang}${page}`)
-  );
+  const esRecipeModules = import.meta.glob('../locales/es/recipes/*.json', { eager: true }) as Record<string, { default?: IdRecord }>;
+  const enRecipeModules = import.meta.glob('../locales/en/recipes/*.json', { eager: true }) as Record<string, { default?: IdRecord }>;
+  const challengeModules = import.meta.glob('../locales/es/challenges/*.json', { eager: true }) as Record<string, { default?: IdRecord }>;
 
-  // Generate language versions of menu URLs
-  const menuUrlsWithLang = menuUrls.flatMap((url) => {
-    const lang = url.startsWith('/en') ? 'en' : url.startsWith('/es') ? 'es' : null;
-    if (lang && config.supportedLocales.includes(lang)) {
-      return [`/${lang}${url.replace(`/${lang}`, '')}`];
-    }
-    // Si la URL no lleva prefijo, generamos para ambos idiomas
-    return config.supportedLocales.map((lng) => `/${lng}${url}`);
+  const urls = [...new Set([
+    ...staticUrls,
+    ...idsFrom((esProducts as { items?: IdRecord[] }).items, '/es/productos/'),
+    ...idsFrom((enProducts as { items?: IdRecord[] }).items, '/en/products/'),
+    ...idsFromModules(esRecipeModules, '/es/recetas/'),
+    ...idsFromModules(enRecipeModules, '/en/recipes/'),
+    ...idsFromModules(challengeModules, '/es/retos-torneos/'),
+  ])];
+
+  const body = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((url) => `  <url><loc>${SITE}${url}</loc></url>`).join('\n')}
+</urlset>`;
+
+  return new Response(body, {
+    headers: { 'Content-Type': 'application/xml; charset=utf-8' },
   });
-
-  // Blog posts with language prefixes (colección "blog")
-  const blogPosts = posts.map((post) =>
-    `/${post.slug.split('/')[0]}/blog/${post.slug.split('/')[1]}`
-  );
-
-  // ==== URLs dinámicas de retos (solo ES) ====
-  const challengesModules = import.meta.glob('../locales/es/challenges/*.json', { eager: true }) as Record<string, any>;
-  const challengeUrls = Object.values(challengesModules)
-    .map((mod: any) => mod.default)
-    .filter((challenge: any) => challenge && challenge.id)
-    .map((challenge: any) => `/es/retos-torneos/${challenge.id}`);
-
-  // ==== URLs dinámicas de recetas (ES y EN) ====
-  const recipesEnModules = import.meta.glob('../locales/en/recipes/*.json', { eager: true }) as Record<string, any>;
-  const recipesEsModules = import.meta.glob('../locales/es/recipes/*.json', { eager: true }) as Record<string, any>;
-
-  const recipeUrlsEn = Object.values(recipesEnModules)
-    .map((mod: any) => mod.default)
-    .filter((recipe: any) => recipe && recipe.id)
-    .map((recipe: any) => `/en/recipes/${recipe.id}`);
-
-  const recipeUrlsEs = Object.values(recipesEsModules)
-    .map((mod: any) => mod.default)
-    .filter((recipe: any) => recipe && recipe.id)
-    .map((recipe: any) => `/es/recipes/${recipe.id}`);
-
-  // ==== URLs dinámicas de productos (actualmente EN) ====
-  const enItems = (enProducts as any)?.items || (enProducts as any) || [];
-  const productUrlsEn = (Array.isArray(enItems) ? enItems : [])
-    .filter((p: any) => p && p.id)
-    .map((p: any) => `/en/products/${p.id}`);
-
-  const allUrls = [
-    ...staticPagesWithLang,
-    ...menuUrlsWithLang,
-    ...blogPosts,
-    ...challengeUrls,
-    ...recipeUrlsEn,
-    ...recipeUrlsEs,
-    ...productUrlsEn,
-  ];
-
-  return new Response(
-    `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      ${allUrls.map(url => `
-        <url>
-          <loc>https://taqueritos.com${url}</loc>
-          <lastmod>${new Date().toISOString()}</lastmod>
-          <changefreq>weekly</changefreq>
-          <priority>0.8</priority>
-        </url>
-      `).join('')}
-    </urlset>`.trim(),
-    {
-      headers: {
-        'Content-Type': 'application/xml',
-      },
-    }
-  );
 };

@@ -175,7 +175,7 @@ const nutritionEntries = Object.entries(nutritionLabels)
             <div class="mt-0 md:mt-4">
               <h2 class="text-2xl font-semibold text-white mb-1 md:mb-2">{sectionLabels.description}</h2>
               <div id="product-description" class="text-2xl md:text-[26.6px] font-normal text-white text-justify">
-                {safeProduct.description || ''}
+                {safeProduct.description || safeProduct.nutrition?.description || ''}
               </div>
             </div>
 

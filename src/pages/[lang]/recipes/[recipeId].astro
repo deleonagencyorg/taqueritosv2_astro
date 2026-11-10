@@ -9,10 +9,10 @@ import RecipeDetail from '../../../views/Recipes/Detail/index.astro';
 const { lang, recipeId } = Astro.params;
 
 if (!lang || !recipeId) {
-  return Astro.redirect('/en');
+  Astro.response.status = 404;
 }
 
-setLocale(lang as Locale);
+setLocale((lang || 'en') as Locale);
 
 // Cargar la receta desde los archivos JSON en tiempo de petición (SSR)
 const modules = import.meta.glob('../../../locales/*/recipes/*.json', { eager: true });
@@ -33,14 +33,23 @@ for (const path in modules) {
 }
 
 if (!recipe) {
-  return Astro.redirect(`/${lang}`);
+  Astro.response.status = 404;
 }
 
-const description = lang === 'es'
-  ? `Receta con Taqueritos: ${recipe.title}. Descubre ingredientes y paso a paso para prepararla.`
-  : `Taqueritos recipe: ${recipe.title}. Discover ingredients and step-by-step instructions to prepare it.`;
+const description = !recipe
+  ? 'Recipe not found.'
+  : lang === 'es'
+    ? `Receta con Taqueritos: ${recipe.title}. Descubre ingredientes y paso a paso para prepararla.`
+    : `Taqueritos recipe: ${recipe.title}. Discover ingredients and step-by-step instructions to prepare it.`;
 ---
 
-<MainLayout title={recipe.title} description={description}>
-  <RecipeDetail currentLang={lang} recipeId={recipeId} />
-</MainLayout>
+{recipe ? (
+  <MainLayout title={recipe.title} description={description}>
+    <RecipeDetail currentLang={lang} recipeId={recipeId} />
+  </MainLayout>
+) : (
+  <MainLayout title="Page not found" description={description} noindex={true}>
+    <h1 class="sr-only">Page not found</h1>
+    <p class="px-6 py-24 text-center text-white">We could not find this recipe. <a href="/en/recipes/">View recipes</a></p>
+  </MainLayout>
+)}

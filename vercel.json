@@ -1,26 +1,44 @@
 {
   "redirects": [
-    {
-      "source": "/",
-      "destination": "/es/",
-      "permanent": false
-    },
+    { "source": "/", "destination": "/es/", "statusCode": 301 },
+    { "source": "/producto", "destination": "/es/productos/", "statusCode": 301 },
+    { "source": "/receta", "destination": "/es/recetas/", "statusCode": 301 },
+    { "source": "/es/recipes/:slug", "destination": "/es/recetas/:slug/", "statusCode": 301 },
+    { "source": "/es/recipes", "destination": "/es/recetas/", "statusCode": 301 },
+    { "source": "/en/recetas/:slug", "destination": "/en/recipes/:slug/", "statusCode": 301 },
+    { "source": "/en/recetas", "destination": "/en/recipes/", "statusCode": 301 },
+    { "source": "/en/nosotros", "destination": "/en/about-us/", "statusCode": 301 },
+    { "source": "/es/about-us", "destination": "/es/nosotros/", "statusCode": 301 },
+    { "source": "/en/contacto", "destination": "/en/contact/", "statusCode": 301 },
+    { "source": "/es/contact", "destination": "/es/contacto/", "statusCode": 301 },
+    { "source": "/en/marcas", "destination": "/en/brands/", "statusCode": 301 },
+    { "source": "/es/brands", "destination": "/es/marcas/", "statusCode": 301 },
+    { "source": "/en/productos", "destination": "/en/products/", "statusCode": 301 },
+    { "source": "/en/productos/:slug", "destination": "/en/products/:slug/", "statusCode": 301 },
+    { "source": "/es/products", "destination": "/es/productos/", "statusCode": 301 },
+    { "source": "/es/products/:slug", "destination": "/es/productos/:slug/", "statusCode": 301 },
+    { "source": "/en/retos-torneos", "destination": "/en/challenges-tournaments/", "statusCode": 301 },
+    { "source": "/en/retos-torneos/:slug", "destination": "/en/challenges-tournaments/:slug/", "statusCode": 301 },
+    { "source": "/es/challenges-tournaments", "destination": "/es/retos-torneos/", "statusCode": 301 },
+    { "source": "/es/donde-comprar", "destination": "/es/contacto/", "statusCode": 301 },
+    { "source": "/en/where-to-buy", "destination": "/en/contact/", "statusCode": 301 },
     {
       "source": "/gaming",
-      "destination": "https://www.taqueritos.com/es/retos-torneos",
-      "permanent": true
+      "destination": "https://www.taqueritos.com/es/retos-torneos/",
+      "statusCode": 301
     },
     {
       "source": "/es/gaming",
-      "destination": "https://www.taqueritos.com/es/retos-torneos",
-      "permanent": true
+      "destination": "https://www.taqueritos.com/es/retos-torneos/",
+      "statusCode": 301
     },
     {
       "source": "/en/gaming",
-      "destination": "https://www.taqueritos.com/es/retos-torneos",
-      "permanent": true
+      "destination": "https://www.taqueritos.com/es/retos-torneos/",
+      "statusCode": 301
     }
   ],
+  "trailingSlash": true,
   "headers": [
     {
       "source": "/assets/(.*)",

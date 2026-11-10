@@ -1,7 +1,7 @@
 {
   "meta": {
     "home": {
-      "title": "Taqueritos - Enjoy your Taqueritos at any moment",
+      "title": "Taqueritos | Rolled corn chips – Enjoy them anytime",
       "description": "When it comes to intensity, the popular Taqueritos have the ideal flavor mix to make your senses explode."
     },
     "contact": {
@@ -141,7 +141,7 @@
     {
       "id": "where-buy",
       "text": "Where to buy",
-      "href": "/en/where-to-buy"
+      "href": "/en/contact/"
     }
   ],
   "games": [

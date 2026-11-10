@@ -4,7 +4,7 @@ import vercel from '@astrojs/vercel';
 import react from '@astrojs/react';
 
 // Get site URL from environment or use default
-const SITE_URL = process.env.SITE_URL || 'https://taqueritos.com';
+const SITE_URL = process.env.SITE_URL || 'https://www.taqueritos.com';
 
 export default defineConfig({
   adapter: vercel({
@@ -14,6 +14,7 @@ export default defineConfig({
   }),
   output: 'server',
   site: SITE_URL,
+  trailingSlash: 'ignore',
   integrations: [
     react(),
     tailwind({

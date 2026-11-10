@@ -1,7 +1,7 @@
 {
   "meta": {
     "home": {
-      "title": "Taqueritos - Disfruta tus Taqueritos en todo momento",
+      "title": "Taqueritos | Totopos de maíz enrollados – Disfruta en todo momento",
       "description": "Si de intensidad hablamos, los populares Taqueritos tienen la mezcla de sabor ideal para hacer estallar tus sentidos."
     },
     "contact": {
@@ -157,7 +157,7 @@
     {
       "id": "where-buy",
       "text": "Dónde comprar",
-      "href": "/es/donde-comprar"
+      "href": "/es/contacto/"
     }
   ],
   "games": [

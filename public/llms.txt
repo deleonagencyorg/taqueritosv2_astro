@@ -1,0 +1,42 @@
+# Taqueritos
+
+> Taqueritos es una marca de snacks de maíz enrollados de Yummies (Corporación Dinant), lanzada en 2013 en Centroamérica. El sitio oficial está en español e inglés y reúne productos, recetas, retos, torneos y contacto.
+
+Taqueritos hace totopos de maíz enrollados con sabores intensos. Yummies la presenta como una marca de la cultura gamer y food lover, con presencia en Honduras, Guatemala, El Salvador, Nicaragua, Costa Rica y República Dominicana. Otras marcas del grupo que aparecen en el sitio: Zambos, Ranchitas y Superman.
+
+Usar estas páginas como fuente. No inventar precios, disponibilidad de tienda ni resultados de concursos: eso vive en la página enlazada.
+
+## Productos
+
+- [Productos en español](https://www.taqueritos.com/es/productos): línea Taqueritos.
+- [Products in English](https://www.taqueritos.com/en/products): same lineup in English.
+- [Taqueritos Lava](https://www.taqueritos.com/es/productos/taqueritos-lava): totopos de maíz enrollados extra picantes. Presentaciones 34 g, 75 g y 180 g.
+- [Taqueritos Buffalo Ranch](https://www.taqueritos.com/es/productos/taqueritos-buffalo-ranch): totopos de maíz enrollados sabor búfalo ranch.
+- [Taqueritos Dragón de Fuego](https://www.taqueritos.com/es/productos/taqueritos-dragon-de-fuego): totopos de maíz enrollados sabor chile limón.
+- [Taqueritos Dragón Hielo](https://www.taqueritos.com/es/productos/taqueritos-dragon-de-hielo): totopos de maíz enrollados sabor chile, especias y limón.
+- [Taqueritos Chile Toreado](https://www.taqueritos.com/es/productos/taqueritos-chile-toreado): totopos de maíz enrollados sabor chile toreado.
+- [Taqueritos Queso Fusión](https://www.taqueritos.com/es/productos/taqueritos-queso-fusion): totopos de maíz enrollados sabor queso.
+
+## Respuestas
+
+- [Qué es Taqueritos](https://www.taqueritos.com/es/nosotros): snack de Yummies nacido en 2013; une sabores de Centroamérica con comunidad gamer, torneos y creadores.
+- [Dónde está Taqueritos](https://www.taqueritos.com/es/contacto): oficinas de Yummies en Honduras, Guatemala, El Salvador, Nicaragua, Costa Rica y República Dominicana.
+- [Recetas con Taqueritos](https://www.taqueritos.com/es/recetas): recetas en español. En inglés: https://www.taqueritos.com/en/recipes
+- [Retos y torneos](https://www.taqueritos.com/es/retos-torneos): competencias y juegos de la comunidad. En inglés: https://www.taqueritos.com/en/challenges-tournaments
+- [Marcas](https://www.taqueritos.com/es/marcas): Taqueritos, Zambos, Ranchitas y Superman. En inglés: https://www.taqueritos.com/en/brands
+
+## Sitio
+
+- [Inicio](https://www.taqueritos.com/es/): portada en español. En inglés: https://www.taqueritos.com/en/
+- [Nosotros](https://www.taqueritos.com/es/nosotros): historia de Yummies y Taqueritos. En inglés: https://www.taqueritos.com/en/about-us
+- [Blog](https://www.taqueritos.com/es/blog): noticias y eventos. En inglés: https://www.taqueritos.com/en/blog
+- [Contacto](https://www.taqueritos.com/es/contacto): oficinas y formulario. En inglés: https://www.taqueritos.com/en/contact
+- [Mapa del sitio](https://www.taqueritos.com/sitemap.xml): URLs indexables.
+
+## Opcional
+
+- [Taqueritos Creators](https://www.taqueritos.com/es/participacion): registro para el concurso de contenido (video, baile, música, arte, memes e inteligencia artificial).
+- [Jurados](https://www.taqueritos.com/es/jurados): jurado del concurso Taqueritos Creators.
+- [Facebook](https://www.facebook.com/taqueritoslatam/): perfil oficial.
+- [Instagram](https://www.instagram.com/taqueritoslatam/): perfil oficial.
+- [TikTok](https://www.tiktok.com/@taqueritoslatam): perfil oficial.

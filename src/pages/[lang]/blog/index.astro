@@ -10,8 +10,15 @@ export async function getStaticPaths() {
   }));
 }
 
-const { currentLang } = Astro.props;
-const blogPosts = (await import(`../../../locales/${currentLang}/news.json`)).items || [];
+const { currentLang: langFromProps } = Astro.props;
+const currentLang = (Astro.params.lang || langFromProps || 'es') as Locale;
+let blogPosts: Array<{ id?: string; slug?: string; title?: string; summary?: string }> = [];
+try {
+  const newsModule = await import(`../../../locales/${currentLang}/news.json`);
+  blogPosts = newsModule.default?.items || newsModule.items || [];
+} catch {
+  blogPosts = [];
+}
 ---
 
 <BlogListing blogPosts={blogPosts} currentLang={currentLang} />
