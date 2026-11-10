@@ -45,7 +45,7 @@ const currentRoute = findRouteBySlug(lang, pageSlug);
 // Si no se encontró la ruta, redirigir a 404
 if (!currentRoute) {
   console.error(`Ruta no encontrada para lang=${lang}, pageSlug=${pageSlug}`);
-  return Astro.redirect(`/${lang}/404`);
+  return new Response('Not found', { status: 404, headers: { 'content-type': 'text/plain; charset=utf-8' } });
 }
 
 // Usar import.meta.glob() para cargar el componente de contenido
@@ -65,7 +65,7 @@ const moduleLoader = modules[targetModulePath]; // modules es Record<string, () 
 if (!moduleLoader) {
   console.error(`Cargador de módulo no encontrado para la ruta: ${currentRoute.id}. Se esperaba la ruta: ${targetModulePath}`);
   console.error('Módulos de VISTAS disponibles de import.meta.glob():', Object.keys(modules));
-  return Astro.redirect(`/${lang}/404`);
+  return new Response('Not found', { status: 404, headers: { 'content-type': 'text/plain; charset=utf-8' } });
 }
 
 const loadedModule = await moduleLoader(); // Ejecutar la función para cargar el módulo
@@ -74,7 +74,7 @@ ContentComponent = ContentComponentModule.default;
 
 if (!ContentComponent) {
   console.error(`Componente por defecto no exportado o no encontrado en el módulo: ${targetModulePath} para la ruta ID: ${currentRoute.id}`);
-  return Astro.redirect(`/${lang}/404`);
+  return new Response('Not found', { status: 404, headers: { 'content-type': 'text/plain; charset=utf-8' } });
 }
 
 if (currentRoute.metaTitleKey) {

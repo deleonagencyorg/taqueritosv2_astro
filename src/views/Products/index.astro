@@ -8,6 +8,7 @@ const homeAssets = t('home', { namespace: 'products', locale: currentLang }) || 
 ---
 
 <section class="w-full min-h-screen bg-brown py-16">
+  <h1 class="sr-only">{currentLang === 'es' ? 'Productos Taqueritos' : 'Taqueritos Products'}</h1>
   <div class="container mx-auto px-4">
     <div class="title mb-4 text-center mt-16">
       {homeAssets.title && <p>{homeAssets.title}</p>}

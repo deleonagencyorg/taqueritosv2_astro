@@ -152,9 +152,9 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                     loading={index === 0 ? "eager" : "lazy"}
                   />
 
-                  <h1 class="dragon-text font-bold uppercase leading-[90%] tracking-[0] select-none">
+                  <p class="dragon-text font-bold uppercase leading-[90%] tracking-[0] select-none">
                     {slide.product_hero || (currentLang === 'es' ? 'DRAGON FUEGO' : 'DRAGON FIRE')}
-                  </h1>
+                  </p>
                  
                 </div>
 
@@ -234,7 +234,7 @@ const isFirstSlideVideo = firstSlide.desktop?.toLowerCase().endsWith('.mp4') ||
                   {showOverlay && (slide.title || slide.subtitle) && (
                     <div class={`overlay bg-black bg-opacity-${overlayOpacity}`}>
                       <div class="text-content">
-                        {slide.title && <h1 class={`slide-title ${textColor}`}>{slide.title}</h1>}
+                        {slide.title && <p class={`slide-title ${textColor}`}>{slide.title}</p>}
                         {slide.subtitle && <p class={`slide-subtitle ${textColor}`}>{slide.subtitle}</p>}
                         {slide.link && (
                           <a

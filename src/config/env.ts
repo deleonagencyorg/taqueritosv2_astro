@@ -27,7 +27,7 @@ export const PUBLIC_SUSCRIBE_FROM_PATH = (import.meta as any).env.PUBLIC_SUSCRIB
 // These use PUBLIC_ vars as fallback for backward compatibility
 export const CONTACT_API_HOST = (import.meta as any).env.CONTACT_API_HOST || PUBLIC_CONTACT_API_HOST || '';
 export const API_TOKEN = (import.meta as any).env.API_TOKEN || PUBLIC_API_TOKEN || '';
-export const SITE_URL = (import.meta as any).env.SITE_URL || 'https://taqueritos.com';
+export const SITE_URL = (import.meta as any).env.SITE_URL || 'https://www.taqueritos.com';
 
 // Logging level for server-side logs
 export const LOG_LEVEL = (import.meta as any).env.LOG_LEVEL || 'info';

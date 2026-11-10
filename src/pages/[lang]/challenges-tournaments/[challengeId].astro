@@ -8,13 +8,11 @@ export async function getStaticPaths() {
   return [];
 }
 
-const { lang } = Astro.params as { lang: Locale };
+const { lang, challengeId } = Astro.params as { lang: Locale; challengeId?: string };
 
-// Si alguien intenta acceder directamente, redirigir al home
-if (lang === 'en') {
-  return Astro.redirect('/en/');
+if (lang === 'es' && challengeId) {
+  return Astro.redirect(`/es/retos-torneos/${challengeId}/`, 301);
 }
 
-// Si es español, redirigir a la ruta correcta
-return Astro.redirect('/es/retos-torneos');
+return Astro.redirect('/en/challenges-tournaments/', 301);
 ---

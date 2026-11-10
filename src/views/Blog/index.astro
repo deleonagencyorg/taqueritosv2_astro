@@ -1,7 +1,6 @@
 ---
 // src/views/Blog/index.astro
 import { type Locale } from '../../i18n/i18n';
-import { ViewTransitions } from 'astro:transitions';
 import MainLayout from '../../layouts/MainLayout.astro';
 import './styles.css';
 import BlogCard from '../../components/blog/BlogCard.astro';
@@ -11,7 +10,15 @@ import Breadcrumb from '../../components/common/Breadcrumb/Breadcrumb.astro';
 import NewsCarousel from '../../components/blog/NewsCarousel.astro';
 import { getCategoryName } from '../../i18n/categories';
 
-export interface Props { currentLang: Locale }
+export interface Props {
+  currentLang: Locale;
+  blogPosts?: Array<{
+    id?: string;
+    slug?: string;
+    title?: string;
+    summary?: string;
+  }>;
+}
 
 interface BlogPostFrontmatter {
   id: string;
@@ -23,7 +30,7 @@ interface BlogPostFrontmatter {
   category?: string;
 }
 
-const { currentLang } = Astro.props;
+const { currentLang, blogPosts = [] } = Astro.props;
 const pageTitle = currentLang === 'es' ? 'Noticias' : 'News';
 const pageDescription = currentLang === 'es' 
   ? 'Mantente al día con nuestras últimas noticias y artículos.' 
@@ -85,10 +92,21 @@ const rightTwo = firstFive.slice(3, 5);
 const restPosts = allPosts.slice(5);
 ---
 <MainLayout title={pageTitle} description={pageDescription} class="">
-  <div style="background: radial-gradient(circle at 50% 50%, #2c0b0b 0%, #150404 80%);">
-    <ViewTransitions />
-  </div>
- 
+  <section class="px-6 py-24 text-white">
+    <h1 class="font-title text-4xl md:text-6xl uppercase mb-8">{pageTitle}</h1>
+    {blogPosts.length === 0 ? (
+      <p>{noPostsText}</p>
+    ) : (
+      <ul class="space-y-6 max-w-3xl">
+        {blogPosts.map((post) => (
+          <li>
+            <h2 class="text-2xl font-bold">{post.title}</h2>
+            {post.summary && <p class="mt-2 text-white/80">{post.summary}</p>}
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
 </MainLayout>
 
 <style>

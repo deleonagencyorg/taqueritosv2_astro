@@ -3,6 +3,7 @@
 import { t, setLocale, type Locale } from '../../../i18n/i18n';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import ProductDetail from '../../../views/Products/Detail/index.astro';
+import { productCopy } from '../../../config/productMeta';
 
 export const prerender = true;
 
@@ -43,8 +44,30 @@ const headerColors = {
   textColor: product.text_color,
   isSpecialBackground: isSpecialBackground
 };
+const copy = productCopy(product?.id, lang as string);
 ---
 
-<MainLayout title={product.name} headerColors={headerColors}>
+<MainLayout title={copy?.title || product.name} description={copy?.description} headerColors={headerColors}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      description: product.nutrition?.description || copy?.description,
+      brand: { '@type': 'Brand', name: 'Taqueritos' },
+      manufacturer: { '@type': 'Organization', name: 'Snacks Yummies', url: 'https://www.snacksyummies.com/' },
+      image: product.image ? [product.image] : undefined,
+      url: `https://www.taqueritos.com/en/products/${product.id}/`,
+      nutrition: product.nutrition ? {
+        '@type': 'NutritionInformation',
+        servingSize: product.nutrition.servingSize,
+        calories: product.nutrition.calories,
+        fatContent: product.nutrition.totalFat,
+        sodiumContent: product.nutrition.sodium,
+        carbohydrateContent: product.nutrition.totalCarbs,
+        proteinContent: product.nutrition.protein,
+      } : undefined,
+    })}></script>
+  </Fragment>
   <ProductDetail currentLang={lang as Locale} productId={productId} />
 </MainLayout>

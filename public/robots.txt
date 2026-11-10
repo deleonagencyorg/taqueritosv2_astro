@@ -4,11 +4,9 @@
 # Rastreo general: indexar el sitio y omitir APIs y assets de juegos.
 User-agent: *
 Allow: /
+Allow: /games/*/index.html
 Disallow: /api/
-Disallow: /games/*/assets/
-Disallow: /games/*/libs/
-Disallow: /games/*/css/
-Disallow: /games/*/scripts/
+Disallow: /games/
 
 # Buscadores y motores de respuesta / generativos.
 # Cada agente usa solo su grupo, así que se repiten las mismas exclusiones.
@@ -33,11 +31,9 @@ User-agent: DuckAssistBot
 User-agent: Meta-ExternalAgent
 User-agent: FacebookBot
 Allow: /
+Allow: /games/*/index.html
 Disallow: /api/
-Disallow: /games/*/assets/
-Disallow: /games/*/libs/
-Disallow: /games/*/css/
-Disallow: /games/*/scripts/
+Disallow: /games/
 
 # Rastreadores que no aportan búsqueda ni citas.
 User-agent: Bytespider

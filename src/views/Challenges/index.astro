@@ -136,6 +136,7 @@ const promosSlides = Array.isArray(commonAssets)
   : [];
 ---
 <div class="-mt-px -mb-px bg-dark-spotlight">
+  <h1 class="sr-only">{currentLang === 'es' ? 'Retos y torneos Taqueritos' : 'Taqueritos challenges and tournaments'}</h1>
   <!-- Carrusel de promos activas (solo español) - Full width -->
   {currentLang === 'es' && promosSlides.length > 0 && (
     <section class="w-full">

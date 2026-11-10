@@ -1,0 +1,47 @@
+<div id="locale-suggest" hidden class="fixed bottom-4 left-1/2 z-[80] flex -translate-x-1/2 items-center gap-3 rounded-full bg-black px-4 py-3 text-sm text-white shadow-lg">
+  <span id="locale-suggest-text">¿Prefieres ver el sitio en inglés?</span>
+  <a id="locale-link" href="/en/" class="font-bold underline">English</a>
+  <button type="button" id="locale-close" aria-label="Cerrar" class="px-2 text-lg leading-none">×</button>
+</div>
+
+<script>
+  const banner = document.getElementById('locale-suggest');
+  const link = document.getElementById('locale-link');
+  const text = document.getElementById('locale-suggest-text');
+  const close = document.getElementById('locale-close');
+
+  close?.addEventListener('click', () => {
+    if (banner) banner.hidden = true;
+  });
+
+  async function suggestLocale() {
+    if (!banner || !link || localStorage.getItem('locale')) return;
+
+    const current = location.pathname.split('/').filter(Boolean)[0] || 'es';
+    localStorage.setItem('locale', current === 'en' ? 'en' : 'es');
+
+    try {
+      const response = await fetch('/api/detect-locale');
+      if (!response.ok) return;
+      const data = await response.json();
+      const suggested = data?.defaultLocale;
+      if (!suggested || suggested === current) return;
+
+      const alternate = document.querySelector(`link[rel="alternate"][hreflang="${suggested}"]`);
+      if (!(alternate instanceof HTMLLinkElement) || !alternate.href) return;
+
+      link.href = alternate.href;
+      if (text) {
+        text.textContent = suggested === 'en'
+          ? '¿Prefieres ver el sitio en inglés?'
+          : 'Prefer to view this site in Spanish?';
+      }
+      link.textContent = suggested === 'en' ? 'English' : 'Español';
+      banner.hidden = false;
+    } catch {
+      banner.hidden = true;
+    }
+  }
+
+  suggestLocale();
+</script>
