@@ -7,7 +7,6 @@ import { t, type Locale } from '../i18n/i18n';
 import Header from '../components/common/Header/index.astro';
 import Footer from '../components/common/Footer/index.astro';
 import MobileMenu from '../components/common/MobileMenu/index.astro';
-import I18nProvider from '../components/i18n/I18nProvider.astro';
 import { routesConfig } from '../config/routes';
 import { getHeaderColors } from '../config/headerColors';
 import { ClientRouter } from "astro:transitions";
@@ -82,15 +81,13 @@ if (headerColors) {
     <slot name="head" />
   </head>
   <body class={`font-sans min-h-screen flex flex-col ${className || ''}`}>
-    <I18nProvider>
-      <slot name="header">
-        <Header currentLang={currentLang} headerColors={headerColors} />
-      </slot>
-      <main class="flex-1 flex flex-col overflow-hidden">
-        <slot />
-      </main>
-      <Footer currentLang={currentLang} />
-    </I18nProvider>
+    <slot name="header">
+      <Header currentLang={currentLang} headerColors={headerColors} />
+    </slot>
+    <main class="flex-1 flex flex-col overflow-hidden">
+      <slot />
+    </main>
+    <Footer currentLang={currentLang} />
     
     <MobileMenu currentLang={currentLang} headerColorConfig={customHeaderConfig} />
     <StockistModal products={products} stockists={stockists} locale={currentLang} />
